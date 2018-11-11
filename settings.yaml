@@ -1,0 +1,4 @@
+cachePath: "./data/cache/"
+sourcePath: "./server/src/main/kotlin/"
+pluginPath: "./plugins/src/main/kotlin/"
+connectionLimit: 2
