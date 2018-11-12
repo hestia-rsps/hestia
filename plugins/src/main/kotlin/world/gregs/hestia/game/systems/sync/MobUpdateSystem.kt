@@ -17,14 +17,14 @@ import world.gregs.hestia.game.component.update.gfx.ThirdGraphic
 import world.gregs.hestia.game.component.movement.Run
 import world.gregs.hestia.game.component.movement.Walk
 import world.gregs.hestia.game.component.update.*
-import world.gregs.hestia.services.Aspect
-import world.gregs.hestia.services.exclude
-import world.gregs.hestia.services.toArray
 import world.gregs.hestia.network.update.mob.*
 import world.gregs.hestia.network.update.player.*
 import world.gregs.hestia.game.component.entity.Mob
-import world.gregs.hestia.services.one
+import world.gregs.hestia.game.component.entity.Type
 import world.gregs.hestia.game.component.map.Position
+import world.gregs.hestia.services.*
+import world.gregs.hestia.game.systems.RegionSystem
+import world.gregs.hestia.game.component.update.direction.Watch
 
 abstract class MobUpdateSystem(aspect: com.artemis.Aspect.Builder) : SynchronizeSystem(aspect) {
     //Flags
@@ -44,16 +44,26 @@ abstract class MobUpdateSystem(aspect: com.artemis.Aspect.Builder) : Synchronize
     private lateinit var displayNameMapper: ComponentMapper<DisplayName>
     private lateinit var combatLevelMapper: ComponentMapper<CombatLevel>
     private lateinit var transformMapper: ComponentMapper<Transform>
+    private lateinit var timeBarMapper: ComponentMapper<TimeBar>
+    private lateinit var modelChangeMapper: ComponentMapper<MobModelChange>
+    private lateinit var batchAnimationsMapper: ComponentMapper<BatchAnimations>
+    private lateinit var colourOverlayMapper: ComponentMapper<ColourOverlay>
+    private lateinit var typeMapper: ComponentMapper<Type>
     private lateinit var mobSubscription: EntitySubscription
 
-    override fun getLocals(viewport: Viewport): MutableList<Int> {
+    override fun getLocals(entityId: Int, viewport: Viewport): MutableList<Int> {
         return viewport.localMobs()
     }
 
-    override fun getGlobals(viewport: Viewport): MutableList<Int> {
-        return mobSubscription.entities.toArray()
+    override fun getGlobals(entityId: Int, viewport: Viewport): MutableList<Int> {
+        val regionId = positionMapper.get(entityId).regionId
+        return world.getSystem(RegionSystem::class).regions.first { it.regionId == regionId }.mobs
                 .filterNot { viewport.localMobs().contains(it) }
                 .toMutableList()
+        //TODO improve with real region system
+        /*return mobSubscription.entities.toArray()
+                .filterNot { viewport.localMobs().contains(it) }
+                .toMutableList()*/
     }
 
     override fun initialize() {
@@ -68,24 +78,34 @@ abstract class MobUpdateSystem(aspect: com.artemis.Aspect.Builder) : Synchronize
                 create(0x20000, Aspect.all(Renderable::class, FourthGraphic::class), MobGraphicMask(fourthGraphicMapper)),
                 //Hits
                 create(0x40, Aspect.all(Renderable::class, Damage::class), HitsMask(damageMapper, true)),
+                //Time bar
+                create(0x100, Aspect.all(Renderable::class, TimeBar::class), MobTimeBarMask(timeBarMapper)),
                 //Name
-                create(0x40000, Aspect.all(Renderable::class).one(UpdateDisplayName::class), MobNameMask(displayNameMapper), true),
+                create(0x40000, Aspect.all(Renderable::class, UpdateDisplayName::class), MobNameMask(displayNameMapper), true),
                 //Transform
-                create(0x20, Aspect.all(Renderable::class).one(Transform::class), MobTransformMask(transformMapper)),
+                create(0x20, Aspect.all(Renderable::class, Transform::class), MobTransformMask(transformMapper, typeMapper)),
                 //Force Chat
                 create(0x2, Aspect.all(Renderable::class, ForceChat::class), ForceChatMask(forceChatMapper)),
                 //Face Direction
                 create(0x8, Aspect.all(Renderable::class, Facing::class).exclude(Run::class, Walk::class), MobFacingMask(positionMapper, facingMapper)),
-                //Force Movement
-                create(0x400, Aspect.all(Renderable::class, Position::class, ForceMovement::class), MobForceMovementMask(positionMapper, forceMovementMapper)),
                 //Combat level
                 create(0x80000, Aspect.all(Renderable::class, UpdateCombatLevel::class), MobCombatLevelMask(combatLevelMapper), true),
+                //0x2000 - Weapon hidden/rotation
+                //0x10000 - Model change (not sure it actually does anything)
+                //Force Movement
+                create(0x400, Aspect.all(Renderable::class, Position::class, ForceMovement::class), MobForceMovementMask(positionMapper, forceMovementMapper)),
                 //Animation
                 create(0x10, Aspect.all(Renderable::class).one(FirstAnimation::class, SecondAnimation::class, ThirdAnimation::class, FourthAnimation::class), MobAnimMask(firstAnimationMapper, secondAnimationMapper, thirdAnimationMapper, fourthAnimationMapper)),
+                //Model change
+                create(0x800, Aspect.all(Renderable::class, MobModelChange::class), MobModelChangeMask(modelChangeMapper)),
+                //Batch animations
+                create(0x4000, Aspect.all(Renderable::class, BatchAnimations::class), MobBatchAnimationMask(batchAnimationsMapper)),
                 //Second Graphic
                 create(0x1000, Aspect.all(Renderable::class, SecondGraphic::class), MobGraphicMask(secondGraphicMapper)),
                 //First Graphic
-                create(0x4, Aspect.all(Renderable::class, FirstGraphic::class), MobGraphicMask(firstGraphicMapper))
+                create(0x4, Aspect.all(Renderable::class, FirstGraphic::class), MobGraphicMask(firstGraphicMapper)),
+                //Colour overlay
+                create(0x200, Aspect.all(Renderable::class, ColourOverlay::class), MobColourOverlayMask(colourOverlayMapper))
         )
     }
 

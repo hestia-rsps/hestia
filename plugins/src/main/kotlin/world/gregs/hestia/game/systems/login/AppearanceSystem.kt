@@ -12,12 +12,16 @@ import io.netty.buffer.Unpooled
 import net.mostlyoriginal.api.event.common.Subscribe
 import world.gregs.hestia.core.network.packets.Packet
 import world.gregs.hestia.core.services.Encryption
+import world.gregs.hestia.core.services.int
+import world.gregs.hestia.game.component.update.Transform
 
 class AppearanceSystem : SubscriptionSystem(Aspect.all(Player::class)) {
 
     private lateinit var appearanceDataMapper: ComponentMapper<AppearanceData>
     private lateinit var displayNameMapper: ComponentMapper<DisplayName>
     private lateinit var appearanceMapper: ComponentMapper<Appearance>
+    private lateinit var transformMapper: ComponentMapper<Transform>
+    private lateinit var playerMapper: ComponentMapper<Player>
 
     override fun inserted(entityId: Int) {
         update(UpdateAppearance(entityId))
@@ -25,8 +29,15 @@ class AppearanceSystem : SubscriptionSystem(Aspect.all(Player::class)) {
 
     @Subscribe
     private fun update(event: UpdateAppearance) {
+        if(!playerMapper.has(event.entityId)) {
+            return
+        }
+
         val packet = Packet.Builder()
         val displayName = displayNameMapper.get(event.entityId).name
+
+        val look = intArrayOf(0, 10, 18, 26, 33, 36, 42)
+        val colour = intArrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
 
         packet.apply {
 
@@ -37,38 +48,49 @@ class AppearanceSystem : SubscriptionSystem(Aspect.all(Player::class)) {
             writeByte(-1)//Head icon
             writeByte(0)//Hidden
 
-            for (index in 0..3) {
-                writeByte(0)//Hidden appearance
+            if(transformMapper.has(event.entityId)) {
+                val transform = transformMapper.get(event.entityId)
+                writeShort(-1)
+                writeShort(transform.mobId)
+                writeByte(0)
+            } else {
+                for (index in 0..3) {
+                    writeByte(0)//Hidden appearance
+                }
+
+                writeShort(0x100 + look[2])//Torso
+                writeByte(0)
+                writeShort(0x100 + look[3])//Arms
+
+                writeShort(0x100 + look[5])//Legs
+                writeShort(0x100 + look[0])//Hair
+                writeShort(0x100 + look[4])//Bracelet
+                writeShort(0x100 + look[6])//Feet
+                writeShort(0x100 + look[1])//Beard
+                writeByte(0)
+
+                //Inventory
+                val stream = Unpooled.buffer()
+                for (slotId in 0..14) {
+                }
+                buffer.writeShort(0)
+                buffer.writeBytes(stream)//TODO remove?
             }
-
-            val look = intArrayOf(0, 10, 18, 26, 33, 36, 42)
-            val colour = intArrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
-
-            writeShort(0x100 + look[2])//Torso
-            writeByte(0)
-            writeShort(0x100 + look[3])//Arms
-
-            writeShort(0x100 + look[5])//Legs
-            writeShort(0x100 + look[0])//Hair
-            writeShort(0x100 + look[4])//Bracelet
-            writeShort(0x100 + look[6])//Feet
-            writeShort(0x100 + look[1])//Beard
-            writeByte(0)
-
-            //Inventory
-            val stream = Unpooled.buffer()
-            for (slotId in 0..14) {
-            }
-            buffer.writeShort(0)
-            buffer.writeBytes(stream)//TODO remove?
-
             colour.forEach { writeByte(it) }
             writeShort(1426)//Render emote
             writeString(displayName ?: "")//Display name
             writeByte(3)//Combat level
             writeByte(0)//Combat level + summoning
             writeByte(-1)//Player height priority toggle?
-            writeByte(0)//Mob morph
+            writeByte(transformMapper.has(event.entityId).int)//Mob morph
+            //Morph details
+            if(transformMapper.has(event.entityId)) {
+                writeShort(-1)
+                writeShort(-1)
+                writeShort(-1)
+                writeShort(0)
+                writeByte(0)
+            }
         }
 
         val data = ByteArray(packet.position())

@@ -135,7 +135,7 @@ internal class MapIndexDecoderTest {
                 val id = index.getArchiveId("n${x}_$y")
                 if (id != -1) {
                     val npcSpawnsContainerData = Cache.getIndex(5)?.getFile(id, 0, null)
-                    println("Found: n${x}_$y")
+                    println("Found: n${x}_$y ${x * 64} ${y * 64}")
                     if (npcSpawnsContainerData != null) {
                         val buffer = Unpooled.wrappedBuffer(npcSpawnsContainerData)
                         while (buffer.readableBytes() > 0) {

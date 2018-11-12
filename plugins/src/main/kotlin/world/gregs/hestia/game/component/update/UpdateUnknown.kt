@@ -4,6 +4,4 @@ import com.artemis.Component
 import com.artemis.annotations.PooledWeaver
 
 @PooledWeaver
-class CombatLevel : Component() {
-    var level: Int = 1
-}
+class UpdateUnknown : Component()

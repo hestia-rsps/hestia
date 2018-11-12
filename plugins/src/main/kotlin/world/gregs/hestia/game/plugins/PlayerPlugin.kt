@@ -11,10 +11,7 @@ import world.gregs.hestia.game.systems.*
 import world.gregs.hestia.game.systems.direction.DirectionSystem
 import world.gregs.hestia.game.systems.direction.MovementFaceSystem
 import world.gregs.hestia.game.systems.direction.WatchingSystem
-import world.gregs.hestia.game.systems.login.AppearanceSystem
-import world.gregs.hestia.game.systems.login.InterfaceSystem
-import world.gregs.hestia.game.systems.login.MapRegionSystem
-import world.gregs.hestia.game.systems.login.PlayerLoginSystem
+import world.gregs.hestia.game.systems.login.*
 import world.gregs.hestia.game.systems.sync.MobSyncSystem
 import world.gregs.hestia.game.systems.sync.PlayerSyncSystem
 import world.gregs.hestia.game.systems.sync.PostSyncSystem
@@ -34,7 +31,7 @@ class PlayerPlugin : Plugin {
         b.with(PRE_SYNC_PRIORITY, TickTaskSystem())
 
         //Login
-        b.with(ClientIndexSystem(), PlayerLoginSystem(), MapRegionSystem(), AppearanceSystem(), InterfaceSystem())
+        b.with(PlayerChangeSystem(), ClientIndexSystem(), RegionSystem(), PlayerLoginSystem(), MapRegionSystem(), AppearanceSystem(), InterfaceSystem())
         b.with(DamageSystem(), AnimationSystem(), GraphicsSystem())
     }
 

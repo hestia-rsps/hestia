@@ -18,6 +18,10 @@ import world.gregs.hestia.game.component.movement.*
 import world.gregs.hestia.game.component.update.*
 import world.gregs.hestia.services.Aspect
 import world.gregs.hestia.game.component.entity.Player
+import world.gregs.hestia.game.component.update.BatchAnimations
+import world.gregs.hestia.game.component.update.direction.Watching
+import world.gregs.hestia.game.systems.login.PlayerChangeSystem
+import world.gregs.hestia.services.getSystem
 
 class PostSyncSystem : IteratingSystem(Aspect.all(Renderable::class)) {
 
@@ -45,6 +49,14 @@ class PostSyncSystem : IteratingSystem(Aspect.all(Renderable::class)) {
     private lateinit var runMapper: ComponentMapper<Run>
     private lateinit var walkingMapper: ComponentMapper<Walking>
     private lateinit var movingMapper: ComponentMapper<Moving>
+    private lateinit var batchAnimationsMapper: ComponentMapper<BatchAnimations>
+    private lateinit var colourOverlayMapper: ComponentMapper<ColourOverlay>
+    private lateinit var timeBarMapper: ComponentMapper<TimeBar>
+    private lateinit var clanMemberMapper: ComponentMapper<UpdateClanMember>
+    private lateinit var unknownMapper: ComponentMapper<UpdateUnknown>
+    private lateinit var miniMapDotMapper: ComponentMapper<PlayerMiniMapDot>
+    private lateinit var modelChangeMapper: ComponentMapper<MobModelChange>
+    private lateinit var watchingMapper: ComponentMapper<Watching>
     private lateinit var playerSubscription: EntitySubscription
 
     override fun initialize() {
@@ -55,7 +67,6 @@ class PostSyncSystem : IteratingSystem(Aspect.all(Renderable::class)) {
     override fun process(entityId: Int) {
         //Update global/local entities
         viewportMapper.get(entityId)?.update(playerSubscription.entities)
-        viewportMapper.get(entityId)?.localMobs()?.clear()
 
         //Flags
         appearanceMapper.remove(entityId)
@@ -79,5 +90,13 @@ class PostSyncSystem : IteratingSystem(Aspect.all(Renderable::class)) {
         runMapper.remove(entityId)
         walkingMapper.remove(entityId)
         movingMapper.remove(entityId)
+        batchAnimationsMapper.remove(entityId)
+        colourOverlayMapper.remove(entityId)
+        timeBarMapper.remove(entityId)
+        clanMemberMapper.remove(entityId)
+        unknownMapper.remove(entityId)
+        miniMapDotMapper.remove(entityId)
+        modelChangeMapper.remove(entityId)
+        watchingMapper.remove(entityId)
     }
 }
