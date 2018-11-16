@@ -8,20 +8,17 @@ import world.gregs.hestia.game.systems.login.locationHash30Bit
 import world.gregs.hestia.GameConstants
 import world.gregs.hestia.core.network.packets.Packet
 
-class MapRegion(players: IntArray, viewport: Viewport, positionMapper: ComponentMapper<Position>, entityId: Int, position: Position, local: Boolean) : Packet.Builder(43, Packet.Type.VAR_SHORT) {
+class MapRegion(players: IntArray, positionMapper: ComponentMapper<Position>, entityId: Int, position: Position, local: Boolean) : Packet.Builder(43, Packet.Type.VAR_SHORT) {
     init {
         if (local) {
             startBitAccess()
             //Send current player position
             writeBits(30, position.locationHash30Bit)
-            //Add as first local player
-            viewport.addLocalPlayer(entityId)
 
             //Update player locations
             players.filterNot { it == entityId }.forEach { player ->
                 MapRegionSystem.updateHash(player, positionMapper.get(player))
                 writeBits(18, MapRegionSystem.locationHashes.getOrDefault(player, 0))
-                viewport.addGlobalPlayer(player)
             }
 
             //Iterate up to max number of players

@@ -19,7 +19,7 @@ class PlayerMoveTypeMask(private val walkingMapper: ComponentMapper<Walking>, pr
                     moving -> 127
                     walking -> 1
                     running -> 2
-                    else -> 1
+                    else -> 0
                 }
         )
     }

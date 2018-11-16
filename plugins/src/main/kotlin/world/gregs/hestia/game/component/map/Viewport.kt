@@ -2,6 +2,7 @@ package world.gregs.hestia.game.component.map
 
 import com.artemis.Component
 import com.artemis.utils.IntBag
+import world.gregs.hestia.services.toArray
 import java.util.*
 
 class Viewport : Component() {
@@ -39,7 +40,6 @@ class Viewport : Component() {
 
     fun update(players: IntBag) {
         globalPlayerIndices.clear()
-        globalPlayerIndices.addAll(Arrays.copyOf(players.data, players.size()).toList())
-        globalPlayerIndices.removeAll(localPlayers)
+        players.toArray().filterNotTo(globalPlayerIndices) { localPlayers.contains(it) }
     }
 }

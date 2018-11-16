@@ -23,7 +23,7 @@ import world.gregs.hestia.services.Aspect
 import world.gregs.hestia.services.exclude
 import world.gregs.hestia.services.one
 import world.gregs.hestia.game.component.map.Position
-import world.gregs.hestia.game.component.update.Appearance
+import world.gregs.hestia.game.component.update.*
 
 abstract class PlayerUpdateSystem(aspect: com.artemis.Aspect.Builder): SynchronizeSystem(aspect) {
 
@@ -44,32 +44,50 @@ abstract class PlayerUpdateSystem(aspect: com.artemis.Aspect.Builder): Synchroni
     private lateinit var watchingMapper: ComponentMapper<Watching>
     private lateinit var forceMovementMapper: ComponentMapper<ForceMovement>
     private lateinit var facingMapper: ComponentMapper<Facing>
+    private lateinit var batchAnimationsMapper: ComponentMapper<BatchAnimations>
+    private lateinit var colourOverlayMapper: ComponentMapper<ColourOverlay>
+    private lateinit var timeBarMapper: ComponentMapper<TimeBar>
+    private lateinit var clanMemberMapper: ComponentMapper<UpdateClanMember>
+    private lateinit var updateUnknownMapper: ComponentMapper<UpdateUnknown>
+    private lateinit var miniMapDotMapper: ComponentMapper<PlayerMiniMapDot>
 
-    override fun getLocals(viewport: Viewport): MutableList<Int> {
+    override fun getLocals(entityId: Int, viewport: Viewport): MutableList<Int> {
         return viewport.localPlayers()
     }
 
-    override fun getGlobals(viewport: Viewport): MutableList<Int> {
+    override fun getGlobals(entityId: Int, viewport: Viewport): MutableList<Int> {
         return viewport.globalPlayers()
     }
 
     override fun initialize() {
         super.initialize()
         flags = listOf(
+                //Batch animation masks
+                create(0x8000, Aspect.all(Renderable::class, BatchAnimations::class), PlayerBatchAnimationMask(batchAnimationsMapper)),
                 //Animation
                 create(0x40, Aspect.all(Renderable::class).one(FirstAnimation::class, SecondAnimation::class, ThirdAnimation::class, FourthAnimation::class), PlayerAnimMask(firstAnimationMapper, secondAnimationMapper, thirdAnimationMapper, fourthAnimationMapper), true),
                 //Third Graphic
                 create(0x40000, Aspect.all(Renderable::class, ThirdGraphic::class), PlayerGraphicMask(thirdGraphicMapper)),
+                //Colour overlay
+                create(0x20000, Aspect.all(Renderable::class, ColourOverlay::class), PlayerColourOverlayMask(colourOverlayMapper)),
                 //Move Type
                 create(0x200, Aspect.all(Renderable::class).one(Moving::class, Walking::class), PlayerMoveTypeMask(walkingMapper, runningMapper, movingMapper), true),
+                //Time Bar
+                create(0x2000, Aspect.all(Renderable::class, TimeBar::class), PlayerTimeBarMask(timeBarMapper)),
                 //Fourth Graphic
                 create(0x80000, Aspect.all(Renderable::class, FourthGraphic::class), PlayerGraphicMask(fourthGraphicMapper)),
+                //Clan chat member
+                create(0x100000, Aspect.all(Renderable::class, UpdateClanMember::class), ClanMemberMask(clanMemberMapper)),
                 //Hits
                 create(0x4, Aspect.all(Renderable::class, Damage::class), HitsMask(damageMapper, false)),
+                //Hidden weapon rotation/direction
+                create(0x10000, Aspect.all(Renderable::class, UpdateUnknown::class), UnknownMask(updateUnknownMapper)),
                 //Appearance
                 create(0x8, Aspect.all(Renderable::class, Appearance::class), PlayerAppearanceMask(appearanceDataMapper), true),
                 //Force Chat
                 create(0x4000, Aspect.all(Renderable::class, ForceChat::class), ForceChatMask(forceChatMapper)),
+                //Changes other players mini-map dot from white to a "p"
+                create(0x400, Aspect.all(Renderable::class, PlayerMiniMapDot::class), PlayerMiniMapMask(miniMapDotMapper)),
                 //Movement Type
                 create(0x1, Aspect.all(Renderable::class, UpdateMovement::class), PlayerMovementMask(runningMapper), true),
                 //Watch Entity

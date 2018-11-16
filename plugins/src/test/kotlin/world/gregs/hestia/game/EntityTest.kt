@@ -6,6 +6,8 @@ import world.gregs.hestia.services.Aspect
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import world.gregs.hestia.game.component.map.Position
+import world.gregs.hestia.services.add
 
 internal class EntityTest {
 
@@ -16,7 +18,7 @@ internal class EntityTest {
     fun setUp() {
         val config = WorldConfigurationBuilder().build()
         world = World(config)
-        test = ArchetypeBuilder().add(world.gregs.hestia.game.component.map.Position::class).build(world)
+        test = ArchetypeBuilder().add(Position::class).build(world)
     }
 
     @Test
@@ -27,7 +29,7 @@ internal class EntityTest {
 
     @Test
     fun insertion() {
-        val subscription = world.aspectSubscriptionManager.get(Aspect.all(world.gregs.hestia.game.component.map.Position::class))
+        val subscription = world.aspectSubscriptionManager.get(Aspect.all(Position::class))
 
         //Ignored
         world.create(test)//0
@@ -68,7 +70,7 @@ internal class EntityTest {
 
     @Test
     fun removal() {
-        val subscription = world.aspectSubscriptionManager.get(Aspect.all(world.gregs.hestia.game.component.map.Position::class))
+        val subscription = world.aspectSubscriptionManager.get(Aspect.all(Position::class))
 
         //Ignored
         world.create(test)//0
