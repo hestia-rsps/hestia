@@ -14,7 +14,6 @@ class BotCreation : PassiveSystem() {
 
     private lateinit var displayNameMapper: ComponentMapper<DisplayName>
     private lateinit var positionMapper: ComponentMapper<Position>
-    private val count = AtomicInteger(1)
 
     @Subscribe
     fun create(event: CreateBot) {
@@ -24,7 +23,8 @@ class BotCreation : PassiveSystem() {
         displayName?.name = event.name
 
         val position = positionMapper.get(entityId)
-        position.y = 3501 - count.getAndIncrement()
-        position.x = 3087
+        position.x = event.x
+        position.y = event.y
+        position.plane = event.plane
     }
 }

@@ -15,6 +15,7 @@ import world.gregs.hestia.services.send
 import world.gregs.hestia.game.component.map.Position
 import world.gregs.hestia.game.component.update.direction.Facing
 import world.gregs.hestia.game.update.DirectionUtils
+import world.gregs.hestia.game.systems.ViewDistanceSystem.Companion.MAXIMUM_MOBS
 
 class MobSyncSystem : MobUpdateSystem(Aspect.all(NetworkSession::class, Renderable::class, Viewport::class)) {
 
@@ -24,9 +25,13 @@ class MobSyncSystem : MobUpdateSystem(Aspect.all(NetworkSession::class, Renderab
     private lateinit var clientIndexMapper: ComponentMapper<ClientIndex>
     private lateinit var facingMapper: ComponentMapper<Facing>
     private lateinit var typeMapper: ComponentMapper<Type>
+    private var count = 0
+    private var added = 0
 
     override fun begin(entityId: Int, locals: List<Int>) {
         //Reset
+        count = locals.size
+        added = 0
         packet = Packet.Builder(6, Packet.Type.VAR_SHORT)
         data = Packet.Builder()
 
@@ -78,6 +83,16 @@ class MobSyncSystem : MobUpdateSystem(Aspect.all(NetworkSession::class, Renderab
         }
     }
 
+    override fun globalCheck(entityId: Int, global: Int): Boolean {
+        return when {
+            //Viewport cap
+            added + count >= MAXIMUM_MOBS -> false
+            //Number of players added has to be capped due to maximum packet size
+            added >= NEW_MOBS_PER_CYCLE -> false
+            else -> true
+        }
+    }
+
     /**
      * Process other mobs
      */
@@ -113,6 +128,7 @@ class MobSyncSystem : MobUpdateSystem(Aspect.all(NetworkSession::class, Renderab
             //Add to local
             val viewport = viewportMapper.get(entityId)
             viewport.addLocalMob(global)
+            added++
         }
     }
 
@@ -127,5 +143,9 @@ class MobSyncSystem : MobUpdateSystem(Aspect.all(NetworkSession::class, Renderab
         }
 
         es.send(entityId, packet)
+    }
+
+    companion object {
+        private const val NEW_MOBS_PER_CYCLE = 20
     }
 }

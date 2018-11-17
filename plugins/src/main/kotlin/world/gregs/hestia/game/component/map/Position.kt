@@ -41,6 +41,16 @@ class Position : Component() {
         return "$x, $y, $plane"
     }
 
+    fun withinDistance(from: Position, distance: Int = 15): Boolean {
+        return plane == from.plane && Math.abs(x - from.x) <= distance && Math.abs(y - from.y) <= distance
+    }
+
+    fun getDistance(other: Position): Int {
+        val deltaX = x - other.x
+        val deltaY =y  - other.y
+        return Math.ceil(Math.sqrt((deltaX * deltaX + deltaY * deltaY).toDouble())).toInt()
+    }
+
     companion object {
         val EMPTY = Position()
         fun create(x: Int, y: Int, z: Int): Position {
@@ -61,23 +71,6 @@ class Position : Component() {
 
         fun clone(position: Position): Position {
             return create(position.x, position.y, position.plane)
-        }
-
-        fun withinDistance(from: Position, to: Position): Boolean {
-            return if (to.plane != from.plane) {
-                false
-            } else {
-                Math.abs(to.x - from.x) <= 15 && Math.abs(to.y - from.y) <= 15
-            }
-        }
-
-        fun withinDistance(from: Position, to: Position, distance: Int): Boolean {
-            if (to.plane != from.plane){
-                return false
-            }
-            val deltaX = to.x - from.x
-            val deltaY = to.y - from.y
-            return deltaX <= distance && deltaX >= -distance && deltaY <= distance && deltaY >= -distance
         }
     }
 }

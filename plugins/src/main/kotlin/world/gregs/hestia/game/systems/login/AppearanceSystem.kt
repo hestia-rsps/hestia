@@ -24,17 +24,21 @@ class AppearanceSystem : SubscriptionSystem(Aspect.all(Player::class)) {
     private lateinit var playerMapper: ComponentMapper<Player>
 
     override fun inserted(entityId: Int) {
-        update(UpdateAppearance(entityId))
+        update(entityId)
     }
 
     @Subscribe
-    private fun update(event: UpdateAppearance) {
-        if(!playerMapper.has(event.entityId)) {
+    fun update(event: UpdateAppearance) {
+        update(event.entityId)
+    }
+
+    private fun update(entityId: Int) {
+        if(!playerMapper.has(entityId)) {
             return
         }
 
         val packet = Packet.Builder()
-        val displayName = displayNameMapper.get(event.entityId).name
+        val displayName = displayNameMapper.get(entityId).name
 
         val look = intArrayOf(0, 10, 18, 26, 33, 36, 42)
         val colour = intArrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
@@ -48,8 +52,8 @@ class AppearanceSystem : SubscriptionSystem(Aspect.all(Player::class)) {
             writeByte(-1)//Head icon
             writeByte(0)//Hidden
 
-            if(transformMapper.has(event.entityId)) {
-                val transform = transformMapper.get(event.entityId)
+            if(transformMapper.has(entityId)) {
+                val transform = transformMapper.get(entityId)
                 writeShort(-1)
                 writeShort(transform.mobId)
                 writeByte(0)
@@ -82,9 +86,9 @@ class AppearanceSystem : SubscriptionSystem(Aspect.all(Player::class)) {
             writeByte(3)//Combat level
             writeByte(0)//Combat level + summoning
             writeByte(-1)//Player height priority toggle?
-            writeByte(transformMapper.has(event.entityId).int)//Mob morph
+            writeByte(transformMapper.has(entityId).int)//Mob morph
             //Morph details
-            if(transformMapper.has(event.entityId)) {
+            if(transformMapper.has(entityId)) {
                 writeShort(-1)
                 writeShort(-1)
                 writeShort(-1)
@@ -96,10 +100,10 @@ class AppearanceSystem : SubscriptionSystem(Aspect.all(Player::class)) {
         val data = ByteArray(packet.position())
         System.arraycopy(packet.buffer.array(), 0, data, 0, data.size)
 
-        val appearance = appearanceDataMapper.get(event.entityId)
+        val appearance = appearanceDataMapper.get(entityId)
         appearance.hash = Encryption.encryptMD5(data)
         appearance.data = data
         //Flag for update
-        appearanceMapper.create(event.entityId)
+        appearanceMapper.create(entityId)
     }
 }

@@ -15,7 +15,6 @@ class MobCreation : PassiveSystem() {
 
     private lateinit var typeMapper: ComponentMapper<Type>
     private lateinit var positionMapper: ComponentMapper<Position>
-    private val count = AtomicInteger(0)
 
     @Subscribe
     fun create(event: CreateMob): Int {
@@ -25,8 +24,9 @@ class MobCreation : PassiveSystem() {
         type.id = event.mobId
 
         val position = positionMapper.get(entityId)
-        position.y = 3501 - count.getAndIncrement()
-        position.x = 3086
+        position.x = event.x
+        position.y = event.y
+        position.plane = event.plane
         return entityId
     }
 }

@@ -1,6 +1,5 @@
 package world.gregs.hestia.network.`in`
 
-import world.gregs.hestia.game.component.update.ForceMovement.Companion.SOUTH
 import world.gregs.hestia.game.component.map.Position
 import world.gregs.hestia.game.component.update.direction.face
 import world.gregs.hestia.game.component.update.direction.turn
@@ -15,8 +14,6 @@ import world.gregs.hestia.core.network.Session
 import world.gregs.hestia.core.network.packets.Packet
 import world.gregs.hestia.core.network.packets.PacketOpcode
 import world.gregs.hestia.core.network.packets.PacketSize
-import world.gregs.hestia.game.component.entity.Type
-import world.gregs.hestia.game.component.map.Viewport
 import world.gregs.hestia.game.component.update.*
 import world.gregs.hestia.game.update.Marker
 import world.gregs.hestia.network.game.GamePacket
@@ -32,7 +29,7 @@ class Commands : GamePacket() {
 
         val entity = entity ?: return false
 
-        if(command.contains(",")) {
+        if (command.contains(",")) {
             val params = parts[1].split(",")
             val plane = params[0].toInt()
             val x = params[1].toInt() shl 6 or params[3].toInt()
@@ -42,7 +39,7 @@ class Commands : GamePacket() {
             return true
         }
         println("Command ${parts[0]}")
-        when(parts[0]) {
+        when (parts[0]) {
             //Player updating flags
             "batch" -> {
                 entity.batchAnim()
@@ -56,7 +53,8 @@ class Commands : GamePacket() {
             }
             "clan" -> {
                 entity.world.players().forEach {
-                    entity.world.getEntity(it).updateClanChat(true) }
+                    entity.world.getEntity(it).updateClanChat(true)
+                }
             }
             "uk" -> {
                 entity.edit().add(UpdateUnknown())
@@ -77,7 +75,7 @@ class Commands : GamePacket() {
             "party" -> {
                 entity.schedule(0, 1) {
                     entity.colour(255, 255, tick * 25, 128, 1)
-                    if(tick >= 10) {
+                    if (tick >= 10) {
                         stop()
                     }
                 }
@@ -90,28 +88,34 @@ class Commands : GamePacket() {
             }
             "transform" -> {
                 val id = parts[1].toInt()
-                if(id < 0) {
+                if (id < 0) {
                     entity.updateAppearance()
                 } else {
                     entity.transform(parts[1].toInt())
                 }
             }
             "bot" -> {
-//                for(i in 0 until 5)
-                    es.dispatch(CreateBot("Bot"))
+                var count = 0
+                for (y in (3482 until 3518)) {
+                    for (x in 3070 until 3104) {
+                        es.dispatch(CreateBot("Bot ${count++}", x, y))
+                    }
+                }
             }
             "b" -> {
-                val bot = entity.world.getEntity(entity.world.players().last())
-//                val position = bot.getComponent(Position::class)!!
-//                bot.navigate(position.x + 1, position.y + 2)
-                val position = bot.getComponent(Position::class)!!
-                val target = Position.clone(position)
-                target.y += 1
-                bot.force(1, target, 2, ForceMovement.NORTH)
+                entity.world.players().forEach {
+                    val bot = entity.world.getEntity(it)
+//                    bot.force("Bot $it")
+                    bot.animate(863)
+                }
             }
             "mob" -> {
+                for (y in (3488 until 3510)) {
+                    for (x in 3079 until 3097) {
+                        es.dispatch(CreateMob(1, x, y))
+                    }
+                }
 //                for(i in 0 until 5)
-                    es.dispatch(CreateMob(1))
             }
             "m" -> {
                 val mob = entity.world.getEntity(entity.world.mobs().first())
@@ -123,8 +127,8 @@ class Commands : GamePacket() {
                 entity.world.delete(entity.world.mobs().first())
             }
             "hit" -> {
-                for(i in 0 until 5)
-                entity.hit(10, Marker.MELEE)
+                for (i in 0 until 5)
+                    entity.hit(10, Marker.MELEE)
             }
             "force" -> {
                 val position = entity.getComponent(Position::class)!!
@@ -164,7 +168,7 @@ class Commands : GamePacket() {
             "mobdemo" -> {
                 val mob = entity.world.getEntity(entity.world.mobs().first())
                 entity.schedule(0, 1) {
-                    when(tick) {
+                    when (tick) {
                         0 -> {
                             mob.force("Graphic")
                             mob.graphic(40)
@@ -244,7 +248,7 @@ class Commands : GamePacket() {
             "botdemo" -> {
                 val bot = entity.world.getEntity(entity.world.players()[1])
                 entity.schedule(0, 1) {
-                    when(tick) {
+                    when (tick) {
                         0 -> {
                             bot.force("Animation")
                             bot.animate(855)

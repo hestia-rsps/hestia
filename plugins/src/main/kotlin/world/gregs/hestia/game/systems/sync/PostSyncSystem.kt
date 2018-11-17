@@ -20,8 +20,6 @@ import world.gregs.hestia.services.Aspect
 import world.gregs.hestia.game.component.entity.Player
 import world.gregs.hestia.game.component.update.BatchAnimations
 import world.gregs.hestia.game.component.update.direction.Watching
-import world.gregs.hestia.game.systems.login.PlayerChangeSystem
-import world.gregs.hestia.services.getSystem
 
 class PostSyncSystem : IteratingSystem(Aspect.all(Renderable::class)) {
 
