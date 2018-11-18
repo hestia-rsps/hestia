@@ -1,10 +1,6 @@
 package world.gregs.hestia.game.systems.sync
 
-import com.artemis.EntitySubscription
-import com.artemis.utils.IntBag
-import io.reactivex.rxkotlin.toSingle
 import world.gregs.hestia.game.component.*
-import world.gregs.hestia.game.systems.login.MapRegionSystem
 import world.gregs.hestia.game.systems.login.locationHash18Bit
 import world.gregs.hestia.services.Aspect
 import net.mostlyoriginal.api.event.common.EventSystem
@@ -21,6 +17,7 @@ import world.gregs.hestia.game.update.DirectionUtils.Companion.getPlayerRunningD
 import world.gregs.hestia.game.update.DirectionUtils.Companion.getPlayerWalkingDirection
 import world.gregs.hestia.services.send
 import world.gregs.hestia.game.component.map.Position
+import world.gregs.hestia.game.systems.ViewDistanceSystem.Companion.MAXIMUM_LOCAL_PLAYERS
 
 class PlayerSyncSystem : PlayerUpdateSystem(Aspect.all(NetworkSession::class, Renderable::class, Viewport::class, AppearanceData::class)) {
 
@@ -29,10 +26,13 @@ class PlayerSyncSystem : PlayerUpdateSystem(Aspect.all(NetworkSession::class, Re
     private lateinit var packet: Packet.Builder
     private lateinit var data: Packet.Builder
     private var total = 0
+    private var count = 0
+    private var added = 0
 
     override fun begin(entityId: Int, locals: List<Int>) {
         //Reset
         total = locals.size
+        count = locals.size
         skip = -1
         packet = Packet.Builder(69, Packet.Type.VAR_SHORT)
         data = Packet.Builder()
@@ -61,18 +61,31 @@ class PlayerSyncSystem : PlayerUpdateSystem(Aspect.all(NetworkSession::class, Re
     override fun middle(entityId: Int, globals: List<Int>) {
         skipPlayers()
 
-        total += globals.size
-
         packet.finishBitAccess()
         packet.startBitAccess()
+
+        added = 0
+    }
+
+    override fun globalCheck(entityId: Int, global: Int): Boolean {
+        return when {
+            //Viewport cap
+            added + count >= MAXIMUM_LOCAL_PLAYERS -> false
+            //Number of players added has to be capped due to maximum packet size
+            added >= NEW_PLAYERS_PER_CYCLE -> false
+            else -> true
+        }
     }
 
     /**
      * Process other players
      */
     override fun global(entityId: Int, global: Int, type: UpdateStage, iterator: MutableIterator<Int>) {
+        total++
+
         //Update
         if (type == UpdateStage.ADD) {
+            added++
             update(entityId, global, data, true, true)
         }
         //Sync
@@ -80,7 +93,7 @@ class PlayerSyncSystem : PlayerUpdateSystem(Aspect.all(NetworkSession::class, Re
             skip++
         } else {
             skipPlayers()
-            if (world.entityManager.isActive(global)) {//TODO check
+            if (world.entityManager.isActive(global)) {
                 updateGlobalPlayer(type, entityId, global, iterator)
             }
         }
@@ -110,18 +123,20 @@ class PlayerSyncSystem : PlayerUpdateSystem(Aspect.all(NetworkSession::class, Re
         }
 
         val position = positionMapper.get(local)
-        val lastPosition = mobileMapper.get(local)?.lastPosition
+        val mobile = mobileMapper.get(local)
         when (type) {
             UpdateStage.REMOVE -> {
-                if (lastPosition != null) {
-                    MapRegionSystem.updateHash(local, lastPosition)
+                val viewport = viewportMapper.get(player)
+                if(mobile != null && mobile.lastX != -1) {
+                    viewport.updateHash(local, Position.create(mobile.lastX, mobile.lastY, mobile.lastPlane))
                 }
                 sendMovementUpdate(player, local)
                 iterator.remove()
             }
             UpdateStage.MOVE -> {
-                val delta = Position.delta(position, lastPosition!!)
-                val global = !Position.withinDistance(position, lastPosition)
+                val lastPosition = Position.create(mobile.lastX, mobile.lastY, mobile.lastPlane)
+                val delta = Position.delta(position, lastPosition)
+                val global = !position.withinDistance(lastPosition, 15)
                 packet.writeBits(1, global.int)
                 if (!global) {
                     //Send local position
@@ -133,7 +148,7 @@ class PlayerSyncSystem : PlayerUpdateSystem(Aspect.all(NetworkSession::class, Re
                     packet.writeBits(30, (delta.y and 0x3fff) + (delta.x and 0x3fff shl 14) + (delta.plane and 0x3 shl 28))
                 }
             }
-            UpdateStage.WALKING, UpdateStage.RUNNING -> {//Walking/Running
+            UpdateStage.WALKING, UpdateStage.RUNNING -> {
                 val nextWalkDirection = walkMapper.get(local).direction
 
                 //Calculate next step coordinates
@@ -186,6 +201,7 @@ class PlayerSyncSystem : PlayerUpdateSystem(Aspect.all(NetworkSession::class, Re
         packet.writeBits(2, type.movementType())//Movement type
         //Position
         val position = positionMapper.get(global) ?: return
+
         when (type) {
             UpdateStage.ADD -> {
                 sendMovementUpdate(player, global)
@@ -196,7 +212,7 @@ class PlayerSyncSystem : PlayerUpdateSystem(Aspect.all(NetworkSession::class, Re
                 iterator?.remove()
             }
             UpdateStage.HEIGHT, UpdateStage.REGION, UpdateStage.MOVE -> {
-                val oldHash = MapRegionSystem.getHash(global)
+                val oldHash = viewport.getHash(global)
                 val newHash = position.locationHash18Bit//Equivalent to regionX/Y
                 val old = Position.from(oldHash)
                 val new = Position.from(newHash)
@@ -215,17 +231,17 @@ class PlayerSyncSystem : PlayerUpdateSystem(Aspect.all(NetworkSession::class, Re
                     else -> {
                     }
                 }
-                MapRegionSystem.updateHash(global, position)
+                viewport.updateHash(global, position)
             }
             else -> {
             }
         }
     }
 
-    private fun getUpdateType(player: Int): UpdateStage {
-        val newHash = positionMapper.get(player)?.locationHash18Bit
+    private fun getUpdateType(player: Int, other: Int): UpdateStage {
+        val oldHash = viewportMapper.get(player).getHash(other)
+        val newHash = positionMapper.get(other)?.locationHash18Bit
                 ?: return UpdateStage.SKIP
-        val oldHash = MapRegionSystem.getHash(player)
 
         val new = Position.from(newHash)
         val old = Position.from(oldHash)
@@ -244,7 +260,7 @@ class PlayerSyncSystem : PlayerUpdateSystem(Aspect.all(NetworkSession::class, Re
     }
 
     private fun sendMovementUpdate(player: Int, other: Int) {
-        val updateType = getUpdateType(other)
+        val updateType = getUpdateType(player, other)
         if (updateType != UpdateStage.SKIP) {
             //Move to global players
             updateGlobalPlayer(updateType, player, other)
@@ -276,5 +292,9 @@ class PlayerSyncSystem : PlayerUpdateSystem(Aspect.all(NetworkSession::class, Re
             }
         }
         skip = -1
+    }
+
+    companion object {
+        private const val NEW_PLAYERS_PER_CYCLE = 20
     }
 }

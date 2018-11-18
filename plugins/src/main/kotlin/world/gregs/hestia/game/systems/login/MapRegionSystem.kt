@@ -17,6 +17,7 @@ import world.gregs.hestia.network.out.MapRegion
 class MapRegionSystem : SubscriptionSystem(Aspect.all(NetworkSession::class, Player::class)) {
 
     private lateinit var es: EventSystem
+    private lateinit var viewportMapper: ComponentMapper<Viewport>
     private lateinit var positionMapper: ComponentMapper<Position>
 
     override fun inserted(entityId: Int) {
@@ -30,22 +31,10 @@ class MapRegionSystem : SubscriptionSystem(Aspect.all(NetworkSession::class, Pla
 
     private fun update(entityId: Int) {
         val position = positionMapper.get(entityId)
+        val viewport = viewportMapper.get(entityId)
         val list = Arrays.copyOf(entityIds.data, entityIds.size())
-        es.send(entityId, MapRegion(list, positionMapper, entityId, position, true))
+        es.send(entityId, MapRegion(list, viewport, positionMapper, entityId, position, true))
     }
-
-    companion object {
-        val locationHashes = HashMap<Int, Int>()
-
-        fun updateHash(index: Int, tile: Position) {
-            locationHashes[index] = tile.locationHash18Bit
-        }
-
-        fun getHash(playerIndex: Int): Int {
-            return locationHashes[playerIndex] ?: Position.EMPTY.locationHash18Bit
-        }
-    }
-
 }
 
 val Position.locationHash18Bit: Int

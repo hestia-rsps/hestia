@@ -18,6 +18,8 @@ class MobileSystem : IteratingSystem(Aspect.all(Position::class, Mobile::class))
     override fun process(entityId: Int) {
         val position = positionMapper.get(entityId)
         val mobile = mobileMapper.get(entityId)
-        mobile.lastPosition = Position.clone(position)
+        mobile.lastX = position.x
+        mobile.lastY = position.y
+        mobile.lastPlane = position.plane
     }
 }

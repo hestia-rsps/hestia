@@ -27,12 +27,14 @@ class PlayerPlugin : Plugin {
         b.with(SYNC_PRIORITY, PlayerSyncSystem())
         b.with(MOB_SYNC_PRIORITY, MobSyncSystem())
         b.with(POST_SYNC_PRIORITY, PostSyncSystem())
+        b.with(POST_SYNC_PRIORITY + 1, ViewDistanceSystem())
 
         b.with(PRE_SYNC_PRIORITY, TickTaskSystem())
 
         //Login
         b.with(PlayerChangeSystem(), ClientIndexSystem(), RegionSystem(), PlayerLoginSystem(), MapRegionSystem(), AppearanceSystem(), InterfaceSystem())
         b.with(DamageSystem(), AnimationSystem(), GraphicsSystem())
+        b.with(PlayerLogoutSystem())
     }
 
 }

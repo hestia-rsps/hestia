@@ -3,12 +3,11 @@ package world.gregs.hestia.network.out
 import com.artemis.ComponentMapper
 import world.gregs.hestia.game.component.map.Position
 import world.gregs.hestia.game.component.map.Viewport
-import world.gregs.hestia.game.systems.login.MapRegionSystem
 import world.gregs.hestia.game.systems.login.locationHash30Bit
 import world.gregs.hestia.GameConstants
 import world.gregs.hestia.core.network.packets.Packet
 
-class MapRegion(players: IntArray, positionMapper: ComponentMapper<Position>, entityId: Int, position: Position, local: Boolean) : Packet.Builder(43, Packet.Type.VAR_SHORT) {
+class MapRegion(players: IntArray, viewport: Viewport, positionMapper: ComponentMapper<Position>, entityId: Int, position: Position, local: Boolean) : Packet.Builder(43, Packet.Type.VAR_SHORT) {
     init {
         if (local) {
             startBitAccess()
@@ -17,8 +16,8 @@ class MapRegion(players: IntArray, positionMapper: ComponentMapper<Position>, en
 
             //Update player locations
             players.filterNot { it == entityId }.forEach { player ->
-                MapRegionSystem.updateHash(player, positionMapper.get(player))
-                writeBits(18, MapRegionSystem.locationHashes.getOrDefault(player, 0))
+                viewport.updateHash(player, positionMapper.get(player))
+                writeBits(18, viewport.getHash(player))
             }
 
             //Iterate up to max number of players
