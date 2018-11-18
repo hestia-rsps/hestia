@@ -73,10 +73,14 @@ class Commands : GamePacket() {
 //                mob.change(intArrayOf(390, 456, 332, 326, 151, 177, 12138, 181), intArrayOf(10508, -10342, 4550))
             }
             "party" -> {
-                entity.schedule(0, 1) {
-                    entity.colour(255, 255, tick * 25, 128, 1)
-                    if (tick >= 10) {
-                        stop()
+                var count = 0
+                for (y in 3482 until 3518) {
+                    for (x in 3070 until 3104) {
+                        if((x + y).rem(2) == 0) {
+                            es.dispatch(CreateMob(1, x, y))
+                        } else {
+                            es.dispatch(CreateBot("Bot ${count++}", x, y))
+                        }
                     }
                 }
             }
@@ -95,6 +99,7 @@ class Commands : GamePacket() {
                 }
             }
             "bot" -> {
+                val position = entity.getComponent(Position::class)!!
                 var count = 0
                 for (y in (3482 until 3518)) {
                     for (x in 3070 until 3104) {
@@ -110,12 +115,20 @@ class Commands : GamePacket() {
                 }
             }
             "mob" -> {
-                for (y in (3488 until 3510)) {
-                    for (x in 3079 until 3097) {
+                val position = entity.getComponent(Position::class)!!
+                for (y in (3482 until 3518)) {
+                    for (x in 3070 until 3104) {
                         es.dispatch(CreateMob(1, x, y))
                     }
                 }
-//                for(i in 0 until 5)
+                /*entity.schedule(4, 0) {
+                    entity.world.mobs().forEachIndexed { index, it ->
+                        val displayName = DisplayName()
+                        displayName.name = "Mob ${index + 1} ${3482 + index}"
+                        entity.world.getEntity(it).edit().add(displayName).add(UpdateDisplayName())
+                    }
+                    stop()
+                }*/
             }
             "m" -> {
                 val mob = entity.world.getEntity(entity.world.mobs().first())

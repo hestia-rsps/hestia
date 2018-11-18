@@ -14,6 +14,6 @@ import world.gregs.hestia.services.add
 class BotFactory : ArchetypeFactory {
 
     override fun getBuilder(): ArchetypeBuilder {
-        return ArchetypeBuilder().add(Player::class, ClientIndex::class, Renderable::class, Position::class, AppearanceData::class, DisplayName::class, Viewport::class, Mobile::class)
+        return ArchetypeBuilder().add(Player::class, ClientIndex::class, Renderable::class, Position::class, AppearanceData::class, DisplayName::class, Mobile::class)
     }
 }

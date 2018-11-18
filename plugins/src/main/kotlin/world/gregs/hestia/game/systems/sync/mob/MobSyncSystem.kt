@@ -1,4 +1,4 @@
-package world.gregs.hestia.game.systems.sync
+package world.gregs.hestia.game.systems.sync.mob
 
 import com.artemis.ComponentMapper
 import world.gregs.hestia.game.update.UpdateStage
@@ -15,7 +15,7 @@ import world.gregs.hestia.services.send
 import world.gregs.hestia.game.component.map.Position
 import world.gregs.hestia.game.component.update.direction.Facing
 import world.gregs.hestia.game.update.DirectionUtils
-import world.gregs.hestia.game.systems.ViewDistanceSystem.Companion.MAXIMUM_MOBS
+import world.gregs.hestia.game.systems.sync.mob.MobViewDistanceSystem.Companion.MAXIMUM_LOCAL_MOBS
 
 class MobSyncSystem : MobUpdateSystem(Aspect.all(NetworkSession::class, Renderable::class, Viewport::class)) {
 
@@ -30,7 +30,7 @@ class MobSyncSystem : MobUpdateSystem(Aspect.all(NetworkSession::class, Renderab
 
     override fun begin(entityId: Int, locals: List<Int>) {
         //Reset
-        count = locals.size
+        count = 0
         added = 0
         packet = Packet.Builder(6, Packet.Type.VAR_SHORT)
         data = Packet.Builder()
@@ -51,15 +51,15 @@ class MobSyncSystem : MobUpdateSystem(Aspect.all(NetworkSession::class, Renderab
         }
 
         //Sync
-        val movement = type == UpdateStage.MOVE || type == UpdateStage.WALKING || type == UpdateStage.RUNNING
-        packet.writeBits(1, (update || movement || type == UpdateStage.UPDATE).int)//Update?
-        if(update || movement) {
-            packet.writeBits(2, type.movementType())//Movement type
+        packet.writeBits(1, (type != UpdateStage.SKIP).int)//Update?
+        if (type != UpdateStage.SKIP) {
+            packet.writeBits(2, if(type == UpdateStage.REMOVE) 3 else type.movementType())//Movement type
         }
 
         when (type) {
             UpdateStage.MOVE, UpdateStage.REMOVE -> {
                 iterator.remove()
+                return//Return here as they shouldn't be counted as part of the total
             }
             UpdateStage.WALKING, UpdateStage.RUNNING -> {
                 val running = runMapper.has(entityId)
@@ -81,14 +81,15 @@ class MobSyncSystem : MobUpdateSystem(Aspect.all(NetworkSession::class, Renderab
             else -> {
             }
         }
+        count++
     }
 
     override fun globalCheck(entityId: Int, global: Int): Boolean {
         return when {
             //Viewport cap
-            added + count >= MAXIMUM_MOBS -> false
+            added + count >= MAXIMUM_LOCAL_MOBS -> false
             //Number of players added has to be capped due to maximum packet size
-            added >= NEW_MOBS_PER_CYCLE -> false
+            added >= MobSyncSystem.NEW_MOBS_PER_CYCLE -> false
             else -> true
         }
     }
@@ -96,7 +97,7 @@ class MobSyncSystem : MobUpdateSystem(Aspect.all(NetworkSession::class, Renderab
     /**
      * Process other mobs
      */
-    override fun global(entityId: Int, global: Int, type: UpdateStage, iterator: MutableIterator<Int>) {
+    override fun global(entityId: Int, global: Int, type: UpdateStage) {
         val needsUpdate = flags.any { t -> t.subscription.entities.contains(global) }
         //Update
         if (needsUpdate) {
@@ -108,7 +109,7 @@ class MobSyncSystem : MobUpdateSystem(Aspect.all(NetworkSession::class, Renderab
             packet.writeBits(15, clientIndexMapper.get(global).index)
             //Facing
             val facing = facingMapper.get(global)
-            val direction = if(facing != null) DirectionUtils.getFaceDirection(facing.x, facing.y) else 0
+            val direction = if (facing != null) DirectionUtils.getFaceDirection(facing.x, facing.y) else 0
             packet.writeBits(3, (direction shr 11) - 4)
             //Update
             packet.writeBits(1, needsUpdate.int)
