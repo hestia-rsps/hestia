@@ -1,9 +1,9 @@
-package world.gregs.hestia.game.component.update
+package world.gregs.hestia.game.component.update.appearance
 
 import com.artemis.Component
 import com.artemis.annotations.PooledWeaver
 
 @PooledWeaver
-class CombatLevel : Component() {
+class SummoningCombatLevel : Component() {
     var level: Int = 1
 }

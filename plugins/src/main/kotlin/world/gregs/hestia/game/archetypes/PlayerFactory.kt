@@ -9,7 +9,7 @@ import world.gregs.hestia.game.component.map.Position
 import world.gregs.hestia.game.component.map.PlayerViewDistance
 import world.gregs.hestia.game.component.map.Viewport
 import world.gregs.hestia.game.component.movement.Mobile
-import world.gregs.hestia.game.component.update.AppearanceData
+import world.gregs.hestia.game.component.update.appearance.AppearanceData
 import world.gregs.hestia.game.component.update.DisplayName
 import world.gregs.hestia.services.add
 
