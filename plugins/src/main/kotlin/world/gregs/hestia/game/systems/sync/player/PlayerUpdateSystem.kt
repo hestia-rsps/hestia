@@ -1,4 +1,4 @@
-package world.gregs.hestia.game.systems.sync
+package world.gregs.hestia.game.systems.sync.player
 
 import com.artemis.ComponentMapper
 import world.gregs.hestia.game.component.*
@@ -24,6 +24,8 @@ import world.gregs.hestia.services.exclude
 import world.gregs.hestia.services.one
 import world.gregs.hestia.game.component.map.Position
 import world.gregs.hestia.game.component.update.*
+import world.gregs.hestia.game.systems.sync.SynchronizeSystem
+import world.gregs.hestia.services.getSystem
 
 abstract class PlayerUpdateSystem(aspect: com.artemis.Aspect.Builder): SynchronizeSystem(aspect) {
 
@@ -55,8 +57,11 @@ abstract class PlayerUpdateSystem(aspect: com.artemis.Aspect.Builder): Synchroni
         return viewport.localPlayers()
     }
 
-    override fun getGlobals(entityId: Int, viewport: Viewport): MutableList<Int> {
-        return viewport.globalPlayers()
+    override fun getGlobals(entityId: Int, viewport: Viewport): List<Int> {
+        return world.getSystem(PlayerChunkSystem::class)
+                .get(positionMapper.get(entityId))
+                .filterNot { viewport.localPlayers().contains(it) }
+                .sorted()
     }
 
     override fun initialize() {

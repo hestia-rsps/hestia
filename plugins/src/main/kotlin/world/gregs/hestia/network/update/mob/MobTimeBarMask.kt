@@ -1,4 +1,4 @@
-package world.gregs.hestia.network.update.player
+package world.gregs.hestia.network.update.mob
 
 import com.artemis.ComponentMapper
 import world.gregs.hestia.game.update.UpdateEncoder

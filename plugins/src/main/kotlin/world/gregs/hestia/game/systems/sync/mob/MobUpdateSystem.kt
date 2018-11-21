@@ -1,4 +1,4 @@
-package world.gregs.hestia.game.systems.sync
+package world.gregs.hestia.game.systems.sync.mob
 
 import com.artemis.ComponentMapper
 import com.artemis.EntitySubscription
@@ -23,8 +23,7 @@ import world.gregs.hestia.game.component.entity.Mob
 import world.gregs.hestia.game.component.entity.Type
 import world.gregs.hestia.game.component.map.Position
 import world.gregs.hestia.services.*
-import world.gregs.hestia.game.systems.RegionSystem
-import world.gregs.hestia.game.component.update.direction.Watch
+import world.gregs.hestia.game.systems.sync.SynchronizeSystem
 
 abstract class MobUpdateSystem(aspect: com.artemis.Aspect.Builder) : SynchronizeSystem(aspect) {
     //Flags
@@ -55,15 +54,11 @@ abstract class MobUpdateSystem(aspect: com.artemis.Aspect.Builder) : Synchronize
         return viewport.localMobs()
     }
 
-    override fun getGlobals(entityId: Int, viewport: Viewport): MutableList<Int> {
-        val regionId = positionMapper.get(entityId).regionId
-        return world.getSystem(RegionSystem::class).regions.first { it.regionId == regionId }.mobs
+    override fun getGlobals(entityId: Int, viewport: Viewport): List<Int> {
+        return world.getSystem(MobChunkSystem::class)
+                .get(positionMapper.get(entityId))
                 .filterNot { viewport.localMobs().contains(it) }
-                .toMutableList()
-        //TODO improve with real region system
-        /*return mobSubscription.entities.toArray()
-                .filterNot { viewport.localMobs().contains(it) }
-                .toMutableList()*/
+                .sorted()//Not required for mobs but makes loading nicer rather than in square chunks
     }
 
     override fun initialize() {

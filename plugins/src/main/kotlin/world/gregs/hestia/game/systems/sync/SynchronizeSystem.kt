@@ -10,15 +10,17 @@ import world.gregs.hestia.game.component.movement.Moving
 import world.gregs.hestia.game.component.movement.Run
 import world.gregs.hestia.game.component.movement.Walk
 import world.gregs.hestia.core.network.packets.Packet
-import world.gregs.hestia.game.component.map.ViewDistance
+import world.gregs.hestia.game.component.entity.Mob
+import world.gregs.hestia.game.component.map.PlayerViewDistance
+import world.gregs.hestia.game.component.map.MobViewDistance
 import world.gregs.hestia.game.update.UpdateEncoder
 import world.gregs.hestia.game.update.UpdateStage
-import world.gregs.hestia.game.systems.ViewDistanceSystem
 
-abstract class SynchronizeSystem(aspect: com.artemis.Aspect.Builder): IteratingSystem(aspect) {
+abstract class SynchronizeSystem(aspect: com.artemis.Aspect.Builder) : IteratingSystem(aspect) {
 
     internal lateinit var viewportMapper: ComponentMapper<Viewport>
-    internal lateinit var viewDistanceMapper: ComponentMapper<ViewDistance>
+    private lateinit var playerViewDistanceMapper: ComponentMapper<PlayerViewDistance>
+    private lateinit var mobViewDistanceMapper: ComponentMapper<MobViewDistance>
 
     //Stage checks
     internal lateinit var mobileMapper: ComponentMapper<Mobile>
@@ -26,12 +28,13 @@ abstract class SynchronizeSystem(aspect: com.artemis.Aspect.Builder): IteratingS
     internal lateinit var runMapper: ComponentMapper<Run>
     internal lateinit var movingMapper: ComponentMapper<Moving>
     internal lateinit var positionMapper: ComponentMapper<Position>
+    private lateinit var mobMapper: ComponentMapper<Mob>
 
     internal lateinit var flags: List<FlagType>
 
     abstract fun getLocals(entityId: Int, viewport: Viewport): MutableList<Int>
 
-    abstract fun getGlobals(entityId: Int, viewport: Viewport): MutableList<Int>
+    abstract fun getGlobals(entityId: Int, viewport: Viewport): List<Int>
 
     open fun local(entityId: Int, local: Int, type: UpdateStage, update: Boolean, iterator: MutableIterator<Int>) {
     }
@@ -40,7 +43,7 @@ abstract class SynchronizeSystem(aspect: com.artemis.Aspect.Builder): IteratingS
         return true
     }
 
-    open fun global(entityId: Int, global: Int, type: UpdateStage, iterator: MutableIterator<Int>) {
+    open fun global(entityId: Int, global: Int, type: UpdateStage) {
     }
 
     open fun globalCheck(entityId: Int, global: Int): Boolean {
@@ -58,36 +61,37 @@ abstract class SynchronizeSystem(aspect: com.artemis.Aspect.Builder): IteratingS
         val viewport = viewportMapper.get(entityId)
 
         val locals = getLocals(entityId, viewport)
+        val globals = getGlobals(entityId, viewport)
+
         begin(entityId, locals)
 
         //Local entities
-        var iterator = locals.iterator()
-        while (iterator.hasNext()) {
-            val localId = iterator.next()
+        val localIterator = locals.iterator()
+        while (localIterator.hasNext()) {
+            val localId = localIterator.next()
 
-            if(!localCheck(entityId, localId)) {
+            if (!localCheck(entityId, localId)) {
                 break
             }
 
             val update = flags.any { t -> t.subscription.entities.contains(localId) }
             val type = getLocalStage(entityId, localId, update)
-            local(entityId, localId, type, update, iterator)
+            local(entityId, localId, type, update, localIterator)
         }
 
-        val globals = getGlobals(entityId, viewport)
         middle(entityId, globals)
 
         //Global entities
-        iterator = globals.iterator()
-        while (iterator.hasNext()) {
-            val entityIndex = iterator.next()
+        val globalIterator = globals.iterator()
+        while (globalIterator.hasNext()) {
+            val entityIndex = globalIterator.next()
 
-            if(!globalCheck(entityId, entityIndex)) {
+            if (!globalCheck(entityId, entityIndex)) {
                 break
             }
 
             val type = getGlobalStage(entityId, entityIndex)
-            global(entityId, entityIndex, type, iterator)
+            global(entityId, entityIndex, type)
         }
 
         end(entityId)
@@ -106,7 +110,7 @@ abstract class SynchronizeSystem(aspect: com.artemis.Aspect.Builder): IteratingS
 
     private fun getGlobalStage(entityId: Int, global: Int): UpdateStage {
         return when {
-            !world.entityManager.isActive(global) -> UpdateStage.SKIP//TODO check if isActive works same as when `world.getEntity(id) == null`
+            !world.entityManager.isActive(global) -> UpdateStage.SKIP
             /* !global.hasFinished() && */withinDistance(entityId, global) -> UpdateStage.ADD
             mobileMapper.has(global) && mobileMapper.get(global).lastPlane != positionMapper.get(global)?.plane -> UpdateStage.HEIGHT
             movingMapper.has(global) -> UpdateStage.MOVE
@@ -128,7 +132,7 @@ abstract class SynchronizeSystem(aspect: com.artemis.Aspect.Builder): IteratingS
             maskData = maskData or 0x80
         }
         if (maskData >= 65536) {
-            maskData = maskData or if(player) 0x800 else 0x8000
+            maskData = maskData or if (player) 0x800 else 0x8000
         }
 
         data.writeByte(maskData)
@@ -146,13 +150,17 @@ abstract class SynchronizeSystem(aspect: com.artemis.Aspect.Builder): IteratingS
     }
 
     private fun withinDistance(entityId: Int, otherId: Int): Boolean {
-        val pos = positionMapper.get(entityId)
-        val o = positionMapper.get(otherId)
-        val distance = if(viewDistanceMapper.has(entityId)) viewDistanceMapper.get(entityId).distance else ViewDistanceSystem.DEFAULT_VIEW_DISTANCE
+        val pos = if (positionMapper.has(entityId)) positionMapper.get(entityId) else return false
+        val o = if (positionMapper.has(otherId)) positionMapper.get(otherId) else return false
+        val distance = if (mobMapper.has(otherId)) {
+            mobViewDistanceMapper.get(entityId)?.distance
+        } else {
+            playerViewDistanceMapper.get(entityId)?.distance
+        } ?: ViewDistanceSystem.DEFAULT_VIEW_DISTANCE
         return pos.withinDistance(o, distance)
     }
 
-    internal fun create(mask: Int, aspect: com.artemis.Aspect.Builder, unit: UpdateEncoder, added: Boolean = false) : FlagType {
+    internal fun create(mask: Int, aspect: com.artemis.Aspect.Builder, unit: UpdateEncoder, added: Boolean = false): FlagType {
         return FlagType(mask, world.aspectSubscriptionManager.get(aspect), unit, added)
     }
 

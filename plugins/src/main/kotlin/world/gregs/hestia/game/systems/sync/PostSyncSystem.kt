@@ -23,8 +23,6 @@ import world.gregs.hestia.game.component.update.direction.Watching
 
 class PostSyncSystem : IteratingSystem(Aspect.all(Renderable::class)) {
 
-    private lateinit var viewportMapper: ComponentMapper<Viewport>
-
     //Flags
     private lateinit var appearanceMapper: ComponentMapper<Appearance>
     private lateinit var firstAnimationMapper: ComponentMapper<FirstAnimation>
@@ -55,17 +53,8 @@ class PostSyncSystem : IteratingSystem(Aspect.all(Renderable::class)) {
     private lateinit var miniMapDotMapper: ComponentMapper<PlayerMiniMapDot>
     private lateinit var modelChangeMapper: ComponentMapper<MobModelChange>
     private lateinit var watchingMapper: ComponentMapper<Watching>
-    private lateinit var playerSubscription: EntitySubscription
-
-    override fun initialize() {
-        super.initialize()
-        playerSubscription = world.aspectSubscriptionManager.get(Aspect.all(Player::class))
-    }
 
     override fun process(entityId: Int) {
-        //Update global/local entities
-        viewportMapper.get(entityId)?.update(playerSubscription.entities)
-
         //Flags
         appearanceMapper.remove(entityId)
         firstAnimationMapper.remove(entityId)

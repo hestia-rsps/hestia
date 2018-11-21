@@ -45,14 +45,19 @@ class Position : Component() {
         return plane == from.plane && Math.abs(x - from.x) <= distance && Math.abs(y - from.y) <= distance
     }
 
-    fun getDistance(other: Position): Int {
+    fun getDistance(from: Position): Int {
+        return Math.max(Math.abs(x - from.x), Math.abs(y - from.y))
+    }
+
+    fun getDirectDistance(other: Position): Int {
         val deltaX = x - other.x
-        val deltaY =y  - other.y
+        val deltaY = y - other.y
         return Math.ceil(Math.sqrt((deltaX * deltaX + deltaY * deltaY).toDouble())).toInt()
     }
 
     companion object {
         val EMPTY = Position()
+
         fun create(x: Int, y: Int, z: Int): Position {
             val pos = Position()
             pos.x = x
