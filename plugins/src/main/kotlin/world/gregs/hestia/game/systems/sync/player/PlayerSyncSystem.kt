@@ -9,7 +9,7 @@ import world.gregs.hestia.core.services.int
 import world.gregs.hestia.game.update.UpdateStage
 import world.gregs.hestia.GameConstants
 import world.gregs.hestia.game.component.map.Viewport
-import world.gregs.hestia.game.component.update.AppearanceData
+import world.gregs.hestia.game.component.update.appearance.AppearanceData
 import world.gregs.hestia.game.update.DirectionUtils.Companion.DELTA_X
 import world.gregs.hestia.game.update.DirectionUtils.Companion.DELTA_Y
 import world.gregs.hestia.game.update.DirectionUtils.Companion.REGION_MOVEMENT

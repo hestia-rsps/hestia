@@ -14,7 +14,7 @@ import world.gregs.hestia.game.component.update.gfx.FourthGraphic
 import world.gregs.hestia.game.component.update.gfx.SecondGraphic
 import world.gregs.hestia.game.component.update.gfx.ThirdGraphic
 import world.gregs.hestia.game.component.movement.*
-import world.gregs.hestia.game.component.update.AppearanceData
+import world.gregs.hestia.game.component.update.appearance.AppearanceData
 import world.gregs.hestia.game.component.update.Damage
 import world.gregs.hestia.game.component.update.ForceChat
 import world.gregs.hestia.game.component.update.ForceMovement
@@ -24,6 +24,7 @@ import world.gregs.hestia.services.exclude
 import world.gregs.hestia.services.one
 import world.gregs.hestia.game.component.map.Position
 import world.gregs.hestia.game.component.update.*
+import world.gregs.hestia.game.component.update.appearance.Appearance
 import world.gregs.hestia.game.systems.sync.SynchronizeSystem
 import world.gregs.hestia.services.getSystem
 

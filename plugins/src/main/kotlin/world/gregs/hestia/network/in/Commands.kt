@@ -15,6 +15,7 @@ import world.gregs.hestia.core.network.packets.Packet
 import world.gregs.hestia.core.network.packets.PacketOpcode
 import world.gregs.hestia.core.network.packets.PacketSize
 import world.gregs.hestia.game.component.update.*
+import world.gregs.hestia.game.component.update.appearance.CombatLevel
 import world.gregs.hestia.game.update.Marker
 import world.gregs.hestia.network.game.GamePacket
 
@@ -101,18 +102,16 @@ class Commands : GamePacket() {
             "bot" -> {
                 val position = entity.getComponent(Position::class)!!
                 var count = 0
-                for (y in (3482 until 3518)) {
+                /*for (y in (3482 until 3518)) {
                     for (x in 3070 until 3104) {
                         es.dispatch(CreateBot("Bot ${count++}", x, y))
                     }
-                }
+                }*/
+                es.dispatch(CreateBot("Bot ${count++}", position.x, position.y - 1))
             }
             "b" -> {
-                entity.world.players().forEach {
-                    val bot = entity.world.getEntity(it)
-//                    bot.force("Bot $it")
-                    bot.animate(863)
-                }
+                val bot = entity.world.getEntity(entity.world.players().last())
+                bot.updateAppearance()
             }
             "mob" -> {
                 val position = entity.getComponent(Position::class)!!

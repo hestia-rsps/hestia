@@ -22,6 +22,7 @@ import world.gregs.hestia.network.update.player.*
 import world.gregs.hestia.game.component.entity.Mob
 import world.gregs.hestia.game.component.entity.Type
 import world.gregs.hestia.game.component.map.Position
+import world.gregs.hestia.game.component.update.appearance.CombatLevel
 import world.gregs.hestia.services.*
 import world.gregs.hestia.game.systems.sync.SynchronizeSystem
 

@@ -1,7 +1,7 @@
 package world.gregs.hestia.network.update.mob
 
 import com.artemis.ComponentMapper
-import world.gregs.hestia.game.component.update.CombatLevel
+import world.gregs.hestia.game.component.update.appearance.CombatLevel
 import world.gregs.hestia.game.update.UpdateEncoder
 import world.gregs.hestia.core.network.packets.Packet
 
