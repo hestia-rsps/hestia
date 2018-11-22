@@ -49,16 +49,17 @@ class AppearanceSystem : SubscriptionSystem(Aspect.all(Player::class)) {
         val packet = Packet.Builder()
 
         packet.apply {
+            val skillLevel = false
             var flag = 0
 //            flag = flag or 0x1//gender
 //            flag = flag or 0x2//Has display name
-//            if (!summoningCombatLevelMapper.has(entityId)) {
-//                flag = flag or 0x4//Combat levels (with/out summoning) are the same
-//            }
+            if(skillLevel) {
+                flag = flag or 0x4//Skill level displayed rather than combat
+            }
 //            flag = flag or (size shl 3 and 0x7)//Size
 //            flag = flag and ((1 and 0xf2) shr 6)//Something about trimming title
             writeByte(flag)//Flag
-            writeByte(titleMapper.get(entityId)?.title ?: -1)//Title
+            writeByte(titleMapper.get(entityId)?.title ?: 1)//Title
             writeString(namePrefixMapper.get(entityId)?.prefix ?: "")//Chat prefix
             writeByte(skullMapper.get(entityId)?.skull ?: -1)//Skull
             writeByte(headIconMapper.get(entityId)?.headIcon ?: -1)//Head icon
@@ -99,13 +100,12 @@ class AppearanceSystem : SubscriptionSystem(Aspect.all(Player::class)) {
             writeShort(emoteMapper.get(entityId)?.id ?: 1426)//Render emote
             writeString(displayNameMapper.get(entityId)?.name ?: "")//Display name
             writeByte(combatLevelMapper.get(entityId)?.level ?: 3)//Combat level
-//            if (!summoningCombatLevelMapper.has(entityId)) {
-                //Summoning combat level = reg combat level (aka not in pvp area)
-//                writeShort(-1)//Player height priority toggle?
-//            } else {
+            if(skillLevel) {
+                writeShort(-1)//Skill level
+            } else {
                 writeByte(summoningCombatLevelMapper.get(entityId)?.level ?: 0)//Combat level + summoning
-                writeByte(-1)//Player height priority toggle?
-//            }
+                writeByte(-1)//Skill level? or player height priority toggle
+            }
             writeByte(transformMapper.has(entityId).int)//Mob morph
             //Morph details
             if (transformMapper.has(entityId)) {
