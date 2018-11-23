@@ -24,9 +24,7 @@ class MoveSystem : IteratingSystem(Aspect.all(Position::class, Move::class)) {
 //        val lastPlane = position.plane
 
         //Move to location
-        position.x = move.x
-        position.y = move.y
-        position.plane = move.plane
+        position.set(move.x, move.y, move.plane)
 
         //Remove command
         moveMapper.remove(entityId)

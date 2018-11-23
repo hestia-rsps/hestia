@@ -14,7 +14,7 @@ import kotlin.reflect.KClass
  * This system prioritises keeping a square viewport over displaying the maximum entities possible
  */
 
-abstract class ViewDistanceSystem(private val chunkSystem: KClass<out ChunkSystem>, private val maxViewDistance: Int, private val maxLocalEntities: Int, viewDistance: KClass<out Component>) : IteratingSystem(Aspect.all(Viewport::class, viewDistance)) {
+abstract class ViewDistanceSystem(private val entityChunkSystem: KClass<out EntityChunkSystem>, private val maxViewDistance: Int, private val maxLocalEntities: Int, viewDistance: KClass<out Component>) : IteratingSystem(Aspect.all(Viewport::class, viewDistance)) {
 
     private lateinit var positionMapper: ComponentMapper<Position>
     private var array = arrayOfNulls<Int>(maxViewDistance)
@@ -32,7 +32,8 @@ abstract class ViewDistanceSystem(private val chunkSystem: KClass<out ChunkSyste
         val position = positionMapper.get(entityId)
 
         //For all entities
-        world.getSystem(chunkSystem).get(positionMapper.get(entityId))
+        val entityChunkSystem = entityChunkSystem
+        world.getSystem(entityChunkSystem).get(positionMapper.get(entityId))
                 .forEach {
                     //Calculate distance
                     val distance = position.getDistance(positionMapper.get(it))

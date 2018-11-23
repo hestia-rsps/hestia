@@ -10,6 +10,7 @@ import world.gregs.hestia.game.systems.login.locationHash18Bit
 
 class MapRegion(players: IntArray, viewport: Viewport, positionMapper: ComponentMapper<Position>, entityId: Int, position: Position, local: Boolean) : Packet.Builder(43, Packet.Type.VAR_SHORT) {
     init {
+        println("Local $local")
         if (local) {
             startBitAccess()
             //Send current player position
@@ -34,7 +35,7 @@ class MapRegion(players: IntArray, viewport: Viewport, positionMapper: Component
         writeLEShort(position.chunkX)
         writeShort(position.chunkY)
         for (regionId in 0 until 6) {//Local map region ids
-            for (index in 0..3) {
+            for (index in 0 until 4) {
                 writeInt(0)
             }
         }

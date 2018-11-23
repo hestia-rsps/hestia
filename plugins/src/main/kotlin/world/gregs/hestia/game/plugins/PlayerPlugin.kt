@@ -12,9 +12,9 @@ import world.gregs.hestia.game.systems.direction.DirectionSystem
 import world.gregs.hestia.game.systems.direction.MovementFaceSystem
 import world.gregs.hestia.game.systems.direction.WatchingSystem
 import world.gregs.hestia.game.systems.login.*
+import world.gregs.hestia.game.systems.sync.*
 import world.gregs.hestia.game.systems.sync.mob.MobSyncSystem
 import world.gregs.hestia.game.systems.sync.player.PlayerSyncSystem
-import world.gregs.hestia.game.systems.sync.PostSyncSystem
 import world.gregs.hestia.game.systems.sync.mob.MobChunkSystem
 import world.gregs.hestia.game.systems.sync.mob.MobIndexSystem
 import world.gregs.hestia.game.systems.sync.mob.MobViewDistanceSystem
@@ -25,8 +25,11 @@ import world.gregs.hestia.game.systems.sync.player.PlayerViewDistanceSystem
 class PlayerPlugin : Plugin {
 
     override fun setup(b: WorldConfigurationBuilder) {
+        b.with(PlayerChunkMap(), MobChunkMap())
+
         //Direction
-        b.with(SHIFT_PRIORITY + 1, MovementFaceSystem())
+        b.with(SHIFT_PRIORITY + 1, MovementFaceSystem(), PlayerChunkChangeSystem(), MobChunkChangeSystem())
+        b.with(PRE_SYNC_PRIORITY, RegionLoadSystem())
         b.with(PRE_SYNC_PRIORITY, DirectionSystem(), WatchingSystem())
 
         //Sync

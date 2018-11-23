@@ -24,9 +24,7 @@ class MobCreation : PassiveSystem() {
         type.id = event.mobId
 
         val position = positionMapper.get(entityId)
-        position.x = event.x
-        position.y = event.y
-        position.plane = event.plane
+        position.set(event.x, event.y, event.plane)
         return entityId
     }
 }
