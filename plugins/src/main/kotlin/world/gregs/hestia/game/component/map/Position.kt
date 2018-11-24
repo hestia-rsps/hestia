@@ -4,7 +4,7 @@ import com.artemis.Component
 import com.artemis.annotations.PooledWeaver
 
 @PooledWeaver
-class Position : Component() {
+open class Position : Component() {
     var x: Int = 0
     var y: Int = 0
     var plane: Int = 0
@@ -53,6 +53,16 @@ class Position : Component() {
         val deltaX = x - other.x
         val deltaY = y - other.y
         return Math.ceil(Math.sqrt((deltaX * deltaX + deltaY * deltaY).toDouble())).toInt()
+    }
+
+    fun set(position: Position) {
+        set(position.x, position.y, position.plane)
+    }
+
+    fun set(x: Int, y: Int, plane: Int = 0) {
+        this.x = x
+        this.y = y
+        this.plane = plane
     }
 
     companion object {

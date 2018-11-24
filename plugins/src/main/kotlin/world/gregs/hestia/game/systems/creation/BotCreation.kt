@@ -23,8 +23,6 @@ class BotCreation : PassiveSystem() {
         displayName?.name = event.name
 
         val position = positionMapper.get(entityId)
-        position.x = event.x
-        position.y = event.y
-        position.plane = event.plane
+        position.set(event.x, event.y, event.plane)
     }
 }

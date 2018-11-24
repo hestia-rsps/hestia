@@ -32,8 +32,7 @@ class PlayerCreation : PassiveSystem() {
         displayName?.name = event.name
 
         val position = positionMapper.get(entityId)
-        position.y = 3501 - count.getAndIncrement()
-        position.x = 3087
+        position.set(3087, 3501 - count.getAndIncrement())
         return entityId
     }
 }
