@@ -1,7 +1,7 @@
 package worlds.gregs.hestia.network.update.mob
 
 import com.artemis.ComponentMapper
-import worlds.gregs.hestia.game.component.update.DisplayName
+import worlds.gregs.hestia.game.plugins.entity.components.update.DisplayName
 import worlds.gregs.hestia.game.update.UpdateEncoder
 import world.gregs.hestia.core.network.packets.Packet
 

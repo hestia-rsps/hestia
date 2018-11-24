@@ -1,22 +1,11 @@
 package worlds.gregs.hestia.network.`in`
 
-import worlds.gregs.hestia.game.component.map.Position
-import worlds.gregs.hestia.game.component.update.direction.face
-import worlds.gregs.hestia.game.component.update.direction.turn
-import worlds.gregs.hestia.game.component.update.direction.watch
-import worlds.gregs.hestia.game.component.movement.*
-import worlds.gregs.hestia.game.events.*
-import worlds.gregs.hestia.network.login.Packets
-import worlds.gregs.hestia.services.getComponent
-import worlds.gregs.hestia.services.mobs
-import worlds.gregs.hestia.services.players
 import world.gregs.hestia.core.network.Session
 import world.gregs.hestia.core.network.packets.Packet
 import world.gregs.hestia.core.network.packets.PacketOpcode
 import world.gregs.hestia.core.network.packets.PacketSize
-import worlds.gregs.hestia.game.component.update.*
-import worlds.gregs.hestia.game.update.Marker
 import worlds.gregs.hestia.network.game.GamePacket
+import worlds.gregs.hestia.network.login.Packets
 
 @PacketSize(8)
 @PacketOpcode(Packets.INTERFACE_BTN_1, Packets.INTERFACE_BTN_2, Packets.INTERFACE_BTN_3, Packets.INTERFACE_BTN_4, Packets.INTERFACE_BTN_5, Packets.INTERFACE_BTN_6, Packets.INTERFACE_BTN_7, Packets.INTERFACE_BTN_8, Packets.INTERFACE_BTN_9, Packets.INTERFACE_BTN_10)

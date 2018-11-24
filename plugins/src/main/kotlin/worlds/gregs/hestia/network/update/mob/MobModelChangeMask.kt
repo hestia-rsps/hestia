@@ -3,7 +3,7 @@ package worlds.gregs.hestia.network.update.mob
 import com.artemis.ComponentMapper
 import worlds.gregs.hestia.game.update.UpdateEncoder
 import world.gregs.hestia.core.network.packets.Packet
-import worlds.gregs.hestia.game.component.update.MobModelChange
+import worlds.gregs.hestia.game.plugins.mob.component.update.MobModelChange
 
 class MobModelChangeMask(private val modelChangeMapper: ComponentMapper<MobModelChange>) : UpdateEncoder {
 

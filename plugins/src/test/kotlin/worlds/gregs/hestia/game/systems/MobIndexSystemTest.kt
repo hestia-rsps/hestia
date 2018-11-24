@@ -1,20 +1,37 @@
 package worlds.gregs.hestia.game.systems
 
+import com.artemis.Entity
 import com.artemis.WorldConfigurationBuilder
-import worlds.gregs.hestia.game.GameTest
-import worlds.gregs.hestia.game.component.entity.ClientIndex
-import worlds.gregs.hestia.game.mob.component.Mob
-import worlds.gregs.hestia.services.Aspect
-import worlds.gregs.hestia.services.getComponent
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
-import worlds.gregs.hestia.game.mob.systems.sync.MobIndexSystem
+import worlds.gregs.hestia.game.GameTest
+import worlds.gregs.hestia.game.archetypes.EntityFactory
+import worlds.gregs.hestia.game.archetypes.MobFactory
+import worlds.gregs.hestia.game.events.CreateMob
+import worlds.gregs.hestia.game.plugins.core.components.entity.ClientIndex
+import worlds.gregs.hestia.game.plugins.mob.component.Mob
+import worlds.gregs.hestia.game.plugins.mob.systems.MobCreation
+import worlds.gregs.hestia.game.plugins.mob.systems.sync.MobIndexSystem
+import worlds.gregs.hestia.services.Aspect
+import worlds.gregs.hestia.services.getComponent
+import worlds.gregs.hestia.services.getSystem
 
-internal class MobIndexSystemTest : GameTest(WorldConfigurationBuilder().with(MobIndexSystem())) {
+internal class MobIndexSystemTest : GameTest(WorldConfigurationBuilder().with(MobCreation(), MobIndexSystem())) {
+
+    @Test
+    override fun setUp() {
+        super.setUp()
+        EntityFactory.add(MobFactory())
+    }
+
+    private fun fakeMob(id: Int = 0): Entity {
+        val mc = world.getSystem(MobCreation::class)
+        return world.getEntity(mc.create(CreateMob(id, 0, 0)))
+    }
 
     @Test
     fun testIndexChanges() {
-        val sub = w.aspectSubscriptionManager.get(Aspect.all(Mob::class))
+        val sub = world.aspectSubscriptionManager.get(Aspect.all(Mob::class))
         for(i in 0 until 5) {
             fakeMob()
         }
@@ -23,11 +40,11 @@ internal class MobIndexSystemTest : GameTest(WorldConfigurationBuilder().with(Mo
 
         Assertions.assertThat(sub.entities.size()).isEqualTo(5)
 
-        w.delete(0)//Delete the first entity
+        world.delete(0)//Delete the first entity
 
         tick()
 
-        val second = w.getEntity(1)
+        val second = world.getEntity(1)
 
         Assertions.assertThat(second.getComponent(ClientIndex::class)?.index).isEqualTo(2)
 

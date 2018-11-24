@@ -1,16 +1,14 @@
 package worlds.gregs.hestia.network.out
 
 import com.artemis.ComponentMapper
-import worlds.gregs.hestia.game.component.map.Position
-import worlds.gregs.hestia.game.component.map.Viewport
-import worlds.gregs.hestia.game.systems.login.locationHash30Bit
-import worlds.gregs.hestia.game.player.systems.sync.PlayerIndexSystem
 import world.gregs.hestia.core.network.packets.Packet
-import worlds.gregs.hestia.game.systems.login.locationHash18Bit
+import worlds.gregs.hestia.game.plugins.core.components.map.Position
+import worlds.gregs.hestia.game.plugins.core.components.map.Viewport
+import worlds.gregs.hestia.game.plugins.region.systems.locationHash18Bit
+import worlds.gregs.hestia.game.plugins.region.systems.locationHash30Bit
 
 class MapRegion(players: IntArray, viewport: Viewport, positionMapper: ComponentMapper<Position>, entityId: Int, position: Position, local: Boolean) : Packet.Builder(43, Packet.Type.VAR_SHORT) {
     init {
-        println("Local $local")
         if (local) {
             startBitAccess()
             //Send current player position
@@ -24,7 +22,7 @@ class MapRegion(players: IntArray, viewport: Viewport, positionMapper: Component
             }
 
             //Iterate up to max number of players
-            for(i in (players.size + 1) until worlds.gregs.hestia.game.player.systems.sync.PlayerIndexSystem.PLAYERS_LIMIT) {
+            for(i in (players.size + 1) until worlds.gregs.hestia.game.plugins.player.systems.sync.PlayerIndexSystem.PLAYERS_LIMIT) {
                 writeBits(18, 0)
             }
 

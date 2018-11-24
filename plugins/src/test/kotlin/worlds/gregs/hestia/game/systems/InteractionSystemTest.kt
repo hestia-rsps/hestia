@@ -2,22 +2,35 @@ package worlds.gregs.hestia.game.systems
 
 import com.artemis.Entity
 import com.artemis.WorldConfigurationBuilder
-import worlds.gregs.hestia.game.component.map.Position
-import worlds.gregs.hestia.game.component.movement.RunToggled
-import worlds.gregs.hestia.game.component.movement.Steps
-import worlds.gregs.hestia.game.component.movement.interact
-import worlds.gregs.hestia.game.plugins.MovementPlugin
-import worlds.gregs.hestia.services.getComponent
-import worlds.gregs.hestia.services.remove
-import worlds.gregs.hestia.game.GameTest
 import org.assertj.core.api.Assertions
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import world.gregs.hestia.core.network.Session
+import worlds.gregs.hestia.game.GameTest
+import worlds.gregs.hestia.game.archetypes.EntityFactory
+import worlds.gregs.hestia.game.archetypes.PlayerFactory
+import worlds.gregs.hestia.game.events.CreatePlayer
+import worlds.gregs.hestia.game.plugins.MovementPlugin
+import worlds.gregs.hestia.game.plugins.core.components.map.Position
+import worlds.gregs.hestia.game.plugins.movement.components.RunToggled
+import worlds.gregs.hestia.game.plugins.movement.components.Steps
+import worlds.gregs.hestia.game.plugins.movement.components.interact
+import worlds.gregs.hestia.game.plugins.player.systems.PlayerCreation
 import worlds.gregs.hestia.game.update.DirectionUtils
 import worlds.gregs.hestia.services.dependsOn
+import worlds.gregs.hestia.services.getComponent
+import worlds.gregs.hestia.services.getSystem
+import worlds.gregs.hestia.services.remove
 
-internal class InteractionSystemTest : GameTest(WorldConfigurationBuilder().dependsOn(MovementPlugin::class)) {
+internal class InteractionSystemTest : GameTest(WorldConfigurationBuilder().dependsOn(MovementPlugin::class).with(PlayerCreation())) {
 
     //TODO with & without clipping checks
+
+    @BeforeEach
+    override fun setUp() {
+        super.setUp()
+        EntityFactory.add(PlayerFactory())
+    }
 
     @Test
     fun walk() {
@@ -68,5 +81,15 @@ internal class InteractionSystemTest : GameTest(WorldConfigurationBuilder().depe
 
         //Clear last position
         entity.edit().remove(Steps::class)
+    }
+
+    private fun fakePlayer(x: Int = 0, y: Int = 0, name: String = "Dummy"): Entity {
+        val pc = world.getSystem(PlayerCreation::class)
+        val entityId = pc.create(CreatePlayer(Session(), name))
+        val player = world.getEntity(entityId)
+        val position = player.getComponent(Position::class)!!
+        position.x = x
+        position.y = y
+        return player
     }
 }

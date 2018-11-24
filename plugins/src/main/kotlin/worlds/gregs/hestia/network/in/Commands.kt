@@ -1,24 +1,33 @@
 package worlds.gregs.hestia.network.`in`
 
-import worlds.gregs.hestia.game.component.map.Position
-import worlds.gregs.hestia.game.component.update.direction.face
-import worlds.gregs.hestia.game.component.update.direction.turn
-import worlds.gregs.hestia.game.component.update.direction.watch
-import worlds.gregs.hestia.game.component.movement.*
-import worlds.gregs.hestia.game.events.*
-import worlds.gregs.hestia.network.login.Packets
-import worlds.gregs.hestia.services.getComponent
-import worlds.gregs.hestia.services.mobs
-import worlds.gregs.hestia.services.players
 import world.gregs.hestia.core.network.Session
 import world.gregs.hestia.core.network.packets.Packet
 import world.gregs.hestia.core.network.packets.PacketOpcode
 import world.gregs.hestia.core.network.packets.PacketSize
-import worlds.gregs.hestia.game.component.update.*
-import worlds.gregs.hestia.game.component.update.appearance.CombatLevel
-import worlds.gregs.hestia.game.component.update.appearance.Hidden
+import worlds.gregs.hestia.game.events.*
+import worlds.gregs.hestia.game.plugins.core.components.map.Position
+import worlds.gregs.hestia.game.plugins.entity.components.update.*
+import worlds.gregs.hestia.game.plugins.entity.components.update.direction.face
+import worlds.gregs.hestia.game.plugins.entity.components.update.direction.turn
+import worlds.gregs.hestia.game.plugins.entity.components.update.direction.watch
+import worlds.gregs.hestia.game.plugins.mob.component.update.UpdateCombatLevel
+import worlds.gregs.hestia.game.plugins.mob.component.update.UpdateDisplayName
+import worlds.gregs.hestia.game.plugins.mob.component.update.change
+import worlds.gregs.hestia.game.plugins.movement.components.Navigate
+import worlds.gregs.hestia.game.plugins.movement.components.RunToggled
+import worlds.gregs.hestia.game.plugins.movement.components.move
+import worlds.gregs.hestia.game.plugins.player.component.update.PlayerMiniMapDot
+import worlds.gregs.hestia.game.plugins.player.component.update.UpdateMovement
+import worlds.gregs.hestia.game.plugins.player.component.update.UpdateUnknown
+import worlds.gregs.hestia.game.plugins.player.component.update.appearance.CombatLevel
+import worlds.gregs.hestia.game.plugins.player.component.update.appearance.Hidden
+import worlds.gregs.hestia.game.plugins.player.component.update.updateClanChat
 import worlds.gregs.hestia.game.update.Marker
 import worlds.gregs.hestia.network.game.GamePacket
+import worlds.gregs.hestia.network.login.Packets
+import worlds.gregs.hestia.services.getComponent
+import worlds.gregs.hestia.services.mobs
+import worlds.gregs.hestia.services.players
 import worlds.gregs.hestia.services.toggle
 
 @PacketSize(-1)
@@ -81,6 +90,12 @@ class Commands : GamePacket() {
             }
             "party" -> {
                 var count = 0
+                /*entity.world.players().filterNot { it == entity.id }.forEach {
+                    entity.world.delete(it)
+                }
+                entity.world.mobs().forEach {
+                    entity.world.delete(it)
+                }*/
                 for (y in 3482 until 3518) {
                     for (x in 3070 until 3104) {
                         if((x + y).rem(2) == 0) {
@@ -117,8 +132,9 @@ class Commands : GamePacket() {
             }
             "b" -> {
                 val bot = entity.world.getEntity(entity.world.players().last())
-                bot.edit().add(Hidden())
-                bot.updateAppearance()
+                /*bot.edit().add(Hidden())
+                bot.updateAppearance()*/
+                entity.world.deleteEntity(bot)
             }
             "mob" -> {
                 val position = entity.getComponent(Position::class)!!

@@ -5,9 +5,9 @@ import com.artemis.BaseSystem
 import com.artemis.World
 import com.artemis.WorldConfigurationBuilder
 import com.artemis.utils.IntBag
-import worlds.gregs.hestia.game.events.OutBoundPacket
 import net.mostlyoriginal.api.event.common.EventSystem
 import world.gregs.hestia.core.network.packets.Packet
+import worlds.gregs.hestia.game.events.OutBoundPacket
 import java.util.*
 import kotlin.reflect.KClass
 

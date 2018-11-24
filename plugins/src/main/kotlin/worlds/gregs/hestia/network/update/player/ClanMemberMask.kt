@@ -4,7 +4,7 @@ import com.artemis.ComponentMapper
 import worlds.gregs.hestia.game.update.UpdateEncoder
 import world.gregs.hestia.core.network.packets.Packet
 import world.gregs.hestia.core.services.int
-import worlds.gregs.hestia.game.component.update.UpdateClanMember
+import worlds.gregs.hestia.game.plugins.player.component.update.UpdateClanMember
 
 class ClanMemberMask(private val clanMemberMapper: ComponentMapper<UpdateClanMember>) : UpdateEncoder {
 

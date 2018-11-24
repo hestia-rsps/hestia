@@ -1,7 +1,7 @@
 package worlds.gregs.hestia.network.update.player
 
 import com.artemis.ComponentMapper
-import worlds.gregs.hestia.game.component.update.ForceChat
+import worlds.gregs.hestia.game.plugins.entity.components.update.ForceChat
 import worlds.gregs.hestia.game.update.UpdateEncoder
 import world.gregs.hestia.core.network.packets.Packet
 

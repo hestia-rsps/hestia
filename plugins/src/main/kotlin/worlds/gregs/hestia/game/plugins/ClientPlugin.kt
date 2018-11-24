@@ -1,0 +1,45 @@
+package worlds.gregs.hestia.game.plugins
+
+import com.artemis.WorldConfigurationBuilder
+import worlds.gregs.hestia.game.plugin.Plugin
+import worlds.gregs.hestia.game.plugin.Plugin.Companion.INTERFACE_PRIORITY
+import worlds.gregs.hestia.game.plugin.Plugin.Companion.LOGIN_DETAILS_PRIORITY
+import worlds.gregs.hestia.game.plugin.Plugin.Companion.UPDATE_CHANGE_PRIORITY
+import worlds.gregs.hestia.game.plugin.Plugin.Companion.UPDATE_DISPLAY_FLAG_PRIORITY
+import worlds.gregs.hestia.game.plugin.Plugin.Companion.UPDATE_FINISH_PRIORITY
+import worlds.gregs.hestia.game.plugin.Plugin.Companion.UPDATE_FLAG_PRIORITY
+import worlds.gregs.hestia.game.plugin.Plugin.Companion.UPDATE_SYNC_PRIORITY
+import worlds.gregs.hestia.game.plugin.Plugin.Companion.UPDATE_UPDATE_PRIORITY
+import worlds.gregs.hestia.game.plugins.client.systems.ClientConnectSystem
+import worlds.gregs.hestia.game.plugins.client.systems.ClientDisconnectSystem
+import worlds.gregs.hestia.game.plugins.client.systems.InterfaceSystem
+import worlds.gregs.hestia.game.plugins.client.systems.PacketSender
+import worlds.gregs.hestia.game.plugins.client.systems.update.PostUpdateSystem
+import worlds.gregs.hestia.game.plugins.client.systems.update.stage.GlobalDisplayFlagSystem
+import worlds.gregs.hestia.game.plugins.client.systems.update.stage.LocalDisplayFlagSystem
+import worlds.gregs.hestia.game.plugins.client.systems.update.sync.MobSyncSystem
+import worlds.gregs.hestia.game.plugins.client.systems.update.sync.PlayerSyncSystem
+import worlds.gregs.hestia.game.plugins.client.systems.update.update.MobUpdateSystem
+import worlds.gregs.hestia.game.plugins.client.systems.update.update.PlayerUpdateSystem
+import worlds.gregs.hestia.game.plugins.client.systems.update.update.change.MobUpdateChangeSystem
+import worlds.gregs.hestia.game.plugins.client.systems.update.update.change.PlayerUpdateChangeSystem
+import worlds.gregs.hestia.game.plugins.client.systems.update.update.flag.MobUpdateFlagSystem
+import worlds.gregs.hestia.game.plugins.client.systems.update.update.flag.PlayerUpdateFlagSystem
+import worlds.gregs.hestia.game.plugins.movement.systems.MovementStageChecks
+
+class ClientPlugin : Plugin {
+
+    override fun setup(b: WorldConfigurationBuilder) {
+        b.with(LOGIN_DETAILS_PRIORITY, ClientConnectSystem())
+        b.with(INTERFACE_PRIORITY, InterfaceSystem())
+        b.with(PacketSender(), ClientDisconnectSystem())
+
+        b.with(UPDATE_FLAG_PRIORITY, PlayerUpdateFlagSystem(), MobUpdateFlagSystem())
+        b.with(UPDATE_DISPLAY_FLAG_PRIORITY, LocalDisplayFlagSystem(), GlobalDisplayFlagSystem(), MovementStageChecks())
+        b.with(UPDATE_SYNC_PRIORITY, PlayerSyncSystem(), MobSyncSystem())
+        b.with(UPDATE_UPDATE_PRIORITY, PlayerUpdateSystem(), MobUpdateSystem())
+        b.with(UPDATE_CHANGE_PRIORITY, PlayerUpdateChangeSystem(), MobUpdateChangeSystem())
+        b.with(UPDATE_FINISH_PRIORITY, PostUpdateSystem())
+    }
+
+}

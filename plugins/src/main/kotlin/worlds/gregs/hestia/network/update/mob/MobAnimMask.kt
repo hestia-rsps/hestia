@@ -1,10 +1,10 @@
 package worlds.gregs.hestia.network.update.mob
 
 import com.artemis.ComponentMapper
-import worlds.gregs.hestia.game.component.update.anim.FirstAnimation
-import worlds.gregs.hestia.game.component.update.anim.FourthAnimation
-import worlds.gregs.hestia.game.component.update.anim.SecondAnimation
-import worlds.gregs.hestia.game.component.update.anim.ThirdAnimation
+import worlds.gregs.hestia.game.plugins.entity.components.update.anim.FirstAnimation
+import worlds.gregs.hestia.game.plugins.entity.components.update.anim.FourthAnimation
+import worlds.gregs.hestia.game.plugins.entity.components.update.anim.SecondAnimation
+import worlds.gregs.hestia.game.plugins.entity.components.update.anim.ThirdAnimation
 import worlds.gregs.hestia.game.update.UpdateEncoder
 import world.gregs.hestia.core.network.packets.Packet
 

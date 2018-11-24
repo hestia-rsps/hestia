@@ -1,6 +1,6 @@
 package worlds.gregs.hestia.network.`in`
 
-import worlds.gregs.hestia.game.component.movement.navigate
+import worlds.gregs.hestia.game.plugins.movement.components.navigate
 import worlds.gregs.hestia.network.login.Packets
 import world.gregs.hestia.core.network.Session
 import world.gregs.hestia.core.network.packets.Packet

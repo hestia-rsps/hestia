@@ -23,7 +23,7 @@ class GamePacketInboundHandler(private val world: World, packets: PacketMap) : P
     }
 
     override fun disconnect(session: Session) {
-        if(session.id != -1) {
+        if(session.id != -1 && world.entityManager.isActive(session.id)) {
             world.delete(session.id)
         }
     }

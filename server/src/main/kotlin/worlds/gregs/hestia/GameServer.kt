@@ -15,8 +15,8 @@ import world.gregs.hestia.core.network.server.Network
 import world.gregs.hestia.core.services.Cache
 import world.gregs.hestia.core.services.load.PacketLoader
 import worlds.gregs.hestia.game.Engine
-import worlds.gregs.hestia.game.plugin.PluginLoader
 import worlds.gregs.hestia.game.archetypes.EntityFactory
+import worlds.gregs.hestia.game.plugin.PluginLoader
 import worlds.gregs.hestia.network.GamePacketInboundHandler
 import worlds.gregs.hestia.network.LoginAttempt
 import worlds.gregs.hestia.network.LoginServerInboundHandler

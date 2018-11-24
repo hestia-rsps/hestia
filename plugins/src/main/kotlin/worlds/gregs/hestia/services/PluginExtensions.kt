@@ -3,8 +3,8 @@ package worlds.gregs.hestia.services
 import com.artemis.*
 import com.artemis.Aspect
 import org.apache.commons.text.WordUtils
-import worlds.gregs.hestia.game.mob.component.Mob
-import worlds.gregs.hestia.game.player.component.Player
+import worlds.gregs.hestia.game.plugins.mob.component.Mob
+import worlds.gregs.hestia.game.plugins.player.component.Player
 import kotlin.reflect.KClass
 
 /*
@@ -32,6 +32,10 @@ class Aspect {
             return com.artemis.Aspect.exclude(*clazz.map { it.java }.toTypedArray())
         }
     }
+}
+
+fun WorldConfigurationBuilder.dependsOn(vararg clazz: KClass<out Component>): WorldConfigurationBuilder {
+    return dependsOn(*clazz.map { it.java }.toTypedArray())
 }
 
 fun Aspect.Builder.all(vararg clazz: KClass<out Component>): com.artemis.Aspect.Builder {

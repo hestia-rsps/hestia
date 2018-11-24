@@ -3,7 +3,7 @@ package worlds.gregs.hestia.network.update.player
 import com.artemis.ComponentMapper
 import worlds.gregs.hestia.game.update.UpdateEncoder
 import world.gregs.hestia.core.network.packets.Packet
-import worlds.gregs.hestia.game.component.update.UpdateUnknown
+import worlds.gregs.hestia.game.plugins.player.component.update.UpdateUnknown
 
 class UnknownMask(private val unknownMapper: ComponentMapper<UpdateUnknown>) : UpdateEncoder {
 
