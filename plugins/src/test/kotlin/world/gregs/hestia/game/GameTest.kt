@@ -41,7 +41,7 @@ abstract class GameTest(private val config: WorldConfigurationBuilder) {
     }
 
     fun fakeMob(id: Int = 0): Entity {
-        return w.getEntity(mc.create(CreateMob(id)))
+        return w.getEntity(mc.create(CreateMob(id, 0, 0)))
     }
 
     fun fakePlayer(x: Int = 0, y: Int = 0, name: String = "Dummy"): Entity {

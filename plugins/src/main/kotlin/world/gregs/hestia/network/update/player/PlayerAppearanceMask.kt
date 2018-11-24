@@ -1,7 +1,7 @@
 package world.gregs.hestia.network.update.player
 
 import com.artemis.ComponentMapper
-import world.gregs.hestia.game.component.update.AppearanceData
+import world.gregs.hestia.game.component.update.appearance.AppearanceData
 import world.gregs.hestia.game.update.UpdateEncoder
 import world.gregs.hestia.core.network.packets.Packet
 

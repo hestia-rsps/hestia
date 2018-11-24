@@ -1,7 +1,6 @@
-package world.gregs.hestia.game.systems.sync
+package world.gregs.hestia.game.systems.sync.player
 
 import world.gregs.hestia.game.component.*
-import world.gregs.hestia.game.systems.login.MapRegionSystem
 import world.gregs.hestia.game.systems.login.locationHash18Bit
 import world.gregs.hestia.services.Aspect
 import net.mostlyoriginal.api.event.common.EventSystem
@@ -10,7 +9,7 @@ import world.gregs.hestia.core.services.int
 import world.gregs.hestia.game.update.UpdateStage
 import world.gregs.hestia.GameConstants
 import world.gregs.hestia.game.component.map.Viewport
-import world.gregs.hestia.game.component.update.AppearanceData
+import world.gregs.hestia.game.component.update.appearance.AppearanceData
 import world.gregs.hestia.game.update.DirectionUtils.Companion.DELTA_X
 import world.gregs.hestia.game.update.DirectionUtils.Companion.DELTA_Y
 import world.gregs.hestia.game.update.DirectionUtils.Companion.REGION_MOVEMENT
@@ -18,20 +17,22 @@ import world.gregs.hestia.game.update.DirectionUtils.Companion.getPlayerRunningD
 import world.gregs.hestia.game.update.DirectionUtils.Companion.getPlayerWalkingDirection
 import world.gregs.hestia.services.send
 import world.gregs.hestia.game.component.map.Position
+import world.gregs.hestia.game.systems.sync.player.PlayerViewDistanceSystem.Companion.MAXIMUM_LOCAL_PLAYERS
 
 class PlayerSyncSystem : PlayerUpdateSystem(Aspect.all(NetworkSession::class, Renderable::class, Viewport::class, AppearanceData::class)) {
 
     private lateinit var es: EventSystem
-    private var skip = -1//Counter for the number of players to skip
     private lateinit var packet: Packet.Builder
     private lateinit var data: Packet.Builder
+    private var skip = -1//Counter for the number of players to skip
+    private var total = 0//Total number of players
+    private var count = 0//Base number of players (with additions & removals)
+    private var added = 0//Number of new local players added
 
-    override fun removed(entityId: Int) {
-        println("Removed $entityId")
-    }
-
-    override fun begin(entityId: Int) {
+    override fun begin(entityId: Int, locals: List<Int>) {
         //Reset
+        total = 0
+        count = 0
         skip = -1
         packet = Packet.Builder(69, Packet.Type.VAR_SHORT)
         data = Packet.Builder()
@@ -43,33 +44,52 @@ class PlayerSyncSystem : PlayerUpdateSystem(Aspect.all(NetworkSession::class, Re
     /**
      * Process each local player
      */
-    override fun local(entityId: Int, local: Int, type: UpdateStage, iterator: MutableIterator<Int>) {
+    override fun local(entityId: Int, local: Int, type: UpdateStage, update: Boolean, iterator: MutableIterator<Int>) {
+        total++
+
         //Update
         if (type != UpdateStage.SKIP && type != UpdateStage.REMOVE) {
+            count++
             update(entityId, local, data, true, false)
         }
         //Sync
         if (type == UpdateStage.SKIP) {
+            count++
             skip++
         } else {
             skipPlayers()
-            updateLocalPlayer(type, entityId, local, iterator)
+            updateLocalPlayer(type, entityId, local, update, iterator)
         }
     }
 
-    override fun middle(entityId: Int) {
+    override fun middle(entityId: Int, globals: List<Int>) {
         skipPlayers()
 
         packet.finishBitAccess()
         packet.startBitAccess()
+
+        added = 0
+    }
+
+    override fun globalCheck(entityId: Int, global: Int): Boolean {
+        return when {
+            //Viewport cap
+            added + count >= MAXIMUM_LOCAL_PLAYERS -> false
+            //Number of players added has to be capped due to maximum packet size
+            added >= PlayerSyncSystem.NEW_PLAYERS_PER_CYCLE -> false
+            else -> true
+        }
     }
 
     /**
      * Process other players
      */
-    override fun global(entityId: Int, global: Int, type: UpdateStage, iterator: MutableIterator<Int>) {
+    override fun global(entityId: Int, global: Int, type: UpdateStage) {
+        total++
+
         //Update
         if (type == UpdateStage.ADD) {
+            added++
             update(entityId, global, data, true, true)
         }
         //Sync
@@ -77,18 +97,16 @@ class PlayerSyncSystem : PlayerUpdateSystem(Aspect.all(NetworkSession::class, Re
             skip++
         } else {
             skipPlayers()
-            if (world.entityManager.isActive(global)) {//TODO check
-                updateGlobalPlayer(type, entityId, global, iterator)
+            if (world.entityManager.isActive(global)) {
+                updateGlobalPlayer(type, entityId, global)
             }
         }
     }
 
     override fun end(entityId: Int) {
-        val viewport = viewportMapper.get(entityId)
         //Skip remaining null players up to max player count
-        for (i in (viewport.localPlayers().size + viewport.globalPlayers().size) until GameConstants.PLAYERS_LIMIT) {
-            skip++
-        }
+        skip += PlayerIndexSystem.PLAYERS_LIMIT - 1 - total
+
         skipPlayers()
 
         packet.finishBitAccess()
@@ -101,27 +119,28 @@ class PlayerSyncSystem : PlayerUpdateSystem(Aspect.all(NetworkSession::class, Re
         es.send(entityId, packet)
     }
 
-    private fun updateLocalPlayer(type: UpdateStage, player: Int, local: Int, iterator: MutableIterator<Int>) {
+    private fun updateLocalPlayer(type: UpdateStage, player: Int, local: Int, update: Boolean, iterator: MutableIterator<Int>) {
         packet.writeBits(1, 1)//Needs update
-        packet.writeBits(1, if (type == UpdateStage.REMOVE) 0 else flags.any { t -> t.subscription.entities.contains(local) }.int)//Is mask update needed?
+        packet.writeBits(1, if(type == UpdateStage.RUNNING && player == local) 1 else if (type == UpdateStage.REMOVE) 0 else update.int)//Is mask update needed?
         if (type != UpdateStage.WALKING && type != UpdateStage.RUNNING) {
             packet.writeBits(2, type.movementType())//Movement type (0 none, 1 walk, 2 run, 3 tele)
         }
 
         val position = positionMapper.get(local)
-        val lastPosition = mobileMapper.get(local)?.lastPosition
+        val mobile = mobileMapper.get(local)
         when (type) {
             UpdateStage.REMOVE -> {
-                if(lastPosition != null) {
-                    MapRegionSystem.updateHash(local, lastPosition)
+                val viewport = viewportMapper.get(player)
+                if(mobile != null && mobile.lastX != -1) {
+                    viewport.updateHash(local, Position.create(mobile.lastX, mobile.lastY, mobile.lastPlane))
                 }
-                println("Last position: $lastPosition")
                 sendMovementUpdate(player, local)
                 iterator.remove()
             }
             UpdateStage.MOVE -> {
-                val delta = Position.delta(position, lastPosition!!)
-                val global = !Position.withinDistance(position, lastPosition)
+                val lastPosition = Position.create(mobile.lastX, mobile.lastY, mobile.lastPlane)
+                val delta = Position.delta(position, lastPosition)
+                val global = !position.withinDistance(lastPosition, 15)
                 packet.writeBits(1, global.int)
                 if (!global) {
                     //Send local position
@@ -133,7 +152,7 @@ class PlayerSyncSystem : PlayerUpdateSystem(Aspect.all(NetworkSession::class, Re
                     packet.writeBits(30, (delta.y and 0x3fff) + (delta.x and 0x3fff shl 14) + (delta.plane and 0x3 shl 28))
                 }
             }
-            UpdateStage.WALKING, UpdateStage.RUNNING -> {//Walking/Running
+            UpdateStage.WALKING, UpdateStage.RUNNING -> {
                 val nextWalkDirection = walkMapper.get(local).direction
 
                 //Calculate next step coordinates
@@ -180,12 +199,13 @@ class PlayerSyncSystem : PlayerUpdateSystem(Aspect.all(NetworkSession::class, Re
         }
     }
 
-    private fun updateGlobalPlayer(type: UpdateStage, player: Int, global: Int, iterator: MutableIterator<Int>? = null) {
+    private fun updateGlobalPlayer(type: UpdateStage, player: Int, global: Int) {
         val viewport = viewportMapper.get(player)!!
         packet.writeBits(1, 1)//Needs update
         packet.writeBits(2, type.movementType())//Movement type
         //Position
         val position = positionMapper.get(global) ?: return
+
         when (type) {
             UpdateStage.ADD -> {
                 sendMovementUpdate(player, global)
@@ -193,46 +213,43 @@ class PlayerSyncSystem : PlayerUpdateSystem(Aspect.all(NetworkSession::class, Re
                 packet.writeBits(6, position.yInRegion)
                 packet.writeBits(1, 1)//Update finished?
                 viewport.addLocalPlayer(global)
-                iterator?.remove()
             }
-            UpdateStage.HEIGHT, UpdateStage.REGION, UpdateStage.MOVE -> {
-                val oldHash = MapRegionSystem.getHash(global)
-                val newHash = position.locationHash18Bit
-                val old = Position.from(oldHash)
-                val new = Position.from(newHash)
-                println("Old vs new: $old $new - ${mobileMapper.get(global).lastPosition} $position")
-                val delta = Position.delta(new, old)
-                when (type) {
-                    UpdateStage.HEIGHT -> {
-                        packet.writeBits(2, delta.plane)
-                    }
-                    UpdateStage.REGION -> {
-                        val direction = REGION_MOVEMENT[delta.x + 1][delta.y + 1]
-                        packet.writeBits(5, (delta.plane shl 3) + (direction and 0x7))
-                    }
-                    UpdateStage.MOVE -> {
-                        packet.writeBits(18, (delta.y and 0xff) + (delta.x and 0xff shl 8) + (delta.plane shl 16))
-                    }
-                    else -> {
-                    }
-                }
-                MapRegionSystem.updateHash(global, position)
+            UpdateStage.HEIGHT -> {
+                val delta = getDelta(viewport, position, global)
+                packet.writeBits(2, delta.plane)
+                viewport.updateHash(global, position)
+            }
+            UpdateStage.REGION -> {
+                val delta = getDelta(viewport, position, global)
+                val direction = REGION_MOVEMENT[delta.x + 1][delta.y + 1]
+                packet.writeBits(5, (delta.plane shl 3) + (direction and 0x7))
+                viewport.updateHash(global, position)
+            }
+            UpdateStage.MOVE -> {
+                val delta = getDelta(viewport, position, global)
+                packet.writeBits(18, (delta.y and 0xff) + (delta.x and 0xff shl 8) + (delta.plane shl 16))
+                viewport.updateHash(global, position)
             }
             else -> {
             }
         }
     }
 
-    private fun getUpdateType(player: Int): UpdateStage {
-        val oldHash = MapRegionSystem.getHash(player)
-        val newHash = positionMapper.get(player)?.locationHash18Bit ?: return UpdateStage.SKIP//TODO fix for removing when position doesn't exit.
+    private fun getDelta(viewport: Viewport, position: Position, other: Int): Position {
+        val newHash = position.locationHash18Bit
+        val oldHash = viewport.getHash(other)
 
-        val old = Position.from(oldHash)
         val new = Position.from(newHash)
-        println("Old vs new: $old $new - ${mobileMapper.get(player).lastPosition} ${positionMapper.get(player)!!}")
+        val old = Position.from(oldHash)
 
-        val delta = Position.delta(old, new)
+        return Position.delta(new, old)
+    }
 
+    private fun getUpdateType(player: Int, other: Int): UpdateStage {
+        if(!positionMapper.has(other)) {
+            return UpdateStage.SKIP
+        }
+        val delta = getDelta(viewportMapper.get(player), positionMapper.get(other), other)
         return if (delta.x == 0 && delta.y == 0 && delta.plane == 0) {
             UpdateStage.SKIP//No update needed
         } else if (delta.x == 0 && delta.y == 0 && delta.plane != 0) {
@@ -245,8 +262,7 @@ class PlayerSyncSystem : PlayerUpdateSystem(Aspect.all(NetworkSession::class, Re
     }
 
     private fun sendMovementUpdate(player: Int, other: Int) {
-        val updateType = getUpdateType(other)
-        println("Update type: $updateType")
+        val updateType = getUpdateType(player, other)
         if (updateType != UpdateStage.SKIP) {
             //Move to global players
             updateGlobalPlayer(updateType, player, other)
@@ -278,5 +294,9 @@ class PlayerSyncSystem : PlayerUpdateSystem(Aspect.all(NetworkSession::class, Re
             }
         }
         skip = -1
+    }
+
+    companion object {
+        private const val NEW_PLAYERS_PER_CYCLE = 20
     }
 }

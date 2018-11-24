@@ -13,22 +13,16 @@ import world.gregs.hestia.game.update.DirectionUtils.Companion.DELTA_Y
  * Processes entity walk steps
  */
 class WalkSystem : IteratingSystem(Aspect.all(Position::class, Mobile::class, Steps::class)) {
-    private lateinit var positionMapper: ComponentMapper<Position>
-    //    private lateinit var mobileMapper: ComponentMapper<Mobile>
     private lateinit var stepsMapper: ComponentMapper<Steps>
     private lateinit var walkMapper: ComponentMapper<Walk>
     private lateinit var runMapper: ComponentMapper<Run>
     private lateinit var shiftPositionMapper: ComponentMapper<ShiftPosition>
 
     override fun process(entityId: Int) {
-        val position = positionMapper.get(entityId)
-//        val mobile = mobileMapper.get(entityId)
         val steps = stepsMapper.get(entityId)
 
         walkMapper.remove(entityId)
         runMapper.remove(entityId)
-
-//        mobile.lastPosition = Position.clone(position)//TODO is this needed if move/tele then run or is it covered by [MobileSystem]?
 
         if (steps.hasNext) {
             //Add a walk step with direction

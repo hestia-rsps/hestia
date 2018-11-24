@@ -4,7 +4,6 @@ import com.artemis.Component
 import com.artemis.annotations.PooledWeaver
 
 @PooledWeaver
-class AppearanceData : Component() {
-    var hash: ByteArray? = null
-    var data: ByteArray? = null
+class PlayerMiniMapDot : Component() {
+    var p = false
 }

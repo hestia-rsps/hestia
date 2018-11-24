@@ -11,13 +11,16 @@ import world.gregs.hestia.game.systems.*
 import world.gregs.hestia.game.systems.direction.DirectionSystem
 import world.gregs.hestia.game.systems.direction.MovementFaceSystem
 import world.gregs.hestia.game.systems.direction.WatchingSystem
-import world.gregs.hestia.game.systems.login.AppearanceSystem
-import world.gregs.hestia.game.systems.login.InterfaceSystem
-import world.gregs.hestia.game.systems.login.MapRegionSystem
-import world.gregs.hestia.game.systems.login.PlayerLoginSystem
-import world.gregs.hestia.game.systems.sync.MobSyncSystem
-import world.gregs.hestia.game.systems.sync.PlayerSyncSystem
+import world.gregs.hestia.game.systems.login.*
+import world.gregs.hestia.game.systems.sync.mob.MobSyncSystem
+import world.gregs.hestia.game.systems.sync.player.PlayerSyncSystem
 import world.gregs.hestia.game.systems.sync.PostSyncSystem
+import world.gregs.hestia.game.systems.sync.mob.MobChunkSystem
+import world.gregs.hestia.game.systems.sync.mob.MobIndexSystem
+import world.gregs.hestia.game.systems.sync.mob.MobViewDistanceSystem
+import world.gregs.hestia.game.systems.sync.player.PlayerChunkSystem
+import world.gregs.hestia.game.systems.sync.player.PlayerIndexSystem
+import world.gregs.hestia.game.systems.sync.player.PlayerViewDistanceSystem
 
 class PlayerPlugin : Plugin {
 
@@ -30,12 +33,15 @@ class PlayerPlugin : Plugin {
         b.with(SYNC_PRIORITY, PlayerSyncSystem())
         b.with(MOB_SYNC_PRIORITY, MobSyncSystem())
         b.with(POST_SYNC_PRIORITY, PostSyncSystem())
+        b.with(PRE_SYNC_PRIORITY, PlayerViewDistanceSystem(), MobViewDistanceSystem())
 
         b.with(PRE_SYNC_PRIORITY, TickTaskSystem())
 
+        b.with(POST_SYNC_PRIORITY, PlayerChunkSystem(), MobChunkSystem())
         //Login
-        b.with(ClientIndexSystem(), PlayerLoginSystem(), MapRegionSystem(), AppearanceSystem(), InterfaceSystem())
+        b.with(ViewportSystem(), PlayerIndexSystem(), MobIndexSystem(), PlayerLoginSystem(), MapRegionSystem(), AppearanceSystem(), InterfaceSystem())
         b.with(DamageSystem(), AnimationSystem(), GraphicsSystem())
+        b.with(PlayerLogoutSystem())
     }
 
 }

@@ -11,7 +11,7 @@ class InterfaceSystem : SubscriptionSystem(Aspect.all(NetworkSession::class, Pla
 
     override fun inserted(entityId: Int) {
         val e = world.getEntity(entityId)
-        e.send(WindowsPane(548, 0))
+        e.send(WindowsPane(746, 0))
     }
 
 }

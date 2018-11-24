@@ -4,7 +4,7 @@ import com.artemis.Entity
 import com.artemis.WorldConfigurationBuilder
 import world.gregs.hestia.game.GameTest
 import world.gregs.hestia.game.component.map.Position
-import world.gregs.hestia.game.component.movement.Running
+import world.gregs.hestia.game.component.movement.RunToggled
 import world.gregs.hestia.game.component.movement.Steps
 import world.gregs.hestia.game.component.movement.navigate
 import world.gregs.hestia.game.plugins.MovementPlugin
@@ -34,7 +34,7 @@ internal class NavigationSystemTest : GameTest(WorldConfigurationBuilder().depen
     @Test
     fun run() {
         val player = fakePlayer(3501, 3087)
-        player.edit().add(Running())
+        player.edit().add(RunToggled())
         val counter = DirectionUtils.DELTA_X.size
 
         //Check every direction near and far

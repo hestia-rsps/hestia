@@ -8,8 +8,9 @@ import world.gregs.hestia.services.Aspect
 import world.gregs.hestia.services.getComponent
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
+import world.gregs.hestia.game.systems.sync.mob.MobIndexSystem
 
-internal class ClientIndexSystemTest : GameTest(WorldConfigurationBuilder().with(ClientIndexSystem())) {
+internal class MobIndexSystemTest : GameTest(WorldConfigurationBuilder().with(MobIndexSystem())) {
 
     @Test
     fun testIndexChanges() {

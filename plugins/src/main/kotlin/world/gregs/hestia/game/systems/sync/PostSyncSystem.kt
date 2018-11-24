@@ -18,10 +18,11 @@ import world.gregs.hestia.game.component.movement.*
 import world.gregs.hestia.game.component.update.*
 import world.gregs.hestia.services.Aspect
 import world.gregs.hestia.game.component.entity.Player
+import world.gregs.hestia.game.component.update.BatchAnimations
+import world.gregs.hestia.game.component.update.appearance.Appearance
+import world.gregs.hestia.game.component.update.direction.Watching
 
 class PostSyncSystem : IteratingSystem(Aspect.all(Renderable::class)) {
-
-    private lateinit var viewportMapper: ComponentMapper<Viewport>
 
     //Flags
     private lateinit var appearanceMapper: ComponentMapper<Appearance>
@@ -43,20 +44,18 @@ class PostSyncSystem : IteratingSystem(Aspect.all(Renderable::class)) {
     private lateinit var updateCombatLevelMapper: ComponentMapper<UpdateCombatLevel>
     private lateinit var walkMapper: ComponentMapper<Walk>
     private lateinit var runMapper: ComponentMapper<Run>
-    private lateinit var walkingMapper: ComponentMapper<Walking>
+    private lateinit var updateMoveTypeMapper: ComponentMapper<UpdateMoveType>
     private lateinit var movingMapper: ComponentMapper<Moving>
-    private lateinit var playerSubscription: EntitySubscription
-
-    override fun initialize() {
-        super.initialize()
-        playerSubscription = world.aspectSubscriptionManager.get(Aspect.all(Player::class))
-    }
+    private lateinit var batchAnimationsMapper: ComponentMapper<BatchAnimations>
+    private lateinit var colourOverlayMapper: ComponentMapper<ColourOverlay>
+    private lateinit var timeBarMapper: ComponentMapper<TimeBar>
+    private lateinit var clanMemberMapper: ComponentMapper<UpdateClanMember>
+    private lateinit var unknownMapper: ComponentMapper<UpdateUnknown>
+    private lateinit var miniMapDotMapper: ComponentMapper<PlayerMiniMapDot>
+    private lateinit var modelChangeMapper: ComponentMapper<MobModelChange>
+    private lateinit var watchingMapper: ComponentMapper<Watching>
 
     override fun process(entityId: Int) {
-        //Update global/local entities
-        viewportMapper.get(entityId)?.update(playerSubscription.entities)
-        viewportMapper.get(entityId)?.localMobs()?.clear()
-
         //Flags
         appearanceMapper.remove(entityId)
         firstAnimationMapper.remove(entityId)
@@ -77,7 +76,15 @@ class PostSyncSystem : IteratingSystem(Aspect.all(Renderable::class)) {
         updateCombatLevelMapper.remove(entityId)
         walkMapper.remove(entityId)
         runMapper.remove(entityId)
-        walkingMapper.remove(entityId)
+        updateMoveTypeMapper.remove(entityId)
         movingMapper.remove(entityId)
+        batchAnimationsMapper.remove(entityId)
+        colourOverlayMapper.remove(entityId)
+        timeBarMapper.remove(entityId)
+        clanMemberMapper.remove(entityId)
+        unknownMapper.remove(entityId)
+        miniMapDotMapper.remove(entityId)
+        modelChangeMapper.remove(entityId)
+        watchingMapper.remove(entityId)
     }
 }

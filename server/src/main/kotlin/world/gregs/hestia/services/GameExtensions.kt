@@ -34,6 +34,12 @@ fun IntBag.toArray(): IntArray {
     return Arrays.copyOf(data, size())
 }
 
+fun IntBag.forEach(function: (Int) -> Unit) {
+    for(i in 0 until size()) {
+        function(get(i))
+    }
+}
+
 fun <T : BaseSystem>World.getSystem(type: KClass<T>) : T {
     return getSystem(type.java)
 }

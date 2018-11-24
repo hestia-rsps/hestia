@@ -35,19 +35,6 @@ class MapRegionSystem : SubscriptionSystem(Aspect.all(NetworkSession::class, Pla
         val list = Arrays.copyOf(entityIds.data, entityIds.size())
         es.send(entityId, MapRegion(list, viewport, positionMapper, entityId, position, true))
     }
-
-    companion object {
-        val locationHashes = HashMap<Int, Int>()
-
-        fun updateHash(index: Int, tile: Position) {
-            locationHashes[index] = tile.locationHash18Bit
-        }
-
-        fun getHash(playerIndex: Int): Int {
-            return locationHashes[playerIndex] ?: Position.EMPTY.locationHash18Bit
-        }
-    }
-
 }
 
 val Position.locationHash18Bit: Int

@@ -2,7 +2,10 @@ package world.gregs.hestia.game.component.map
 
 import com.artemis.Component
 import com.artemis.utils.IntBag
+import world.gregs.hestia.game.systems.login.locationHash18Bit
+import kotlin.collections.HashMap
 import java.util.*
+
 
 class Viewport : Component() {
 
@@ -10,7 +13,7 @@ class Viewport : Component() {
 
     private val localPlayers = ArrayList<Int>()
 
-    private val globalPlayerIndices = ArrayList<Int>()
+    private val locationHashes = HashMap<Int, Int>()
 
     fun addLocalMob(mob: Int) {
         localMobs.add(mob)
@@ -29,17 +32,11 @@ class Viewport : Component() {
         return localPlayers
     }
 
-    fun addGlobalPlayer(playerIndex: Int) {
-        globalPlayerIndices.add(playerIndex)//TODO is a sort needed for these too?
+    fun updateHash(index: Int, tile: Position) {
+        locationHashes[index] = tile.locationHash18Bit
     }
 
-    fun globalPlayers(): ArrayList<Int> {
-        return globalPlayerIndices
-    }
-
-    fun update(players: IntBag) {
-        globalPlayerIndices.clear()
-        globalPlayerIndices.addAll(Arrays.copyOf(players.data, players.size()).toList())
-        globalPlayerIndices.removeAll(localPlayers)
+    fun getHash(playerIndex: Int): Int {
+        return locationHashes[playerIndex] ?: Position.EMPTY.locationHash18Bit
     }
 }

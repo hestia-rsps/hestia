@@ -27,18 +27,14 @@ class WatchingSystem : IteratingSystem(Aspect.all(Watch::class)) {
         //Convert to client index
         watching.clientIndex =
                 //Attempted to watch self
-                if (entityId == watch.entity) {
+                if (watch.entity < 0 || entityId == watch.entity) {
                     -1
                 } else {
-
-                    //Get target entity
-                    val entity = world.getEntity(watch.entity)
-
                     //Target doesn't exist
-                    if (entity == null) {
+                    if (!world.entityManager.isActive(watch.entity)) {//TODO check is same as not null?
                         -1
                     } else {
-                        (clientIndexMapper.get(entityId)?.index ?: 0) + if(playerMapper.has(entityId)) 32768 else 0
+                        (clientIndexMapper.get(watch.entity)?.index ?: 0) + if(playerMapper.has(watch.entity)) 32768 else 0
                     }
                 }
         //Remove request
