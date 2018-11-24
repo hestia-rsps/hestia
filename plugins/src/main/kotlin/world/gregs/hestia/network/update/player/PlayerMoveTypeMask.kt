@@ -2,10 +2,11 @@ package world.gregs.hestia.network.update.player
 
 import com.artemis.ComponentMapper
 import world.gregs.hestia.game.component.movement.Moving
-import world.gregs.hestia.game.component.movement.Running
+import world.gregs.hestia.game.component.movement.RunToggled
 import world.gregs.hestia.game.component.movement.Walking
 import world.gregs.hestia.game.update.UpdateEncoder
 import world.gregs.hestia.core.network.packets.Packet
+import world.gregs.hestia.game.component.movement.Running
 
 class PlayerMoveTypeMask(private val walkingMapper: ComponentMapper<Walking>, private val runningMapper: ComponentMapper<Running>, private val movingMapper: ComponentMapper<Moving>) : UpdateEncoder {
 

@@ -3,7 +3,7 @@ package world.gregs.hestia.game.systems
 import com.artemis.Entity
 import com.artemis.WorldConfigurationBuilder
 import world.gregs.hestia.game.component.map.Position
-import world.gregs.hestia.game.component.movement.Running
+import world.gregs.hestia.game.component.movement.RunToggled
 import world.gregs.hestia.game.component.movement.Steps
 import world.gregs.hestia.game.component.movement.interact
 import world.gregs.hestia.game.plugins.MovementPlugin
@@ -36,7 +36,7 @@ internal class InteractionSystemTest : GameTest(WorldConfigurationBuilder().depe
     @Test
     fun run() {
         val player = fakePlayer(3501, 3087)
-        player.edit().add(Running())
+        player.edit().add(RunToggled())
         val counter = DirectionUtils.DELTA_X.size
 
         //Check every direction near and far

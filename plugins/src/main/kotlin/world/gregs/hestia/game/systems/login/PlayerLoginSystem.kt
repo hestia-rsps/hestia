@@ -20,7 +20,7 @@ class PlayerLoginSystem : SubscriptionSystem(Aspect.all(NetworkSession::class, P
     override fun inserted(entityId: Int) {
         val displayName = displayNameMapper.get(entityId)
         val clientIndex = clientIndexMapper.get(entityId)
-        es.send(entityId, LoginDetails(clientIndex.index, displayName?.name
-                ?: "", 2))
+        val name = displayName?.name ?: ""
+        es.send(entityId, LoginDetails(clientIndex.index, name, if(name.equals("Greg", true)) 2 else 0))
     }
 }

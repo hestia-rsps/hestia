@@ -16,8 +16,10 @@ import world.gregs.hestia.core.network.packets.PacketOpcode
 import world.gregs.hestia.core.network.packets.PacketSize
 import world.gregs.hestia.game.component.update.*
 import world.gregs.hestia.game.component.update.appearance.CombatLevel
+import world.gregs.hestia.game.component.update.appearance.Hidden
 import world.gregs.hestia.game.update.Marker
 import world.gregs.hestia.network.game.GamePacket
+import world.gregs.hestia.services.toggle
 
 @PacketSize(-1)
 @PacketOpcode(Packets.COMMAND)
@@ -44,6 +46,10 @@ class Commands : GamePacket() {
             //Player updating flags
             "batch" -> {
                 entity.batchAnim()
+            }
+            "hide" -> {
+                entity.edit().toggle(Hidden())
+                entity.updateAppearance()
             }
             "colour" -> {
                 //70 110 90 130 green used for kalphite king
@@ -111,6 +117,7 @@ class Commands : GamePacket() {
             }
             "b" -> {
                 val bot = entity.world.getEntity(entity.world.players().last())
+                bot.edit().add(Hidden())
                 bot.updateAppearance()
             }
             "mob" -> {
@@ -164,7 +171,7 @@ class Commands : GamePacket() {
                 entity.edit()?.add(move)
             }
             "run" -> {
-                entity.edit().add(Running()).add(UpdateMovement())
+                entity.edit().toggle(RunToggled()).add(UpdateMovement())
             }
             "turn" -> {
                 entity.turn(-1, 0)
