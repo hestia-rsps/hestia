@@ -63,7 +63,7 @@ class AppearanceSystem : SubscriptionSystem(Aspect.all(Player::class)) {
             writeString(namePrefixMapper.get(entityId)?.prefix ?: "")//Chat prefix
             writeByte(skullMapper.get(entityId)?.skull ?: -1)//Skull
             writeByte(headIconMapper.get(entityId)?.headIcon ?: -1)//Head icon
-            writeByte(hiddenMapper.has(entityId).int)//Hidden
+            writeByte(hiddenMapper.has(entityId).int)//Hidden (displays visible to admins)
 
             if (transformMapper.has(entityId)) {
                 val transform = transformMapper.get(entityId)

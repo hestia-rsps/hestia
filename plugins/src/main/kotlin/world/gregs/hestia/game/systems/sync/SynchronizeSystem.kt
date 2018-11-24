@@ -13,6 +13,7 @@ import world.gregs.hestia.core.network.packets.Packet
 import world.gregs.hestia.game.component.entity.Mob
 import world.gregs.hestia.game.component.map.PlayerViewDistance
 import world.gregs.hestia.game.component.map.MobViewDistance
+import world.gregs.hestia.game.component.update.Created
 import world.gregs.hestia.game.update.UpdateEncoder
 import world.gregs.hestia.game.update.UpdateStage
 
@@ -21,6 +22,7 @@ abstract class SynchronizeSystem(aspect: com.artemis.Aspect.Builder) : Iterating
     internal lateinit var viewportMapper: ComponentMapper<Viewport>
     private lateinit var playerViewDistanceMapper: ComponentMapper<PlayerViewDistance>
     private lateinit var mobViewDistanceMapper: ComponentMapper<MobViewDistance>
+    private lateinit var createdMapper: ComponentMapper<Created>
 
     //Stage checks
     internal lateinit var mobileMapper: ComponentMapper<Mobile>
@@ -119,7 +121,8 @@ abstract class SynchronizeSystem(aspect: com.artemis.Aspect.Builder) : Iterating
     }
 
     internal fun update(entityId: Int, local: Int, data: Packet.Builder, player: Boolean, added: Boolean) {
-        val types = flags.filter { t -> (added && t.added) || t.subscription.entities.contains(local) }
+        val created = added || createdMapper.has(entityId)
+        val types = flags.filter { t -> (created && t.added) || t.subscription.entities.contains(local) }
         if (types.isEmpty()) {
             return
         }
@@ -147,6 +150,8 @@ abstract class SynchronizeSystem(aspect: com.artemis.Aspect.Builder) : Iterating
         types.forEach {
             it.unit.encode(data, entityId, local)
         }
+
+        createdMapper.remove(entityId)
     }
 
     private fun withinDistance(entityId: Int, otherId: Int): Boolean {

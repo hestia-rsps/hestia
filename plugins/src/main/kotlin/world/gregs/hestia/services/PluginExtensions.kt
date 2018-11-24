@@ -63,6 +63,10 @@ fun <T : Component> Entity.getComponent(type: KClass<T>): T? {
     return getComponent(tf.getTypeFor(type.java)) as? T
 }
 
+fun <T : Component> EntityEdit.toggle(component: T): EntityEdit {
+    return if(entity.getComponent(component::class) == null) add(component) else remove(component)
+}
+
 fun EntityEdit.remove(type: KClass<out Component>): EntityEdit {
     return remove(type.java)
 }

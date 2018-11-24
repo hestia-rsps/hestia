@@ -246,6 +246,9 @@ class PlayerSyncSystem : PlayerUpdateSystem(Aspect.all(NetworkSession::class, Re
     }
 
     private fun getUpdateType(player: Int, other: Int): UpdateStage {
+        if(!positionMapper.has(other)) {
+            return UpdateStage.SKIP
+        }
         val delta = getDelta(viewportMapper.get(player), positionMapper.get(other), other)
         return if (delta.x == 0 && delta.y == 0 && delta.plane == 0) {
             UpdateStage.SKIP//No update needed

@@ -41,6 +41,7 @@ abstract class PlayerUpdateSystem(aspect: com.artemis.Aspect.Builder): Synchroni
     private lateinit var fourthGraphicMapper: ComponentMapper<FourthGraphic>
     private lateinit var walkingMapper: ComponentMapper<Walking>
     private lateinit var runningMapper: ComponentMapper<Running>
+    private lateinit var runToggledMapper: ComponentMapper<RunToggled>
     private lateinit var damageMapper: ComponentMapper<Damage>
     private lateinit var appearanceDataMapper: ComponentMapper<AppearanceData>
     private lateinit var forceChatMapper: ComponentMapper<ForceChat>
@@ -77,7 +78,7 @@ abstract class PlayerUpdateSystem(aspect: com.artemis.Aspect.Builder): Synchroni
                 //Colour overlay
                 create(0x20000, Aspect.all(Renderable::class, ColourOverlay::class), PlayerColourOverlayMask(colourOverlayMapper)),
                 //Move Type
-                create(0x200, Aspect.all(Renderable::class).one(Moving::class, Walking::class), PlayerMoveTypeMask(walkingMapper, runningMapper, movingMapper), true),
+                create(0x200, Aspect.all(Renderable::class).one(Moving::class, UpdateMoveType::class), PlayerMoveTypeMask(walkingMapper, runningMapper, movingMapper), true),
                 //Time Bar
                 create(0x2000, Aspect.all(Renderable::class, TimeBar::class), PlayerTimeBarMask(timeBarMapper)),
                 //Fourth Graphic
@@ -95,7 +96,7 @@ abstract class PlayerUpdateSystem(aspect: com.artemis.Aspect.Builder): Synchroni
                 //Changes other players mini-map dot from white to a "p"
                 create(0x400, Aspect.all(Renderable::class, PlayerMiniMapDot::class), PlayerMiniMapMask(miniMapDotMapper)),
                 //Movement Type
-                create(0x1, Aspect.all(Renderable::class, UpdateMovement::class), PlayerMovementMask(runningMapper), true),
+                create(0x1, Aspect.all(Renderable::class, UpdateMovement::class), PlayerMovementMask(runToggledMapper), true),
                 //Watch Entity
                 create(0x10, Aspect.all(Renderable::class, Watching::class), PlayerWatchEntityMask(watchingMapper)),
                 //Force Movement

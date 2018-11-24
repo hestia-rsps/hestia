@@ -1,7 +1,7 @@
-package world.gregs.hestia.game.component.movement
+package world.gregs.hestia.game.component.update
 
 import com.artemis.Component
 import com.artemis.annotations.PooledWeaver
 
 @PooledWeaver
-class Running : Component()
+class UpdateMoveType : Component()

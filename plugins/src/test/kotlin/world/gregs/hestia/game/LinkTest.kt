@@ -7,7 +7,7 @@ import com.artemis.annotations.PreserveProcessVisiblity
 import com.artemis.link.EntityLinkManager
 import com.artemis.link.LinkAdapter
 import com.artemis.utils.Bag
-import world.gregs.hestia.game.component.movement.Running
+import world.gregs.hestia.game.component.movement.RunToggled
 import world.gregs.hestia.services.getComponent
 import org.junit.jupiter.api.Test
 import world.gregs.hestia.services.getSystem
@@ -20,7 +20,7 @@ class LinkTest : GameTest(WorldConfigurationBuilder().with(EntityLinkManager()))
 
         val player = fakePlayer()
 
-        w.getSystem(EntityLinkManager::class).register(Running::class.java, object : LinkAdapter() {
+        w.getSystem(EntityLinkManager::class).register(RunToggled::class.java, object : LinkAdapter() {
             override fun onLinkEstablished(sourceId: Int, targetId: Int) {
                 println("Linked $sourceId $targetId")
                 super.onLinkEstablished(sourceId, targetId)
@@ -41,8 +41,8 @@ class LinkTest : GameTest(WorldConfigurationBuilder().with(EntityLinkManager()))
                 super.onLinkKilled(sourceId, targetId)
             }
         })
-        player.edit().add(Running())
-        player.getComponent(Running::class)?.entity = player.id
+        player.edit().add(RunToggled())
+        player.getComponent(RunToggled::class)?.entity = player.id
 
         tick()
         var bag = w.componentManager.getComponentsFor(player.id, Bag<Component>())
@@ -55,7 +55,7 @@ class LinkTest : GameTest(WorldConfigurationBuilder().with(EntityLinkManager()))
 
         bag = w.componentManager.getComponentsFor(player.id, Bag<Component>())
 
-        println(w.aspectSubscriptionManager.get(Aspect.all(Running::class.java)).entities.size())
+        println(w.aspectSubscriptionManager.get(Aspect.all(RunToggled::class.java)).entities.size())
         println("Components ${bag.toList()}")
     }
 

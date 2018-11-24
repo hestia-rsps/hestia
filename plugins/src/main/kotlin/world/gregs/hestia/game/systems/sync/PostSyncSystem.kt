@@ -44,7 +44,7 @@ class PostSyncSystem : IteratingSystem(Aspect.all(Renderable::class)) {
     private lateinit var updateCombatLevelMapper: ComponentMapper<UpdateCombatLevel>
     private lateinit var walkMapper: ComponentMapper<Walk>
     private lateinit var runMapper: ComponentMapper<Run>
-    private lateinit var walkingMapper: ComponentMapper<Walking>
+    private lateinit var updateMoveTypeMapper: ComponentMapper<UpdateMoveType>
     private lateinit var movingMapper: ComponentMapper<Moving>
     private lateinit var batchAnimationsMapper: ComponentMapper<BatchAnimations>
     private lateinit var colourOverlayMapper: ComponentMapper<ColourOverlay>
@@ -76,7 +76,7 @@ class PostSyncSystem : IteratingSystem(Aspect.all(Renderable::class)) {
         updateCombatLevelMapper.remove(entityId)
         walkMapper.remove(entityId)
         runMapper.remove(entityId)
-        walkingMapper.remove(entityId)
+        updateMoveTypeMapper.remove(entityId)
         movingMapper.remove(entityId)
         batchAnimationsMapper.remove(entityId)
         colourOverlayMapper.remove(entityId)
