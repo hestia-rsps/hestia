@@ -16,7 +16,7 @@ ext {
     artemis_eventbus_version = '2.3.0'
     artemis_core_version = '2.3.0'
 
-    junit_version = "5.0.0"
+    junit_version = "5.3.2"
     assertj_version = "3.11.1"
     mockito_version = "1.10.19"
     mockito_kotlin_version = "2.0.0-RC3"

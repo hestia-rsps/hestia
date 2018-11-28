@@ -1,4 +1,4 @@
-import world.gregs.hestia.GameServer
+import worlds.gregs.hestia.GameServer
 
 /**
  * We're using the root project to launch so that both :server & :plugins
