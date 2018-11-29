@@ -4,8 +4,8 @@ import com.artemis.ComponentMapper
 import world.gregs.hestia.core.network.packets.Packet
 import worlds.gregs.hestia.game.plugins.core.components.map.Position
 import worlds.gregs.hestia.game.plugins.core.components.map.Viewport
-import worlds.gregs.hestia.game.plugins.region.systems.locationHash18Bit
-import worlds.gregs.hestia.game.plugins.region.systems.locationHash30Bit
+import worlds.gregs.hestia.game.plugins.client.systems.locationHash18Bit
+import worlds.gregs.hestia.game.plugins.client.systems.locationHash30Bit
 
 class MapRegion(players: IntArray, viewport: Viewport, positionMapper: ComponentMapper<Position>, entityId: Int, position: Position, local: Boolean) : Packet.Builder(43, Packet.Type.VAR_SHORT) {
     init {

@@ -65,7 +65,6 @@ internal class MapIndexDecoderTest {
                             }
                         }
                     }
-                    objectCount = 0
                     if (landContainerData != null) {
                         val map = HashMap<Int, Int>()
                         val landStream = Packet(landContainerData)
@@ -95,6 +94,9 @@ internal class MapIndexDecoderTest {
                                 var objectPlane = plane
                                 if (mapSettings != null && mapSettings[1][localX][localY].toInt() and 2 == 2) {
                                     objectPlane--
+                                }
+                                if(plane < 0 || plane >= 4 && !(objectPlane < 0 || objectPlane >= 4)) {
+                                    println("Necessary!?")
                                 }
                                 if (objectPlane < 0 || objectPlane >= 4 || plane < 0 || plane >= 4) {
                                     continue

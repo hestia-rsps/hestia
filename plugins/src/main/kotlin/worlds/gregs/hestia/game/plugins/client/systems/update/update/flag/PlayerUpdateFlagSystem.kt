@@ -12,14 +12,15 @@ import worlds.gregs.hestia.game.plugins.entity.components.update.anim.FirstAnima
 import worlds.gregs.hestia.game.plugins.entity.components.update.anim.FourthAnimation
 import worlds.gregs.hestia.game.plugins.entity.components.update.anim.SecondAnimation
 import worlds.gregs.hestia.game.plugins.entity.components.update.anim.ThirdAnimation
+import worlds.gregs.hestia.game.plugins.entity.components.update.direction.Face
 import worlds.gregs.hestia.game.plugins.entity.components.update.direction.Facing
 import worlds.gregs.hestia.game.plugins.entity.components.update.direction.Watching
 import worlds.gregs.hestia.game.plugins.entity.components.update.gfx.FirstGraphic
 import worlds.gregs.hestia.game.plugins.entity.components.update.gfx.FourthGraphic
 import worlds.gregs.hestia.game.plugins.entity.components.update.gfx.SecondGraphic
 import worlds.gregs.hestia.game.plugins.entity.components.update.gfx.ThirdGraphic
-import worlds.gregs.hestia.game.plugins.movement.components.Run
-import worlds.gregs.hestia.game.plugins.movement.components.Walk
+import worlds.gregs.hestia.game.plugins.movement.components.types.Run
+import worlds.gregs.hestia.game.plugins.movement.components.types.Walk
 import worlds.gregs.hestia.network.update.player.*
 import worlds.gregs.hestia.services.Aspect
 import worlds.gregs.hestia.services.exclude
@@ -52,7 +53,7 @@ class PlayerUpdateFlagSystem : BaseUpdateFlagSystem(GlobalPlayers::class) {
     private lateinit var forceChatMapper: ComponentMapper<ForceChat>
     private lateinit var watchingMapper: ComponentMapper<Watching>
     private lateinit var forceMovementMapper: ComponentMapper<ForceMovement>
-    private lateinit var facingMapper: ComponentMapper<Facing>
+    private lateinit var faceMapper: ComponentMapper<Face>
     private lateinit var batchAnimationsMapper: ComponentMapper<BatchAnimations>
     private lateinit var colourOverlayMapper: ComponentMapper<ColourOverlay>
     private lateinit var timeBarMapper: ComponentMapper<TimeBar>
@@ -81,7 +82,7 @@ class PlayerUpdateFlagSystem : BaseUpdateFlagSystem(GlobalPlayers::class) {
                 //Force Movement
                 create(0x1000, Aspect.all(Renderable::class, Position::class, ForceMovement::class), PlayerForceMovementMask(positionMapper, forceMovementMapper)),
                 //Face Direction
-                create(0x20, Aspect.all(Renderable::class, Facing::class).exclude(Run::class, Walk::class), PlayerFacingMask(facingMapper), true),
+                create(0x20, Aspect.all(Renderable::class, Facing::class).exclude(Run::class, Walk::class), PlayerFacingMask(faceMapper), true),
                 //First Graphic
                 create(0x2, Aspect.all(Renderable::class, FirstGraphic::class), PlayerGraphicMask(firstGraphicMapper)),
                 //Second Graphic

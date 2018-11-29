@@ -14,9 +14,9 @@ import worlds.gregs.hestia.game.plugins.entity.components.update.gfx.FirstGraphi
 import worlds.gregs.hestia.game.plugins.entity.components.update.gfx.FourthGraphic
 import worlds.gregs.hestia.game.plugins.entity.components.update.gfx.SecondGraphic
 import worlds.gregs.hestia.game.plugins.entity.components.update.gfx.ThirdGraphic
-import worlds.gregs.hestia.game.plugins.movement.components.Moving
-import worlds.gregs.hestia.game.plugins.movement.components.Run
-import worlds.gregs.hestia.game.plugins.movement.components.Walk
+import worlds.gregs.hestia.game.plugins.movement.components.types.Moving
+import worlds.gregs.hestia.game.plugins.movement.components.types.Run
+import worlds.gregs.hestia.game.plugins.movement.components.types.Walk
 import worlds.gregs.hestia.services.Aspect
 
 class PostEntitySyncSystem : IteratingSystem(Aspect.all(Renderable::class)) {

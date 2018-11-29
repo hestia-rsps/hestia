@@ -4,6 +4,11 @@ import com.artemis.Component
 import com.artemis.annotations.PooledWeaver
 
 @PooledWeaver
-class Emote : Component() {
-    val id = -1
+class Emote() : Component() {
+
+    constructor(id: Int) : this() {
+        this.id = id
+    }
+
+    var id = -1
 }

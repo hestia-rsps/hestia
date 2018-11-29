@@ -14,7 +14,7 @@ import worlds.gregs.hestia.game.plugins.MovementPlugin
 import worlds.gregs.hestia.game.plugins.core.components.map.Position
 import worlds.gregs.hestia.game.plugins.movement.components.RunToggled
 import worlds.gregs.hestia.game.plugins.movement.components.Steps
-import worlds.gregs.hestia.game.plugins.movement.components.navigate
+import worlds.gregs.hestia.game.plugins.movement.components.calc.navigate
 import worlds.gregs.hestia.game.plugins.player.systems.PlayerCreation
 import worlds.gregs.hestia.game.update.DirectionUtils
 import worlds.gregs.hestia.services.dependsOn

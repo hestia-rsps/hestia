@@ -1,15 +1,15 @@
 package worlds.gregs.hestia.network.update.player
 
 import com.artemis.ComponentMapper
-import worlds.gregs.hestia.game.update.DirectionUtils
-import worlds.gregs.hestia.game.plugins.entity.components.update.direction.Facing
-import worlds.gregs.hestia.game.update.UpdateEncoder
 import world.gregs.hestia.core.network.packets.Packet
+import worlds.gregs.hestia.game.plugins.entity.components.update.direction.Face
+import worlds.gregs.hestia.game.update.DirectionUtils
+import worlds.gregs.hestia.game.update.UpdateEncoder
 
-class PlayerFacingMask(private val facingMapper: ComponentMapper<Facing>) : UpdateEncoder {
+class PlayerFacingMask(private val faceMapper: ComponentMapper<Face>) : UpdateEncoder {
 
     override val encode: Packet.Builder.(Int, Int) -> Unit = { _, other ->
-        val direction = facingMapper.get(other)
+        val direction = faceMapper.get(other)
         writeShort(if(direction != null) DirectionUtils.getFaceDirection(direction.x, direction.y) else 0)
     }
 

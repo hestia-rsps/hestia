@@ -12,6 +12,7 @@ ext {
     logback_version = "1.2.3"
 
     rx_kotlin_version = '2.0.0'
+    kotlin_coroutines = '1.0.1'
     artemis_version = '2.1.0'
     artemis_eventbus_version = '2.3.0'
     artemis_core_version = '2.3.0'
@@ -29,6 +30,7 @@ ext {
     ]
 
     systemDependencies = [
+            kotlin: "org.jetbrains.kotlinx:kotlinx-coroutines-core:$kotlin_coroutines",
             rxKotlin  : "io.reactivex.rxjava2:rxkotlin:$rx_kotlin_version",
 //            artemis          : "net.onedaybeard.artemis:artemis-odb:$artemis_version",
             artemisSerializer: "net.onedaybeard.artemis:artemis-odb-serializer:$artemis_version",

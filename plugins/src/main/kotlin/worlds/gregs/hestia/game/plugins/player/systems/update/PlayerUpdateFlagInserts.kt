@@ -4,10 +4,10 @@ import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.system.core.PassiveSystem
 import worlds.gregs.hestia.game.plugins.client.systems.update.update.flag.PlayerUpdateFlagSystem
 import worlds.gregs.hestia.game.plugins.core.components.Renderable
-import worlds.gregs.hestia.game.plugins.movement.components.Moving
+import worlds.gregs.hestia.game.plugins.movement.components.types.Moving
 import worlds.gregs.hestia.game.plugins.movement.components.RunToggled
-import worlds.gregs.hestia.game.plugins.movement.components.Running
-import worlds.gregs.hestia.game.plugins.movement.components.Walking
+import worlds.gregs.hestia.game.plugins.movement.components.types.Running
+import worlds.gregs.hestia.game.plugins.movement.components.types.Walking
 import worlds.gregs.hestia.game.plugins.player.component.update.*
 import worlds.gregs.hestia.network.update.player.*
 import worlds.gregs.hestia.services.Aspect

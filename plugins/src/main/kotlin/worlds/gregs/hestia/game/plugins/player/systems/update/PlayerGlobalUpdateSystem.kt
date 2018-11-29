@@ -6,7 +6,7 @@ import worlds.gregs.hestia.game.plugins.client.components.NetworkSession
 import worlds.gregs.hestia.game.plugins.client.components.update.list.GlobalPlayers
 import worlds.gregs.hestia.game.plugins.core.components.map.Position
 import worlds.gregs.hestia.game.plugins.core.components.map.Viewport
-import worlds.gregs.hestia.game.plugins.player.systems.sync.PlayerChunkSystem
+import worlds.gregs.hestia.game.plugins.player.systems.map.PlayerChunkSystem
 import worlds.gregs.hestia.services.Aspect
 import worlds.gregs.hestia.services.getSystem
 

@@ -13,9 +13,9 @@ import worlds.gregs.hestia.game.plugins.entity.components.update.direction.watch
 import worlds.gregs.hestia.game.plugins.mob.component.update.UpdateCombatLevel
 import worlds.gregs.hestia.game.plugins.mob.component.update.UpdateDisplayName
 import worlds.gregs.hestia.game.plugins.mob.component.update.change
-import worlds.gregs.hestia.game.plugins.movement.components.Navigate
 import worlds.gregs.hestia.game.plugins.movement.components.RunToggled
-import worlds.gregs.hestia.game.plugins.movement.components.move
+import worlds.gregs.hestia.game.plugins.movement.components.calc.Navigate
+import worlds.gregs.hestia.game.plugins.movement.components.types.move
 import worlds.gregs.hestia.game.plugins.player.component.update.PlayerMiniMapDot
 import worlds.gregs.hestia.game.plugins.player.component.update.UpdateMovement
 import worlds.gregs.hestia.game.plugins.player.component.update.UpdateUnknown
@@ -78,9 +78,7 @@ class Commands : GamePacket() {
             "p" -> {
                 entity.world.players().forEach {
                     val other = entity.world.getEntity(it)
-                    val dot = PlayerMiniMapDot()
-                    dot.p = parts[1].toBoolean()
-                    other.edit().add(dot)
+                    other.edit().add(PlayerMiniMapDot(parts[1].toBoolean()))
                 }
             }
             "model" -> {
@@ -226,9 +224,7 @@ class Commands : GamePacket() {
                         }
                         4 -> {
                             mob.force("Display name")
-                            val displayName = DisplayName()
-                            displayName.name = "Manly Man"
-                            mob.edit().add(displayName).add(UpdateDisplayName())
+                            mob.edit().add(DisplayName("Manly Man")).add(UpdateDisplayName())
                         }
                         5 -> {
                             mob.force("Transform")

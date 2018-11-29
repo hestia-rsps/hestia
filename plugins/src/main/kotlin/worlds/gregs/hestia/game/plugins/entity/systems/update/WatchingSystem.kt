@@ -2,9 +2,9 @@ package worlds.gregs.hestia.game.plugins.entity.systems.update
 
 import com.artemis.ComponentMapper
 import com.artemis.systems.IteratingSystem
+import worlds.gregs.hestia.game.plugins.core.components.entity.ClientIndex
 import worlds.gregs.hestia.game.plugins.entity.components.update.direction.Watch
 import worlds.gregs.hestia.game.plugins.entity.components.update.direction.Watching
-import worlds.gregs.hestia.game.plugins.core.components.entity.ClientIndex
 import worlds.gregs.hestia.game.plugins.player.component.Player
 import worlds.gregs.hestia.services.Aspect
 
@@ -31,7 +31,7 @@ class WatchingSystem : IteratingSystem(Aspect.all(Watch::class)) {
                     -1
                 } else {
                     //Target doesn't exist
-                    if (!world.entityManager.isActive(watch.entity)) {//TODO check is same as not null?
+                    if (!world.entityManager.isActive(watch.entity)) {
                         -1
                     } else {
                         (clientIndexMapper.get(watch.entity)?.index ?: 0) + if(playerMapper.has(watch.entity)) 32768 else 0

@@ -4,16 +4,15 @@ import com.artemis.WorldConfigurationBuilder
 import worlds.gregs.hestia.game.plugin.Plugin
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.INTERFACE_PRIORITY
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.LOGIN_DETAILS_PRIORITY
+import worlds.gregs.hestia.game.plugin.Plugin.Companion.MAP_REGION_PRIORITY
+import worlds.gregs.hestia.game.plugin.Plugin.Companion.PRE_SYNC_PRIORITY
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.UPDATE_CHANGE_PRIORITY
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.UPDATE_DISPLAY_FLAG_PRIORITY
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.UPDATE_FINISH_PRIORITY
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.UPDATE_FLAG_PRIORITY
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.UPDATE_SYNC_PRIORITY
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.UPDATE_UPDATE_PRIORITY
-import worlds.gregs.hestia.game.plugins.client.systems.ClientConnectSystem
-import worlds.gregs.hestia.game.plugins.client.systems.ClientDisconnectSystem
-import worlds.gregs.hestia.game.plugins.client.systems.InterfaceSystem
-import worlds.gregs.hestia.game.plugins.client.systems.PacketSender
+import worlds.gregs.hestia.game.plugins.client.systems.*
 import worlds.gregs.hestia.game.plugins.client.systems.update.PostUpdateSystem
 import worlds.gregs.hestia.game.plugins.client.systems.update.stage.GlobalDisplayFlagSystem
 import worlds.gregs.hestia.game.plugins.client.systems.update.stage.LocalDisplayFlagSystem
@@ -25,7 +24,7 @@ import worlds.gregs.hestia.game.plugins.client.systems.update.update.change.MobU
 import worlds.gregs.hestia.game.plugins.client.systems.update.update.change.PlayerUpdateChangeSystem
 import worlds.gregs.hestia.game.plugins.client.systems.update.update.flag.MobUpdateFlagSystem
 import worlds.gregs.hestia.game.plugins.client.systems.update.update.flag.PlayerUpdateFlagSystem
-import worlds.gregs.hestia.game.plugins.movement.systems.MovementStageChecks
+import worlds.gregs.hestia.game.plugins.movement.systems.update.MovementStageChecks
 
 class ClientPlugin : Plugin {
 
@@ -40,6 +39,8 @@ class ClientPlugin : Plugin {
         b.with(UPDATE_UPDATE_PRIORITY, PlayerUpdateSystem(), MobUpdateSystem())
         b.with(UPDATE_CHANGE_PRIORITY, PlayerUpdateChangeSystem(), MobUpdateChangeSystem())
         b.with(UPDATE_FINISH_PRIORITY, PostUpdateSystem())
+        b.with(MAP_REGION_PRIORITY, ClientRegionChangeSystem())
+        b.with(PRE_SYNC_PRIORITY, ClientRegionLoadSystem())
     }
 
 }

@@ -4,7 +4,14 @@ import com.artemis.Component
 import com.artemis.annotations.PooledWeaver
 
 @PooledWeaver
-open class Position : Component() {
+open class Position() : Component() {
+
+    constructor(x: Int, y: Int, plane: Int = 0) : this() {
+        this.x = x
+        this.y = y
+        this.plane = plane
+    }
+
     var x: Int = 0
     var y: Int = 0
     var plane: Int = 0
@@ -69,11 +76,7 @@ open class Position : Component() {
         val EMPTY = Position()
 
         fun create(x: Int, y: Int, z: Int): Position {
-            val pos = Position()
-            pos.x = x
-            pos.y = y
-            pos.plane = z
-            return pos
+            return Position(x, y, z)
         }
 
         fun from(hash: Int): Position {
@@ -86,6 +89,10 @@ open class Position : Component() {
 
         fun clone(position: Position): Position {
             return create(position.x, position.y, position.plane)
+        }
+
+        fun regionId(x: Int, y: Int): Int {
+            return (x shr 6 shl 8) + (y shr 6)
         }
     }
 }
