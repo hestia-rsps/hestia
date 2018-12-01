@@ -41,15 +41,15 @@ abstract class EntityChunkSystem(type: KClass<out Component>) : SubscriptionSyst
 
     companion object {
 
-        fun toHash(position: Position): Int {
-            return toHash(position.chunkX, position.chunkY, position.plane)
+        fun toChunkPosition(position: Position): Int {
+            return toChunkPosition(position.chunkX, position.chunkY, position.plane)
         }
 
-        fun toHash(chunkX: Int, chunkY: Int, plane: Int): Int {
+        fun toChunkPosition(chunkX: Int, chunkY: Int, plane: Int): Int {
             return chunkY + (chunkX shl 14) + (plane shl 28)
         }
 
-        fun fromHash(hash: Int): Position {
+        fun fromChunkPosition(hash: Int): Position {
             val x = hash shr 14 and 0x3fff
             val y = hash and 0x3fff
             val z = hash shr 28

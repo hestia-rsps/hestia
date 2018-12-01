@@ -6,7 +6,7 @@ import worlds.gregs.hestia.game.plugins.core.components.entity.Size
 import worlds.gregs.hestia.game.plugins.core.components.map.Position
 import worlds.gregs.hestia.game.plugins.movement.components.Steps
 import worlds.gregs.hestia.game.plugins.movement.components.calc.Path
-import worlds.gregs.hestia.game.plugins.region.systems.RegionMapSystem
+import worlds.gregs.hestia.game.plugins.region.systems.change.ClippingMaskSystem
 import worlds.gregs.hestia.game.plugins.region.systems.RegionSystem
 
 /**
@@ -18,7 +18,7 @@ class PathSystem : BaseMovementSystem(Path::class) {
     private lateinit var pathMapper: ComponentMapper<Path>
     private lateinit var regionSystem: RegionSystem
     private lateinit var routeFinder: RouteFinderSystem
-    private lateinit var rms: RegionMapSystem
+    private lateinit var rms: ClippingMaskSystem
     private lateinit var positionMapper: ComponentMapper<Position>
     private lateinit var sizeMapper: ComponentMapper<Size>
     private lateinit var stepsMapper: ComponentMapper<Steps>

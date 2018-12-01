@@ -1,4 +1,4 @@
-package worlds.gregs.hestia.game.plugins.region.systems
+package worlds.gregs.hestia.game.plugins.region.systems.change
 
 import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.system.core.PassiveSystem
@@ -6,17 +6,19 @@ import worlds.gregs.hestia.game.map.GameObject
 import worlds.gregs.hestia.game.plugins.core.components.map.Position
 import worlds.gregs.hestia.game.plugins.core.systems.cache.ObjectDefinitionSystem
 import worlds.gregs.hestia.game.plugins.region.components.Clipping
-import worlds.gregs.hestia.game.plugins.region.components.Dynamic
 import worlds.gregs.hestia.game.plugins.region.components.Objects
 import worlds.gregs.hestia.game.plugins.region.components.ProjectileClipping
 import java.util.concurrent.CopyOnWriteArrayList
 
+/**
+ * RegionObjectSystem
+ * TODO requires a rewrite
+ */
 class RegionObjectSystem : PassiveSystem() {
     private lateinit var objectsMapper: ComponentMapper<Objects>
     private lateinit var clippingMapper: ComponentMapper<Clipping>
     private lateinit var projectileClippingMapper: ComponentMapper<ProjectileClipping>
-    private lateinit var dynamicMapper: ComponentMapper<Dynamic>
-    private lateinit var rms: RegionMapSystem
+    private lateinit var rms: ClippingMaskSystem
     private lateinit var objectDef: ObjectDefinitionSystem
 
     fun addObject(entityId: Int, `object`: GameObject, plane: Int, localX: Int, localY: Int) {
@@ -38,10 +40,6 @@ class RegionObjectSystem : PassiveSystem() {
     }
 
     fun addMapObject(entityId: Int, `object`: GameObject, x: Int, y: Int) {
-        if(dynamicMapper.has(entityId)) {
-            return
-        }
-
         val plane = `object`.plane
         val type = `object`.type
         val rotation = `object`.rotation
@@ -61,9 +59,9 @@ class RegionObjectSystem : PassiveSystem() {
 
         when (type) {
             in 0..3 -> {
-                rms.changeWall(entityId, map, plane, x, y, type, rotation, objectDefinition.isProjectileClipped, true, RegionMapSystem.ADD_MASK)
+                rms.changeWall(entityId, map, plane, x, y, type, rotation, objectDefinition.isProjectileClipped, true, ClippingMaskSystem.ADD_MASK)
                 if (objectDefinition.isProjectileClipped) {
-                    rms.changeWall(entityId, clippedOnlyMap, plane, x, y, type, rotation, objectDefinition.isProjectileClipped, true, RegionMapSystem.ADD_MASK)
+                    rms.changeWall(entityId, clippedOnlyMap, plane, x, y, type, rotation, objectDefinition.isProjectileClipped, true, ClippingMaskSystem.ADD_MASK)
                 }
             }
             in 9..21 -> {
@@ -76,9 +74,9 @@ class RegionObjectSystem : PassiveSystem() {
                     sizeX = objectDefinition.sizeY
                     sizeY = objectDefinition.sizeX
                 }
-                rms.changeObject(entityId, map, plane, x, y, sizeX, sizeY, objectDefinition.isProjectileClipped, true, RegionMapSystem.ADD_MASK)
+                rms.changeObject(entityId, map, plane, x, y, sizeX, sizeY, objectDefinition.isProjectileClipped, true, ClippingMaskSystem.ADD_MASK)
                 if (objectDefinition.isProjectileClipped) {
-                    rms.changeObject(entityId, clippedOnlyMap, plane, x, y, sizeX, sizeY, objectDefinition.isProjectileClipped, true, RegionMapSystem.ADD_MASK)
+                    rms.changeObject(entityId, clippedOnlyMap, plane, x, y, sizeX, sizeY, objectDefinition.isProjectileClipped, true, ClippingMaskSystem.ADD_MASK)
                 }
             }
             22 -> {
@@ -103,9 +101,9 @@ class RegionObjectSystem : PassiveSystem() {
         val map = clippingMapper.create(entityId)
         val clippedOnlyMap = projectileClippingMapper.create(entityId)
         if (type in 0..3) {
-            rms.changeWall(entityId, map, plane, x, y, type, rotation, objectDefinition.isProjectileClipped, true, RegionMapSystem.REMOVE_MASK)
+            rms.changeWall(entityId, map, plane, x, y, type, rotation, objectDefinition.isProjectileClipped, true, ClippingMaskSystem.REMOVE_MASK)
             if (objectDefinition.isProjectileClipped) {
-                rms.changeWall(entityId, clippedOnlyMap, plane, x, y, type, rotation, objectDefinition.isProjectileClipped, true, RegionMapSystem.REMOVE_MASK)
+                rms.changeWall(entityId, clippedOnlyMap, plane, x, y, type, rotation, objectDefinition.isProjectileClipped, true, ClippingMaskSystem.REMOVE_MASK)
             }
         } else if (type in 9..21) {
             val sizeX: Short
@@ -117,9 +115,9 @@ class RegionObjectSystem : PassiveSystem() {
                 sizeX = objectDefinition.sizeY
                 sizeY = objectDefinition.sizeX
             }
-            rms.changeObject(entityId, map, plane, x, y, sizeX, sizeY, objectDefinition.isProjectileClipped, true, RegionMapSystem.REMOVE_MASK)
+            rms.changeObject(entityId, map, plane, x, y, sizeX, sizeY, objectDefinition.isProjectileClipped, true, ClippingMaskSystem.REMOVE_MASK)
             if (objectDefinition.isProjectileClipped) {
-                rms.changeObject(entityId, clippedOnlyMap, plane, x, y, sizeX, sizeY, objectDefinition.isProjectileClipped, true, RegionMapSystem.REMOVE_MASK)
+                rms.changeObject(entityId, clippedOnlyMap, plane, x, y, sizeX, sizeY, objectDefinition.isProjectileClipped, true, ClippingMaskSystem.REMOVE_MASK)
             }
         } else if (type == 22) {
 //            map.removeFloor(plane, x, y);
@@ -284,7 +282,8 @@ class RegionObjectSystem : PassiveSystem() {
         const val REGION_PLANES = 4
         const val REGION_SIZE = 64
 
-        private val REGION_RANGE = 0 until REGION_SIZE
+        val PLANE_RANGE = 0 until REGION_PLANES
+        val REGION_RANGE = 0 until REGION_SIZE
 
         fun isOutOfBounds(localX: Int, localY: Int): Boolean {
             return localX !in REGION_RANGE || localY !in REGION_RANGE

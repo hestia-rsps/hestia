@@ -5,7 +5,7 @@ import net.mostlyoriginal.api.system.core.PassiveSystem
 import worlds.gregs.hestia.game.map.Flags
 import worlds.gregs.hestia.game.path.RouteStrategy
 import worlds.gregs.hestia.game.plugins.region.components.Clipping
-import worlds.gregs.hestia.game.plugins.region.systems.RegionMapSystem
+import worlds.gregs.hestia.game.plugins.region.systems.change.ClippingMaskSystem
 import worlds.gregs.hestia.game.plugins.region.systems.RegionSystem
 
 class RouteFinderSystem : PassiveSystem() {
@@ -44,7 +44,7 @@ class RouteFinderSystem : PassiveSystem() {
      * steps > 0, route exists. If steps = 0, route exists, but no need to move.
      * If steps < 0, route does not exist.
      */
-    fun findRoute(srcX: Int, srcY: Int, srcZ: Int, sizeX: Int, sizeY: Int, strategy: RouteStrategy, findAlternative: Boolean, regionSystem: RegionSystem, rms: RegionMapSystem): Int {
+    fun findRoute(srcX: Int, srcY: Int, srcZ: Int, sizeX: Int, sizeY: Int, strategy: RouteStrategy, findAlternative: Boolean, regionSystem: RegionSystem, rms: ClippingMaskSystem): Int {
         //Reset previous data
         isAlternative = false
         for (x in 0 until GRAPH_SIZE) {
@@ -633,7 +633,7 @@ class RouteFinderSystem : PassiveSystem() {
     /**
      * Transmit's clip data to route finder buffers.
      */
-    private fun transmitClipData(x: Int, y: Int, z: Int, regions: RegionSystem, rms: RegionMapSystem) {
+    private fun transmitClipData(x: Int, y: Int, z: Int, regions: RegionSystem, rms: ClippingMaskSystem) {
         val graphBaseX = x - GRAPH_SIZE / 2
         val graphBaseY = y - GRAPH_SIZE / 2
         for (transmitRegionX in (graphBaseX shr 6)..(graphBaseX + (GRAPH_SIZE - 1) shr 6)) {

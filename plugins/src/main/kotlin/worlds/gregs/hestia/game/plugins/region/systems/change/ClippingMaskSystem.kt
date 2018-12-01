@@ -1,4 +1,4 @@
-package worlds.gregs.hestia.game.plugins.region.systems
+package worlds.gregs.hestia.game.plugins.region.systems.change
 
 import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.system.core.PassiveSystem
@@ -8,15 +8,19 @@ import worlds.gregs.hestia.game.plugins.region.components.Clipping
 import worlds.gregs.hestia.game.plugins.region.components.ClippingMap
 import worlds.gregs.hestia.game.plugins.region.components.ProjectileClipping
 import worlds.gregs.hestia.game.plugins.region.components.Region
-import worlds.gregs.hestia.game.plugins.region.systems.RegionObjectSystem.Companion.isOutOfBounds
+import worlds.gregs.hestia.game.plugins.region.systems.RegionSystem
+import worlds.gregs.hestia.game.plugins.region.systems.change.RegionObjectSystem.Companion.isOutOfBounds
 
-class RegionMapSystem : PassiveSystem() {
+class ClippingMaskSystem : PassiveSystem() {
 
     private lateinit var clippingMapper: ComponentMapper<Clipping>
     private lateinit var projectileClippingMapper: ComponentMapper<ProjectileClipping>
     private lateinit var regionMapper: ComponentMapper<Region>
     private lateinit var regions: RegionSystem
 
+    /**
+     * Add, remove or set object mask
+     */
     fun changeObject(entityId: Int, map: ClippingMap, plane: Int, x: Int, y: Int, sizeX: Short, sizeY: Short, solid: Boolean, notAlternative: Boolean, changeType: Int) {
         var mask = Flags.OBJ
         if (solid) {
@@ -32,6 +36,9 @@ class RegionMapSystem : PassiveSystem() {
         }
     }
 
+    /**
+     * Add, remove or set wall mask
+     */
     fun changeWall(entityId: Int, map: ClippingMap, plane: Int, x: Int, y: Int, type: Int, rotation: Int, solid: Boolean, notAlternative: Boolean, changeType: Int) {
         change(entityId, map, plane, x, y, type, rotation, 0, changeType)
         if(solid) {
@@ -42,8 +49,12 @@ class RegionMapSystem : PassiveSystem() {
         }
     }
 
+    /**
+     * Add, remove or set regular mask
+     */
     private fun change(entityId: Int, map: ClippingMap, plane: Int, x: Int, y: Int, type: Int, rotation: Int, stage: Int, changeType: Int) {
-        val offsets = getOffsets(type, rotation) ?: return
+        val offsets = getOffsets(type, rotation)
+                ?: return
 
         val firstFlag = getFlag(type, rotation, stage, true)
         val secondFlag = getFlag(type, rotation, stage, false)
@@ -69,6 +80,9 @@ class RegionMapSystem : PassiveSystem() {
         }
     }
 
+    /**
+     * Apply change to masks
+     */
     fun changeMask(entityId: Int, map: ClippingMap, plane: Int, localX: Int, localY: Int, mask: Int, changeType: Int) {
         handleMaskBounds(entityId, map, plane, localX, localY) { plane, x, y ->
             map.masks[plane][x][y] = when (changeType) {
@@ -81,6 +95,9 @@ class RegionMapSystem : PassiveSystem() {
         }
     }
 
+    /**
+     * Check that the change is within bounds, if out of bounds recursively apply the change to the correct region
+     */
     private fun handleMaskBounds(entityId: Int, map: ClippingMap, plane: Int, localX: Int, localY: Int, action: (Int, Int, Int) -> Int): Int {
         return if (isOutOfBounds(localX, localY)) {
             val region = regionMapper.get(entityId)

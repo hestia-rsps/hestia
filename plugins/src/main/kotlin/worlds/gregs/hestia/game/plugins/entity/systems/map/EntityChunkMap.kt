@@ -16,7 +16,7 @@ abstract class EntityChunkMap : PassiveSystem() {
         val list = ArrayList<Int>()
         for(chunkX in xRange) {
             for(chunkY in yRange) {
-                val hash = EntityChunkSystem.toHash(chunkX, chunkY, plane)
+                val hash = EntityChunkSystem.toChunkPosition(chunkX, chunkY, plane)
                 if(map.containsKey(hash)) {
                     list.addAll(map[hash]!!)
                 }

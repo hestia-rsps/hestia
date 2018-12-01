@@ -6,12 +6,23 @@ import com.artemis.annotations.PooledWeaver
 @PooledWeaver
 class Region : Component() {
     var id: Int = -1
-    var loadStage: Int = 0
 
     val x: Int
-        get() = (id shr 8) * 64
+        get() = regionX * 64
 
     val y: Int
-        get() = (id and 0xff) * 64
+        get() = regionY * 64
+
+    val chunkX: Int
+        get() = regionX * 8
+
+    val chunkY: Int
+        get() = regionY * 8
+
+    val regionX: Int
+        get() = id shr 8
+
+    val regionY: Int
+        get() = id and 0xff
 
 }

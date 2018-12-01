@@ -4,7 +4,4 @@ import com.artemis.Component
 import com.artemis.annotations.PooledWeaver
 
 @PooledWeaver
-class Dynamic : Component() {
-    val regionData = HashMap<Int, Int>()
-    val reloads = ArrayList<Int>()
-}
+class Loaded : Component()

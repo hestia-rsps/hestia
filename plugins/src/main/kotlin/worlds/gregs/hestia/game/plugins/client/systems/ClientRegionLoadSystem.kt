@@ -30,7 +30,7 @@ class ClientRegionLoadSystem : IteratingSystem(Aspect.all(NetworkSession::class,
             //Load map objects & clipping
 
             //Send client map update
-            es.dispatch(UpdateMapRegion(entityId, false))
+            es.dispatch(UpdateMapRegion(entityId, false, false))
         }
     }
 

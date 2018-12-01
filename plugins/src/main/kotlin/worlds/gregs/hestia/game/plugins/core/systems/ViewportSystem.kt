@@ -1,4 +1,4 @@
-package worlds.gregs.hestia.game.plugins.region.systems
+package worlds.gregs.hestia.game.plugins.core.systems
 
 import com.artemis.ComponentMapper
 import worlds.gregs.hestia.game.plugins.core.components.Renderable

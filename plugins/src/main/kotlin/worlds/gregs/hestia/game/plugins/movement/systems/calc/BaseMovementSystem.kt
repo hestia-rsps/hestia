@@ -7,7 +7,7 @@ import worlds.gregs.hestia.game.plugins.core.components.entity.Size
 import worlds.gregs.hestia.game.plugins.core.components.map.Position
 import worlds.gregs.hestia.game.plugins.movement.components.Mobile
 import worlds.gregs.hestia.game.plugins.movement.components.Steps
-import worlds.gregs.hestia.game.plugins.region.systems.TileCheckSystem
+import worlds.gregs.hestia.game.plugins.region.systems.change.TileCheckSystem
 import worlds.gregs.hestia.game.update.DirectionUtils
 import worlds.gregs.hestia.game.update.DirectionUtils.Companion.getMoveDirection
 import worlds.gregs.hestia.services.Aspect

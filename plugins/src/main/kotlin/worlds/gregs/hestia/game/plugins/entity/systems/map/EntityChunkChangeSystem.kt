@@ -29,8 +29,8 @@ abstract class EntityChunkChangeSystem(private vararg val classes: KClass<out Co
     }
 
     override fun changed(entityId: Int, position: Position, x: Int, y: Int, plane: Int?) {
-        val oldHash = EntityChunkSystem.toHash(position)
-        val newHash = EntityChunkSystem.toHash(x, y, plane!!)
+        val oldHash = EntityChunkSystem.toChunkPosition(position)
+        val newHash = EntityChunkSystem.toChunkPosition(x, y, plane!!)
 
         changedChunk(entityId, oldHash, newHash)
     }
@@ -41,14 +41,14 @@ abstract class EntityChunkChangeSystem(private vararg val classes: KClass<out Co
             override fun inserted(entities: IntBag?) {
                 entities?.forEach {entityId ->
                     val position = positionMapper.get(entityId)
-                    changedChunk(entityId, -1, EntityChunkSystem.toHash(position))
+                    changedChunk(entityId, -1, EntityChunkSystem.toChunkPosition(position))
                 }
             }
 
             override fun removed(entities: IntBag?) {
                 entities?.forEach {entityId ->
                     val position = positionMapper.get(entityId)
-                    changedChunk(entityId, EntityChunkSystem.toHash(position), -1)
+                    changedChunk(entityId, EntityChunkSystem.toChunkPosition(position), -1)
                 }
             }
 

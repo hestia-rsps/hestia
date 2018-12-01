@@ -64,7 +64,6 @@ fun Entity.force(position: Position, delay: Int, direction: Int, secondPosition:
     if(move) {
         schedule(Math.max(delay, secondDelay) - 1, 0) {
             move(secondPosition ?: position)
-            stop()
         }
     }
 }
