@@ -5,7 +5,15 @@ import com.artemis.Entity
 import com.artemis.annotations.PooledWeaver
 
 @PooledWeaver
-class TimeBar : Component() {
+class TimeBar() : Component() {
+
+    constructor(full: Boolean = false, exponent: Int = 0, delay: Int = 0, increment: Int = 1) : this() {
+        this.full = full
+        this.exponentialDelay = exponent
+        this.delay = delay
+        this.increment = increment
+    }
+
     var full = false
     var exponentialDelay = 0
     var delay = 0
@@ -13,12 +21,5 @@ class TimeBar : Component() {
 }
 
 fun Entity.time(full: Boolean = false, exponent: Int = 0, delay: Int = 0, increment: Int = 1) {
-    val time = TimeBar()
-    time.apply {
-        this.full = full
-        this.exponentialDelay = exponent
-        this.delay = delay
-        this.increment = increment
-    }
-    edit().add(time)
+    edit().add(TimeBar(full, exponent, delay, increment))
 }

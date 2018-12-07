@@ -3,8 +3,8 @@ package worlds.gregs.hestia.game.plugins.movement.systems
 import com.artemis.ComponentMapper
 import com.artemis.systems.IteratingSystem
 import worlds.gregs.hestia.game.plugins.core.components.map.Position
-import worlds.gregs.hestia.game.plugins.movement.components.Move
-import worlds.gregs.hestia.game.plugins.movement.components.Moving
+import worlds.gregs.hestia.game.plugins.movement.components.types.Move
+import worlds.gregs.hestia.game.plugins.movement.components.types.Moving
 import worlds.gregs.hestia.services.Aspect
 
 /**

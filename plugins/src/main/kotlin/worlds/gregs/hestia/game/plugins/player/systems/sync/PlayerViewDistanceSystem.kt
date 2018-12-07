@@ -4,6 +4,7 @@ import com.artemis.Component
 import com.artemis.ComponentMapper
 import worlds.gregs.hestia.game.plugins.entity.systems.ViewDistanceSystem
 import worlds.gregs.hestia.game.plugins.player.component.PlayerViewDistance
+import worlds.gregs.hestia.game.plugins.player.systems.map.PlayerChunkSystem
 
 class PlayerViewDistanceSystem : ViewDistanceSystem(PlayerChunkSystem::class, MAXIMUM_PLAYER_VIEW_DISTANCE, MAXIMUM_LOCAL_PLAYERS, PlayerViewDistance::class) {
 

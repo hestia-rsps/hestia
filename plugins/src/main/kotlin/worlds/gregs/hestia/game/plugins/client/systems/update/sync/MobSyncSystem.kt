@@ -3,11 +3,11 @@ package worlds.gregs.hestia.game.plugins.client.systems.update.sync
 import com.artemis.ComponentMapper
 import world.gregs.hestia.core.network.packets.Packet
 import world.gregs.hestia.core.services.int
-import worlds.gregs.hestia.game.plugins.client.systems.update.bases.update.sync.BaseMobSyncSystem
 import worlds.gregs.hestia.game.plugins.client.systems.update.bases.EntitySync
+import worlds.gregs.hestia.game.plugins.client.systems.update.bases.update.sync.BaseMobSyncSystem
 import worlds.gregs.hestia.game.plugins.core.components.entity.ClientIndex
 import worlds.gregs.hestia.game.plugins.core.components.map.Position
-import worlds.gregs.hestia.game.plugins.entity.components.update.direction.Facing
+import worlds.gregs.hestia.game.plugins.entity.components.update.direction.Face
 import worlds.gregs.hestia.game.plugins.mob.component.Type
 import worlds.gregs.hestia.game.update.DirectionUtils
 import worlds.gregs.hestia.game.update.DisplayFlag
@@ -18,7 +18,7 @@ class MobSyncSystem : BaseMobSyncSystem(), EntitySync {
     private var movingCheck: ((Int) -> Boolean)? = null
     private lateinit var typeMapper: ComponentMapper<Type>
     private lateinit var clientIndexMapper: ComponentMapper<ClientIndex>
-    private lateinit var facingMapper: ComponentMapper<Facing>
+    private lateinit var faceMapper: ComponentMapper<Face>
     private lateinit var positionMapper: ComponentMapper<Position>
 
     override fun start() {
@@ -51,8 +51,8 @@ class MobSyncSystem : BaseMobSyncSystem(), EntitySync {
             //Client index
             packet.writeBits(15, clientIndexMapper.get(global).index)
             //Facing
-            val facing = facingMapper.get(global)
-            val direction = if (facing != null) DirectionUtils.getFaceDirection(facing.x, facing.y) else 0
+            val face = faceMapper.get(global)
+            val direction = if (face != null) DirectionUtils.getFaceDirection(face.x, face.y) else 0
             packet.writeBits(3, (direction shr 11) - 4)
             //Update
             packet.writeBits(1, update.int)

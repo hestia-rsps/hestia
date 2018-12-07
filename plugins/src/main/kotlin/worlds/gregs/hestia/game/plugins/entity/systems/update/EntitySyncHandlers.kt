@@ -6,7 +6,7 @@ import world.gregs.hestia.core.network.packets.Packet
 import worlds.gregs.hestia.game.plugins.client.systems.update.sync.PlayerSyncSystem
 import worlds.gregs.hestia.game.plugins.core.components.map.Position
 import worlds.gregs.hestia.game.plugins.core.components.map.Viewport
-import worlds.gregs.hestia.game.plugins.region.systems.locationHash18Bit
+import worlds.gregs.hestia.game.plugins.client.systems.locationHash18Bit
 import worlds.gregs.hestia.game.update.DisplayFlag
 
 class EntitySyncHandlers : PassiveSystem() {

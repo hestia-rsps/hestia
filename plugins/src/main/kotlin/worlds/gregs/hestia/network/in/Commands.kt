@@ -13,22 +13,20 @@ import worlds.gregs.hestia.game.plugins.entity.components.update.direction.watch
 import worlds.gregs.hestia.game.plugins.mob.component.update.UpdateCombatLevel
 import worlds.gregs.hestia.game.plugins.mob.component.update.UpdateDisplayName
 import worlds.gregs.hestia.game.plugins.mob.component.update.change
-import worlds.gregs.hestia.game.plugins.movement.components.Navigate
 import worlds.gregs.hestia.game.plugins.movement.components.RunToggled
-import worlds.gregs.hestia.game.plugins.movement.components.move
+import worlds.gregs.hestia.game.plugins.movement.components.calc.Navigate
+import worlds.gregs.hestia.game.plugins.movement.components.types.move
 import worlds.gregs.hestia.game.plugins.player.component.update.PlayerMiniMapDot
 import worlds.gregs.hestia.game.plugins.player.component.update.UpdateMovement
 import worlds.gregs.hestia.game.plugins.player.component.update.UpdateUnknown
 import worlds.gregs.hestia.game.plugins.player.component.update.appearance.CombatLevel
 import worlds.gregs.hestia.game.plugins.player.component.update.appearance.Hidden
 import worlds.gregs.hestia.game.plugins.player.component.update.updateClanChat
+import worlds.gregs.hestia.game.plugins.region.systems.RegionBuilder
 import worlds.gregs.hestia.game.update.Marker
 import worlds.gregs.hestia.network.game.GamePacket
 import worlds.gregs.hestia.network.login.Packets
-import worlds.gregs.hestia.services.getComponent
-import worlds.gregs.hestia.services.mobs
-import worlds.gregs.hestia.services.players
-import worlds.gregs.hestia.services.toggle
+import worlds.gregs.hestia.services.*
 
 @PacketSize(-1)
 @PacketOpcode(Packets.COMMAND)
@@ -52,6 +50,23 @@ class Commands : GamePacket() {
         }
         println("Command ${parts[0]}")
         when (parts[0]) {
+            "dy" -> {
+                val position = entity.getComponent(Position::class)!!
+                val builder = entity.world.getSystem(RegionBuilder::class)
+//                dynamicRegionSystem.create(position.regionId)
+//                if(regionSystem.toggle(position.regionId)) {
+                    builder.reset(position.regionId)
+                    builder.set(position.chunkX, position.chunkY, 0, position.chunkX, position.chunkY, 0, parts[1].toInt())
+//                regionSystem.changeArea(position.chunkX + 1, position.chunkY - 1, 0, position.chunkX - 1, position.chunkY - 1, 0, 3, 2, 3)
+//                    regionSystem.changeRegion(position.regionId, position.regionId, 3)
+//                }
+                    if(builder.build(position.regionId)) {
+                        entity.updateMapRegion(false, true)
+                    } else {
+                        println("Failed to load region ${position.regionId}")
+                    }
+
+            }
             //Player updating flags
             "batch" -> {
                 entity.batchAnim()
@@ -78,9 +93,7 @@ class Commands : GamePacket() {
             "p" -> {
                 entity.world.players().forEach {
                     val other = entity.world.getEntity(it)
-                    val dot = PlayerMiniMapDot()
-                    dot.p = parts[1].toBoolean()
-                    other.edit().add(dot)
+                    other.edit().add(PlayerMiniMapDot(parts[1].toBoolean()))
                 }
             }
             "model" -> {
@@ -98,7 +111,7 @@ class Commands : GamePacket() {
                 }*/
                 for (y in 3482 until 3518) {
                     for (x in 3070 until 3104) {
-                        if((x + y).rem(2) == 0) {
+                        if ((x + y).rem(2) == 0) {
                             es.dispatch(CreateMob(1, x, y))
                         } else {
                             es.dispatch(CreateBot("Bot ${count++}", x, y))
@@ -226,9 +239,7 @@ class Commands : GamePacket() {
                         }
                         4 -> {
                             mob.force("Display name")
-                            val displayName = DisplayName()
-                            displayName.name = "Manly Man"
-                            mob.edit().add(displayName).add(UpdateDisplayName())
+                            mob.edit().add(DisplayName("Manly Man")).add(UpdateDisplayName())
                         }
                         5 -> {
                             mob.force("Transform")

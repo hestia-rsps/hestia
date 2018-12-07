@@ -10,7 +10,7 @@ class InterfaceSystem : SubscriptionSystem(Aspect.all(NetworkSession::class)) {
 
     override fun inserted(entityId: Int) {
         val e = world.getEntity(entityId)
-        e.send(WindowsPane(746, 0))
+        e.send(WindowsPane(746, 0))//548
     }
 
 }

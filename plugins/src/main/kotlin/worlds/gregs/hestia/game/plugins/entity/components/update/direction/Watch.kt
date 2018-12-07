@@ -5,12 +5,15 @@ import com.artemis.Entity
 import com.artemis.annotations.PooledWeaver
 
 @PooledWeaver
-class Watch : Component() {
+class Watch() : Component() {
+
+    constructor(entityId: Int) : this() {
+        this.entity = entityId
+    }
+
     var entity = 0//Entity id
 }
 
 fun Entity.watch(entityId: Int) {
-    val watch = Watch()
-    watch.entity = entityId
-    edit().add(watch)
+    edit().add(Watch(entityId))
 }

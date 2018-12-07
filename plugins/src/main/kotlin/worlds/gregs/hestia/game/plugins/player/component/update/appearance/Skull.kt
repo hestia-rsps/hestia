@@ -4,6 +4,11 @@ import com.artemis.Component
 import com.artemis.annotations.PooledWeaver
 
 @PooledWeaver
-class Skull : Component() {
-    val skull = -1
+class Skull() : Component() {
+
+    constructor(skull: Int) : this() {
+        this.skull = skull
+    }
+
+    var skull = -1
 }

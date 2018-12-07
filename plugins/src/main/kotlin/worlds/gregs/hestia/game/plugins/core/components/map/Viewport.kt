@@ -1,7 +1,7 @@
 package worlds.gregs.hestia.game.plugins.core.components.map
 
 import com.artemis.Component
-import worlds.gregs.hestia.game.plugins.region.systems.locationHash18Bit
+import worlds.gregs.hestia.game.plugins.client.systems.locationHash18Bit
 import java.util.*
 import kotlin.collections.HashMap
 

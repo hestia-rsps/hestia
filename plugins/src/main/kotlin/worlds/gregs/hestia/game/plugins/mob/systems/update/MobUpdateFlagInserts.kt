@@ -5,7 +5,7 @@ import net.mostlyoriginal.api.system.core.PassiveSystem
 import worlds.gregs.hestia.game.plugins.client.systems.update.update.flag.MobUpdateFlagSystem
 import worlds.gregs.hestia.game.plugins.core.components.Renderable
 import worlds.gregs.hestia.game.plugins.entity.components.update.DisplayName
-import worlds.gregs.hestia.game.plugins.mob.component.update.MobModelChange
+import worlds.gregs.hestia.game.plugins.mob.component.update.ModelChange
 import worlds.gregs.hestia.game.plugins.mob.component.update.UpdateCombatLevel
 import worlds.gregs.hestia.game.plugins.mob.component.update.UpdateDisplayName
 import worlds.gregs.hestia.game.plugins.player.component.update.appearance.CombatLevel
@@ -21,7 +21,7 @@ class MobUpdateFlagInserts : PassiveSystem() {
     //Flags
     private lateinit var displayNameMapper: ComponentMapper<DisplayName>
     private lateinit var combatLevelMapper: ComponentMapper<CombatLevel>
-    private lateinit var modelChangeMapper: ComponentMapper<MobModelChange>
+    private lateinit var modelChangeMapper: ComponentMapper<ModelChange>
 
     override fun initialize() {
         super.initialize()
@@ -31,6 +31,6 @@ class MobUpdateFlagInserts : PassiveSystem() {
         //Combat level
         flagSystem.insertAfter(0x8, flagSystem.create(0x80000, Aspect.all(Renderable::class, UpdateCombatLevel::class), MobCombatLevelMask(combatLevelMapper), true))
         //Model change
-        flagSystem.insertAfter(0x10, flagSystem.create(0x800, Aspect.all(Renderable::class, MobModelChange::class), MobModelChangeMask(modelChangeMapper)))
+        flagSystem.insertAfter(0x10, flagSystem.create(0x800, Aspect.all(Renderable::class, ModelChange::class), MobModelChangeMask(modelChangeMapper)))
     }
 }

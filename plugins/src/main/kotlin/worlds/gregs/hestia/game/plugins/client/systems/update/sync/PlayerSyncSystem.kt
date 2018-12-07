@@ -2,8 +2,8 @@ package worlds.gregs.hestia.game.plugins.client.systems.update.sync
 
 import world.gregs.hestia.core.network.packets.Packet
 import world.gregs.hestia.core.services.int
-import worlds.gregs.hestia.game.plugins.client.systems.update.bases.update.sync.BasePlayerSyncSystem
 import worlds.gregs.hestia.game.plugins.client.systems.update.bases.EntitySync
+import worlds.gregs.hestia.game.plugins.client.systems.update.bases.update.sync.BasePlayerSyncSystem
 import worlds.gregs.hestia.game.plugins.player.systems.sync.PlayerIndexSystem.Companion.PLAYERS_LIMIT
 import worlds.gregs.hestia.game.update.DisplayFlag
 import java.util.*

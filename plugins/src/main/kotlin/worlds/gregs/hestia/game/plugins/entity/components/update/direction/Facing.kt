@@ -3,10 +3,10 @@ package worlds.gregs.hestia.game.plugins.entity.components.update.direction
 import com.artemis.Component
 import com.artemis.Entity
 import com.artemis.annotations.PooledWeaver
-import worlds.gregs.hestia.game.plugins.entity.components.update.direction.Facing.Companion.getFaceX
-import worlds.gregs.hestia.game.plugins.entity.components.update.direction.Facing.Companion.getFaceY
 import worlds.gregs.hestia.game.plugins.core.components.entity.Size
 import worlds.gregs.hestia.game.plugins.core.components.map.Position
+import worlds.gregs.hestia.game.plugins.entity.components.update.direction.Facing.Companion.getFaceX
+import worlds.gregs.hestia.game.plugins.entity.components.update.direction.Facing.Companion.getFaceY
 import worlds.gregs.hestia.services.getComponent
 
 @PooledWeaver
@@ -26,17 +26,17 @@ class Facing : Component() {
 }
 
 fun Entity.turn(deltaX: Int, deltaY: Int) {
-    val face = Face()
-    face.x = deltaX
-    face.y = deltaY
-    edit().add(face)
+    getComponent(Face::class)?.apply {
+        x = deltaX
+        y = deltaY
+    }
+    edit().add(Facing())
 }
 
 fun Entity.face(x: Int, y: Int) {
     val size = getComponent(Size::class)
     val position = getComponent(Position::class)!!
-    val face = Face()
-    face.x = x - getFaceX(position, size?.sizeX ?: 1)
-    face.y = y - getFaceY(position, size?.sizeY ?: 1)
-    edit().add(face)
+    val deltaX = x - getFaceX(position, size?.sizeX ?: 1)
+    val deltaY = y - getFaceY(position, size?.sizeY ?: 1)
+    turn(deltaX, deltaY)
 }

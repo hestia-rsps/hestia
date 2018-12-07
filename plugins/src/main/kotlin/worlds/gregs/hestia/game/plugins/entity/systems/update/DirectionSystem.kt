@@ -3,26 +3,24 @@ package worlds.gregs.hestia.game.plugins.entity.systems.update
 import com.artemis.ComponentMapper
 import com.artemis.systems.IteratingSystem
 import worlds.gregs.hestia.game.plugins.entity.components.update.direction.Face
-import worlds.gregs.hestia.game.plugins.entity.components.update.direction.Facing
+import worlds.gregs.hestia.game.plugins.movement.components.Shift
 import worlds.gregs.hestia.services.Aspect
 
 /**
  * DirectionSystem
- * Changed the direction which an entity is facing
+ * Turns entity to the correct direction when moving
  */
-class DirectionSystem : IteratingSystem(Aspect.all(Face::class)) {
-    private lateinit var facingMapper: ComponentMapper<Facing>
+class DirectionSystem : IteratingSystem(Aspect.all(Shift::class)) {
+
+    private lateinit var shiftMapper: ComponentMapper<Shift>
     private lateinit var faceMapper: ComponentMapper<Face>
 
     override fun process(entityId: Int) {
-        val face = faceMapper.get(entityId)
-
-        //Set coordinates to face
-        val facing = facingMapper.create(entityId)
-        facing.x = face.x
-        facing.y = face.y
-
-        //Remove request
-        faceMapper.remove(entityId)
+        val shift = shiftMapper.get(entityId)
+        if(shift.x != 0 || shift.y != 0) {
+            val face = faceMapper.create(entityId)
+            face.x = shift.x
+            face.y = shift.y
+        }
     }
 }

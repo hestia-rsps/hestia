@@ -3,13 +3,21 @@ package worlds.gregs.hestia.game.plugins.entity.components.update
 import com.artemis.Component
 import com.artemis.Entity
 import com.artemis.annotations.PooledWeaver
-import worlds.gregs.hestia.game.plugins.core.components.map.Position
 import worlds.gregs.hestia.game.events.schedule
-import worlds.gregs.hestia.game.plugins.movement.components.move
+import worlds.gregs.hestia.game.plugins.core.components.map.Position
+import worlds.gregs.hestia.game.plugins.movement.components.types.move
 import worlds.gregs.hestia.services.getComponent
 
 @PooledWeaver
-class ForceMovement : Component() {
+class ForceMovement() : Component() {
+
+    constructor(first: Position, delay: Int, second: Position?, secondDelay: Int, direction: Int) : this() {
+        this.firstPosition = first
+        this.firstDelay = delay
+        this.secondPosition = second
+        this.secondDelay = secondDelay
+        this.direction = direction
+    }
     /*
         Two uses
 
@@ -49,21 +57,13 @@ fun Entity.force(position: Position, delay: Int, direction: Int, secondPosition:
         throw IllegalArgumentException("First delay must be less than the second")
     }
     //Add force movement
-    val movement = ForceMovement()
-    movement.apply {
-        this.firstPosition = position
-        this.firstDelay = delay
-        this.secondPosition = secondPosition
-        this.secondDelay = secondDelay
-        this.direction = direction
-    }
+    val movement = ForceMovement(position, delay, secondPosition, secondDelay, direction)
     edit().add(movement)
 
     //Moves player to finishing position after force is complete
     if(move) {
         schedule(Math.max(delay, secondDelay) - 1, 0) {
             move(secondPosition ?: position)
-            stop()
         }
     }
 }

@@ -5,12 +5,15 @@ import com.artemis.Entity
 import com.artemis.annotations.PooledWeaver
 
 @PooledWeaver
-class UpdateClanMember : Component() {
+class UpdateClanMember() : Component() {
+
+    constructor(inSameClanChat: Boolean) : this() {
+        this.inSameClanChat = inSameClanChat
+    }
+
     var inSameClanChat = false
 }
 
 fun Entity.updateClanChat(sameClan: Boolean) {
-    val clan = UpdateClanMember()
-    clan.inSameClanChat = sameClan
-    edit().add(clan)
+    edit().add(UpdateClanMember(sameClan))
 }

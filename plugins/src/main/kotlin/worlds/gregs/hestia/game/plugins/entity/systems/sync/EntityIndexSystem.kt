@@ -9,6 +9,7 @@ import worlds.gregs.hestia.services.Aspect
 
 /**
  * Doesn't really do anything, a back-up system for when player/mob plugins aren't attached
+ * See [worlds.gregs.hestia.game.plugins.player.systems.sync.PlayerIndexSystem] or [worlds.gregs.hestia.game.plugins.mob.systems.sync.MobIndexSystem]
  */
 class EntityIndexSystem : SubscriptionSystem(Aspect.all(ClientIndex::class)) {
 

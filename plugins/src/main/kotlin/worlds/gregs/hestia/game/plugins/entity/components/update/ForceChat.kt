@@ -5,12 +5,15 @@ import com.artemis.Entity
 import com.artemis.annotations.PooledWeaver
 
 @PooledWeaver
-class ForceChat : Component() {
+class ForceChat() : Component() {
+
+    constructor(message: String) : this() {
+        this.message = message
+    }
+
     var message: String? = null
 }
 
 fun Entity.force(message: String) {
-    val chat = ForceChat()
-    chat.message = message
-    edit().add(chat)
+    edit().add(ForceChat(message))
 }

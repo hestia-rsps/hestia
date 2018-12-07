@@ -1,12 +1,12 @@
 package worlds.gregs.hestia.network.`in`
 
-import worlds.gregs.hestia.game.plugins.movement.components.navigate
-import worlds.gregs.hestia.network.login.Packets
 import world.gregs.hestia.core.network.Session
 import world.gregs.hestia.core.network.packets.Packet
 import world.gregs.hestia.core.network.packets.PacketOpcode
 import world.gregs.hestia.core.network.packets.PacketSize
+import worlds.gregs.hestia.game.plugins.movement.components.calc.path
 import worlds.gregs.hestia.network.game.GamePacket
+import worlds.gregs.hestia.network.login.Packets
 
 @PacketSize(-1)
 @PacketOpcode(Packets.WALKING, Packets.MINI_MAP_WALKING)
@@ -31,7 +31,7 @@ class WalkingHandler : GamePacket() {
             y = baseY + packet.readUnsignedByte()
         }
 
-        entity?.navigate(x, y)
+        entity?.path(x, y)
         return true
     }
 

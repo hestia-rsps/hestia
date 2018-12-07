@@ -3,8 +3,8 @@ package worlds.gregs.hestia.game.plugins
 import com.artemis.WorldConfigurationBuilder
 import worlds.gregs.hestia.game.plugin.Plugin
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.POST_UPDATE_PRIORITY
+import worlds.gregs.hestia.game.plugin.Plugin.Companion.PRE_SHIFT_PRIORITY
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.PRE_SYNC_PRIORITY
-import worlds.gregs.hestia.game.plugin.Plugin.Companion.SHIFT_PRIORITY
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.UPDATE_DISPLAY_CHANGE_PRIORITY
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.UPDATE_FINISH_PRIORITY
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.UPDATE_GLOBAL_ENTITY_PRIORITY
@@ -23,7 +23,7 @@ class MobPlugin : Plugin {
 
     override fun setup(b: WorldConfigurationBuilder) {
         b.with(MobChunkMap(), MobCreation(), MobUpdateFlagInserts())
-        b.with(SHIFT_PRIORITY + 1, MobChunkChangeSystem())
+        b.with(PRE_SHIFT_PRIORITY, MobChunkChangeSystem())
         b.with(POST_UPDATE_PRIORITY, MobChunkSystem())
         b.with(UPDATE_GLOBAL_ENTITY_PRIORITY, MobGlobalUpdateSystem())
         b.with(PRE_SYNC_PRIORITY, MobViewDistanceSystem())

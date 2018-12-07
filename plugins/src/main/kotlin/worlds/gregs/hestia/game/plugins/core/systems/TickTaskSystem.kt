@@ -1,10 +1,10 @@
 package worlds.gregs.hestia.game.plugins.core.systems
 
 import com.artemis.BaseSystem
-import worlds.gregs.hestia.game.events.TaskEvent
 import net.mostlyoriginal.api.event.common.Subscribe
-import java.util.*
 import worlds.gregs.hestia.game.TickTask
+import worlds.gregs.hestia.game.events.TaskEvent
+import java.util.*
 
 class TickTaskSystem : BaseSystem() {
 
@@ -33,18 +33,28 @@ class TickTaskSystem : BaseSystem() {
                 tasks.remove(task)
             } else {
                 //Reset delay
-                task.delay = task.period
+                task.delay = task.period - 1
             }
         }
     }
     
     @Subscribe
     fun schedule(event: TaskEvent) {
-        if(event.delay < 0 || event.period < 0) {
+        schedule(event.delay, event.period, event.task)
+    }
+
+    /**
+     * Schedules a tick task
+     * @param delay the number of ticks to wait before starting (0 is instant)
+     * @param period how often to repeat the task until stopped (0 doesn't repeat)
+     * @param task the task to run
+     */
+    fun schedule(delay: Int, period: Int, task: TickTask.() -> Unit) {
+        if(delay < 0 || period < 0) {
             return
         }
-        tasks.add(Task(TickTask(event.period != 0, event.task), event.delay, event.period))
+        tasks.add(Task(TickTask(period != 0, task), delay, period))
     }
-    
+
     private data class Task(val task: TickTask, var delay: Int, val period: Int)
 }

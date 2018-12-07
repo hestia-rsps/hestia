@@ -333,7 +333,7 @@ class ObjectDefinition {
         }
     }
 
-    internal fun changeValues() {
+    fun changeValues() {
         if (interactive == -1) {
             interactive = if (modelTypes != null && modelTypes!!.size == 1 && modelTypes!![0].toInt() == 10) {
                 1

@@ -4,7 +4,15 @@ import com.artemis.Component
 import com.artemis.annotations.PooledWeaver
 
 @PooledWeaver
-open class Graphics: Component() {
+open class Graphics() : Component() {
+
+    constructor(id: Int, delay: Int = 0, height: Int = 0, rotation: Int = 0, forceRefresh: Boolean = false) : this() {
+        this.id = id
+        this.delay = delay
+        this.height = height
+        this.rotation = rotation
+        this.forceRefresh = forceRefresh
+    }
 
     var id = -1
 
