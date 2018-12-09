@@ -1,6 +1,7 @@
 package worlds.gregs.hestia.game.plugins.movement.systems.calc
 
 import com.artemis.ComponentMapper
+import com.artemis.annotations.Wire
 import worlds.gregs.hestia.game.plugins.movement.components.calc.Interact
 import worlds.gregs.hestia.game.update.DirectionUtils.Companion.getOffset
 
@@ -8,6 +9,7 @@ import worlds.gregs.hestia.game.update.DirectionUtils.Companion.getOffset
  * Interaction system
  * Calculates the steps required to move an entity next to a position
  */
+@Wire(failOnNull = false, injectInherited = true)
 class InteractionSystem : BaseMovementSystem(Interact::class) {
     private lateinit var interactMapper: ComponentMapper<Interact>
 

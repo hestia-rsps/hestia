@@ -5,6 +5,10 @@ import com.artemis.WorldConfigurationBuilder
 
 interface Plugin : ArtemisPlugin {
 
+    open fun active(): Boolean {
+        return true
+    }
+
     companion object {
         /*
         Highest first

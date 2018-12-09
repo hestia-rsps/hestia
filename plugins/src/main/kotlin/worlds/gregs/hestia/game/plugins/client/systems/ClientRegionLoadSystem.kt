@@ -22,21 +22,16 @@ class ClientRegionLoadSystem : IteratingSystem(Aspect.all(NetworkSession::class,
 
     override fun process(entityId: Int) {
         val position = positionMapper.get(entityId)
+        val lastRegion = lastLoadedRegionMapper.get(entityId)
+        val size = (MAP_SIZES[0] shr 4) - 1
+        //If needs region update
+        if(Math.abs(lastRegion.chunkX - position.chunkX) >= size || Math.abs(lastRegion.chunkY - position.chunkY) >= size) {
+            //Set last loaded position
+            lastRegion.set(position)
 
-        if(needsMapUpdate(entityId, position.chunkX, position.chunkY)) {
-            val lastLoadedRegion = lastLoadedRegionMapper.get(entityId)
-            lastLoadedRegion.set(position)
-
-            //Load map objects & clipping
-
+            println("Client region load changed")
             //Send client map update
             es.dispatch(UpdateMapRegion(entityId, false, false))
         }
-    }
-
-    private fun needsMapUpdate(entityId: Int, chunkX: Int, chunkY: Int): Boolean {
-        val lastRegion = lastLoadedRegionMapper.get(entityId)
-        val size = (MAP_SIZES[0] shr 4) - 1
-        return Math.abs(lastRegion.chunkX - chunkX) >= size || Math.abs(lastRegion.chunkY - chunkY) >= size
     }
 }

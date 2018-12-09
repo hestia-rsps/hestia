@@ -5,8 +5,8 @@ import worlds.gregs.hestia.game.plugins.core.components.Renderable
 import worlds.gregs.hestia.game.plugins.core.components.entity.ClientIndex
 import worlds.gregs.hestia.game.plugins.core.components.map.Position
 import worlds.gregs.hestia.game.plugins.entity.components.update.direction.Face
-import worlds.gregs.hestia.game.plugins.mob.component.Mob
-import worlds.gregs.hestia.game.plugins.mob.component.Type
+import worlds.gregs.hestia.game.api.mob.Mob
+import worlds.gregs.hestia.game.plugins.entity.components.update.Type
 import worlds.gregs.hestia.game.plugins.movement.components.Mobile
 import worlds.gregs.hestia.services.add
 

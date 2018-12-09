@@ -2,6 +2,9 @@ package worlds.gregs.hestia.game.map
 
 object Flags {
 
+    const val BLOCKED_TILE = 0x1
+    const val BRIDGE_TILE = 0x2
+
     const val FLOOR_BLOCKS_WALK = 0x200000
     const val FLOOR_DECO_BLOCKS_WALK = 0x40000
 

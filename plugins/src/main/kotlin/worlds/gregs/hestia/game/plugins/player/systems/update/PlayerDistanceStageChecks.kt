@@ -2,8 +2,8 @@ package worlds.gregs.hestia.game.plugins.player.systems.update
 
 import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.system.core.PassiveSystem
+import worlds.gregs.hestia.game.api.player.Player
 import worlds.gregs.hestia.game.plugins.entity.systems.update.stage.EntityStageSystem
-import worlds.gregs.hestia.game.plugins.player.component.Player
 import worlds.gregs.hestia.game.plugins.player.component.PlayerViewDistance
 
 class PlayerDistanceStageChecks : PassiveSystem() {

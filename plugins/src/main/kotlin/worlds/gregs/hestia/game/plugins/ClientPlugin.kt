@@ -31,15 +31,14 @@ class ClientPlugin : Plugin {
     override fun setup(b: WorldConfigurationBuilder) {
         b.with(LOGIN_DETAILS_PRIORITY, ClientConnectSystem())
         b.with(INTERFACE_PRIORITY, InterfaceSystem())
-        b.with(PacketSender(), ClientDisconnectSystem())
-
+        b.with(PacketSender(), ClientDisconnectSystem(), GlobalEntitySystem(), ClientNetworkSystem())
         b.with(UPDATE_FLAG_PRIORITY, PlayerUpdateFlagSystem(), MobUpdateFlagSystem())
         b.with(UPDATE_DISPLAY_FLAG_PRIORITY, LocalDisplayFlagSystem(), GlobalDisplayFlagSystem(), MovementStageChecks())
         b.with(UPDATE_SYNC_PRIORITY, PlayerSyncSystem(), MobSyncSystem())
         b.with(UPDATE_UPDATE_PRIORITY, PlayerUpdateSystem(), MobUpdateSystem())
         b.with(UPDATE_CHANGE_PRIORITY, PlayerUpdateChangeSystem(), MobUpdateChangeSystem())
         b.with(UPDATE_FINISH_PRIORITY, PostUpdateSystem())
-        b.with(MAP_REGION_PRIORITY, ClientRegionChangeSystem())
+        b.with(MAP_REGION_PRIORITY, ClientRegionChangeSystem(), RegionSenderSystem())
         b.with(PRE_SYNC_PRIORITY, ClientRegionLoadSystem())
     }
 

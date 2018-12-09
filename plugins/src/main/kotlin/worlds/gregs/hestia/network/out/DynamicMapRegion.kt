@@ -1,18 +1,17 @@
 package worlds.gregs.hestia.network.out
 
-import com.artemis.ComponentMapper
 import world.gregs.hestia.core.network.packets.Packet
 import world.gregs.hestia.core.services.int
+import worlds.gregs.hestia.game.api.region.Dynamic
+import worlds.gregs.hestia.game.api.region.Regions
+import worlds.gregs.hestia.game.plugins.core.components.map.Chunk.toChunkPosition
 import worlds.gregs.hestia.game.plugins.core.components.map.Position
-import worlds.gregs.hestia.game.plugins.entity.systems.map.EntityChunkSystem.Companion.toChunkPosition
-import worlds.gregs.hestia.game.plugins.region.components.Dynamic
-import worlds.gregs.hestia.game.plugins.region.systems.RegionBuilder.Companion.forChunks
-import worlds.gregs.hestia.game.plugins.region.systems.RegionBuilder.Companion.nearby
-import worlds.gregs.hestia.game.plugins.region.systems.change.RegionObjectSystem.Companion.PLANE_RANGE
-import worlds.gregs.hestia.game.plugins.region.systems.RegionSystem
+import worlds.gregs.hestia.game.plugins.region.systems.RegionBuilderSystem.Companion.forChunks
 import worlds.gregs.hestia.game.region.MapConstants.MAP_SIZES
+import worlds.gregs.hestia.game.region.MapConstants.PLANE_RANGE
+import worlds.gregs.hestia.services.nearby
 
-class DynamicMapRegion(entityId: Int, position: Position, forceReload: Boolean, login: (Packet.Builder.(Int) -> Unit)?, regionSystem: RegionSystem, dynamicMapper: ComponentMapper<Dynamic>) : Packet.Builder(128, Packet.Type.VAR_SHORT) {
+class DynamicMapRegion(entityId: Int, position: Position, forceReload: Boolean, login: (Packet.Builder.(Int) -> Unit)?, regions: Regions, dynamic: Dynamic) : Packet.Builder(128, Packet.Type.VAR_SHORT) {
     init {
         login?.invoke(this, entityId)
 
@@ -28,14 +27,14 @@ class DynamicMapRegion(entityId: Int, position: Position, forceReload: Boolean, 
         startBitAccess()
 
         //For all chunks within view
-        forChunks(nearby(position.chunkX, mapHash), nearby(position.chunkY, mapHash), PLANE_RANGE) { chunkX, chunkY, plane ->
+        forChunks(position.chunkX.nearby(mapHash), position.chunkY.nearby(mapHash), PLANE_RANGE) { chunkX, chunkY, plane ->
             //Calculate region id
             val regionId = (chunkX / 8 shl 8) + chunkY / 8
             //Get id of it's region
-            val regionEntityId = regionSystem.getEntity(regionId)
+            val regionEntityId = regions.getEntityId(regionId)
 
             //Check if region exists and is a dynamic region
-            if (regionEntityId == null || !dynamicMapper.has(regionEntityId)) {
+            if (regionEntityId == null || !dynamic.isDynamic(regionEntityId)) {
                 writeBits(1, 0)//Send blank chunk
                 return@forChunks
             }
@@ -43,7 +42,7 @@ class DynamicMapRegion(entityId: Int, position: Position, forceReload: Boolean, 
             //Calculate the chunks shift
             val hash = toChunkPosition(chunkX, chunkY, plane)
             //Get the dynamic region data
-            val data = dynamicMapper.get(regionEntityId).regionData[hash]
+            val data = dynamic.get(regionEntityId)!!.regionData[hash]
             //Write if the data is valid
             writeBits(1, (data != null).int)
             //If valid data

@@ -19,10 +19,9 @@ import worlds.gregs.hestia.game.plugins.movement.components.types.move
 import worlds.gregs.hestia.game.plugins.player.component.update.PlayerMiniMapDot
 import worlds.gregs.hestia.game.plugins.player.component.update.UpdateMovement
 import worlds.gregs.hestia.game.plugins.player.component.update.UpdateUnknown
-import worlds.gregs.hestia.game.plugins.player.component.update.appearance.CombatLevel
 import worlds.gregs.hestia.game.plugins.player.component.update.appearance.Hidden
 import worlds.gregs.hestia.game.plugins.player.component.update.updateClanChat
-import worlds.gregs.hestia.game.plugins.region.systems.RegionBuilder
+import worlds.gregs.hestia.game.plugins.region.systems.RegionBuilderSystem
 import worlds.gregs.hestia.game.update.Marker
 import worlds.gregs.hestia.network.game.GamePacket
 import worlds.gregs.hestia.network.login.Packets
@@ -44,15 +43,18 @@ class Commands : GamePacket() {
             val plane = params[0].toInt()
             val x = params[1].toInt() shl 6 or params[3].toInt()
             val y = params[2].toInt() shl 6 or params[4].toInt()
-
             entity.move(x, y, plane)
             return true
         }
+
         println("Command ${parts[0]}")
         when (parts[0]) {
+            "tele", "tp" -> {
+                entity.move(parts[1].toInt(), parts[2].toInt(), if(parts.size > 3) parts[3].toInt() else 0)
+            }
             "dy" -> {
                 val position = entity.getComponent(Position::class)!!
-                val builder = entity.world.getSystem(RegionBuilder::class)
+                val builder = entity.world.getSystem(RegionBuilderSystem::class)
 //                dynamicRegionSystem.create(position.regionId)
 //                if(regionSystem.toggle(position.regionId)) {
                     builder.reset(position.regionId)

@@ -4,7 +4,7 @@ import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.event.common.EventSystem
 import worlds.gregs.hestia.game.plugins.client.components.NetworkSession
 import worlds.gregs.hestia.game.plugins.core.components.entity.ClientIndex
-import worlds.gregs.hestia.game.plugins.core.systems.extensions.SubscriptionSystem
+import worlds.gregs.hestia.game.api.SubscriptionSystem
 import worlds.gregs.hestia.game.plugins.entity.components.update.DisplayName
 import worlds.gregs.hestia.network.login.out.LoginDetails
 import worlds.gregs.hestia.services.Aspect

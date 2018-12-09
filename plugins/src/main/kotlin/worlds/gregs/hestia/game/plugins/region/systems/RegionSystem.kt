@@ -1,64 +1,49 @@
 package worlds.gregs.hestia.game.plugins.region.systems
 
 import com.artemis.ComponentMapper
+import com.artemis.annotations.Wire
 import net.mostlyoriginal.api.event.common.EventSystem
+import worlds.gregs.hestia.game.api.land.Land
+import worlds.gregs.hestia.game.api.map.Map
+import worlds.gregs.hestia.game.api.region.Region
+import worlds.gregs.hestia.game.api.region.Regions
 import worlds.gregs.hestia.game.events.CreateRegion
-import worlds.gregs.hestia.game.plugins.core.systems.extensions.SubscriptionSystem
 import worlds.gregs.hestia.game.plugins.region.components.Loaded
 import worlds.gregs.hestia.game.plugins.region.components.Loading
-import worlds.gregs.hestia.game.plugins.region.components.Objects
-import worlds.gregs.hestia.game.plugins.region.components.Region
+import worlds.gregs.hestia.game.plugins.region.components.RegionIdentifier
 import worlds.gregs.hestia.services.Aspect
-import java.util.*
 
-class RegionSystem : SubscriptionSystem(Aspect.all(Region::class)) {
+@Wire(failOnNull = false)
+class RegionSystem : Region(Aspect.all(RegionIdentifier::class)) {
 
-    private val list = HashMap<Int, Int>()
     private lateinit var es: EventSystem
-    private lateinit var regionMapper: ComponentMapper<Region>
-    private lateinit var objectsMapper: ComponentMapper<Objects>
+    private var regions: Regions? = null
+    private var land: Land? = null
     private lateinit var loadingMapper: ComponentMapper<Loading>
     private lateinit var loadedMapper: ComponentMapper<Loaded>
+    private var map: Map? = null
 
     override fun inserted(entityId: Int) {
-        val region = regionMapper.get(entityId)
-        list[region.id] = entityId
+        //Begin loading process
         loadingMapper.create(entityId)
     }
 
-    override fun removed(entityId: Int) {
-        val region = regionMapper.get(entityId)
-        list.remove(region.id, entityId)
-    }
-
-    fun getEntity(regionId: Int): Int? {
-        return list[regionId]
-    }
-
-    /**
-     * Loads region if hasn't been loaded already
-     * @param regionId
-     */
-    fun load(regionId: Int) {
-        if (list.containsKey(regionId)) {
+    override fun load(regionId: Int) {
+        if (regions?.contains(regionId) == true) {
             return
         }
 
         es.dispatch(CreateRegion(regionId))
     }
 
-
-    /**
-     * Unloads region resources if the region is loaded
-     * @param regionId
-     */
-    fun unload(regionId: Int) {
-        val entityId = getEntity(regionId) ?: return
-        if (loadedMapper.has(entityId)) {
-            val objects = objectsMapper.get(entityId)
-            objects.objects = null
-            objects.spawnedObjects?.clear()
-            objects.removedObjects?.clear()
+    override fun unload(entityId: Int) {
+        //If loaded
+        if(loadedMapper.has(entityId)) {
+            //Unload clipping
+            map?.unload(entityId)
+            //Unload objects
+            land?.unload(entityId)
+            //Remove loaded flag
             loadedMapper.remove(entityId)
         }
     }

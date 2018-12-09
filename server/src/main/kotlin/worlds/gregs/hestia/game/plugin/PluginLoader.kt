@@ -12,14 +12,26 @@ class PluginLoader {
 
     fun setup(b: WorldConfigurationBuilder, loader: Loader) {
         var count = 0
+        var total = 0
         val time = measureNanoTime {
             val plugins = loader.loadJavaClasses("worlds.gregs.hestia.game.plugins", Plugin::class.java)
             plugins.forEach {
-                b.dependsOn(it)
+                if(!it.isAnnotationPresent(DisablePlugin::class.java)) {
+                    b.dependsOn(it)
+                    count++
+                }
             }
-            count = plugins.size
+            total = plugins.size
         }
-        logger.debug("$count ${"plugin".plural(count)} loaded in ${time / 1000000}ms")
+        val inactive = total - count
+        logger.debug("$count ${"plugin".plural(count)} loaded in ${time / 1000000}ms ${ if(inactive > 0) "$inactive disabled" else "" }")
         b.dependsOn()
     }
 }
+
+/**
+ * Annotation for deactivating plugins
+ */
+@Retention(AnnotationRetention.RUNTIME)
+@Target(AnnotationTarget.CLASS, AnnotationTarget.FILE)
+annotation class DisablePlugin

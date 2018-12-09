@@ -1,9 +1,10 @@
 package worlds.gregs.hestia.game.plugins.client.systems.update.update.flag
 
 import com.artemis.ComponentMapper
+import worlds.gregs.hestia.game.api.client.PlayerUpdateFlags
+import worlds.gregs.hestia.game.plugins.client.components.NetworkSession
 import worlds.gregs.hestia.game.plugins.client.components.update.list.GlobalPlayers
 import worlds.gregs.hestia.game.plugins.client.components.update.stage.EntityUpdates
-import worlds.gregs.hestia.game.plugins.client.systems.update.bases.flag.BaseUpdateFlagSystem
 import worlds.gregs.hestia.game.plugins.core.components.Renderable
 import worlds.gregs.hestia.game.plugins.core.components.map.Position
 import worlds.gregs.hestia.game.plugins.core.components.map.Viewport
@@ -19,14 +20,11 @@ import worlds.gregs.hestia.game.plugins.entity.components.update.gfx.FirstGraphi
 import worlds.gregs.hestia.game.plugins.entity.components.update.gfx.FourthGraphic
 import worlds.gregs.hestia.game.plugins.entity.components.update.gfx.SecondGraphic
 import worlds.gregs.hestia.game.plugins.entity.components.update.gfx.ThirdGraphic
-import worlds.gregs.hestia.game.plugins.movement.components.types.Run
-import worlds.gregs.hestia.game.plugins.movement.components.types.Walk
 import worlds.gregs.hestia.network.update.player.*
 import worlds.gregs.hestia.services.Aspect
-import worlds.gregs.hestia.services.exclude
 import worlds.gregs.hestia.services.one
 
-class PlayerUpdateFlagSystem : BaseUpdateFlagSystem(GlobalPlayers::class) {
+class PlayerUpdateFlagSystem : PlayerUpdateFlags(Aspect.all(NetworkSession::class, Viewport::class).one(GlobalPlayers::class)) {
 
     private lateinit var viewportMapper: ComponentMapper<Viewport>
     private lateinit var entityUpdatesMapper: ComponentMapper<EntityUpdates>
@@ -82,7 +80,7 @@ class PlayerUpdateFlagSystem : BaseUpdateFlagSystem(GlobalPlayers::class) {
                 //Force Movement
                 create(0x1000, Aspect.all(Renderable::class, Position::class, ForceMovement::class), PlayerForceMovementMask(positionMapper, forceMovementMapper)),
                 //Face Direction
-                create(0x20, Aspect.all(Renderable::class, Facing::class).exclude(Run::class, Walk::class), PlayerFacingMask(faceMapper), true),
+                create(0x20, Aspect.all(Renderable::class, Facing::class), PlayerFacingMask(faceMapper), true),
                 //First Graphic
                 create(0x2, Aspect.all(Renderable::class, FirstGraphic::class), PlayerGraphicMask(firstGraphicMapper)),
                 //Second Graphic

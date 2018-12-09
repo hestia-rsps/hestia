@@ -11,9 +11,6 @@ import worlds.gregs.hestia.services.getComponent
 
 @PooledWeaver
 class Facing : Component() {
-    var x = 0
-    var y = -1
-
     companion object {
         fun getFaceX(position: Position, sizeX: Int, sizeY: Int = -1, rotation: Int = -1): Int {
             return position.x + ((if (rotation == 1 || rotation == 3) sizeY else sizeX) - 1) / 2

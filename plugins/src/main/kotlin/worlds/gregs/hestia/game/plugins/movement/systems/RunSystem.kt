@@ -1,17 +1,18 @@
 package worlds.gregs.hestia.game.plugins.movement.systems
 
 import com.artemis.ComponentMapper
-import com.artemis.systems.IteratingSystem
+import net.mostlyoriginal.api.event.common.EventSystem
+import worlds.gregs.hestia.game.api.movement.Run
+import worlds.gregs.hestia.game.events.FlagMoveType
 import worlds.gregs.hestia.game.plugins.core.components.map.Position
 import worlds.gregs.hestia.game.plugins.movement.components.Mobile
 import worlds.gregs.hestia.game.plugins.movement.components.RunToggled
-import worlds.gregs.hestia.game.plugins.movement.components.Shift
+import worlds.gregs.hestia.game.api.movement.Shift
 import worlds.gregs.hestia.game.plugins.movement.components.Steps
-import worlds.gregs.hestia.game.plugins.movement.components.types.Run
 import worlds.gregs.hestia.game.plugins.movement.components.types.Running
-import worlds.gregs.hestia.game.plugins.movement.components.types.Walk
 import worlds.gregs.hestia.game.plugins.movement.components.types.Walking
-import worlds.gregs.hestia.game.plugins.player.component.update.UpdateMoveType
+import worlds.gregs.hestia.game.plugins.movement.components.types.RunStep
+import worlds.gregs.hestia.game.plugins.movement.components.types.WalkStep
 import worlds.gregs.hestia.game.update.DirectionUtils.Companion.DELTA_X
 import worlds.gregs.hestia.game.update.DirectionUtils.Companion.DELTA_Y
 import worlds.gregs.hestia.services.Aspect
@@ -21,13 +22,13 @@ import worlds.gregs.hestia.services.Aspect
  * Processes entity run steps
  * Entity must have [RunToggled] toggled
  */
-class RunSystem : IteratingSystem(Aspect.all(Position::class, Mobile::class, Steps::class, Walk::class, RunToggled::class)) {
+class RunSystem : Run(Aspect.all(Position::class, Mobile::class, Steps::class, WalkStep::class, RunToggled::class)) {
     private lateinit var stepsMapper: ComponentMapper<Steps>
-    private lateinit var runMapper: ComponentMapper<Run>
+    private lateinit var runMapper: ComponentMapper<RunStep>
     private lateinit var shiftMapper: ComponentMapper<Shift>
     private lateinit var walkingMapper: ComponentMapper<Walking>
     private lateinit var runningMapper: ComponentMapper<Running>
-    private lateinit var updateMoveTypeMapper: ComponentMapper<UpdateMoveType>
+    private lateinit var es: EventSystem
 
     override fun process(entityId: Int) {
         val steps = stepsMapper.get(entityId)
@@ -45,7 +46,7 @@ class RunSystem : IteratingSystem(Aspect.all(Position::class, Mobile::class, Ste
                 //Flag running movement type
                 runningMapper.create(entityId)
                 //Flag
-                updateMoveTypeMapper.create(entityId)
+                es.dispatch(FlagMoveType(entityId))
             }
         } else {
             if(!walkingMapper.has(entityId)) {
@@ -54,9 +55,16 @@ class RunSystem : IteratingSystem(Aspect.all(Position::class, Mobile::class, Ste
                 //Flag movement type as walking
                 walkingMapper.create(entityId)
                 //Flag
-                updateMoveTypeMapper.create(entityId)
+                es.dispatch(FlagMoveType(entityId))
             }
         }
     }
 
+    override fun isRunning(entityId: Int): Boolean {
+        return runningMapper.has(entityId)
+    }
+
+    override fun hasStep(entityId: Int): Boolean {
+        return runMapper.has(entityId)
+    }
 }

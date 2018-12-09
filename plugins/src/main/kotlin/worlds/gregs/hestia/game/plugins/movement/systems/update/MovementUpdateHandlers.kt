@@ -10,9 +10,8 @@ import worlds.gregs.hestia.game.plugins.core.components.map.Position
 import worlds.gregs.hestia.game.plugins.core.components.map.Viewport
 import worlds.gregs.hestia.game.plugins.movement.components.Mobile
 import worlds.gregs.hestia.game.plugins.movement.components.types.Moving
-import worlds.gregs.hestia.game.plugins.movement.components.types.Run
-import worlds.gregs.hestia.game.plugins.movement.components.types.Walk
-import worlds.gregs.hestia.game.plugins.client.systems.locationHash18Bit
+import worlds.gregs.hestia.game.plugins.movement.components.types.RunStep
+import worlds.gregs.hestia.game.plugins.movement.components.types.WalkStep
 import worlds.gregs.hestia.game.update.DirectionUtils
 import worlds.gregs.hestia.game.update.DirectionUtils.Companion.getMobMoveDirection
 import worlds.gregs.hestia.game.update.DisplayFlag
@@ -22,8 +21,8 @@ class MovementUpdateHandlers : PassiveSystem() {
     private lateinit var mobSyncSystem: MobSyncSystem
     private lateinit var positionMapper: ComponentMapper<Position>
     private lateinit var viewportMapper: ComponentMapper<Viewport>
-    private lateinit var runMapper: ComponentMapper<Run>
-    private lateinit var walkMapper: ComponentMapper<Walk>
+    private lateinit var runMapper: ComponentMapper<RunStep>
+    private lateinit var walkMapper: ComponentMapper<WalkStep>
     private lateinit var mobileMapper: ComponentMapper<Mobile>
     private lateinit var entityUpdatesMapper: ComponentMapper<EntityUpdates>
     private lateinit var movingMapper: ComponentMapper<Moving>

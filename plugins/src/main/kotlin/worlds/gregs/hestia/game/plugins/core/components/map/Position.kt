@@ -72,6 +72,13 @@ open class Position() : Component() {
         this.plane = plane
     }
 
+    val locationHash18Bit: Int
+        get() = regionY + (regionX shl 8) + (plane shl 16)
+
+    val locationHash30Bit: Int
+        get() = y + (x shl 14) + (plane shl 28)
+
+
     companion object {
         val EMPTY = Position()
 
