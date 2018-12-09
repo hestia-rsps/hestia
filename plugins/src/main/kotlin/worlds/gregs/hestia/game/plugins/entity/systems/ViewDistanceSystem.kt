@@ -3,10 +3,10 @@ package worlds.gregs.hestia.game.plugins.entity.systems
 import com.artemis.Component
 import com.artemis.ComponentMapper
 import com.artemis.systems.IteratingSystem
-import worlds.gregs.hestia.game.plugins.core.components.map.Position
-import worlds.gregs.hestia.game.plugins.core.components.map.ViewDistance
-import worlds.gregs.hestia.game.plugins.core.components.map.Viewport
-import worlds.gregs.hestia.game.plugins.entity.systems.map.EntityChunkSystem
+import worlds.gregs.hestia.api.core.ViewDistance
+import worlds.gregs.hestia.api.core.components.Position
+import worlds.gregs.hestia.api.core.components.Viewport
+import worlds.gregs.hestia.api.entity.EntityChunk
 import worlds.gregs.hestia.services.Aspect
 import worlds.gregs.hestia.services.getSystem
 import kotlin.reflect.KClass
@@ -15,7 +15,7 @@ import kotlin.reflect.KClass
  * This system prioritises keeping a square viewport over displaying the maximum entities possible
  */
 
-abstract class ViewDistanceSystem(private val entityChunkSystem: KClass<out EntityChunkSystem>, private val maxViewDistance: Int, private val maxLocalEntities: Int, viewDistance: KClass<out Component>) : IteratingSystem(Aspect.all(Viewport::class, viewDistance)) {
+abstract class ViewDistanceSystem(private val entityChunkSystem: KClass<out EntityChunk>, private val maxViewDistance: Int, private val maxLocalEntities: Int, viewDistance: KClass<out Component>) : IteratingSystem(Aspect.all(Viewport::class, viewDistance)) {
 
     private lateinit var positionMapper: ComponentMapper<Position>
     private var array = arrayOfNulls<Int>(maxViewDistance)

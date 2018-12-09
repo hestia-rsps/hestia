@@ -5,9 +5,11 @@ import com.artemis.WorldConfigurationBuilder
 import net.mostlyoriginal.api.event.common.EventSystem
 import org.junit.jupiter.api.BeforeEach
 import worlds.gregs.hestia.game.archetypes.EntityFactory
+import worlds.gregs.hestia.game.plugins.movement.systems.calc.MovementTester
 
 abstract class GameTest(private val config: WorldConfigurationBuilder) {
 
+    private lateinit var clipping: MovementTester.ClippingBuilderTester
     lateinit var world: World
     lateinit var es: EventSystem
 
@@ -20,7 +22,7 @@ abstract class GameTest(private val config: WorldConfigurationBuilder) {
         EntityFactory.init(world)
     }
 
-    fun tick() {
+    open fun tick() {
         world.process()
     }
 

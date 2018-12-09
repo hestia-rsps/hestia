@@ -6,8 +6,14 @@ import world.gregs.hestia.core.services.Cache
 
 class CacheSystem : PassiveSystem() {
 
-    fun getIndex(id: Int): Index {
-        return Cache.getIndex(id)!!
+    @Throws(ArrayIndexOutOfBoundsException::class)
+    fun getIndex(id: Int): Index? {
+        return try {
+            Cache.getIndex(id)
+        } catch (t: Throwable) {
+            t.printStackTrace()
+            null
+        }
     }
 
 }

@@ -1,15 +1,16 @@
 package worlds.gregs.hestia.game.plugins.land.systems
 
 import com.artemis.annotations.Wire
+import net.mostlyoriginal.api.event.common.EventSystem
 import world.gregs.hestia.core.network.packets.Packet
-import worlds.gregs.hestia.game.api.land.Land
-import worlds.gregs.hestia.game.api.land.LandObjects
+import worlds.gregs.hestia.api.land.Land
+import worlds.gregs.hestia.api.land.LandObjects
+import worlds.gregs.hestia.game.events.CreateObject
 import worlds.gregs.hestia.game.map.Flags.BRIDGE_TILE
-import worlds.gregs.hestia.game.map.GameObject
 import worlds.gregs.hestia.game.plugins.core.systems.cache.ObjectDefinitionSystem
 import worlds.gregs.hestia.game.plugins.region.systems.load.ChunkRotationSystem
-import worlds.gregs.hestia.game.region.MapConstants.PLANE_RANGE
-import worlds.gregs.hestia.game.region.MapConstants.isOutOfBounds
+import worlds.gregs.hestia.game.map.MapConstants.PLANE_RANGE
+import worlds.gregs.hestia.game.map.MapConstants.isOutOfBounds
 
 /**
  * MapObjectSystem
@@ -18,9 +19,9 @@ import worlds.gregs.hestia.game.region.MapConstants.isOutOfBounds
 @Wire(failOnNull = false)
 class LandObjectSystem : LandObjects() {
 
-    private var land: Land? = null
     private lateinit var objectDefinitions: ObjectDefinitionSystem
     private lateinit var chunk: ChunkRotationSystem
+    private lateinit var es: EventSystem
 
     override fun load(entityId: Int, x: Int, y: Int, landContainerData: ByteArray, settings: Array<Array<ByteArray>>?, rotation: Int?, chunkX: Int?, chunkY: Int?, chunkPlane: Int?) {
         val landStream = Packet(landContainerData)
@@ -83,8 +84,8 @@ class LandObjectSystem : LandObjects() {
                     objectRotation = (rotation + objectRotation) and 0x3
                 }
 
-                //Add the object
-                land?.addObject(entityId, GameObject(objectId, type, objectRotation, localX + x, localY + y, plane), localX, localY, plane)
+                //Create the object
+                es.dispatch(CreateObject(objectId, localX + x, localY + y, plane, type, objectRotation))
             }
         }
     }

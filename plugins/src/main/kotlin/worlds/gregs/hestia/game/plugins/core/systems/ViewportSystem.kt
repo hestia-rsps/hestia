@@ -1,10 +1,10 @@
 package worlds.gregs.hestia.game.plugins.core.systems
 
 import com.artemis.ComponentMapper
-import worlds.gregs.hestia.game.api.SubscriptionSystem
-import worlds.gregs.hestia.game.plugins.core.components.Renderable
-import worlds.gregs.hestia.game.plugins.core.components.entity.Created
-import worlds.gregs.hestia.game.plugins.core.components.map.Viewport
+import worlds.gregs.hestia.api.SubscriptionSystem
+import worlds.gregs.hestia.api.core.components.Renderable
+import worlds.gregs.hestia.api.core.components.Created
+import worlds.gregs.hestia.api.core.components.Viewport
 import worlds.gregs.hestia.services.Aspect
 
 /**

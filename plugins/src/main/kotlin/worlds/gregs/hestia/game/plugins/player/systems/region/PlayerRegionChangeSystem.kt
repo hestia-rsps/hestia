@@ -1,8 +1,8 @@
 package worlds.gregs.hestia.game.plugins.player.systems.region
 
 import net.mostlyoriginal.api.event.common.EventSystem
-import worlds.gregs.hestia.game.api.movement.RegionChanged
-import worlds.gregs.hestia.game.api.player.Player
+import worlds.gregs.hestia.api.movement.systems.RegionChanged
+import worlds.gregs.hestia.api.player.Player
 import worlds.gregs.hestia.game.events.PlayerRegionChanged
 
 class PlayerRegionChangeSystem : RegionChanged(Player::class) {

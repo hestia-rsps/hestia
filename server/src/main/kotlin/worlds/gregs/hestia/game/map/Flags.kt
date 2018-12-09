@@ -1,5 +1,7 @@
 package worlds.gregs.hestia.game.map
 
+import worlds.gregs.hestia.game.update.Direction
+
 object Flags {
 
     const val BLOCKED_TILE = 0x1
@@ -32,15 +34,15 @@ object Flags {
     const val CORNER_OBJ_SOUTH_EAST_BLOCKS_FLY = 0x2000
     const val CORNER_OBJ_SOUTH_WEST_BLOCKS_FLY = 0x8000
 
-    const val WALL_OBJ_NORTH_BLOCKS_WALK_ALTERNATIVE = 0x800000
-    const val WALL_OBJ_EAST_BLOCKS_WALK_ALTERNATIVE = 0x2000000
-    const val WALL_OBJ_SOUTH_BLOCKS_WALK_ALTERNATIVE = 0x8000000
-    const val WALL_OBJ_WEST_BLOCKS_WALK_ALTERNATIVE = 0x20000000
+    const val WALL_OBJ_SOUTH_BLOCKS_WALK_ALTERNATIVE = 0x800000
+    const val WALL_OBJ_WEST_BLOCKS_WALK_ALTERNATIVE = 0x2000000
+    const val WALL_OBJ_NORTH_BLOCKS_WALK_ALTERNATIVE = 0x8000000
+    const val WALL_OBJ_EAST_BLOCKS_WALK_ALTERNATIVE = 0x20000000
 
-    const val CORNER_OBJ_NORTH_WEST_BLOCKS_WALK_ALTERNATIVE = 0x400000
-    const val CORNER_OBJ_NORTH_EAST_BLOCKS_WALK_ALTERNATIVE = 0x1000000
-    const val CORNER_OBJ_SOUTH_EAST_BLOCKS_WALK_ALTERNATIVE = 0x4000000
-    const val CORNER_OBJ_SOUTH_WEST_BLOCKS_WALK_ALTERNATIVE = 0x10000000
+    const val CORNER_OBJ_SOUTH_EAST_BLOCKS_WALK_ALTERNATIVE = 0x400000
+    const val CORNER_OBJ_SOUTH_WEST_BLOCKS_WALK_ALTERNATIVE = 0x1000000
+    const val CORNER_OBJ_NORTH_WEST_BLOCKS_WALK_ALTERNATIVE = 0x4000000
+    const val CORNER_OBJ_NORTH_EAST_BLOCKS_WALK_ALTERNATIVE = 0x10000000
 
     val FLAG_GROUPS = arrayOf(
             arrayOf(
@@ -52,14 +54,83 @@ object Flags {
                     intArrayOf(CORNER_OBJ_NORTH_WEST_BLOCKS_FLY, CORNER_OBJ_NORTH_EAST_BLOCKS_FLY, CORNER_OBJ_SOUTH_EAST_BLOCKS_FLY, CORNER_OBJ_SOUTH_WEST_BLOCKS_FLY)
             ),
             arrayOf(
-                    intArrayOf(WALL_OBJ_NORTH_BLOCKS_WALK_ALTERNATIVE, WALL_OBJ_EAST_BLOCKS_WALK_ALTERNATIVE, WALL_OBJ_SOUTH_BLOCKS_WALK_ALTERNATIVE, WALL_OBJ_WEST_BLOCKS_WALK_ALTERNATIVE),
-                    intArrayOf(CORNER_OBJ_NORTH_WEST_BLOCKS_WALK_ALTERNATIVE, CORNER_OBJ_NORTH_EAST_BLOCKS_WALK_ALTERNATIVE, CORNER_OBJ_SOUTH_EAST_BLOCKS_WALK_ALTERNATIVE, CORNER_OBJ_SOUTH_WEST_BLOCKS_WALK_ALTERNATIVE)
+                    intArrayOf(WALL_OBJ_SOUTH_BLOCKS_WALK_ALTERNATIVE, WALL_OBJ_WEST_BLOCKS_WALK_ALTERNATIVE, WALL_OBJ_NORTH_BLOCKS_WALK_ALTERNATIVE, WALL_OBJ_EAST_BLOCKS_WALK_ALTERNATIVE),
+                    intArrayOf(CORNER_OBJ_SOUTH_EAST_BLOCKS_WALK_ALTERNATIVE, CORNER_OBJ_SOUTH_WEST_BLOCKS_WALK_ALTERNATIVE, CORNER_OBJ_NORTH_WEST_BLOCKS_WALK_ALTERNATIVE, CORNER_OBJ_NORTH_EAST_BLOCKS_WALK_ALTERNATIVE)
             )
     )
 
     val EXTRA_FLAGS = arrayOf(
-            intArrayOf(130, 10, 40, 160),
-            intArrayOf(0x10400, 5120, 20480, 0x14000),
+            intArrayOf(0x82, 0xA, 0x28, 0xA0),
+            intArrayOf(0x10400, 0x1400, 0x5000, 0x14000),
             intArrayOf(0x20800000, 0x2800000, 0xa000000, 0x28000000)
     )
+
+    const val BLOCKED = FLOOR_BLOCKS_WALK or FLOOR_DECO_BLOCKS_WALK or OBJ_BLOCKS_WALK_ALTERNATIVE
+    const val BLOCKED_WEST = BLOCKED or WALL_OBJ_WEST_BLOCKS_WALK_ALTERNATIVE
+    const val BLOCKED_EAST = BLOCKED or WALL_OBJ_EAST_BLOCKS_WALK_ALTERNATIVE
+    const val BLOCKED_SOUTH = BLOCKED or WALL_OBJ_SOUTH_BLOCKS_WALK_ALTERNATIVE
+    const val BLOCKED_NORTH = BLOCKED or WALL_OBJ_NORTH_BLOCKS_WALK_ALTERNATIVE
+    const val BLOCKED_SOUTH_WEST = BLOCKED_SOUTH or WALL_OBJ_WEST_BLOCKS_WALK_ALTERNATIVE or CORNER_OBJ_SOUTH_WEST_BLOCKS_WALK_ALTERNATIVE
+    const val BLOCKED_SOUTH_EAST = BLOCKED_SOUTH or WALL_OBJ_EAST_BLOCKS_WALK_ALTERNATIVE or CORNER_OBJ_SOUTH_EAST_BLOCKS_WALK_ALTERNATIVE
+    const val BLOCKED_NORTH_WEST = BLOCKED_NORTH or WALL_OBJ_WEST_BLOCKS_WALK_ALTERNATIVE or CORNER_OBJ_NORTH_WEST_BLOCKS_WALK_ALTERNATIVE
+    const val BLOCKED_NORTH_EAST = BLOCKED_NORTH or WALL_OBJ_EAST_BLOCKS_WALK_ALTERNATIVE or CORNER_OBJ_NORTH_EAST_BLOCKS_WALK_ALTERNATIVE
+
+    const val CLEAR_WEST = BLOCKED or WALL_OBJ_SOUTH_BLOCKS_WALK_ALTERNATIVE or WALL_OBJ_WEST_BLOCKS_WALK_ALTERNATIVE or WALL_OBJ_NORTH_BLOCKS_WALK_ALTERNATIVE or CORNER_OBJ_SOUTH_WEST_BLOCKS_WALK_ALTERNATIVE or CORNER_OBJ_NORTH_WEST_BLOCKS_WALK_ALTERNATIVE
+    const val CLEAR_EAST = BLOCKED or WALL_OBJ_SOUTH_BLOCKS_WALK_ALTERNATIVE or WALL_OBJ_NORTH_BLOCKS_WALK_ALTERNATIVE or WALL_OBJ_EAST_BLOCKS_WALK_ALTERNATIVE or CORNER_OBJ_SOUTH_EAST_BLOCKS_WALK_ALTERNATIVE or CORNER_OBJ_NORTH_EAST_BLOCKS_WALK_ALTERNATIVE
+    const val CLEAR_SOUTH = BLOCKED or WALL_OBJ_SOUTH_BLOCKS_WALK_ALTERNATIVE or WALL_OBJ_WEST_BLOCKS_WALK_ALTERNATIVE or WALL_OBJ_EAST_BLOCKS_WALK_ALTERNATIVE or CORNER_OBJ_SOUTH_EAST_BLOCKS_WALK_ALTERNATIVE or CORNER_OBJ_SOUTH_WEST_BLOCKS_WALK_ALTERNATIVE
+    const val CLEAR_NORTH = BLOCKED or WALL_OBJ_WEST_BLOCKS_WALK_ALTERNATIVE or WALL_OBJ_NORTH_BLOCKS_WALK_ALTERNATIVE or WALL_OBJ_EAST_BLOCKS_WALK_ALTERNATIVE or CORNER_OBJ_NORTH_WEST_BLOCKS_WALK_ALTERNATIVE or CORNER_OBJ_NORTH_EAST_BLOCKS_WALK_ALTERNATIVE
+
+    @JvmStatic
+    fun main2(args: Array<String>) {
+
+        println("${Direction.WEST.getClippingMask()} $BLOCKED_WEST")
+        println("${Direction.EAST.getClippingMask()} $BLOCKED_EAST")
+        println("${Direction.SOUTH.getClippingMask()} $BLOCKED_SOUTH")
+        println("${Direction.NORTH.getClippingMask()} $BLOCKED_NORTH")
+        println("${Direction.SOUTH_WEST.getClippingMask()} $BLOCKED_SOUTH_WEST")
+        println("${Direction.SOUTH_EAST.getClippingMask()} $BLOCKED_SOUTH_EAST")
+        println("${Direction.NORTH_WEST.getClippingMask()} $BLOCKED_NORTH_WEST")
+        println("${Direction.NORTH_EAST.getClippingMask()} $BLOCKED_NORTH_EAST")
+        println()
+        println("${Direction.WEST.getSurroundClippingMask()} $CLEAR_WEST")
+        println("${Direction.EAST.getSurroundClippingMask()} $CLEAR_EAST")
+        println("${Direction.SOUTH.getSurroundClippingMask()} $CLEAR_SOUTH")
+        println("${Direction.NORTH.getSurroundClippingMask()} $CLEAR_NORTH")
+    }
+
+    @JvmStatic
+    fun main(args: Array<String>) {
+        val result = StringBuilder()
+        val newLine = System.getProperty("line.separator")
+
+        result.append(this.javaClass.name)
+        result.append(" Object {")
+        result.append(newLine)
+
+        //determine fields declared in this class only (no fields of superclass)
+        val fields = this.javaClass.declaredFields
+
+        //print field names paired with their values
+        for (field in fields) {
+            result.append("  ")
+            try {
+                result.append(field.name)
+                result.append(": ")
+                //requires access to private field:
+                val value = field.get(this)
+                if(value is Int) {
+                    result.append("$value 0x${"%X".format(value)}")
+                } else {
+                    result.append(field.get(this))
+                }
+            } catch (ex: IllegalAccessException) {
+                ex.printStackTrace()
+            }
+
+            result.append(newLine)
+        }
+        result.append("}")
+
+        println(result.toString())
+    }
 }

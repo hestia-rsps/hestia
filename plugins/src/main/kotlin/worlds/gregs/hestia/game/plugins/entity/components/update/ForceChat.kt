@@ -13,7 +13,3 @@ class ForceChat() : Component() {
 
     var message: String? = null
 }
-
-fun Entity.force(message: String) {
-    edit().add(ForceChat(message))
-}

@@ -1,11 +1,7 @@
 package worlds.gregs.hestia.game.plugins.movement.components
 
-import com.artemis.Component
 import com.artemis.annotations.PooledWeaver
+import worlds.gregs.hestia.api.core.components.Position
 
 @PooledWeaver
-class Mobile : Component() {
-    var lastX = -1
-    var lastY = -1
-    var lastPlane = -1
-}
+class Mobile : Position()

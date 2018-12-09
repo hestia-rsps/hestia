@@ -2,8 +2,8 @@ package worlds.gregs.hestia.network.out
 
 import world.gregs.hestia.core.network.packets.Packet
 import world.gregs.hestia.core.services.int
-import worlds.gregs.hestia.game.plugins.core.components.map.Position
-import worlds.gregs.hestia.game.region.MapConstants.MAP_SIZES
+import worlds.gregs.hestia.api.core.components.Position
+import worlds.gregs.hestia.game.map.MapConstants.MAP_SIZES
 
 class MapRegion(entityId: Int, position: Position, forceRefresh: Boolean, login: (Packet.Builder.(Int) -> Unit)?) : Packet.Builder(43, Packet.Type.VAR_SHORT) {
     init {

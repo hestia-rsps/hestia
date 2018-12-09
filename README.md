@@ -1,6 +1,6 @@
 # Hestia
 
-Open-source Kotlin MMO-RPG game server; emulating RS on october 2011, build 667.1
+Open-source Kotlin MMO-RPG game server; emulating RS on October 2011, build 667.1
 
 ## Getting Started
 

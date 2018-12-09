@@ -2,17 +2,17 @@ package worlds.gregs.hestia.game.plugins.map.systems
 
 import com.artemis.annotations.Wire
 import world.gregs.hestia.core.network.packets.Packet
-import worlds.gregs.hestia.game.api.map.ClippingMasks
-import worlds.gregs.hestia.game.api.map.MapSettings
+import worlds.gregs.hestia.api.map.ClippingMasks
+import worlds.gregs.hestia.api.map.MapSettings
 import worlds.gregs.hestia.game.map.Flags
 import worlds.gregs.hestia.game.map.Flags.BLOCKED_TILE
 import worlds.gregs.hestia.game.map.Flags.BRIDGE_TILE
 import worlds.gregs.hestia.game.plugins.region.systems.RegionBuilderSystem.Companion.forChunks
 import worlds.gregs.hestia.game.plugins.region.systems.load.ChunkRotationSystem
-import worlds.gregs.hestia.game.region.MapConstants.PLANE_RANGE
-import worlds.gregs.hestia.game.region.MapConstants.REGION_PLANES
-import worlds.gregs.hestia.game.region.MapConstants.REGION_RANGE
-import worlds.gregs.hestia.game.region.MapConstants.REGION_SIZE
+import worlds.gregs.hestia.game.map.MapConstants.PLANE_RANGE
+import worlds.gregs.hestia.game.map.MapConstants.REGION_PLANES
+import worlds.gregs.hestia.game.map.MapConstants.REGION_RANGE
+import worlds.gregs.hestia.game.map.MapConstants.REGION_SIZE
 
 /**
  * MapSettingsSystem

@@ -2,8 +2,8 @@ package worlds.gregs.hestia.game.plugins.mob.systems.update
 
 import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.system.core.PassiveSystem
-import worlds.gregs.hestia.game.api.client.MobUpdateFlags
-import worlds.gregs.hestia.game.plugins.core.components.Renderable
+import worlds.gregs.hestia.api.client.MobUpdateFlags
+import worlds.gregs.hestia.api.core.components.Renderable
 import worlds.gregs.hestia.game.plugins.entity.components.update.CombatLevel
 import worlds.gregs.hestia.game.plugins.entity.components.update.DisplayName
 import worlds.gregs.hestia.game.plugins.mob.component.update.ModelChange

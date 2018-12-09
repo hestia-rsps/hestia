@@ -22,6 +22,7 @@ internal class PluginTest : GameTest(WorldConfigurationBuilder()) {
         build(WorldConfigurationBuilder().with(CorePlugin()), false)
     }
 
+
     @Test
     fun testRegion() {
         //Individually

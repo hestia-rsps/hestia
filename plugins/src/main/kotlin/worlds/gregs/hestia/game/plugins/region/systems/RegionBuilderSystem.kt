@@ -1,21 +1,23 @@
 package worlds.gregs.hestia.game.plugins.region.systems
 
 import com.artemis.ComponentMapper
-import worlds.gregs.hestia.game.api.region.RegionBuilder
-import worlds.gregs.hestia.game.api.region.Regions
-import worlds.gregs.hestia.game.plugins.core.components.map.Chunk.toChunkPosition
-import worlds.gregs.hestia.game.plugins.core.components.map.Chunk.toRotatedChunkPosition
-import worlds.gregs.hestia.game.plugins.region.components.DynamicRegion
+import com.artemis.annotations.Wire
+import worlds.gregs.hestia.api.region.RegionBuilder
+import worlds.gregs.hestia.api.region.Regions
+import worlds.gregs.hestia.api.region.components.DynamicRegion
+import worlds.gregs.hestia.game.map.Chunk.toChunkPosition
+import worlds.gregs.hestia.game.map.Chunk.toRotatedChunkPosition
+import worlds.gregs.hestia.game.map.MapConstants.PLANE_RANGE
 import worlds.gregs.hestia.game.plugins.region.components.Loaded
 import worlds.gregs.hestia.game.plugins.region.components.Loading
 import worlds.gregs.hestia.game.plugins.region.components.RegionIdentifier
-import worlds.gregs.hestia.game.region.MapConstants.PLANE_RANGE
 
 /**
  * DynamicRegionBuilder
  * Toolset to modify region maps
  * Uses exact chunk coordinates, not local
  */
+@Wire(failOnNull = false)
 class RegionBuilderSystem : RegionBuilder() {
 
     /*
@@ -33,8 +35,8 @@ class RegionBuilderSystem : RegionBuilder() {
     private lateinit var loadedMapper: ComponentMapper<Loaded>
     private lateinit var loadingMapper: ComponentMapper<Loading>
 
-    private var set = HashMap<Int, Int>()
-    private var clear = ArrayList<Int>()
+    internal val set = HashMap<Int, Int>()
+    internal val clear = ArrayList<Int>()
 
     /**
      * Sets a single chunk at [chunkX], [chunkY], [plane] to the chunk at [toChunkX], [toChunkY], [toPlane] with [rotation]
@@ -96,7 +98,10 @@ class RegionBuilderSystem : RegionBuilder() {
      * @param plane The z position of the chunk to remove
      */
     override fun clear(chunkX: Int, chunkY: Int, plane: Int) {
-        clear.add(toChunkPosition(chunkX, chunkY, plane))
+        val position = toChunkPosition(chunkX, chunkY, plane)
+        if(!clear.contains(position)) {
+            clear.add(position)
+        }
     }
 
     /**
@@ -172,6 +177,15 @@ class RegionBuilderSystem : RegionBuilder() {
                 //Reset
                 reset(chunkX + x, chunkY + y, plane)
             }
+        }
+    }
+
+    override fun load(regionId: Int) {
+        val entityId = regions?.getEntityId(regionId) ?: return
+        val dynamic = dynamicMapper.get(entityId) ?: return
+
+        dynamic.regionData.forEach { position, chunk ->
+            set[position] = chunk
         }
     }
 

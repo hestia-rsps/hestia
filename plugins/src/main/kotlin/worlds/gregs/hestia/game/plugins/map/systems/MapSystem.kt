@@ -1,8 +1,8 @@
 package worlds.gregs.hestia.game.plugins.map.systems
 
 import com.artemis.ComponentMapper
-import worlds.gregs.hestia.game.api.map.Clipping
-import worlds.gregs.hestia.game.api.map.Map
+import worlds.gregs.hestia.api.map.Clipping
+import worlds.gregs.hestia.api.map.Map
 import worlds.gregs.hestia.game.plugins.map.components.ClippingMap
 import worlds.gregs.hestia.game.plugins.map.components.ProjectileClipping
 

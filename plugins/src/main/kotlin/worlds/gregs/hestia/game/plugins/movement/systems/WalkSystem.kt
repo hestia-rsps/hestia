@@ -1,16 +1,14 @@
 package worlds.gregs.hestia.game.plugins.movement.systems
 
 import com.artemis.ComponentMapper
-import worlds.gregs.hestia.game.api.movement.Shift
-import worlds.gregs.hestia.game.api.movement.Walk
-import worlds.gregs.hestia.game.plugins.core.components.map.Position
+import worlds.gregs.hestia.api.core.components.Position
+import worlds.gregs.hestia.api.movement.components.Shift
+import worlds.gregs.hestia.api.movement.types.Walk
 import worlds.gregs.hestia.game.plugins.movement.components.Mobile
 import worlds.gregs.hestia.game.plugins.movement.components.Steps
 import worlds.gregs.hestia.game.plugins.movement.components.types.RunStep
 import worlds.gregs.hestia.game.plugins.movement.components.types.WalkStep
 import worlds.gregs.hestia.game.plugins.movement.components.types.Walking
-import worlds.gregs.hestia.game.update.DirectionUtils.Companion.DELTA_X
-import worlds.gregs.hestia.game.update.DirectionUtils.Companion.DELTA_Y
 import worlds.gregs.hestia.services.Aspect
 
 /**
@@ -36,7 +34,7 @@ class WalkSystem : Walk(Aspect.all(Position::class, Mobile::class, Steps::class)
             walk.direction = steps.nextDirection
             //Shift entities location
             val shift = shiftMapper.create(entityId)
-            shift.add(DELTA_X[walk.direction], DELTA_Y[walk.direction])
+            shift.add(walk.direction.deltaX, walk.direction.deltaY)
         } else {
             stepsMapper.remove(entityId)
         }
