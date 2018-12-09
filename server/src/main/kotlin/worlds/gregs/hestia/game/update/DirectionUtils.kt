@@ -1,147 +1,86 @@
 package worlds.gregs.hestia.game.update
 
+import worlds.gregs.hestia.game.update.Direction.Companion.fromDelta
+import worlds.gregs.hestia.game.update.Direction.Companion.fromDirection
+
 class DirectionUtils {
     companion object {
 
-    val REGION_MOVEMENT = arrayOf(
-            intArrayOf(0, 3, 5),
-            intArrayOf(1, -1, 6),
-            intArrayOf(2, 4, 7)
-    )
+        fun getOffset(current: Int, destination: Int): Int {
+            return if (current < destination) 1 else if (current > destination) -1 else 0
+        }
 
-    val DELTA_X = intArrayOf(-1, 0, 1, -1, 1, -1, 0, 1)
-    val DELTA_Y = intArrayOf(1, 1, 1, 0, 0, -1, -1, -1)
+        fun getMoveDirection(nextX: Int, nextY: Int, lastX: Int, lastY: Int): Direction? {
+            //Calculate the delta offsets then return direction value
+            return fromDelta(getOffset(lastX, nextX), getOffset(lastY, nextY))
+        }
+        fun getFaceDirection(xOffset: Int, yOffset: Int): Int {
+            return (Math.atan2(xOffset * -1.0, yOffset * -1.0) * 2607.5945876176133).toInt() and 0x3fff
+        }
 
-    fun getOffset(current: Int, destination: Int): Int {
-        return if (current < destination) 1 else if (current > destination) -1 else 0
-    }
+        fun getPlayerWalkingDirection(dx: Int, dy: Int): Int {
+            val dir = fromDelta(dx, -dy) ?: Direction.NONE
+            return dir.value
+        }
 
-    fun getMoveDirection(xOffset: Int, yOffset: Int): Int {
-        val x = getOffset(0, xOffset)
-        val y = getOffset(yOffset, 0)
+        @JvmStatic
+        fun main(args: Array<String>) {
+            RUN_X.forEachIndexed { index, x ->
+                println("$x ${RUN_Y[index]} ${getPlayerRunningDirection(x, RUN_Y[index])} ${fromDirection(getPlayerRunningDirection(x, RUN_Y[index]))?.deltaX} ${fromDirection(getPlayerRunningDirection(x, RUN_Y[index]))?.deltaY}")
+            }
 
-        return REGION_MOVEMENT[x + 1][y + 1]
-    }
+            println("${TEST_X.map { -it }.reversed().union(TEST_X.toList())}")
+            println("${TEST_Y.map { -it }.reversed()} ${TEST_Y.toList()}")
 
-    fun getFaceDirection(xOffset: Int, yOffset: Int): Int {
-        return (Math.atan2(xOffset * -1.0, yOffset * -1.0) * 2607.5945876176133).toInt() and 0x3fff
-    }
+        }
 
-    fun getMobMoveDirection(direction: Int): Int {
-        return if (direction < 0) {
-            -1
-        } else {
-            getMobMoveDirection(DELTA_X[direction], DELTA_Y[direction])
-        }
-    }
+        private val RUN_X = intArrayOf(-2, -1, 0, 1, 2, -2, 2, -2, 2, -2, 2, -2, -1, 0, 1, 2)
+        private val RUN_Y = intArrayOf(-2, -2, -2, -2, -2, -1, -1, 0, 0, 1, 1, 2, 2, 2, 2, 2)
 
-    fun getPlayerWalkingDirection(dx: Int, dy: Int): Int {
-        if (dx == -1 && dy == -1) {
-            return 0
-        }
-        if (dx == 0 && dy == -1) {
-            return 1
-        }
-        if (dx == 1 && dy == -1) {
-            return 2
-        }
-        if (dx == -1 && dy == 0) {
-            return 3
-        }
-        if (dx == 1 && dy == 0) {
-            return 4
-        }
-        if (dx == -1 && dy == 1) {
-            return 5
-        }
-        if (dx == 0 && dy == 1) {
-            return 6
-        }
-        return if (dx == 1 && dy == 1) {
-            7
-        } else -1
-    }
+        private val TEST_X = intArrayOf(2, -2, 2, -2, -1, 0, 1, 2)
+        private val TEST_Y = intArrayOf(0, 1, 1, 2, 2, 2, 2, 2)
 
-    fun getPlayerRunningDirection(dx: Int, dy: Int): Int {
-        if (dx == -2 && dy == -2) {
-            return 0
+        fun getPlayerRunningDirection(dx: Int, dy: Int): Int {
+            RUN_X.forEachIndexed { i, x ->
+                if (dx == x && dy == RUN_Y[i]) {
+                    return i
+                }
+            }
+            return -1
         }
-        if (dx == -1 && dy == -2) {
-            return 1
-        }
-        if (dx == 0 && dy == -2) {
-            return 2
-        }
-        if (dx == 1 && dy == -2) {
-            return 3
-        }
-        if (dx == 2 && dy == -2) {
-            return 4
-        }
-        if (dx == -2 && dy == -1) {
-            return 5
-        }
-        if (dx == 2 && dy == -1) {
-            return 6
-        }
-        if (dx == -2 && dy == 0) {
-            return 7
-        }
-        if (dx == 2 && dy == 0) {
-            return 8
-        }
-        if (dx == -2 && dy == 1) {
-            return 9
-        }
-        if (dx == 2 && dy == 1) {
-            return 10
-        }
-        if (dx == -2 && dy == 2) {
-            return 11
-        }
-        if (dx == -1 && dy == 2) {
-            return 12
-        }
-        if (dx == 0 && dy == 2) {
-            return 13
-        }
-        if (dx == 1 && dy == 2) {
-            return 14
-        }
-        return if (dx == 2 && dy == 2) {
-            15
-        } else {
-            -1
-        }
-    }
 
-    private fun getMobMoveDirection(dx: Int, dy: Int): Int {
-        if (dx == 0 && dy > 0) {
-            return 0
+        private val MOVE_X = intArrayOf(0, 1, 1, 1, 0, -1, -1, -1)
+        private val MOVE_Y = intArrayOf(1, 1, 0, -1, -1, -1, 0, 1)
+
+        /*@JvmStatic
+        fun main(args: Array<String>) {
+            MOVE_X.forEachIndexed { index, x ->
+                println("$x ${MOVE_Y[index]} ${getMobMoveDirection(x, MOVE_Y[index])}")
+            }
+        }*/
+
+        fun getMobMoveDirection(direction: Direction): Int {
+            return if (direction == Direction.NONE) {
+                -1
+            } else {
+                getMobMoveDirection(direction.deltaX, direction.deltaY)
+            }
         }
-        if (dx > 0 && dy > 0) {
-            return 1
+        private fun getMobMoveDirection(dx: Int, dy: Int): Int {
+            MOVE_X.forEachIndexed { i, x ->
+                if (close(x, dx) && close(MOVE_Y[i], dy)) {
+                    return i
+                }
+            }
+            return -1
         }
-        if (dx > 0 && dy == 0) {
-            return 2
+
+        private fun close(type: Int, value: Int): Boolean {
+            return when (type) {
+                -1 -> value < 0
+                1 -> value > 0
+                else -> value == 0
+            }
         }
-        if (dx > 0 && dy < 0) {
-            return 3
-        }
-        if (dx == 0 && dy < 0) {
-            return 4
-        }
-        if (dx < 0 && dy < 0) {
-            return 5
-        }
-        if (dx < 0 && dy == 0) {
-            return 6
-        }
-        return if (dx < 0 && dy > 0) {
-            7
-        } else {
-            -1
-        }
-    }
     }
 }

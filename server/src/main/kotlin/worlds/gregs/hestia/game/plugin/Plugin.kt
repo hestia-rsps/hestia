@@ -14,16 +14,19 @@ interface Plugin : ArtemisPlugin {
         Highest first
         Lowest last
          */
-        const val MOBILE_PRIORITY = 10000
-        const val MOVE_PRIORITY = 9900
-        const val NAVIGATION_PRIORITY = 9800
-        const val WALK_PRIORITY = 9700
-        const val RUN_PRIORITY = 9600
-        const val PRE_SHIFT_PRIORITY = 9500
-        const val SHIFT_PRIORITY = 9400
-
         const val PLAYER_INDEX_PRIORITY = WorldConfigurationBuilder.Priority.HIGHEST
-        const val ENTITY_INDEX_PRIORITY = WorldConfigurationBuilder.Priority.HIGH
+        const val ENTITY_INDEX_PRIORITY = PLAYER_INDEX_PRIORITY - 1
+
+        const val MOBILE_PRIORITY = 12000
+        const val MOVE_PRIORITY = 11000
+        const val PRE_NAVIGATION_PRIORITY = 10000
+        const val NAVIGATION_PRIORITY = 9900
+        const val WALK_PRIORITY = 9800
+        const val RUN_PRIORITY = 9700
+        const val PRE_SHIFT_PRIORITY = 9600
+        const val SHIFT_PRIORITY = 9500
+        const val POST_SHIFT_PRIORITY = 9400
+
         const val VIEWPORT_PRIORITY = 9300
         const val LOGIN_DETAILS_PRIORITY = 9200
         const val MAP_REGION_PRIORITY = 9100

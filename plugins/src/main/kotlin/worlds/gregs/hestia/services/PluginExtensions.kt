@@ -3,8 +3,6 @@ package worlds.gregs.hestia.services
 import com.artemis.*
 import com.artemis.Aspect
 import org.apache.commons.text.WordUtils
-import worlds.gregs.hestia.game.api.mob.Mob
-import worlds.gregs.hestia.game.api.player.Player
 import kotlin.reflect.KClass
 
 /*
@@ -16,22 +14,6 @@ import kotlin.reflect.KClass
  */
 fun <T : Component> World.getMapper(type: KClass<T>): ComponentMapper<T> {
     return getMapper(type.java)
-}
-
-class Aspect {
-    companion object {
-        fun all(vararg clazz: KClass<out Component>): com.artemis.Aspect.Builder {
-            return com.artemis.Aspect.all(*clazz.map { it.java }.toTypedArray())
-        }
-
-        fun one(vararg clazz: KClass<out Component>): com.artemis.Aspect.Builder {
-            return com.artemis.Aspect.one(*clazz.map { it.java }.toTypedArray())
-        }
-
-        fun exclude(vararg clazz: KClass<out Component>): com.artemis.Aspect.Builder {
-            return com.artemis.Aspect.exclude(*clazz.map { it.java }.toTypedArray())
-        }
-    }
 }
 
 fun WorldConfigurationBuilder.dependsOn(vararg clazz: KClass<out Component>): WorldConfigurationBuilder {
@@ -52,14 +34,6 @@ fun Aspect.Builder.exclude(vararg clazz: KClass<out Component>): com.artemis.Asp
 
 fun ArchetypeBuilder.add(vararg clazz: KClass<out Component>): ArchetypeBuilder {
     return add(*clazz.map { it.java }.toTypedArray())
-}
-
-fun World.players(): IntArray {
-    return aspectSubscriptionManager.get(worlds.gregs.hestia.services.Aspect.all(Player::class)).entities.toArray()
-}
-
-fun World.mobs(): IntArray {
-    return aspectSubscriptionManager.get(worlds.gregs.hestia.services.Aspect.all(Mob::class)).entities.toArray()
 }
 
 fun <T : Component> Entity.getComponent(type: KClass<T>): T? {

@@ -3,12 +3,12 @@ package worlds.gregs.hestia.game.plugins.player.systems.chunk
 import com.artemis.annotations.Wire
 import net.mostlyoriginal.api.event.common.Subscribe
 import net.mostlyoriginal.api.system.core.PassiveSystem
-import worlds.gregs.hestia.game.api.region.Region
+import worlds.gregs.hestia.api.region.Region
 import worlds.gregs.hestia.game.events.PlayerChunkChanged
-import worlds.gregs.hestia.game.plugins.core.components.map.Chunk.getChunkX
-import worlds.gregs.hestia.game.plugins.core.components.map.Chunk.getChunkY
+import worlds.gregs.hestia.game.map.Chunk.getChunkX
+import worlds.gregs.hestia.game.map.Chunk.getChunkY
 import worlds.gregs.hestia.game.plugins.player.systems.chunk.map.PlayerChunkMap
-import worlds.gregs.hestia.game.region.MapConstants.MAP_SIZES
+import worlds.gregs.hestia.game.map.MapConstants.MAP_SIZES
 
 @Wire(failOnNull = false)
 class PlayerChunkSystem : PassiveSystem() {

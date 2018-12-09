@@ -6,7 +6,7 @@ import worlds.gregs.hestia.services.Aspect
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import worlds.gregs.hestia.game.plugins.core.components.map.Position
+import worlds.gregs.hestia.api.core.components.Position
 import worlds.gregs.hestia.services.add
 
 internal class EntityTest {

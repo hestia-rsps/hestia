@@ -3,7 +3,7 @@ package worlds.gregs.hestia.game.plugins.client.systems.update.bases.update
 import com.artemis.ComponentMapper
 import world.gregs.hestia.core.network.packets.Packet
 import worlds.gregs.hestia.game.plugins.client.systems.update.update.PlayerUpdateSystem
-import worlds.gregs.hestia.game.plugins.core.components.entity.Created
+import worlds.gregs.hestia.api.core.components.Created
 import worlds.gregs.hestia.game.update.DisplayFlag
 import worlds.gregs.hestia.game.update.UpdateFlag
 

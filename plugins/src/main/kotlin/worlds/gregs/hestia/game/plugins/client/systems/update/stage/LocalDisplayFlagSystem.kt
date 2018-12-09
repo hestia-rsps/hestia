@@ -1,11 +1,11 @@
 package worlds.gregs.hestia.game.plugins.client.systems.update.stage
 
 import com.artemis.ComponentMapper
+import worlds.gregs.hestia.api.client.components.EntityUpdates
+import worlds.gregs.hestia.api.core.components.Position
+import worlds.gregs.hestia.api.core.components.Viewport
 import worlds.gregs.hestia.game.plugins.client.components.NetworkSession
-import worlds.gregs.hestia.game.plugins.client.components.update.stage.EntityUpdates
 import worlds.gregs.hestia.game.plugins.client.systems.update.bases.flag.BaseDisplayFlagSystem
-import worlds.gregs.hestia.game.plugins.core.components.map.Position
-import worlds.gregs.hestia.game.plugins.core.components.map.Viewport
 import worlds.gregs.hestia.game.update.DisplayFlag
 import worlds.gregs.hestia.services.Aspect
 
@@ -18,7 +18,7 @@ class LocalDisplayFlagSystem : BaseDisplayFlagSystem(Aspect.all(NetworkSession::
     override fun initialize() {
         super.initialize()
         addCheck(DisplayFlag.REMOVE) { player, other ->
-            !world.entityManager.isActive(other) /* || local.hasFinished() */ || !withinDistance(positionMapper.get(player), other)
+            !world.entityManager.isActive(other) || !withinDistance(positionMapper.get(player), other)
         }
 
         addCheck(DisplayFlag.UPDATE) { player, other ->

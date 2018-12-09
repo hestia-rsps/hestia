@@ -3,10 +3,10 @@ package worlds.gregs.hestia.game.plugins.region.systems
 import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
 import net.mostlyoriginal.api.event.common.EventSystem
-import worlds.gregs.hestia.game.api.land.Land
-import worlds.gregs.hestia.game.api.map.Map
-import worlds.gregs.hestia.game.api.region.Region
-import worlds.gregs.hestia.game.api.region.Regions
+import worlds.gregs.hestia.api.land.Land
+import worlds.gregs.hestia.api.map.Map
+import worlds.gregs.hestia.api.region.Region
+import worlds.gregs.hestia.api.region.Regions
 import worlds.gregs.hestia.game.events.CreateRegion
 import worlds.gregs.hestia.game.plugins.region.components.Loaded
 import worlds.gregs.hestia.game.plugins.region.components.Loading
@@ -21,7 +21,9 @@ class RegionSystem : Region(Aspect.all(RegionIdentifier::class)) {
     private var land: Land? = null
     private lateinit var loadingMapper: ComponentMapper<Loading>
     private lateinit var loadedMapper: ComponentMapper<Loaded>
+    private lateinit var regionIdentifierMapper: ComponentMapper<RegionIdentifier>
     private var map: Map? = null
+    private val loadQueue = ArrayList<Int>()
 
     override fun inserted(entityId: Int) {
         //Begin loading process
@@ -33,7 +35,12 @@ class RegionSystem : Region(Aspect.all(RegionIdentifier::class)) {
             return
         }
 
+        if(loadQueue.contains(regionId)) {
+            return
+        }
+
         es.dispatch(CreateRegion(regionId))
+        loadQueue.add(regionId)
     }
 
     override fun unload(entityId: Int) {
@@ -45,6 +52,8 @@ class RegionSystem : Region(Aspect.all(RegionIdentifier::class)) {
             land?.unload(entityId)
             //Remove loaded flag
             loadedMapper.remove(entityId)
+            //Remove from load queue
+            loadQueue.remove(regionIdentifierMapper.get(entityId).id)
         }
     }
 }

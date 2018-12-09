@@ -1,13 +1,8 @@
 package worlds.gregs.hestia.game.plugins.entity.components.update.direction
 
 import com.artemis.Component
-import com.artemis.Entity
 import com.artemis.annotations.PooledWeaver
-import worlds.gregs.hestia.game.plugins.core.components.entity.Size
-import worlds.gregs.hestia.game.plugins.core.components.map.Position
-import worlds.gregs.hestia.game.plugins.entity.components.update.direction.Facing.Companion.getFaceX
-import worlds.gregs.hestia.game.plugins.entity.components.update.direction.Facing.Companion.getFaceY
-import worlds.gregs.hestia.services.getComponent
+import worlds.gregs.hestia.api.core.components.Position
 
 @PooledWeaver
 class Facing : Component() {
@@ -20,20 +15,4 @@ class Facing : Component() {
             return position.y + ((if (rotation == 1 || rotation == 3) sizeX else sizeY) - 1) / 2
         }
     }
-}
-
-fun Entity.turn(deltaX: Int, deltaY: Int) {
-    getComponent(Face::class)?.apply {
-        x = deltaX
-        y = deltaY
-    }
-    edit().add(Facing())
-}
-
-fun Entity.face(x: Int, y: Int) {
-    val size = getComponent(Size::class)
-    val position = getComponent(Position::class)!!
-    val deltaX = x - getFaceX(position, size?.sizeX ?: 1)
-    val deltaY = y - getFaceY(position, size?.sizeY ?: 1)
-    turn(deltaX, deltaY)
 }

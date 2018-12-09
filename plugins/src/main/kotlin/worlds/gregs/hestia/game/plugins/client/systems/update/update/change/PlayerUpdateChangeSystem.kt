@@ -1,8 +1,8 @@
 package worlds.gregs.hestia.game.plugins.client.systems.update.update.change
 
 import com.artemis.ComponentMapper
+import worlds.gregs.hestia.api.core.components.Viewport
 import worlds.gregs.hestia.game.plugins.client.systems.update.bases.update.sync.BasePlayerSyncSystem
-import worlds.gregs.hestia.game.plugins.core.components.map.Viewport
 import worlds.gregs.hestia.game.update.DisplayFlag
 
 class PlayerUpdateChangeSystem : BasePlayerSyncSystem() {

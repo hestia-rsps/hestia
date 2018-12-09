@@ -1,20 +1,22 @@
 package worlds.gregs.hestia.game.plugins.entity.systems.update.stage
 
 import com.artemis.ComponentMapper
+import com.artemis.annotations.Wire
 import net.mostlyoriginal.api.system.core.PassiveSystem
+import worlds.gregs.hestia.api.core.components.Position
 import worlds.gregs.hestia.game.plugins.client.systems.update.stage.GlobalDisplayFlagSystem
 import worlds.gregs.hestia.game.plugins.client.systems.update.stage.LocalDisplayFlagSystem
-import worlds.gregs.hestia.game.plugins.core.components.map.Position
 import worlds.gregs.hestia.game.plugins.entity.systems.ViewDistanceSystem
 import worlds.gregs.hestia.game.update.DisplayFlag
 
+@Wire(failOnNull = false)
 class EntityStageSystem : PassiveSystem() {
 
     private val checks = ArrayList<(Int, Int) -> Int?>()
 
     private lateinit var positionMapper: ComponentMapper<Position>
-    private lateinit var localStageSystem: LocalDisplayFlagSystem
-    private lateinit var globalStageSystem: GlobalDisplayFlagSystem
+    private var localStageSystem: LocalDisplayFlagSystem? = null
+    private var globalStageSystem: GlobalDisplayFlagSystem? = null
 
     fun addCheck(check: (Int, Int) -> Int?) {
         checks.add(check)
@@ -22,12 +24,12 @@ class EntityStageSystem : PassiveSystem() {
 
     override fun initialize() {
         super.initialize()
-        localStageSystem.addCheck(DisplayFlag.REMOVE) { player, other ->
-            !world.entityManager.isActive(other) /* || local.hasFinished() */ || !withinDistance(player, other)
+        localStageSystem?.addCheck(DisplayFlag.REMOVE) { player, other ->
+            !world.entityManager.isActive(other) || !withinDistance(player, other)
         }
 
-        globalStageSystem.addCheck(DisplayFlag.ADD) { player, other ->
-            /* !global.hasFinished() && */ withinDistance(player, other)
+        globalStageSystem?.addCheck(DisplayFlag.ADD) { player, other ->
+            withinDistance(player, other)
         }
     }
 

@@ -2,15 +2,15 @@ package worlds.gregs.hestia.game.plugins.map.systems
 
 import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
-import worlds.gregs.hestia.game.api.map.Clipping
-import worlds.gregs.hestia.game.api.map.ClippingMasks
-import worlds.gregs.hestia.game.api.map.Map
-import worlds.gregs.hestia.game.api.region.Regions
+import worlds.gregs.hestia.api.core.components.Position
+import worlds.gregs.hestia.api.map.Clipping
+import worlds.gregs.hestia.api.map.ClippingMasks
+import worlds.gregs.hestia.api.map.Map
+import worlds.gregs.hestia.api.region.Regions
 import worlds.gregs.hestia.game.map.Flags
-import worlds.gregs.hestia.game.plugins.core.components.map.Position
+import worlds.gregs.hestia.game.map.MapConstants.isOutOfBounds
 import worlds.gregs.hestia.game.plugins.map.components.ProjectileClipping
 import worlds.gregs.hestia.game.plugins.region.components.RegionIdentifier
-import worlds.gregs.hestia.game.region.MapConstants.isOutOfBounds
 
 @Wire(failOnNull = false)
 class ClippingMaskSystem : ClippingMasks() {
@@ -35,19 +35,7 @@ class ClippingMaskSystem : ClippingMasks() {
         changeObject(entityId, localX, localY, plane, sizeX, sizeY, solid, notAlternative, SET_MASK)
     }
 
-    /**
-     * Applies [changeType] changes to clipping mask for an object
-     * @param entityId The region entity id
-     * @param localX The local x coordinate of the object
-     * @param localY The local y coordinate of the object
-     * @param plane The plane coordinate of the object
-     * @param sizeX The width of the object
-     * @param sizeY The height of the object
-     * @param solid Whether the object is solid
-     * @param notAlternative Whether the objects clipping can be ignored on an alternative route
-     * @param changeType How to change the clipping mask
-     */
-    private fun changeObject(entityId: Int, localX: Int, localY: Int, plane: Int, sizeX: Short, sizeY: Short, solid: Boolean, notAlternative: Boolean, changeType: Int) {
+    override fun changeObject(entityId: Int, localX: Int, localY: Int, plane: Int, sizeX: Short, sizeY: Short, solid: Boolean, notAlternative: Boolean, changeType: Int) {
         changeObject(entityId, getClipping(entityId, false), localX, localY, plane, sizeX, sizeY, solid, notAlternative, changeType)
         if (solid) {
             changeObject(entityId, getClipping(entityId, true), localX, localY, plane, sizeX, sizeY, solid, notAlternative, changeType)
@@ -101,19 +89,7 @@ class ClippingMaskSystem : ClippingMasks() {
         changeWall(entityId, localX, localY, plane, type, rotation, solid, notAlternative, SET_MASK)
     }
 
-    /**
-     * Applies [changeType] changes to clipping mask for a wall
-     * @param entityId The region entity id
-     * @param localX The local x coordinate of the wall
-     * @param localY The local y coordinate of the wall
-     * @param plane The plane coordinate of the wall
-     * @param type The wall type (TODO more info)
-     * @param rotation The rotation of the wall
-     * @param solid Whether the object is solid
-     * @param notAlternative Whether the objects clipping can be ignored on an alternative route
-     * @param changeType How to change the clipping mask
-     */
-    private fun changeWall(entityId: Int, localX: Int, localY: Int, plane: Int, type: Int, rotation: Int, solid: Boolean, notAlternative: Boolean, changeType: Int) {
+    override fun changeWall(entityId: Int, localX: Int, localY: Int, plane: Int, type: Int, rotation: Int, solid: Boolean, notAlternative: Boolean, changeType: Int) {
         changeWall(entityId, getClipping(entityId, false), localX, localY, plane, type, rotation, solid, notAlternative, changeType)
         if (solid) {
             changeWall(entityId, getClipping(entityId, false), localX, localY, plane, type, rotation, solid, notAlternative, changeType)
@@ -127,7 +103,7 @@ class ClippingMaskSystem : ClippingMasks() {
      * @param localX The local x coordinate of the wall
      * @param localY The local y coordinate of the wall
      * @param plane The plane coordinate of the wall
-     * @param type The wall type (TODO more info)
+     * @param type The wall type
      * @param rotation The rotation of the wall
      * @param solid Whether the object is solid
      * @param notAlternative Whether the objects clipping can be ignored on an alternative route
@@ -153,7 +129,7 @@ class ClippingMaskSystem : ClippingMasks() {
      * @param localX The local x coordinate of the wall
      * @param localY The local y coordinate of the wall
      * @param plane The plane coordinate of the wall
-     * @param type The wall type (TODO more info)
+     * @param type The wall type
      * @param rotation The rotation of the wall
      * @param stage Which stage of the mask is being changes (0 normal, 1 projectile/flying, 2 alternative)
      * @param changeType How to change the clipping mask
@@ -192,16 +168,7 @@ class ClippingMaskSystem : ClippingMasks() {
         changeMask(entityId, localX, localY, plane, mask, SET_MASK)
     }
 
-    /**
-     * Applies [changeType] changes to a tile's clipping mask
-     * @param entityId The region entity id
-     * @param localX The x coordinate of the wall
-     * @param localY The y coordinate of the wall
-     * @param plane The plane coordinate of the wall
-     * @param mask The mask to apply
-     * @param changeType How to change the clipping mask
-     */
-    private fun changeMask(entityId: Int, localX: Int, localY: Int, plane: Int, mask: Int, changeType: Int) {
+    override fun changeMask(entityId: Int, localX: Int, localY: Int, plane: Int, mask: Int, changeType: Int) {
         changeMask(entityId, getClipping(entityId, false), localX, localY, plane, mask, changeType)
     }
 
@@ -229,10 +196,19 @@ class ClippingMaskSystem : ClippingMasks() {
         }
     }
 
-    override fun getMask(entityId: Int, clipping: Clipping, localX: Int, localY: Int, plane: Int): Int {
-        return handleMaskBounds(entityId, clipping, localX, localY, plane) { x, y, plane ->
-            clipping.getMask(x, y, plane)
-        } ?: 0
+
+    override tailrec fun getMask(entityId: Int, clipping: Clipping, localX: Int, localY: Int, plane: Int): Int {
+        //We're using duplicate of handleMaskBounds here to avoid the high-order function performance hit
+        return if (isOutOfBounds(localX, localY)) {
+            val region = regionMapper.get(entityId)
+            val offsetX = if(localX > 64) 1 else if(localX < 0) -1 else 0
+            val offsetY = if(localY > 64) 1 else if(localY < 0) -1 else 0
+            val newEntityId = regions?.getEntityId(((region.regionX + offsetX) shl 8) + (region.regionY + offsetY)) ?: return 0
+            val newClipping = getClipping(newEntityId, clipping is ProjectileClipping) ?: return 0
+            getMask(newEntityId, newClipping, (localX - offsetX * 64) % 64, (localY - offsetY * 64) % 64, plane)
+        } else {
+            clipping.getMask(localX, localY, plane)
+        }
     }
 
     /**

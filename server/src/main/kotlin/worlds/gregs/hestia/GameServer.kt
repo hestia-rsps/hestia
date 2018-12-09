@@ -4,6 +4,7 @@ import com.artemis.World
 import com.artemis.WorldConfigurationBuilder
 import com.artemis.link.EntityLinkManager
 import net.mostlyoriginal.api.event.common.EventSystem
+import org.slf4j.LoggerFactory
 import world.gregs.hestia.core.Settings
 import world.gregs.hestia.core.WorldDetails
 import world.gregs.hestia.core.network.NetworkConstants
@@ -22,16 +23,22 @@ import worlds.gregs.hestia.network.LoginAttempt
 import worlds.gregs.hestia.network.LoginServerInboundHandler
 import worlds.gregs.hestia.network.WorldChangeListener
 import worlds.gregs.hestia.network.login.Filter
+import kotlin.system.measureNanoTime
 
 class GameServer(info: WorldDetails) : Engine(), WorldChangeListener {
+    private val log = LoggerFactory.getLogger(this::class.java)
     private val loader = PacketLoader(Settings.getString("sourcePath"))
 
     private lateinit var network: Network
     private lateinit var server: World
 
     override fun tick(time: Long, delta: Float) {
-        server.setDelta(delta)
-        server.process()
+        val took = measureNanoTime {
+            server.process()
+        }
+        if (took > 1000000L) {
+            log.info("Took ${(took / 1000000)}ms")
+        }
     }
 
     init {
@@ -68,10 +75,12 @@ class GameServer(info: WorldDetails) : Engine(), WorldChangeListener {
             EntityFactory.init(server)
             EntityFactory.load(pluginLoader)
 
+            //Set delta
+            server.setDelta(1F)
+
             //List of game packets
-            val gamePackets = pluginLoader.load("worlds.gregs.hestia.network.in")
             //Handles client -> server communications
-            val gameHandler = GamePacketInboundHandler(server, gamePackets)
+            val gameHandler = GamePacketInboundHandler(server)
 
             //List of login packets
             val loginPackets = loader.load("worlds.gregs.hestia.network.login.in")

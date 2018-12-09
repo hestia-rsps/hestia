@@ -1,24 +1,30 @@
 package worlds.gregs.hestia.game.plugins.movement.systems.update
 
 import com.artemis.ComponentMapper
+import com.artemis.annotations.Wire
 import net.mostlyoriginal.api.system.core.PassiveSystem
 import world.gregs.hestia.core.services.int
-import worlds.gregs.hestia.game.plugins.client.components.update.stage.EntityUpdates
+import worlds.gregs.hestia.api.client.components.EntityUpdates
+import worlds.gregs.hestia.api.core.components.Position
+import worlds.gregs.hestia.api.core.components.Position.Companion.delta
+import worlds.gregs.hestia.api.core.components.Position.Companion.regionDelta
+import worlds.gregs.hestia.api.core.components.Viewport
 import worlds.gregs.hestia.game.plugins.client.systems.update.sync.MobSyncSystem
 import worlds.gregs.hestia.game.plugins.client.systems.update.sync.PlayerSyncSystem
-import worlds.gregs.hestia.game.plugins.core.components.map.Position
-import worlds.gregs.hestia.game.plugins.core.components.map.Viewport
 import worlds.gregs.hestia.game.plugins.movement.components.Mobile
 import worlds.gregs.hestia.game.plugins.movement.components.types.Moving
 import worlds.gregs.hestia.game.plugins.movement.components.types.RunStep
 import worlds.gregs.hestia.game.plugins.movement.components.types.WalkStep
-import worlds.gregs.hestia.game.update.DirectionUtils
+import worlds.gregs.hestia.game.update.Direction.Companion.getDirection
 import worlds.gregs.hestia.game.update.DirectionUtils.Companion.getMobMoveDirection
+import worlds.gregs.hestia.game.update.DirectionUtils.Companion.getPlayerRunningDirection
+import worlds.gregs.hestia.game.update.DirectionUtils.Companion.getPlayerWalkingDirection
 import worlds.gregs.hestia.game.update.DisplayFlag
 
+@Wire(failOnNull = false)
 class MovementUpdateHandlers : PassiveSystem() {
-    private lateinit var playerSyncSystem: PlayerSyncSystem
-    private lateinit var mobSyncSystem: MobSyncSystem
+    private var playerSyncSystem: PlayerSyncSystem? = null
+    private var mobSyncSystem: MobSyncSystem? = null
     private lateinit var positionMapper: ComponentMapper<Position>
     private lateinit var viewportMapper: ComponentMapper<Viewport>
     private lateinit var runMapper: ComponentMapper<RunStep>
@@ -30,30 +36,30 @@ class MovementUpdateHandlers : PassiveSystem() {
     override fun initialize() {
         super.initialize()
 
-        playerSyncSystem.addLocal(DisplayFlag.MOVE) { _, local ->
+        playerSyncSystem?.addLocal(DisplayFlag.MOVE) { _, local ->
             val position = positionMapper.get(local)
             val mobile = mobileMapper.get(local)
-            val lastPosition = Position.create(mobile.lastX, mobile.lastY, mobile.lastPlane)
-            val delta = Position.delta(position, lastPosition)
-            val global = !position.withinDistance(lastPosition, 15)
-            writeBits(1, global.int)
-            if (!global) {
-                //Send local position
-                val deltaX = delta.x + if (delta.x < 0) 32 else 0
-                val deltaY = delta.y + if (delta.y < 0) 32 else 0
-                writeBits(12, deltaY + (deltaX shl 5) + (delta.plane shl 10))
-            } else {
-                //Send global position
-                writeBits(30, (delta.y and 0x3fff) + (delta.x and 0x3fff shl 14) + (delta.plane and 0x3 shl 28))
+            val global = !position.withinDistance(mobile, 15)
+            delta(position, mobile) { deltaX, deltaY, deltaPlane ->
+                writeBits(1, global.int)
+                if (global) {
+                    //Send global position
+                    writeBits(30, (deltaY and 0x3fff) + (deltaX and 0x3fff shl 14) + (deltaPlane and 0x3 shl 28))
+                } else {
+                    //Send local position
+                    val x = deltaX + if (deltaX < 0) 32 else 0
+                    val y = deltaY + if (deltaY < 0) 32 else 0
+                    writeBits(12, y + (x shl 5) + (deltaPlane shl 10))
+                }
             }
         }
 
-        playerSyncSystem.addLocal(DisplayFlag.WALKING, DisplayFlag.RUNNING) { _, local ->
+        playerSyncSystem?.addLocal(DisplayFlag.WALKING, DisplayFlag.RUNNING) { _, local ->
             val nextWalkDirection = walkMapper.get(local).direction
 
             //Calculate next step coordinates
-            var dx = DirectionUtils.DELTA_X[nextWalkDirection]
-            var dy = DirectionUtils.DELTA_Y[nextWalkDirection]
+            var dx = nextWalkDirection.deltaX
+            var dy = nextWalkDirection.deltaY
 
             var running = false
             var direction = -1
@@ -62,11 +68,11 @@ class MovementUpdateHandlers : PassiveSystem() {
                 val nextRunDirection = runMapper.get(local).direction
 
                 //Add additional movement
-                dx += DirectionUtils.DELTA_X[nextRunDirection]
-                dy += DirectionUtils.DELTA_Y[nextRunDirection]
+                dx += nextRunDirection.deltaX
+                dy += nextRunDirection.deltaY
 
                 //Calculate direction
-                direction = DirectionUtils.getPlayerRunningDirection(dx, dy)
+                direction = getPlayerRunningDirection(dx, dy)
                 //Running if valid
                 if (direction != -1) {
                     running = true
@@ -75,7 +81,7 @@ class MovementUpdateHandlers : PassiveSystem() {
 
             //If not running calculate walking direction
             if (direction == -1) {
-                direction = DirectionUtils.getPlayerWalkingDirection(dx, dy)
+                direction = getPlayerWalkingDirection(dx, dy)
             }
 
             //If no movement, no direction
@@ -91,27 +97,27 @@ class MovementUpdateHandlers : PassiveSystem() {
             }
         }
 
-        playerSyncSystem.addGlobal(DisplayFlag.HEIGHT) { player, global ->
-            deltaUpdate(player, global) { delta ->
-                writeBits(2, delta.plane)
+        playerSyncSystem?.addGlobal(DisplayFlag.HEIGHT) { player, global ->
+            deltaUpdate(player, global) { _, _, plane ->
+                writeBits(2, plane)
             }
         }
-        playerSyncSystem.addGlobal(DisplayFlag.REGION) { player, global ->
-            deltaUpdate(player, global) { delta ->
-                val direction = DirectionUtils.REGION_MOVEMENT[delta.x + 1][delta.y + 1]
-                writeBits(5, (delta.plane shl 3) + (direction and 0x7))
+        playerSyncSystem?.addGlobal(DisplayFlag.REGION) { player, global ->
+            deltaUpdate(player, global) { deltaX, deltaY, deltaPlane ->
+                val direction = getDirection(deltaX, deltaY)
+                writeBits(5, (deltaPlane shl 3) + (direction and 0x7))
             }
         }
-        playerSyncSystem.addGlobal(DisplayFlag.MOVE) { player, global ->
-            deltaUpdate(player, global) { delta ->
-                writeBits(18, (delta.y and 0xff) + (delta.x and 0xff shl 8) + (delta.plane shl 16))
+        playerSyncSystem?.addGlobal(DisplayFlag.MOVE) { player, global ->
+            deltaUpdate(player, global) { deltaX, deltaY, deltaPlane ->
+                writeBits(18, (deltaY and 0xff) + (deltaX and 0xff shl 8) + (deltaPlane shl 16))
             }
         }
 
-        mobSyncSystem.addMoving { global -> movingMapper.has(global) }
+        mobSyncSystem?.addMoving { global -> movingMapper.has(global) }
 
-        mobSyncSystem.addLocal(DisplayFlag.WALKING, DisplayFlag.RUNNING) { player, local ->
-            val running = runMapper.has(player)
+        mobSyncSystem?.addLocal(DisplayFlag.WALKING, DisplayFlag.RUNNING) { player, local ->
+            val running = runMapper.has(local)
             val update = entityUpdatesMapper.get(player).list.contains(local)
 
             if (running) {
@@ -130,21 +136,18 @@ class MovementUpdateHandlers : PassiveSystem() {
         }
     }
 
-    private fun deltaUpdate(player: Int, global: Int, action: (Position) -> Unit) {
+    private fun deltaUpdate(player: Int, global: Int, action: (Int, Int, Int) -> Unit) {
         val viewport = viewportMapper.get(player)
         val position = positionMapper.get(global)
-        val delta = getDelta(viewport, position, global)
-        action(delta)
-        viewport.updateHash(global, position)
-    }
+        val lastPosition = viewport.getPosition(global)
 
-    private fun getDelta(viewport: Viewport, position: Position, other: Int): Position {
-        val newHash = position.locationHash18Bit
-        val oldHash = viewport.getHash(other)
+        //Calculate movement since last seen position
+        regionDelta(position, lastPosition) { deltaX, deltaY, deltaPlane ->
+            //Change
+            action(deltaX, deltaY, deltaPlane)
 
-        val new = Position.from(newHash)
-        val old = Position.from(oldHash)
-
-        return Position.delta(new, old)
+            //Update
+            viewport.updatePosition(global, position)
+        }
     }
 }

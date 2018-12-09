@@ -2,7 +2,7 @@ package worlds.gregs.hestia.network.update.player
 
 import com.artemis.ComponentMapper
 import worlds.gregs.hestia.game.plugins.entity.components.update.gfx.FirstGraphic
-import worlds.gregs.hestia.game.plugins.core.components.Graphics
+import worlds.gregs.hestia.api.core.components.Graphics
 import worlds.gregs.hestia.game.update.UpdateEncoder
 import world.gregs.hestia.core.network.packets.Packet
 import world.gregs.hestia.core.services.int
