@@ -3,11 +3,11 @@ package worlds.gregs.hestia.game.plugins.movement.systems.calc
 import com.artemis.Component
 import com.artemis.ComponentMapper
 import com.artemis.systems.IteratingSystem
+import worlds.gregs.hestia.game.api.map.TileClipping
 import worlds.gregs.hestia.game.plugins.core.components.entity.Size
 import worlds.gregs.hestia.game.plugins.core.components.map.Position
 import worlds.gregs.hestia.game.plugins.movement.components.Mobile
 import worlds.gregs.hestia.game.plugins.movement.components.Steps
-import worlds.gregs.hestia.game.plugins.region.systems.change.TileCheckSystem
 import worlds.gregs.hestia.game.update.DirectionUtils
 import worlds.gregs.hestia.game.update.DirectionUtils.Companion.getMoveDirection
 import worlds.gregs.hestia.services.Aspect
@@ -17,11 +17,12 @@ import kotlin.reflect.KClass
  * Navigation system
  * Calculates the steps required for an entity to reach a position
  */
+
 abstract class BaseMovementSystem(vararg classes: KClass<out Component>) : IteratingSystem(Aspect.all(Position::class, Mobile::class, *classes)) {
     private lateinit var positionMapper: ComponentMapper<Position>
     private lateinit var stepsMapper: ComponentMapper<Steps>
     private lateinit var sizeMapper: ComponentMapper<Size>
-    private lateinit var tcs: TileCheckSystem
+    private var tiles: TileClipping? = null
 
     /**
      * Navigate directly to the destination
@@ -82,7 +83,7 @@ abstract class BaseMovementSystem(vararg classes: KClass<out Component>) : Itera
         val position = positionMapper.get(entityId)
         val sizeX = if(sizeMapper.has(entityId)) sizeMapper.get(entityId).sizeX else 1
         val sizeY = if(sizeMapper.has(entityId)) sizeMapper.get(entityId).sizeY else 1
-        if (check && (!world.entityManager.isActive(entityId) || !tcs.checkWalkStep(position.plane, lastX, lastY, dir, sizeX))) {
+        if (check && (!world.entityManager.isActive(entityId) || (tiles != null && !tiles!!.checkWalkStep(position.plane, lastX, lastY, dir, sizeX, sizeY)))) {
             return false
         }
 

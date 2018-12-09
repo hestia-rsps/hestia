@@ -1,29 +1,29 @@
 package worlds.gregs.hestia.game.plugins.region.systems
 
 import com.artemis.ComponentMapper
-import com.artemis.systems.IteratingSystem
-import worlds.gregs.hestia.game.plugins.region.components.Clean
-import worlds.gregs.hestia.game.plugins.region.components.Dynamic
-import worlds.gregs.hestia.game.plugins.region.components.Region
-import worlds.gregs.hestia.game.plugins.region.components.RegionEntities
-import worlds.gregs.hestia.game.plugins.region.systems.RegionBuilder.Companion.forChunks
-import worlds.gregs.hestia.game.plugins.region.systems.RegionBuilder.Companion.nearby
+import worlds.gregs.hestia.game.api.SubscriptionSystem
+import worlds.gregs.hestia.game.api.region.Region
+import worlds.gregs.hestia.game.api.region.Regions
+import worlds.gregs.hestia.game.plugins.region.components.DynamicRegion
+import worlds.gregs.hestia.game.plugins.region.components.RegionIdentifier
+import worlds.gregs.hestia.game.plugins.region.components.RegionPriorities
+import worlds.gregs.hestia.game.plugins.region.systems.RegionBuilderSystem.Companion.forChunks
 import worlds.gregs.hestia.services.Aspect
+import worlds.gregs.hestia.services.nearby
 
 /**
  * Region Clean System
- * Unloads regions which has no active entities in
+ * Unloads regions which has no prioritised entities in
  * Entities in this case refers to non-mob's (Players & bots)
  */
-class RegionCleanSystem : IteratingSystem(Aspect.all(Clean::class)) {
-    private lateinit var regionEntitiesMapper: ComponentMapper<RegionEntities>
-    private lateinit var regionMapper: ComponentMapper<Region>
-    private lateinit var regionSystem: RegionSystem
-    private lateinit var cleanMapper: ComponentMapper<Clean>
-    private lateinit var dynamicMapper: ComponentMapper<Dynamic>
+class RegionCleanSystem : SubscriptionSystem(Aspect.all(RegionPriorities::class)) {
+    private lateinit var regionPrioritiesMapper: ComponentMapper<RegionPriorities>
+    private lateinit var regionMapper: ComponentMapper<RegionIdentifier>
+    private lateinit var dynamicMapper: ComponentMapper<DynamicRegion>
+    private var regions: Regions? = null
+    private var region: Region? = null
 
-    override fun process(entityId: Int) {
-        cleanMapper.remove(entityId)
+    override fun removed(entityId: Int) {
         val region = regionMapper.get(entityId)
 
         //Stop if region is dynamic
@@ -32,15 +32,16 @@ class RegionCleanSystem : IteratingSystem(Aspect.all(Clean::class)) {
         }
 
         //Check all nearby regions
-        forChunks(nearby(region.regionX, 1), nearby(region.regionY, 1)) { regionX, regionY ->
+        forChunks(region.regionX.nearby(1), region.regionY.nearby(1)) { regionX, regionY ->
             val regionId = (regionX shl 8) + regionY
-            val entity = regionSystem.getEntity(regionId) ?: return@forChunks
-            //If has entities
-            if (regionEntitiesMapper.has(entity)) {
-                return//Don't clean
+            val entity = regions?.getEntityId(regionId) ?: return@forChunks
+            //Don't clean if has priorities
+            if (regionPrioritiesMapper.has(entity)) {
+                return
             }
         }
-        //Clean
-        regionSystem.unload(region.id)
+
+        //Clean region
+        this.region?.unload(entityId)
     }
 }

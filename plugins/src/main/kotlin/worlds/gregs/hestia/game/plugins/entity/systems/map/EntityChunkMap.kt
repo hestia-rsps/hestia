@@ -1,6 +1,7 @@
 package worlds.gregs.hestia.game.plugins.entity.systems.map
 
 import net.mostlyoriginal.api.system.core.PassiveSystem
+import worlds.gregs.hestia.game.plugins.core.components.map.Chunk.toChunkPosition
 
 abstract class EntityChunkMap : PassiveSystem() {
     private val map = HashMap<Int, ArrayList<Int>>()
@@ -16,7 +17,7 @@ abstract class EntityChunkMap : PassiveSystem() {
         val list = ArrayList<Int>()
         for(chunkX in xRange) {
             for(chunkY in yRange) {
-                val hash = EntityChunkSystem.toChunkPosition(chunkX, chunkY, plane)
+                val hash = toChunkPosition(chunkX, chunkY, plane)
                 if(map.containsKey(hash)) {
                     list.addAll(map[hash]!!)
                 }
@@ -26,7 +27,7 @@ abstract class EntityChunkMap : PassiveSystem() {
     }
 
     /**
-     * Returns the list of entites at a chunk
+     * Returns the list of entities at a chunk
      * @param hash The chunk hash
      * @return List of entity ids (if exists) if not null
      */

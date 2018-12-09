@@ -1,15 +1,13 @@
 package worlds.gregs.hestia.game.plugins.entity.systems.sync
 
 import com.artemis.ComponentMapper
+import worlds.gregs.hestia.game.api.SubscriptionSystem
 import worlds.gregs.hestia.game.plugins.core.components.entity.ClientIndex
-import worlds.gregs.hestia.game.plugins.core.systems.extensions.SubscriptionSystem
-import worlds.gregs.hestia.game.plugins.mob.systems.sync.MobIndexSystem.Companion.MOBS_LIMIT
-import worlds.gregs.hestia.game.plugins.player.systems.sync.PlayerIndexSystem.Companion.PLAYERS_LIMIT
 import worlds.gregs.hestia.services.Aspect
 
 /**
  * Doesn't really do anything, a back-up system for when player/mob plugins aren't attached
- * See [worlds.gregs.hestia.game.plugins.player.systems.sync.PlayerIndexSystem] or [worlds.gregs.hestia.game.plugins.mob.systems.sync.MobIndexSystem]
+ * See [PlayerIndexSystem] or [MobIndexSystem]
  */
 class EntityIndexSystem : SubscriptionSystem(Aspect.all(ClientIndex::class)) {
 
@@ -33,6 +31,6 @@ class EntityIndexSystem : SubscriptionSystem(Aspect.all(ClientIndex::class)) {
     }
 
     companion object {
-        const val ENTITY_LIMIT = PLAYERS_LIMIT + MOBS_LIMIT
+        const val ENTITY_LIMIT = 4096
     }
 }

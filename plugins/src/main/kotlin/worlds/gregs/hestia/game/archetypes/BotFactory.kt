@@ -6,7 +6,7 @@ import worlds.gregs.hestia.game.plugins.core.components.entity.ClientIndex
 import worlds.gregs.hestia.game.plugins.core.components.map.Position
 import worlds.gregs.hestia.game.plugins.entity.components.update.DisplayName
 import worlds.gregs.hestia.game.plugins.movement.components.Mobile
-import worlds.gregs.hestia.game.plugins.player.component.Player
+import worlds.gregs.hestia.game.api.player.Player
 import worlds.gregs.hestia.game.plugins.player.component.update.AppearanceData
 import worlds.gregs.hestia.services.add
 

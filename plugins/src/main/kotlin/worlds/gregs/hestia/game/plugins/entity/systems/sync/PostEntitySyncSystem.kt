@@ -15,8 +15,8 @@ import worlds.gregs.hestia.game.plugins.entity.components.update.gfx.FourthGraph
 import worlds.gregs.hestia.game.plugins.entity.components.update.gfx.SecondGraphic
 import worlds.gregs.hestia.game.plugins.entity.components.update.gfx.ThirdGraphic
 import worlds.gregs.hestia.game.plugins.movement.components.types.Moving
-import worlds.gregs.hestia.game.plugins.movement.components.types.Run
-import worlds.gregs.hestia.game.plugins.movement.components.types.Walk
+import worlds.gregs.hestia.game.plugins.movement.components.types.RunStep
+import worlds.gregs.hestia.game.plugins.movement.components.types.WalkStep
 import worlds.gregs.hestia.services.Aspect
 
 class PostEntitySyncSystem : IteratingSystem(Aspect.all(Renderable::class)) {
@@ -34,8 +34,8 @@ class PostEntitySyncSystem : IteratingSystem(Aspect.all(Renderable::class)) {
     private lateinit var forceMovementMapper: ComponentMapper<ForceMovement>
     private lateinit var facingMapper: ComponentMapper<Facing>
     private lateinit var transformMapper: ComponentMapper<Transform>
-    private lateinit var walkMapper: ComponentMapper<Walk>
-    private lateinit var runMapper: ComponentMapper<Run>
+    private lateinit var walkMapper: ComponentMapper<WalkStep>
+    private lateinit var runMapper: ComponentMapper<RunStep>
     private lateinit var movingMapper: ComponentMapper<Moving>
     private lateinit var batchAnimationsMapper: ComponentMapper<BatchAnimations>
     private lateinit var colourOverlayMapper: ComponentMapper<ColourOverlay>

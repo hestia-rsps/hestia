@@ -1,16 +1,18 @@
 package worlds.gregs.hestia.game.plugins.movement.systems.calc
 
-import com.artemis.ComponentMapper
+import com.artemis.annotations.Wire
 import net.mostlyoriginal.api.system.core.PassiveSystem
+import worlds.gregs.hestia.game.api.map.Map
+import worlds.gregs.hestia.game.api.region.Regions
 import worlds.gregs.hestia.game.map.Flags
 import worlds.gregs.hestia.game.path.RouteStrategy
-import worlds.gregs.hestia.game.plugins.region.components.Clipping
-import worlds.gregs.hestia.game.plugins.region.systems.change.ClippingMaskSystem
-import worlds.gregs.hestia.game.plugins.region.systems.RegionSystem
+import worlds.gregs.hestia.services.nearby
 
+@Wire(failOnNull = false)
 class RouteFinderSystem : PassiveSystem() {
 
-    private lateinit var clippingMapper: ComponentMapper<Clipping>
+    private var map: Map? = null
+    private var regions: Regions? = null
 
     companion object {
         private const val GRAPH_SIZE = 128
@@ -44,7 +46,7 @@ class RouteFinderSystem : PassiveSystem() {
      * steps > 0, route exists. If steps = 0, route exists, but no need to move.
      * If steps < 0, route does not exist.
      */
-    fun findRoute(srcX: Int, srcY: Int, srcZ: Int, sizeX: Int, sizeY: Int, strategy: RouteStrategy, findAlternative: Boolean, regionSystem: RegionSystem, rms: ClippingMaskSystem): Int {
+    fun findRoute(srcX: Int, srcY: Int, srcZ: Int, sizeX: Int, sizeY: Int, strategy: RouteStrategy, findAlternative: Boolean): Int {
         //Reset previous data
         isAlternative = false
         for (x in 0 until GRAPH_SIZE) {
@@ -55,7 +57,7 @@ class RouteFinderSystem : PassiveSystem() {
         }
 
         //Copy region clipping data
-        transmitClipData(srcX, srcY, srcZ, regionSystem, rms)
+        transmitClipData(srcX, srcY, srcZ)
 
 
         val found = when (Math.max(sizeX, sizeY)) {
@@ -89,8 +91,8 @@ class RouteFinderSystem : PassiveSystem() {
             // if we have multiple positions in our range that fits all the
             // conditions, we will choose the one which takes fewer steps.
 
-            for (checkX in approxDestX - ALTERNATIVE_ROUTE_RANGE..approxDestX + ALTERNATIVE_ROUTE_RANGE) {
-                for (checkY in approxDestY - ALTERNATIVE_ROUTE_RANGE..approxDestY + ALTERNATIVE_ROUTE_RANGE) {
+            for (checkX in approxDestX.nearby(ALTERNATIVE_ROUTE_RANGE)) {
+                for (checkY in approxDestY.nearby(ALTERNATIVE_ROUTE_RANGE)) {
                     val graphX = checkX - graphBaseX
                     val graphY = checkY - graphBaseY
                     if (graphX < 0 || graphY < 0 || graphX >= GRAPH_SIZE || graphY >= GRAPH_SIZE || distances[graphX][graphY] >= ALTERNATIVE_ROUTE_MAX_DISTANCE) {
@@ -633,9 +635,11 @@ class RouteFinderSystem : PassiveSystem() {
     /**
      * Transmit's clip data to route finder buffers.
      */
-    private fun transmitClipData(x: Int, y: Int, z: Int, regions: RegionSystem, rms: ClippingMaskSystem) {
+    private fun transmitClipData(x: Int, y: Int, z: Int) {
         val graphBaseX = x - GRAPH_SIZE / 2
         val graphBaseY = y - GRAPH_SIZE / 2
+        //If map plugin isn't loaded allow no-clip, otherwise no movement
+        val default = if (map == null) 0 else -1
         for (transmitRegionX in (graphBaseX shr 6)..(graphBaseX + (GRAPH_SIZE - 1) shr 6)) {
             for (transmitRegionY in (graphBaseY shr 6)..(graphBaseY + (GRAPH_SIZE - 1) shr 6)) {
                 val startX = Math.max(graphBaseX, transmitRegionX shl 6)
@@ -643,10 +647,9 @@ class RouteFinderSystem : PassiveSystem() {
                 val endX = Math.min(graphBaseX + GRAPH_SIZE, (transmitRegionX shl 6) + 64)
                 val endY = Math.min(graphBaseY + GRAPH_SIZE, (transmitRegionY shl 6) + 64)
                 val regionId = transmitRegionX shl 8 or transmitRegionY
-                val entityId = regions.getEntity(regionId)
-                if(entityId != null && clippingMapper.has(entityId)) {
-                    val map = clippingMapper.get(entityId)
-                    val masks = rms.getMasks(map, z)
+                val clipping = map?.getClipping(regions?.getEntityId(regionId))
+                if (clipping != null) {
+                    val masks = clipping.getMasks(z)
                     for (fillX in startX until endX) {
                         for (fillY in startY until endY) {
                             clip[fillX - graphBaseX][fillY - graphBaseY] = masks[fillX and 0x3F][fillY and 0x3F]
@@ -655,7 +658,7 @@ class RouteFinderSystem : PassiveSystem() {
                 } else {
                     for (fillX in startX until endX) {
                         for (fillY in startY until endY) {
-                            clip[fillX - graphBaseX][fillY - graphBaseY] = -1
+                            clip[fillX - graphBaseX][fillY - graphBaseY] = default
                         }
                     }
                 }

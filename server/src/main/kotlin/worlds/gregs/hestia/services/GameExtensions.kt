@@ -26,8 +26,13 @@ fun EventSystem.send(entity: Int, builder: Packet.Builder) {
     send(entity, builder.build())
 }
 
+
 fun EventSystem.send(entity: Int, packet: Packet) {
     dispatch(OutBoundPacket(entity, packet))
+}
+
+fun Int.nearby(size: Int): IntRange {
+    return this - size .. this + size
 }
 
 fun IntBag.toArray(): IntArray {

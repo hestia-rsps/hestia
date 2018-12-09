@@ -1,18 +1,17 @@
 package worlds.gregs.hestia.network.update.player
 
-import com.artemis.ComponentMapper
 import world.gregs.hestia.core.network.packets.Packet
-import worlds.gregs.hestia.game.plugins.movement.components.types.Moving
-import worlds.gregs.hestia.game.plugins.movement.components.types.Running
-import worlds.gregs.hestia.game.plugins.movement.components.types.Walking
+import worlds.gregs.hestia.game.api.movement.Move
+import worlds.gregs.hestia.game.api.movement.Run
+import worlds.gregs.hestia.game.api.movement.Walk
 import worlds.gregs.hestia.game.update.UpdateEncoder
 
-class PlayerMoveTypeMask(private val walkingMapper: ComponentMapper<Walking>, private val runningMapper: ComponentMapper<Running>, private val movingMapper: ComponentMapper<Moving>) : UpdateEncoder {
+class PlayerMoveTypeMask(private val walk: Walk?, private val run: Run?, private val move: Move?) : UpdateEncoder {
 
     override val encode: Packet.Builder.(Int, Int) -> Unit = { _, other ->
-        val moving = movingMapper.has(other)
-        val walking = walkingMapper.has(other)
-        val running = runningMapper.has(other)
+        val moving = move?.isMoving(other) ?: false
+        val walking = walk?.isWalking(other) ?: false
+        val running = run?.isRunning(other) ?: false
 
         writeByteC(
                 when {

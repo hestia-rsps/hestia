@@ -1,8 +1,8 @@
 package worlds.gregs.hestia.game.plugins.client.systems
 
+import worlds.gregs.hestia.game.api.SubscriptionSystem
 import worlds.gregs.hestia.game.events.send
 import worlds.gregs.hestia.game.plugins.client.components.NetworkSession
-import worlds.gregs.hestia.game.plugins.core.systems.extensions.SubscriptionSystem
 import worlds.gregs.hestia.network.out.WindowsPane
 import worlds.gregs.hestia.services.Aspect
 

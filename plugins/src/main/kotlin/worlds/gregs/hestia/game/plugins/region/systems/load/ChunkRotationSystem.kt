@@ -4,7 +4,7 @@ import net.mostlyoriginal.api.system.core.PassiveSystem
 
 /**
  * ChunkRotationSystem
- * Rotation algorithms used by [MapClippingSystem] & [MapObjectSystem]
+ * Rotation algorithms used by [MapSettingsSystem] & [MapObjectSystem]
  */
 class ChunkRotationSystem : PassiveSystem() {
 

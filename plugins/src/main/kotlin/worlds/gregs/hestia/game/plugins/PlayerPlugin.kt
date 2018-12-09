@@ -10,7 +10,14 @@ import worlds.gregs.hestia.game.plugin.Plugin.Companion.UPDATE_DISPLAY_CHANGE_PR
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.UPDATE_FINISH_PRIORITY
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.UPDATE_GLOBAL_ENTITY_PRIORITY
 import worlds.gregs.hestia.game.plugins.player.systems.PlayerCreation
-import worlds.gregs.hestia.game.plugins.player.systems.map.*
+import worlds.gregs.hestia.game.plugins.player.systems.chunk.PlayerChunkChangeSystem
+import worlds.gregs.hestia.game.plugins.player.systems.chunk.PlayerChunkSubscriptionSystem
+import worlds.gregs.hestia.game.plugins.player.systems.chunk.PlayerChunkSystem
+import worlds.gregs.hestia.game.plugins.player.systems.chunk.map.PlayerChunkMap
+import worlds.gregs.hestia.game.plugins.player.systems.chunk.map.PlayerChunkMapSystem
+import worlds.gregs.hestia.game.plugins.player.systems.region.PlayerRegionChangeSystem
+import worlds.gregs.hestia.game.plugins.player.systems.region.PlayerRegionSubscriptionSystem
+import worlds.gregs.hestia.game.plugins.player.systems.region.PlayerRegionSystem
 import worlds.gregs.hestia.game.plugins.player.systems.sync.PlayerIndexSystem
 import worlds.gregs.hestia.game.plugins.player.systems.sync.PlayerViewDistanceSystem
 import worlds.gregs.hestia.game.plugins.player.systems.sync.PostPlayerSyncSystem
@@ -21,12 +28,13 @@ import worlds.gregs.hestia.game.plugins.player.systems.update.PlayerUpdateFlagIn
 class PlayerPlugin : Plugin {
 
     override fun setup(b: WorldConfigurationBuilder) {
-        b.with(PlayerCreation(), PlayerRegionSystem())
+        b.with(PlayerCreation())
+        b.with(PlayerChunkSubscriptionSystem(), PlayerChunkSystem(), PlayerRegionSubscriptionSystem(), PlayerRegionSystem())
         b.with(PLAYER_INDEX_PRIORITY, PlayerIndexSystem())
         b.with(PlayerChunkMap(), PlayerUpdateFlagInserts())
         b.with(PRE_SHIFT_PRIORITY, PlayerChunkChangeSystem(), PlayerRegionChangeSystem())
         b.with(UPDATE_FINISH_PRIORITY, PostPlayerSyncSystem())
-        b.with(POST_UPDATE_PRIORITY, PlayerChunkSystem())
+        b.with(POST_UPDATE_PRIORITY, PlayerChunkMapSystem())
         b.with(UPDATE_GLOBAL_ENTITY_PRIORITY, PlayerGlobalUpdateSystem())
         b.with(PRE_SYNC_PRIORITY, PlayerViewDistanceSystem())
         b.with(UPDATE_DISPLAY_CHANGE_PRIORITY, PlayerDistanceStageChecks())

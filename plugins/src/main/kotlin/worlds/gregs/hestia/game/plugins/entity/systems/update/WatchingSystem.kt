@@ -5,7 +5,7 @@ import com.artemis.systems.IteratingSystem
 import worlds.gregs.hestia.game.plugins.core.components.entity.ClientIndex
 import worlds.gregs.hestia.game.plugins.entity.components.update.direction.Watch
 import worlds.gregs.hestia.game.plugins.entity.components.update.direction.Watching
-import worlds.gregs.hestia.game.plugins.player.component.Player
+import worlds.gregs.hestia.game.api.player.Player
 import worlds.gregs.hestia.services.Aspect
 
 /**
@@ -16,13 +16,12 @@ class WatchingSystem : IteratingSystem(Aspect.all(Watch::class)) {
     private lateinit var watchMapper: ComponentMapper<Watch>
     private lateinit var watchingMapper: ComponentMapper<Watching>
     private lateinit var clientIndexMapper: ComponentMapper<ClientIndex>
-    private lateinit var playerMapper: ComponentMapper<Player>
+    private lateinit var playerMapper: ComponentMapper<Player>//TODO remove player dependency
 
     override fun process(entityId: Int) {
         val watch = watchMapper.get(entityId)
         //Set target to watch
         val watching = watchingMapper.create(entityId)
-
 
         //Convert to client index
         watching.clientIndex =

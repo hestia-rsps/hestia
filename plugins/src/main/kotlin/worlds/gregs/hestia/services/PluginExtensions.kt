@@ -3,8 +3,8 @@ package worlds.gregs.hestia.services
 import com.artemis.*
 import com.artemis.Aspect
 import org.apache.commons.text.WordUtils
-import worlds.gregs.hestia.game.plugins.mob.component.Mob
-import worlds.gregs.hestia.game.plugins.player.component.Player
+import worlds.gregs.hestia.game.api.mob.Mob
+import worlds.gregs.hestia.game.api.player.Player
 import kotlin.reflect.KClass
 
 /*

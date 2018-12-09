@@ -7,8 +7,8 @@ import worlds.gregs.hestia.game.plugins.client.systems.update.bases.EntitySync
 import worlds.gregs.hestia.game.plugins.client.systems.update.bases.update.sync.BaseMobSyncSystem
 import worlds.gregs.hestia.game.plugins.core.components.entity.ClientIndex
 import worlds.gregs.hestia.game.plugins.core.components.map.Position
+import worlds.gregs.hestia.game.plugins.entity.components.update.Type
 import worlds.gregs.hestia.game.plugins.entity.components.update.direction.Face
-import worlds.gregs.hestia.game.plugins.mob.component.Type
 import worlds.gregs.hestia.game.update.DirectionUtils
 import worlds.gregs.hestia.game.update.DisplayFlag
 

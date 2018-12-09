@@ -8,13 +8,14 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import world.gregs.hestia.core.network.packets.Packet
 import worlds.gregs.hestia.game.GameTest
+import worlds.gregs.hestia.game.api.client.PlayerUpdateFlags
 import worlds.gregs.hestia.game.plugins.client.systems.update.update.flag.PlayerUpdateFlagSystem
 import worlds.gregs.hestia.game.update.UpdateEncoder
 import worlds.gregs.hestia.services.getSystem
 
 internal class BaseUpdateFlagSystemTest : GameTest(WorldConfigurationBuilder().with(PlayerUpdateFlagSystem())) {
 
-    private lateinit var system: BaseUpdateFlagSystem
+    private lateinit var system: PlayerUpdateFlags
     private val emptyEncoder = object : UpdateEncoder {
         override val encode: Packet.Builder.(Int, Int) -> Unit
             get() = { _, _ -> }
