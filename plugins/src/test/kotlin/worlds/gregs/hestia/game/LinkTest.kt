@@ -2,33 +2,18 @@ package worlds.gregs.hestia.game
 
 import com.artemis.Aspect
 import com.artemis.Component
-import com.artemis.Entity
 import com.artemis.WorldConfigurationBuilder
 import com.artemis.annotations.PreserveProcessVisiblity
 import com.artemis.link.EntityLinkManager
 import com.artemis.link.LinkAdapter
 import com.artemis.utils.Bag
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import world.gregs.hestia.core.network.Session
-import worlds.gregs.hestia.game.archetypes.EntityFactory
-import worlds.gregs.hestia.game.archetypes.PlayerFactory
-import worlds.gregs.hestia.game.events.CreatePlayer
-import worlds.gregs.hestia.game.plugins.core.components.map.Position
 import worlds.gregs.hestia.game.plugins.movement.components.RunToggled
-import worlds.gregs.hestia.game.plugins.player.systems.PlayerCreation
 import worlds.gregs.hestia.services.getComponent
 import worlds.gregs.hestia.services.getSystem
 
 @PreserveProcessVisiblity
-class LinkTest : GameTest(WorldConfigurationBuilder().with(EntityLinkManager(), PlayerCreation())) {
-
-
-    @BeforeEach
-    override fun setUp() {
-        super.setUp()
-        EntityFactory.add(PlayerFactory())
-    }
+class LinkTest : PlayerTester(WorldConfigurationBuilder().with(EntityLinkManager())) {
 
     @Test
     fun test() {
@@ -72,16 +57,5 @@ class LinkTest : GameTest(WorldConfigurationBuilder().with(EntityLinkManager(), 
 
         println(world.aspectSubscriptionManager.get(Aspect.all(RunToggled::class.java)).entities.size())
         println("Components ${bag.toList()}")
-    }
-
-
-    private fun fakePlayer(x: Int = 0, y: Int = 0, name: String = "Dummy"): Entity {
-        val pc = world.getSystem(PlayerCreation::class)
-        val entityId = pc.create(CreatePlayer(Session(), name))
-        val player = world.getEntity(entityId)
-        val position = player.getComponent(Position::class)!!
-        position.x = x
-        position.y = y
-        return player
     }
 }

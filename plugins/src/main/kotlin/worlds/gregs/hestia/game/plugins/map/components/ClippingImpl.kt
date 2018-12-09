@@ -1,7 +1,7 @@
 package worlds.gregs.hestia.game.plugins.map.components
 
 import com.artemis.annotations.PooledWeaver
-import worlds.gregs.hestia.game.api.map.Clipping
+import worlds.gregs.hestia.api.map.Clipping
 
 @PooledWeaver
 abstract class ClippingImpl : Clipping() {

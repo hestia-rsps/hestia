@@ -2,8 +2,8 @@ package worlds.gregs.hestia.game.plugins.region.systems
 
 import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
-import worlds.gregs.hestia.game.api.region.RegionPriority
-import worlds.gregs.hestia.game.api.region.Regions
+import worlds.gregs.hestia.api.region.RegionPriority
+import worlds.gregs.hestia.api.region.Regions
 import worlds.gregs.hestia.game.plugins.region.components.RegionPriorities
 
 @Wire(failOnNull = false)

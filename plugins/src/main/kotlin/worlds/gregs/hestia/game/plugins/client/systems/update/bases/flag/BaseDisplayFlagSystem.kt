@@ -3,18 +3,22 @@ package worlds.gregs.hestia.game.plugins.client.systems.update.bases.flag
 import com.artemis.Aspect
 import com.artemis.ComponentMapper
 import com.artemis.systems.IteratingSystem
-import worlds.gregs.hestia.game.plugins.client.components.update.list.Entities
-import worlds.gregs.hestia.game.plugins.core.components.map.Position
+import worlds.gregs.hestia.api.client.components.Entities
+import worlds.gregs.hestia.api.core.components.Position
 import worlds.gregs.hestia.game.update.DisplayFlag
+import java.util.*
 
 abstract class BaseDisplayFlagSystem(aspect: Aspect.Builder) : IteratingSystem(aspect) {
 
     private lateinit var positionMapper: ComponentMapper<Position>
-    private val checks = HashMap<DisplayFlag?, (Int, Int) -> Boolean>()
+    private var checks : HashMap<DisplayFlag?, (Int, Int) -> Boolean>? = HashMap()
+    private var sorted: SortedMap<DisplayFlag?, (Int, Int) -> Boolean>? = null
     private lateinit var map: HashMap<Int, DisplayFlag>
 
     fun addCheck(flag: DisplayFlag?, check: (Int, Int) -> Boolean) {
-        checks[flag] = check
+        checks!![flag] = check
+        sorted = checks!!.toSortedMap(compareBy { it?.ordinal ?: DisplayFlag.values().size })
+        //TODO probably a better way of doing this than having two maps
     }
 
     override fun initialize() {
@@ -32,8 +36,11 @@ abstract class BaseDisplayFlagSystem(aspect: Aspect.Builder) : IteratingSystem(a
 
     protected fun check(entityId: Int, list: List<Int>): HashMap<Int, DisplayFlag>  {
         map.clear()
+        if(checks != null) {
+            checks = null
+        }
         list.forEach { other ->
-            for ((flag, check) in checks) {
+            for ((flag, check) in sorted!!) {
                 if (check.invoke(entityId, other)) {
                     if (flag != null) {
                         map[other] = flag

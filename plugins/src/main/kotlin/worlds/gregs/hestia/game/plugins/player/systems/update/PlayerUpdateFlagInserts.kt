@@ -3,15 +3,14 @@ package worlds.gregs.hestia.game.plugins.player.systems.update
 import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
 import net.mostlyoriginal.api.system.core.PassiveSystem
-import worlds.gregs.hestia.game.api.client.PlayerUpdateFlags
-import worlds.gregs.hestia.game.api.movement.Move
-import worlds.gregs.hestia.game.api.movement.Run
-import worlds.gregs.hestia.game.api.movement.Walk
-import worlds.gregs.hestia.game.plugins.core.components.Renderable
+import worlds.gregs.hestia.api.client.PlayerUpdateFlags
+import worlds.gregs.hestia.api.core.components.Renderable
+import worlds.gregs.hestia.api.movement.types.Move
+import worlds.gregs.hestia.api.movement.types.Run
+import worlds.gregs.hestia.api.movement.types.Walk
 import worlds.gregs.hestia.game.plugins.player.component.update.*
 import worlds.gregs.hestia.network.update.player.*
 import worlds.gregs.hestia.services.Aspect
-import worlds.gregs.hestia.services.one
 
 @Wire(failOnNull = false)
 class PlayerUpdateFlagInserts : PassiveSystem() {
@@ -33,7 +32,7 @@ class PlayerUpdateFlagInserts : PassiveSystem() {
         val flags = flags ?: return
 
         //Move Type
-        flags.insertAfter(0x20000, flags.create(0x200, Aspect.all(Renderable::class).one(UpdateMoveType::class), PlayerMoveTypeMask(walk, run, move), true))
+        flags.insertAfter(0x20000, flags.create(0x200, Aspect.all(Renderable::class, UpdateMoveType::class), PlayerMoveTypeMask(walk, run, move), true))
         //Clan chat member
         flags.insertAfter(0x80000, flags.create(0x100000, Aspect.all(Renderable::class, UpdateClanMember::class), ClanMemberMask(clanMemberMapper)))
         //Hidden weapon rotation/direction

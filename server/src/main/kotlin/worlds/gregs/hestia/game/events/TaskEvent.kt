@@ -1,14 +1,13 @@
 package worlds.gregs.hestia.game.events
 
-import com.artemis.Entity
-import worlds.gregs.hestia.game.TickTask
-import worlds.gregs.hestia.services.getSystem
+import com.artemis.World
 import net.mostlyoriginal.api.event.common.Event
 import net.mostlyoriginal.api.event.common.EventSystem
+import worlds.gregs.hestia.game.TickTask
+import worlds.gregs.hestia.services.getSystem
 
 class TaskEvent(val delay: Int, val period: Int, val task: TickTask.() -> Unit) : Event
 
-fun Entity.schedule(delay: Int, period: Int, task: TickTask.() -> Unit) {
-    val eventSystem = world.getSystem(EventSystem::class)
-    eventSystem.dispatch(TaskEvent(delay, period, task))
+fun World.schedule(delay: Int, period: Int, task: TickTask.() -> Unit) {
+    getSystem(EventSystem::class).dispatch(TaskEvent(delay, period, task))
 }

@@ -2,10 +2,10 @@ package worlds.gregs.hestia.game.plugins.entity.systems.update
 
 import com.artemis.ComponentMapper
 import com.artemis.systems.IteratingSystem
-import worlds.gregs.hestia.game.plugins.core.components.entity.ClientIndex
+import worlds.gregs.hestia.api.core.components.ClientIndex
 import worlds.gregs.hestia.game.plugins.entity.components.update.direction.Watch
 import worlds.gregs.hestia.game.plugins.entity.components.update.direction.Watching
-import worlds.gregs.hestia.game.api.player.Player
+import worlds.gregs.hestia.api.player.Player
 import worlds.gregs.hestia.services.Aspect
 
 /**

@@ -1,8 +1,8 @@
 package worlds.gregs.hestia.game.plugins.region.systems
 
 import com.artemis.ComponentMapper
-import worlds.gregs.hestia.game.api.region.Dynamic
-import worlds.gregs.hestia.game.plugins.region.components.DynamicRegion
+import worlds.gregs.hestia.api.region.Dynamic
+import worlds.gregs.hestia.api.region.components.DynamicRegion
 
 class DynamicSystem : Dynamic() {
 

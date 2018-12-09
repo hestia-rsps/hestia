@@ -2,11 +2,11 @@ package worlds.gregs.hestia.game.plugins.client.systems.update.bases.update.sync
 
 import com.artemis.ComponentMapper
 import world.gregs.hestia.core.network.packets.Packet
+import worlds.gregs.hestia.api.client.components.EntityUpdates
+import worlds.gregs.hestia.api.core.components.Viewport
 import worlds.gregs.hestia.game.plugins.client.components.ClientMobPacket
 import worlds.gregs.hestia.game.plugins.client.components.update.list.GlobalMobs
-import worlds.gregs.hestia.game.plugins.client.components.update.stage.EntityUpdates
 import worlds.gregs.hestia.game.plugins.client.systems.update.bases.update.BaseEntitySyncSystem
-import worlds.gregs.hestia.game.plugins.core.components.map.Viewport
 import worlds.gregs.hestia.game.update.DisplayFlag
 
 abstract class BaseMobSyncSystem : BaseEntitySyncSystem(GlobalMobs::class, ClientMobPacket::class, EntityUpdates::class) {

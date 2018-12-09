@@ -2,20 +2,21 @@ package worlds.gregs.hestia.game.plugins.region.systems.load
 
 import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import net.mostlyoriginal.api.event.common.EventSystem
+import net.mostlyoriginal.api.event.common.Subscribe
 import org.slf4j.LoggerFactory
-import worlds.gregs.hestia.game.api.SubscriptionSystem
-import worlds.gregs.hestia.game.api.land.LandObjects
-import worlds.gregs.hestia.game.api.map.Map
-import worlds.gregs.hestia.game.api.map.MapSettings
-import worlds.gregs.hestia.game.api.region.Dynamic
-import worlds.gregs.hestia.game.plugins.core.components.map.Chunk.getChunkX
-import worlds.gregs.hestia.game.plugins.core.components.map.Chunk.getChunkY
-import worlds.gregs.hestia.game.plugins.core.components.map.Chunk.getRotatedChunkPlane
-import worlds.gregs.hestia.game.plugins.core.components.map.Chunk.getRotatedChunkRotation
-import worlds.gregs.hestia.game.plugins.core.components.map.Chunk.getRotatedChunkX
-import worlds.gregs.hestia.game.plugins.core.components.map.Chunk.getRotatedChunkY
+import worlds.gregs.hestia.api.SubscriptionSystem
+import worlds.gregs.hestia.api.land.LandObjects
+import worlds.gregs.hestia.api.map.Map
+import worlds.gregs.hestia.api.map.MapSettings
+import worlds.gregs.hestia.api.region.Dynamic
+import worlds.gregs.hestia.game.events.LoadRegion
+import worlds.gregs.hestia.game.map.Chunk.getChunkX
+import worlds.gregs.hestia.game.map.Chunk.getChunkY
+import worlds.gregs.hestia.game.map.Chunk.getRotatedChunkPlane
+import worlds.gregs.hestia.game.map.Chunk.getRotatedChunkRotation
+import worlds.gregs.hestia.game.map.Chunk.getRotatedChunkX
+import worlds.gregs.hestia.game.map.Chunk.getRotatedChunkY
 import worlds.gregs.hestia.game.plugins.core.systems.cache.CacheSystem
 import worlds.gregs.hestia.game.plugins.region.components.Loaded
 import worlds.gregs.hestia.game.plugins.region.components.Loading
@@ -29,13 +30,14 @@ import worlds.gregs.hestia.services.Aspect
 @Wire(failOnNull = false)
 class RegionFileSystem : SubscriptionSystem(Aspect.all(RegionIdentifier::class, Loading::class)) {
 
-    private lateinit var cache: CacheSystem
+    private var cache: CacheSystem? = null
     private var settings: MapSettings? = null
     private var objects: LandObjects? = null
     private var dynamic: Dynamic? = null
     private lateinit var regionMapper: ComponentMapper<RegionIdentifier>
     private lateinit var loadingMapper: ComponentMapper<Loading>
     private lateinit var loadedMapper: ComponentMapper<Loaded>
+    private lateinit var es: EventSystem
 
     private var map: Map? = null
 
@@ -45,12 +47,15 @@ class RegionFileSystem : SubscriptionSystem(Aspect.all(RegionIdentifier::class, 
         //Clear any old clipping data
         map?.unload(entityId)
         val region = regionMapper.get(entityId)
-        //Load async
-        GlobalScope.launch {
-            loadingMapper.remove(entityId)
-            load(entityId, region.id)
-            loadedMapper.create(entityId)
-        }
+        //Load
+        loadingMapper.remove(entityId)
+        es.dispatch(LoadRegion(entityId, region.id))
+    }
+
+    @Subscribe
+    private fun load(event: LoadRegion) {
+        load(event.entityId, event.regionId)
+        loadedMapper.create(event.entityId)
     }
 
     /**
@@ -99,11 +104,10 @@ class RegionFileSystem : SubscriptionSystem(Aspect.all(RegionIdentifier::class, 
      * Loads clipping & objects from map files
      */
     private fun load(entityId: Int, x: Int, y: Int, regionX: Int, regionY: Int, rotation: Int? = null, chunkX: Int? = null, chunkY: Int? = null, chunkPlane: Int? = null) {
-        val index = cache.getIndex(5)
-
+        val index = cache?.getIndex(5)
         //Get the archive id's for the regions
-        val landIndex = index.getArchiveId("l${regionX}_$regionY")
-        val mapIndex = index.getArchiveId("m${regionX}_$regionY")
+        val landIndex = index?.getArchiveId("l${regionX}_$regionY") ?: -1
+        val mapIndex = index?.getArchiveId("m${regionX}_$regionY") ?: -1
 
         //Make sure the cache has the necessary files
         if (landIndex == -1 || mapIndex == -1) {
@@ -111,18 +115,22 @@ class RegionFileSystem : SubscriptionSystem(Aspect.all(RegionIdentifier::class, 
         }
 
         //Get the map files
-        val landContainerData = index.getFile(landIndex)
-        val mapContainerData = index.getFile(mapIndex)
+        val landContainerData = index?.getFile(landIndex)
+        val mapContainerData = index?.getFile(mapIndex)
 
         var decodedSettings: Array<Array<ByteArray>>? = null
-        val settings = this.settings
-        if (mapContainerData != null && settings != null) {
-            //Load the clipping
-            //TODO settings could be cached for better performance
-            decodedSettings = settings.load(mapContainerData)
-            settings.apply(entityId, decodedSettings, rotation, chunkX, chunkY, chunkPlane)
-        }
+        try {
+            val settings = this.settings
+            if (mapContainerData != null && settings != null) {
+                //Load the clipping
+                //TODO settings could be cached for better performance
+                decodedSettings = settings.load(mapContainerData)
+                settings.apply(entityId, decodedSettings, rotation, chunkX, chunkY, chunkPlane)
+            }
 
+        } catch (t: Throwable) {
+            t.printStackTrace()
+        }
         if (landContainerData != null) {
             //Load the objects
             objects?.load(entityId, x, y, landContainerData, decodedSettings, rotation, chunkX, chunkY, chunkPlane)

@@ -6,7 +6,3 @@ import com.artemis.annotations.PooledWeaver
 
 @PooledWeaver
 class BatchAnimations : Component()
-
-fun Entity.batchAnim() {
-    edit().add(BatchAnimations())
-}

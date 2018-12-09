@@ -8,8 +8,8 @@ import worlds.gregs.hestia.game.plugins.client.components.ClientPlayerPacket
 import worlds.gregs.hestia.game.plugins.client.components.NetworkSession
 import worlds.gregs.hestia.game.plugins.client.components.update.list.GlobalMobs
 import worlds.gregs.hestia.game.plugins.client.components.update.list.GlobalPlayers
-import worlds.gregs.hestia.game.plugins.client.components.update.stage.EntityUpdates
-import worlds.gregs.hestia.game.plugins.core.components.map.Viewport
+import worlds.gregs.hestia.api.client.components.EntityUpdates
+import worlds.gregs.hestia.api.core.components.Viewport
 import worlds.gregs.hestia.services.Aspect
 
 class PostUpdateSystem : IteratingSystem(Aspect.all(NetworkSession::class, Viewport::class)) {

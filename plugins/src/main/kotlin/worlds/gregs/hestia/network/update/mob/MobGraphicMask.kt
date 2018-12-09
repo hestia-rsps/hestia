@@ -4,7 +4,7 @@ import com.artemis.ComponentMapper
 import worlds.gregs.hestia.game.update.UpdateEncoder
 import world.gregs.hestia.core.network.packets.Packet
 import world.gregs.hestia.core.services.int
-import worlds.gregs.hestia.game.plugins.core.components.Graphics
+import worlds.gregs.hestia.api.core.components.Graphics
 import worlds.gregs.hestia.game.plugins.entity.components.update.gfx.*
 
 class MobGraphicMask(private val componentMapper: ComponentMapper<out Graphics>) : UpdateEncoder {
