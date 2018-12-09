@@ -21,19 +21,3 @@ class Facing : Component() {
         }
     }
 }
-
-fun Entity.turn(deltaX: Int, deltaY: Int) {
-    getComponent(Face::class)?.apply {
-        x = deltaX
-        y = deltaY
-    }
-    edit().add(Facing())
-}
-
-fun Entity.face(x: Int, y: Int) {
-    val size = getComponent(Size::class)
-    val position = getComponent(Position::class)!!
-    val deltaX = x - getFaceX(position, size?.sizeX ?: 1)
-    val deltaY = y - getFaceY(position, size?.sizeY ?: 1)
-    turn(deltaX, deltaY)
-}

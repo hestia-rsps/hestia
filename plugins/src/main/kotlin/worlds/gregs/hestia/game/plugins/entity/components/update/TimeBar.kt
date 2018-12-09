@@ -19,7 +19,3 @@ class TimeBar() : Component() {
     var delay = 0
     var increment = 0
 }
-
-fun Entity.time(full: Boolean = false, exponent: Int = 0, delay: Int = 0, increment: Int = 1) {
-    edit().add(TimeBar(full, exponent, delay, increment))
-}

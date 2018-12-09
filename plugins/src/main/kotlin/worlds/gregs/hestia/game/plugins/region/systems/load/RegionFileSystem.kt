@@ -29,7 +29,7 @@ import worlds.gregs.hestia.services.Aspect
 @Wire(failOnNull = false)
 class RegionFileSystem : SubscriptionSystem(Aspect.all(RegionIdentifier::class, Loading::class)) {
 
-    private lateinit var cache: CacheSystem
+    private var cache: CacheSystem? = null
     private var settings: MapSettings? = null
     private var objects: LandObjects? = null
     private var dynamic: Dynamic? = null
@@ -99,11 +99,10 @@ class RegionFileSystem : SubscriptionSystem(Aspect.all(RegionIdentifier::class, 
      * Loads clipping & objects from map files
      */
     private fun load(entityId: Int, x: Int, y: Int, regionX: Int, regionY: Int, rotation: Int? = null, chunkX: Int? = null, chunkY: Int? = null, chunkPlane: Int? = null) {
-        val index = cache.getIndex(5)
-
+        val index = cache?.getIndex(5)
         //Get the archive id's for the regions
-        val landIndex = index.getArchiveId("l${regionX}_$regionY")
-        val mapIndex = index.getArchiveId("m${regionX}_$regionY")
+        val landIndex = index?.getArchiveId("l${regionX}_$regionY") ?: -1
+        val mapIndex = index?.getArchiveId("m${regionX}_$regionY") ?: -1
 
         //Make sure the cache has the necessary files
         if (landIndex == -1 || mapIndex == -1) {
@@ -111,18 +110,22 @@ class RegionFileSystem : SubscriptionSystem(Aspect.all(RegionIdentifier::class, 
         }
 
         //Get the map files
-        val landContainerData = index.getFile(landIndex)
-        val mapContainerData = index.getFile(mapIndex)
+        val landContainerData = index?.getFile(landIndex)
+        val mapContainerData = index?.getFile(mapIndex)
 
         var decodedSettings: Array<Array<ByteArray>>? = null
-        val settings = this.settings
-        if (mapContainerData != null && settings != null) {
-            //Load the clipping
-            //TODO settings could be cached for better performance
-            decodedSettings = settings.load(mapContainerData)
-            settings.apply(entityId, decodedSettings, rotation, chunkX, chunkY, chunkPlane)
-        }
+        try {
+            val settings = this.settings
+            if (mapContainerData != null && settings != null) {
+                //Load the clipping
+                //TODO settings could be cached for better performance
+                decodedSettings = settings.load(mapContainerData)
+                settings.apply(entityId, decodedSettings, rotation, chunkX, chunkY, chunkPlane)
+            }
 
+        } catch (t: Throwable) {
+            t.printStackTrace()
+        }
         if (landContainerData != null) {
             //Load the objects
             objects?.load(entityId, x, y, landContainerData, decodedSettings, rotation, chunkX, chunkY, chunkPlane)

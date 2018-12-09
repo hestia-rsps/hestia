@@ -1,4 +1,4 @@
-package worlds.gregs.hestia.game.plugins.client.systems
+package worlds.gregs.hestia.game.plugins.client.systems.network
 
 import worlds.gregs.hestia.game.api.SubscriptionSystem
 import worlds.gregs.hestia.game.events.send

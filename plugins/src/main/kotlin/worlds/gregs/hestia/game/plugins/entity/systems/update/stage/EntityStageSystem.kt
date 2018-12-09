@@ -23,11 +23,11 @@ class EntityStageSystem : PassiveSystem() {
     override fun initialize() {
         super.initialize()
         localStageSystem.addCheck(DisplayFlag.REMOVE) { player, other ->
-            !world.entityManager.isActive(other) /* || local.hasFinished() */ || !withinDistance(player, other)
+            !world.entityManager.isActive(other) || !withinDistance(player, other)
         }
 
         globalStageSystem.addCheck(DisplayFlag.ADD) { player, other ->
-            /* !global.hasFinished() && */ withinDistance(player, other)
+            withinDistance(player, other)
         }
     }
 

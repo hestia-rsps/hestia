@@ -1,17 +1,16 @@
-package worlds.gregs.hestia.game.systems
+package worlds.gregs.hestia.game.plugins.mob.systems.sync
 
 import com.artemis.Entity
 import com.artemis.WorldConfigurationBuilder
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
 import worlds.gregs.hestia.game.GameTest
+import worlds.gregs.hestia.game.api.mob.Mob
 import worlds.gregs.hestia.game.archetypes.EntityFactory
 import worlds.gregs.hestia.game.archetypes.MobFactory
 import worlds.gregs.hestia.game.events.CreateMob
 import worlds.gregs.hestia.game.plugins.core.components.entity.ClientIndex
-import worlds.gregs.hestia.game.api.mob.Mob
 import worlds.gregs.hestia.game.plugins.mob.systems.MobCreation
-import worlds.gregs.hestia.game.plugins.mob.systems.sync.MobIndexSystem
 import worlds.gregs.hestia.services.Aspect
 import worlds.gregs.hestia.services.getComponent
 import worlds.gregs.hestia.services.getSystem

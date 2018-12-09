@@ -1,4 +1,4 @@
-package worlds.gregs.hestia.game.plugins.client.systems
+package worlds.gregs.hestia.game.plugins.client.systems.network
 
 import com.artemis.ComponentMapper
 import io.netty.channel.Channel

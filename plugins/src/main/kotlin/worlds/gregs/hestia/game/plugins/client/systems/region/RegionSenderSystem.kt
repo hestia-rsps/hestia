@@ -1,4 +1,4 @@
-package worlds.gregs.hestia.game.plugins.client.systems
+package worlds.gregs.hestia.game.plugins.client.systems.region
 
 import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
@@ -42,8 +42,9 @@ class RegionSenderSystem : SubscriptionSystem(Aspect.all(Position::class, Viewpo
 
         //Update player locations
         entityIds.toArray().filterNot { it == entityId }.forEach { player ->
-            val hash = positionMapper.get(player).locationHash18Bit
-            viewport.updateHash(player, positionMapper.get(player))
+            val pos = positionMapper.get(player)
+            val hash = pos.locationHash18Bit
+            viewport.updatePosition(player, pos)
             writeBits(18, hash)
         }
 

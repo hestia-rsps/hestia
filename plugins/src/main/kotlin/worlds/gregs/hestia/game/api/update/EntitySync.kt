@@ -1,4 +1,4 @@
-package worlds.gregs.hestia.game.plugins.client.systems.update.bases
+package worlds.gregs.hestia.game.api.update
 
 import world.gregs.hestia.core.network.packets.Packet
 import worlds.gregs.hestia.game.update.DisplayFlag

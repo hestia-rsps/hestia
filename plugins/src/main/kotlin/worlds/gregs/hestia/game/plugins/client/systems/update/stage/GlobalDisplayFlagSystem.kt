@@ -24,7 +24,7 @@ class GlobalDisplayFlagSystem : BaseDisplayFlagSystem(Aspect.all(NetworkSession:
         }
 
         addCheck(DisplayFlag.ADD) { player, other ->
-            /* !global.hasFinished() && */ withinDistance(positionMapper.get(player), other)
+            withinDistance(positionMapper.get(player), other)
         }
     }
 

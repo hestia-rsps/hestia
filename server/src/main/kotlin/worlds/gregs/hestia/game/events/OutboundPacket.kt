@@ -11,6 +11,5 @@ data class OutBoundPacket(val entity: Int, val packet: Packet, val close: Boolea
 }
 
 fun Entity.send(builder: Packet.Builder) {
-    val eventSystem = world.getSystem(EventSystem::class)
-    eventSystem.dispatch(OutBoundPacket(this.id, builder.build()))
+    world.getSystem(EventSystem::class).dispatch(OutBoundPacket(this.id, builder.build()))
 }

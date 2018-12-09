@@ -17,7 +17,7 @@ abstract class MapSettings : PassiveSystem() {
      * @param rotation Chunk rotation
      * @param chunkX Chunk x coordinate
      * @param chunkY Chunk y coordinate
-     * @param regionPlane Chunk plane coordinate
+     * @param chunkPlane Chunk plane coordinate
      */
-    abstract fun apply(entityId: Int, settings: Array<Array<ByteArray>>, rotation: Int?, chunkX: Int?, chunkY: Int?, regionPlane: Int?)
+    abstract fun apply(entityId: Int, settings: Array<Array<ByteArray>>, rotation: Int?, chunkX: Int?, chunkY: Int?, chunkPlane: Int?)
 }

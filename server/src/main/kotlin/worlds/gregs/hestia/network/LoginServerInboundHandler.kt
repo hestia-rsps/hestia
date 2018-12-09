@@ -9,7 +9,7 @@ import world.gregs.hestia.core.network.packets.Packet
 import world.gregs.hestia.core.services.load.PacketMap
 import worlds.gregs.hestia.network.world.out.WorldInfo
 
-class LoginServerInboundHandler(private val info: WorldDetails, private val listener: WorldChangeListener? = null, packets: PacketMap) : PacketInboundHandler(packets) {
+class LoginServerInboundHandler(private val info: WorldDetails, private val listener: WorldChangeListener? = null, packets: PacketMap<InboundPacket>) : PacketInboundHandler<InboundPacket>(packets) {
 
     override fun connect(session: Session) {
         session.write(WorldInfo(info))

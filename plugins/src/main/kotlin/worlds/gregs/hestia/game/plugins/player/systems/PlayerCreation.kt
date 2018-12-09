@@ -1,6 +1,7 @@
 package worlds.gregs.hestia.game.plugins.player.systems
 
 import com.artemis.ComponentMapper
+import com.artemis.annotations.Wire
 import net.mostlyoriginal.api.event.common.Subscribe
 import net.mostlyoriginal.api.system.core.PassiveSystem
 import worlds.gregs.hestia.game.api.client.ClientNetwork
@@ -11,6 +12,7 @@ import worlds.gregs.hestia.game.plugins.core.components.map.Position
 import worlds.gregs.hestia.game.plugins.entity.components.update.DisplayName
 import java.util.concurrent.atomic.AtomicInteger
 
+@Wire(failOnNull = false)
 class PlayerCreation : PassiveSystem() {
 
     private lateinit var displayNameMapper: ComponentMapper<DisplayName>

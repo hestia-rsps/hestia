@@ -10,7 +10,7 @@ class Viewport : Component() {
 
     private val localPlayers = ArrayList<Int>()
 
-    private val locationHashes = HashMap<Int, Int>()
+    private val regionPositions = HashMap<Int, Position>()
 
     fun addLocalMob(mob: Int) {
         localMobs.add(mob)
@@ -29,11 +29,15 @@ class Viewport : Component() {
         return localPlayers
     }
 
-    fun updateHash(index: Int, tile: Position) {
-        locationHashes[index] = tile.locationHash18Bit
+    fun updatePosition(entityId: Int, tile: Position) {
+        if(!regionPositions.containsKey(entityId)) {
+            regionPositions[entityId] = Position.clone(tile)
+        } else {
+            regionPositions[entityId]!!.set(tile)
+        }
     }
 
-    fun getHash(playerIndex: Int): Int {
-        return locationHashes[playerIndex] ?: Position.EMPTY.locationHash18Bit
+    fun getPosition(entityId: Int): Position {
+        return regionPositions[entityId] ?: Position.EMPTY
     }
 }

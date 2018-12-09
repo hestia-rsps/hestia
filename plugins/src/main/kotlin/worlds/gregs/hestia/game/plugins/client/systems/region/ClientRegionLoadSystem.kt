@@ -1,4 +1,4 @@
-package worlds.gregs.hestia.game.plugins.client.systems
+package worlds.gregs.hestia.game.plugins.client.systems.region
 
 import com.artemis.ComponentMapper
 import com.artemis.systems.IteratingSystem
@@ -29,7 +29,6 @@ class ClientRegionLoadSystem : IteratingSystem(Aspect.all(NetworkSession::class,
             //Set last loaded position
             lastRegion.set(position)
 
-            println("Client region load changed")
             //Send client map update
             es.dispatch(UpdateMapRegion(entityId, false, false))
         }

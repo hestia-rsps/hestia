@@ -1,42 +1,50 @@
-package worlds.gregs.hestia.network.`in`
+package worlds.gregs.hestia.game.plugins.client.systems.network.`in`
 
-import world.gregs.hestia.core.network.Session
+import net.mostlyoriginal.api.event.common.EventSystem
 import world.gregs.hestia.core.network.packets.Packet
 import world.gregs.hestia.core.network.packets.PacketOpcode
 import world.gregs.hestia.core.network.packets.PacketSize
-import worlds.gregs.hestia.game.events.*
+import worlds.gregs.hestia.game.PacketHandler
+import worlds.gregs.hestia.game.events.CreateBot
+import worlds.gregs.hestia.game.events.CreateMob
+import worlds.gregs.hestia.game.events.schedule
 import worlds.gregs.hestia.game.plugins.core.components.map.Position
-import worlds.gregs.hestia.game.plugins.entity.components.update.*
-import worlds.gregs.hestia.game.plugins.entity.components.update.direction.face
-import worlds.gregs.hestia.game.plugins.entity.components.update.direction.turn
-import worlds.gregs.hestia.game.plugins.entity.components.update.direction.watch
+import worlds.gregs.hestia.game.plugins.entity.components.update.CombatLevel
+import worlds.gregs.hestia.game.plugins.entity.components.update.DisplayName
+import worlds.gregs.hestia.game.plugins.entity.components.update.ForceMovement
+import worlds.gregs.hestia.game.plugins.entity.systems.*
 import worlds.gregs.hestia.game.plugins.mob.component.update.UpdateCombatLevel
 import worlds.gregs.hestia.game.plugins.mob.component.update.UpdateDisplayName
-import worlds.gregs.hestia.game.plugins.mob.component.update.change
+import worlds.gregs.hestia.game.plugins.mob.systems.change
 import worlds.gregs.hestia.game.plugins.movement.components.RunToggled
 import worlds.gregs.hestia.game.plugins.movement.components.calc.Navigate
-import worlds.gregs.hestia.game.plugins.movement.components.types.move
 import worlds.gregs.hestia.game.plugins.player.component.update.PlayerMiniMapDot
 import worlds.gregs.hestia.game.plugins.player.component.update.UpdateMovement
 import worlds.gregs.hestia.game.plugins.player.component.update.UpdateUnknown
 import worlds.gregs.hestia.game.plugins.player.component.update.appearance.Hidden
-import worlds.gregs.hestia.game.plugins.player.component.update.updateClanChat
+import worlds.gregs.hestia.game.plugins.player.systems.updateClanChat
 import worlds.gregs.hestia.game.plugins.region.systems.RegionBuilderSystem
 import worlds.gregs.hestia.game.update.Marker
-import worlds.gregs.hestia.network.game.GamePacket
 import worlds.gregs.hestia.network.login.Packets
 import worlds.gregs.hestia.services.*
 
 @PacketSize(-1)
 @PacketOpcode(Packets.COMMAND)
-class Commands : GamePacket() {
-    override fun read(session: Session, packet: Packet, length: Int): Boolean {
-        packet.readUnsignedByte() // client command
+class CommandHandler : PacketHandler() {
+
+    private lateinit var es: EventSystem
+
+    override fun handle(entityId: Int, packet: Packet, length: Int) {
+        packet.readUnsignedByte()//client command
         packet.readUnsignedByte()
         val command = packet.readString()
         val parts = command.split(" ")
+        handle(entityId, command, parts)
+    }
 
-        val entity = entity ?: return false
+    private fun handle(entityId: Int, command: String, parts: List<String>) {
+
+        val entity = world.getEntity(entityId)
 
         if (command.contains(",")) {
             val params = parts[1].split(",")
@@ -44,7 +52,7 @@ class Commands : GamePacket() {
             val x = params[1].toInt() shl 6 or params[3].toInt()
             val y = params[2].toInt() shl 6 or params[4].toInt()
             entity.move(x, y, plane)
-            return true
+            return
         }
 
         println("Command ${parts[0]}")
@@ -54,19 +62,21 @@ class Commands : GamePacket() {
             }
             "dy" -> {
                 val position = entity.getComponent(Position::class)!!
-                val builder = entity.world.getSystem(RegionBuilderSystem::class)
+                val builder = world.getSystem(RegionBuilderSystem::class)
 //                dynamicRegionSystem.create(position.regionId)
 //                if(regionSystem.toggle(position.regionId)) {
-                    builder.reset(position.regionId)
-                    builder.set(position.chunkX, position.chunkY, 0, position.chunkX, position.chunkY, 0, parts[1].toInt())
+//                builder.reset(position.regionId)
+                builder.clear(position.regionId)
+//                builder.set(position.chunkX, position.chunkY, 0, position.chunkX, position.chunkY, 0, parts[1].toInt())
+                builder.set(position.chunkX, position.chunkY, 0, position.chunkX, position.chunkY, 0, 1, 2, parts[1].toInt())
 //                regionSystem.changeArea(position.chunkX + 1, position.chunkY - 1, 0, position.chunkX - 1, position.chunkY - 1, 0, 3, 2, 3)
 //                    regionSystem.changeRegion(position.regionId, position.regionId, 3)
 //                }
-                    if(builder.build(position.regionId)) {
-                        entity.updateMapRegion(false, true)
-                    } else {
-                        println("Failed to load region ${position.regionId}")
-                    }
+                if(builder.build(position.regionId)) {
+                    entity.updateMapRegion(false, true)
+                } else {
+                    println("Failed to load region ${position.regionId}")
+                }
 
             }
             //Player updating flags
@@ -85,31 +95,31 @@ class Commands : GamePacket() {
                 entity.time()
             }
             "clan" -> {
-                entity.world.players().forEach {
-                    entity.world.getEntity(it).updateClanChat(true)
+                world.players().forEach {
+                    world.getEntity(it).updateClanChat(true)
                 }
             }
             "uk" -> {
                 entity.edit().add(UpdateUnknown())
             }
             "p" -> {
-                entity.world.players().forEach {
-                    val other = entity.world.getEntity(it)
+                world.players().forEach {
+                    val other = world.getEntity(it)
                     other.edit().add(PlayerMiniMapDot(parts[1].toBoolean()))
                 }
             }
             "model" -> {
-                val mob = entity.world.getEntity(entity.world.mobs().first())
+                val mob = world.getEntity(world.mobs().first())
                 mob.change()
 //                mob.change(intArrayOf(390, 456, 332, 326, 151, 177, 12138, 181), intArrayOf(10508, -10342, 4550))
             }
             "party" -> {
                 var count = 0
-                /*entity.world.players().filterNot { it == entity.id }.forEach {
-                    entity.world.delete(it)
+                /*world.players().filterNot { it == entity.id }.forEach {
+                    world.delete(it)
                 }
-                entity.world.mobs().forEach {
-                    entity.world.delete(it)
+                world.mobs().forEach {
+                    world.delete(it)
                 }*/
                 for (y in 3482 until 3518) {
                     for (x in 3070 until 3104) {
@@ -146,10 +156,10 @@ class Commands : GamePacket() {
                 es.dispatch(CreateBot("Bot ${count++}", position.x, position.y - 1))
             }
             "b" -> {
-                val bot = entity.world.getEntity(entity.world.players().last())
+                val bot = world.getEntity(world.players().last())
                 /*bot.edit().add(Hidden())
                 bot.updateAppearance()*/
-                entity.world.deleteEntity(bot)
+                world.deleteEntity(bot)
             }
             "mob" -> {
                 val position = entity.getComponent(Position::class)!!
@@ -159,22 +169,22 @@ class Commands : GamePacket() {
                     }
                 }
                 /*entity.schedule(4, 0) {
-                    entity.world.mobs().forEachIndexed { index, it ->
+                    world.mobs().forEachIndexed { index, it ->
                         val displayName = DisplayName()
                         displayName.name = "Mob ${index + 1} ${3482 + index}"
-                        entity.world.getEntity(it).edit().add(displayName).add(UpdateDisplayName())
+                        world.getEntity(it).edit().add(displayName).add(UpdateDisplayName())
                     }
                     stop()
                 }*/
             }
             "m" -> {
-                val mob = entity.world.getEntity(entity.world.mobs().first())
+                val mob = world.getEntity(world.mobs().first())
 //                val position = mob.getComponent(Position::class)!!
 //                mob.navigate(position.x + 1, position.y + 2)
 //                mob.animate(2312)
 //                mob.transform(mob.getComponent(Type::class)?.id ?: 0)
 //                mob.colour(70, 110, 90, 130, duration = 60)
-                entity.world.delete(entity.world.mobs().first())
+                world.delete(world.mobs().first())
             }
             "hit" -> {
                 for (i in 0 until 5)
@@ -216,8 +226,8 @@ class Commands : GamePacket() {
             }
             //Mob updating flags
             "mobdemo" -> {
-                val mob = entity.world.getEntity(entity.world.mobs().first())
-                entity.schedule(0, 1) {
+                val mob = world.getEntity(world.mobs().first())
+                world.schedule(0, 1) {
                     when (tick) {
                         0 -> {
                             mob.force("Graphic")
@@ -294,8 +304,8 @@ class Commands : GamePacket() {
                 }
             }
             "botdemo" -> {
-                val bot = entity.world.getEntity(entity.world.players()[1])
-                entity.schedule(0, 1) {
+                val bot = world.getEntity(world.players()[1])
+                world.schedule(0, 1) {
                     when (tick) {
                         0 -> {
                             bot.force("Animation")
@@ -353,9 +363,6 @@ class Commands : GamePacket() {
                     }
                 }
             }
-            else -> return false
         }
-        return true
     }
-
 }

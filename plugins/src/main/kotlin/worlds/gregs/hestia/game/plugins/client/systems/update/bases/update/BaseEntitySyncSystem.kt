@@ -2,8 +2,8 @@ package worlds.gregs.hestia.game.plugins.client.systems.update.bases.update
 
 import com.artemis.Component
 import com.artemis.ComponentMapper
-import com.artemis.systems.IteratingSystem
 import world.gregs.hestia.core.network.packets.Packet
+import worlds.gregs.hestia.game.api.update.Sync
 import worlds.gregs.hestia.game.plugins.client.components.NetworkSession
 import worlds.gregs.hestia.game.plugins.client.components.update.stage.EntityUpdates
 import worlds.gregs.hestia.game.plugins.core.components.map.Viewport
@@ -12,7 +12,7 @@ import worlds.gregs.hestia.services.Aspect
 import java.util.*
 import kotlin.reflect.KClass
 
-abstract class BaseEntitySyncSystem(vararg classes: KClass<out Component>) : IteratingSystem(Aspect.all(NetworkSession::class, Viewport::class, *classes)) {
+abstract class BaseEntitySyncSystem(vararg classes: KClass<out Component>) : Sync(Aspect.all(NetworkSession::class, Viewport::class, *classes)) {
 
     private lateinit var entityUpdatesMapper: ComponentMapper<EntityUpdates>
     internal lateinit var packet: Packet.Builder
@@ -32,26 +32,8 @@ abstract class BaseEntitySyncSystem(vararg classes: KClass<out Component>) : Ite
         packet.startBitAccess()
     }
 
-    /**
-     * Process a single local entity
-     * @param entityId client entity
-     * @param local local entity
-     * @param type [DisplayFlag]
-     * @param update if requires an update
-     */
-    abstract fun local(entityId: Int, local: Int, type: DisplayFlag?, update: Boolean)
-
     open fun middle() {
     }
-
-    /**
-     * Process a single global entity
-     * @param entityId client entity
-     * @param global global entity
-     * @param type [DisplayFlag]
-     * @param update if requires an update
-     */
-    abstract fun global(entityId: Int, global: Int, type: DisplayFlag?, update: Boolean)
 
     /**
      * Get local entities
@@ -71,7 +53,7 @@ abstract class BaseEntitySyncSystem(vararg classes: KClass<out Component>) : Ite
     /**
      * Skip the processing and write an empty packet
      */
-    open fun skip(locals: List<Int>, globals: List<Int>) {}
+    override fun skip(locals: List<Int>, globals: List<Int>) {}
 
     override fun process(entityId: Int) {
         total = 0//Reset

@@ -1,30 +1,25 @@
-package worlds.gregs.hestia.game.systems
+package worlds.gregs.hestia.game.plugins.movement.systems.calc
 
 import com.artemis.Entity
 import com.artemis.WorldConfigurationBuilder
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import world.gregs.hestia.core.network.Session
 import worlds.gregs.hestia.game.GameTest
 import worlds.gregs.hestia.game.archetypes.EntityFactory
 import worlds.gregs.hestia.game.archetypes.PlayerFactory
-import worlds.gregs.hestia.game.events.CreatePlayer
-import worlds.gregs.hestia.game.plugins.MovementPlugin
 import worlds.gregs.hestia.game.plugins.core.components.map.Position
+import worlds.gregs.hestia.game.plugins.entity.systems.interact
+import worlds.gregs.hestia.game.plugins.movement.components.Mobile
 import worlds.gregs.hestia.game.plugins.movement.components.RunToggled
 import worlds.gregs.hestia.game.plugins.movement.components.Steps
-import worlds.gregs.hestia.game.plugins.movement.components.calc.interact
-import worlds.gregs.hestia.game.plugins.player.systems.PlayerCreation
+import worlds.gregs.hestia.game.plugins.movement.systems.PositionShiftSystem
+import worlds.gregs.hestia.game.plugins.movement.systems.WalkSystem
 import worlds.gregs.hestia.game.update.DirectionUtils
-import worlds.gregs.hestia.services.dependsOn
 import worlds.gregs.hestia.services.getComponent
-import worlds.gregs.hestia.services.getSystem
 import worlds.gregs.hestia.services.remove
 
-internal class InteractionSystemTest : GameTest(WorldConfigurationBuilder().dependsOn(MovementPlugin::class).with(PlayerCreation())) {
-
-    //TODO with & without clipping checks
+internal class InteractionSystemTest : GameTest(WorldConfigurationBuilder().with(InteractionSystem(), WalkSystem(), PositionShiftSystem())) {
 
     @BeforeEach
     override fun setUp() {
@@ -83,13 +78,9 @@ internal class InteractionSystemTest : GameTest(WorldConfigurationBuilder().depe
         entity.edit().remove(Steps::class)
     }
 
-    private fun fakePlayer(x: Int = 0, y: Int = 0, name: String = "Dummy"): Entity {
-        val pc = world.getSystem(PlayerCreation::class)
-        val entityId = pc.create(CreatePlayer(Session(), name))
-        val player = world.getEntity(entityId)
-        val position = player.getComponent(Position::class)!!
-        position.x = x
-        position.y = y
-        return player
+    private fun fakePlayer(x: Int = 0, y: Int = 0): Entity {
+        val entity = world.createEntity()
+        entity.edit().add(Mobile()).add(Steps()).add(Position(x, y))
+        return entity
     }
 }

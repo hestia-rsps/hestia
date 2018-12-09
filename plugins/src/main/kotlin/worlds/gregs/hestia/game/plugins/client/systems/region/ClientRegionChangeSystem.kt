@@ -1,4 +1,4 @@
-package worlds.gregs.hestia.game.plugins.client.systems
+package worlds.gregs.hestia.game.plugins.client.systems.region
 
 import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.event.common.Subscribe

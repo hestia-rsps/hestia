@@ -1,7 +1,6 @@
 package worlds.gregs.hestia.game.plugins.movement.components.calc
 
 import com.artemis.Component
-import com.artemis.Entity
 import com.artemis.annotations.PooledWeaver
 
 @PooledWeaver
@@ -24,8 +23,4 @@ class Interact() : Component() {
     var sizeY = 1
     var check = true
     var calculate = true
-}
-
-fun Entity.interact(x: Int, y: Int, max: Int = -1, size: Int = 1, check: Boolean = true, calculate: Boolean = true) {
-    edit().add(Interact(x, y, max, size, check, calculate))
 }
