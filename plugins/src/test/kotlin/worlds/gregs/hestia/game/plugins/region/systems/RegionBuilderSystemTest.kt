@@ -5,10 +5,10 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import worlds.gregs.hestia.game.GameTest
-import worlds.gregs.hestia.game.plugins.core.components.map.Chunk.getRotatedChunkPlane
-import worlds.gregs.hestia.game.plugins.core.components.map.Chunk.getRotatedChunkRotation
-import worlds.gregs.hestia.game.plugins.core.components.map.Chunk.getRotatedChunkX
-import worlds.gregs.hestia.game.plugins.core.components.map.Chunk.getRotatedChunkY
+import worlds.gregs.hestia.game.map.Chunk.getRotatedChunkPlane
+import worlds.gregs.hestia.game.map.Chunk.getRotatedChunkRotation
+import worlds.gregs.hestia.game.map.Chunk.getRotatedChunkX
+import worlds.gregs.hestia.game.map.Chunk.getRotatedChunkY
 import worlds.gregs.hestia.services.getSystem
 
 internal class RegionBuilderSystemTest : GameTest(WorldConfigurationBuilder().with(RegionBuilderSystem())) {

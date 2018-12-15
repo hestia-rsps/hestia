@@ -3,11 +3,10 @@ package worlds.gregs.hestia.game.plugins.movement.systems
 import com.artemis.Entity
 import com.artemis.WorldConfigurationBuilder
 import org.assertj.core.api.Assertions
-import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
+import worlds.gregs.hestia.api.core.components.Position
+import worlds.gregs.hestia.api.movement.components.Shift
 import worlds.gregs.hestia.game.GameTest
-import worlds.gregs.hestia.game.api.movement.Shift
-import worlds.gregs.hestia.game.plugins.core.components.map.Position
 import worlds.gregs.hestia.services.getComponent
 
 internal class PositionShiftSystemTest : GameTest(WorldConfigurationBuilder().with(PositionShiftSystem())) {
@@ -25,7 +24,6 @@ internal class PositionShiftSystemTest : GameTest(WorldConfigurationBuilder().wi
         entity.edit().add(Shift(-2, 0, 0))
         tick()
         check(position, 2, 0, 0)
-        assertThat(entity.getComponent(Shift::class)).isNull()
     }
 
     private fun check(position: Position, x: Int, y: Int, plane: Int) {
@@ -36,7 +34,7 @@ internal class PositionShiftSystemTest : GameTest(WorldConfigurationBuilder().wi
 
     private fun setup(): Entity {
         val entity = world.createEntity()
-        entity.edit().add(Position(0, 0,0))
+        entity.edit().add(Position(0, 0, 0))
         tick()
         return entity
     }

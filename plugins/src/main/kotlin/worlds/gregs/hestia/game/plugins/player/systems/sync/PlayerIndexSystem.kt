@@ -2,9 +2,9 @@ package worlds.gregs.hestia.game.plugins.player.systems.sync
 
 import com.artemis.ComponentMapper
 import worlds.gregs.hestia.GameConstants.PLAYERS_LIMIT
-import worlds.gregs.hestia.game.api.SubscriptionSystem
-import worlds.gregs.hestia.game.api.player.Player
-import worlds.gregs.hestia.game.plugins.core.components.entity.ClientIndex
+import worlds.gregs.hestia.api.SubscriptionSystem
+import worlds.gregs.hestia.api.player.Player
+import worlds.gregs.hestia.api.core.components.ClientIndex
 import worlds.gregs.hestia.services.Aspect
 
 class MaximumPlayerLimitReached : Exception()

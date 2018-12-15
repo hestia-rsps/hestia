@@ -2,20 +2,21 @@ package worlds.gregs.hestia.game.plugins.region.systems.load
 
 import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
+import net.mostlyoriginal.api.event.common.EventSystem
+import net.mostlyoriginal.api.event.common.Subscribe
 import org.slf4j.LoggerFactory
-import worlds.gregs.hestia.game.api.SubscriptionSystem
-import worlds.gregs.hestia.game.api.land.LandObjects
-import worlds.gregs.hestia.game.api.map.Map
-import worlds.gregs.hestia.game.api.map.MapSettings
-import worlds.gregs.hestia.game.api.region.Dynamic
-import worlds.gregs.hestia.game.plugins.core.components.map.Chunk.getChunkX
-import worlds.gregs.hestia.game.plugins.core.components.map.Chunk.getChunkY
-import worlds.gregs.hestia.game.plugins.core.components.map.Chunk.getRotatedChunkPlane
-import worlds.gregs.hestia.game.plugins.core.components.map.Chunk.getRotatedChunkRotation
-import worlds.gregs.hestia.game.plugins.core.components.map.Chunk.getRotatedChunkX
-import worlds.gregs.hestia.game.plugins.core.components.map.Chunk.getRotatedChunkY
+import worlds.gregs.hestia.api.SubscriptionSystem
+import worlds.gregs.hestia.api.land.LandObjects
+import worlds.gregs.hestia.api.map.Map
+import worlds.gregs.hestia.api.map.MapSettings
+import worlds.gregs.hestia.api.region.Dynamic
+import worlds.gregs.hestia.game.events.LoadRegion
+import worlds.gregs.hestia.game.map.Chunk.getChunkX
+import worlds.gregs.hestia.game.map.Chunk.getChunkY
+import worlds.gregs.hestia.game.map.Chunk.getRotatedChunkPlane
+import worlds.gregs.hestia.game.map.Chunk.getRotatedChunkRotation
+import worlds.gregs.hestia.game.map.Chunk.getRotatedChunkX
+import worlds.gregs.hestia.game.map.Chunk.getRotatedChunkY
 import worlds.gregs.hestia.game.plugins.core.systems.cache.CacheSystem
 import worlds.gregs.hestia.game.plugins.region.components.Loaded
 import worlds.gregs.hestia.game.plugins.region.components.Loading
@@ -36,6 +37,7 @@ class RegionFileSystem : SubscriptionSystem(Aspect.all(RegionIdentifier::class, 
     private lateinit var regionMapper: ComponentMapper<RegionIdentifier>
     private lateinit var loadingMapper: ComponentMapper<Loading>
     private lateinit var loadedMapper: ComponentMapper<Loaded>
+    private lateinit var es: EventSystem
 
     private var map: Map? = null
 
@@ -45,12 +47,15 @@ class RegionFileSystem : SubscriptionSystem(Aspect.all(RegionIdentifier::class, 
         //Clear any old clipping data
         map?.unload(entityId)
         val region = regionMapper.get(entityId)
-        //Load async
-        GlobalScope.launch {
-            loadingMapper.remove(entityId)
-            load(entityId, region.id)
-            loadedMapper.create(entityId)
-        }
+        //Load
+        loadingMapper.remove(entityId)
+        es.dispatch(LoadRegion(entityId, region.id))
+    }
+
+    @Subscribe
+    private fun load(event: LoadRegion) {
+        load(event.entityId, event.regionId)
+        loadedMapper.create(event.entityId)
     }
 
     /**

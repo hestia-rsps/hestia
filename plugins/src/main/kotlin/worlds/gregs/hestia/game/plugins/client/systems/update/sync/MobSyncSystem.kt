@@ -3,10 +3,10 @@ package worlds.gregs.hestia.game.plugins.client.systems.update.sync
 import com.artemis.ComponentMapper
 import world.gregs.hestia.core.network.packets.Packet
 import world.gregs.hestia.core.services.int
-import worlds.gregs.hestia.game.api.update.EntitySync
+import worlds.gregs.hestia.api.update.EntitySync
 import worlds.gregs.hestia.game.plugins.client.systems.update.bases.update.sync.BaseMobSyncSystem
-import worlds.gregs.hestia.game.plugins.core.components.entity.ClientIndex
-import worlds.gregs.hestia.game.plugins.core.components.map.Position
+import worlds.gregs.hestia.api.core.components.ClientIndex
+import worlds.gregs.hestia.api.core.components.Position
 import worlds.gregs.hestia.game.plugins.entity.components.update.Type
 import worlds.gregs.hestia.game.plugins.entity.components.update.direction.Face
 import worlds.gregs.hestia.game.update.DirectionUtils

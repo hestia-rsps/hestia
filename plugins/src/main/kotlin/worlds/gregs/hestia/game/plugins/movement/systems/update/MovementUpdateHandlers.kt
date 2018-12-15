@@ -4,20 +4,18 @@ import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
 import net.mostlyoriginal.api.system.core.PassiveSystem
 import world.gregs.hestia.core.services.int
-import worlds.gregs.hestia.game.plugins.client.components.update.stage.EntityUpdates
+import worlds.gregs.hestia.api.client.components.EntityUpdates
+import worlds.gregs.hestia.api.core.components.Position
+import worlds.gregs.hestia.api.core.components.Position.Companion.delta
+import worlds.gregs.hestia.api.core.components.Position.Companion.regionDelta
+import worlds.gregs.hestia.api.core.components.Viewport
 import worlds.gregs.hestia.game.plugins.client.systems.update.sync.MobSyncSystem
 import worlds.gregs.hestia.game.plugins.client.systems.update.sync.PlayerSyncSystem
-import worlds.gregs.hestia.game.plugins.core.components.map.Position
-import worlds.gregs.hestia.game.plugins.core.components.map.Position.Companion.delta
-import worlds.gregs.hestia.game.plugins.core.components.map.Position.Companion.regionDelta
-import worlds.gregs.hestia.game.plugins.core.components.map.Viewport
 import worlds.gregs.hestia.game.plugins.movement.components.Mobile
 import worlds.gregs.hestia.game.plugins.movement.components.types.Moving
 import worlds.gregs.hestia.game.plugins.movement.components.types.RunStep
 import worlds.gregs.hestia.game.plugins.movement.components.types.WalkStep
-import worlds.gregs.hestia.game.update.DirectionUtils.Companion.DELTA_X
-import worlds.gregs.hestia.game.update.DirectionUtils.Companion.DELTA_Y
-import worlds.gregs.hestia.game.update.DirectionUtils.Companion.REGION_MOVEMENT
+import worlds.gregs.hestia.game.update.Direction.Companion.getDirection
 import worlds.gregs.hestia.game.update.DirectionUtils.Companion.getMobMoveDirection
 import worlds.gregs.hestia.game.update.DirectionUtils.Companion.getPlayerRunningDirection
 import worlds.gregs.hestia.game.update.DirectionUtils.Companion.getPlayerWalkingDirection
@@ -60,8 +58,8 @@ class MovementUpdateHandlers : PassiveSystem() {
             val nextWalkDirection = walkMapper.get(local).direction
 
             //Calculate next step coordinates
-            var dx = DELTA_X[nextWalkDirection]
-            var dy = DELTA_Y[nextWalkDirection]
+            var dx = nextWalkDirection.deltaX
+            var dy = nextWalkDirection.deltaY
 
             var running = false
             var direction = -1
@@ -70,8 +68,8 @@ class MovementUpdateHandlers : PassiveSystem() {
                 val nextRunDirection = runMapper.get(local).direction
 
                 //Add additional movement
-                dx += DELTA_X[nextRunDirection]
-                dy += DELTA_Y[nextRunDirection]
+                dx += nextRunDirection.deltaX
+                dy += nextRunDirection.deltaY
 
                 //Calculate direction
                 direction = getPlayerRunningDirection(dx, dy)
@@ -106,7 +104,7 @@ class MovementUpdateHandlers : PassiveSystem() {
         }
         playerSyncSystem?.addGlobal(DisplayFlag.REGION) { player, global ->
             deltaUpdate(player, global) { deltaX, deltaY, deltaPlane ->
-                val direction = REGION_MOVEMENT[deltaX + 1][deltaY + 1]
+                val direction = getDirection(deltaX, deltaY)
                 writeBits(5, (deltaPlane shl 3) + (direction and 0x7))
             }
         }
@@ -119,7 +117,7 @@ class MovementUpdateHandlers : PassiveSystem() {
         mobSyncSystem?.addMoving { global -> movingMapper.has(global) }
 
         mobSyncSystem?.addLocal(DisplayFlag.WALKING, DisplayFlag.RUNNING) { player, local ->
-            val running = runMapper.has(player)
+            val running = runMapper.has(local)
             val update = entityUpdatesMapper.get(player).list.contains(local)
 
             if (running) {

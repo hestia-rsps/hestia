@@ -2,7 +2,7 @@ package worlds.gregs.hestia.game.component.map
 
 import org.junit.jupiter.api.Test
 
-import worlds.gregs.hestia.game.plugins.core.components.map.Position
+import worlds.gregs.hestia.api.core.components.Position
 import kotlin.system.measureNanoTime
 
 internal class ViewportTest {

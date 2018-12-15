@@ -4,7 +4,7 @@ import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.event.common.Subscribe
 import net.mostlyoriginal.api.system.core.PassiveSystem
 import worlds.gregs.hestia.game.events.Animate
-import worlds.gregs.hestia.game.plugins.core.components.Animation
+import worlds.gregs.hestia.api.core.components.Animation
 import worlds.gregs.hestia.game.plugins.entity.components.update.anim.FirstAnimation
 import worlds.gregs.hestia.game.plugins.entity.components.update.anim.FourthAnimation
 import worlds.gregs.hestia.game.plugins.entity.components.update.anim.SecondAnimation

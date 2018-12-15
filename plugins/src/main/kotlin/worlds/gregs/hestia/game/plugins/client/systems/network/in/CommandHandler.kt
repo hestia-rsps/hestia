@@ -4,11 +4,13 @@ import net.mostlyoriginal.api.event.common.EventSystem
 import world.gregs.hestia.core.network.packets.Packet
 import world.gregs.hestia.core.network.packets.PacketOpcode
 import world.gregs.hestia.core.network.packets.PacketSize
+import worlds.gregs.hestia.api.core.components.Position
+import worlds.gregs.hestia.api.movement.components.Shift
 import worlds.gregs.hestia.game.PacketHandler
 import worlds.gregs.hestia.game.events.CreateBot
 import worlds.gregs.hestia.game.events.CreateMob
 import worlds.gregs.hestia.game.events.schedule
-import worlds.gregs.hestia.game.plugins.core.components.map.Position
+import worlds.gregs.hestia.game.plugins.collision.components.Permeable
 import worlds.gregs.hestia.game.plugins.entity.components.update.CombatLevel
 import worlds.gregs.hestia.game.plugins.entity.components.update.DisplayName
 import worlds.gregs.hestia.game.plugins.entity.components.update.ForceMovement
@@ -17,7 +19,10 @@ import worlds.gregs.hestia.game.plugins.mob.component.update.UpdateCombatLevel
 import worlds.gregs.hestia.game.plugins.mob.component.update.UpdateDisplayName
 import worlds.gregs.hestia.game.plugins.mob.systems.change
 import worlds.gregs.hestia.game.plugins.movement.components.RunToggled
-import worlds.gregs.hestia.game.plugins.movement.components.calc.Navigate
+import worlds.gregs.hestia.game.plugins.movement.components.Steps
+import worlds.gregs.hestia.game.plugins.movement.components.calc.Follow
+import worlds.gregs.hestia.game.plugins.movement.components.calc.Stalk
+import worlds.gregs.hestia.game.plugins.movement.components.calc.Step
 import worlds.gregs.hestia.game.plugins.player.component.update.PlayerMiniMapDot
 import worlds.gregs.hestia.game.plugins.player.component.update.UpdateMovement
 import worlds.gregs.hestia.game.plugins.player.component.update.UpdateUnknown
@@ -51,6 +56,11 @@ class CommandHandler : PacketHandler() {
             val plane = params[0].toInt()
             val x = params[1].toInt() shl 6 or params[3].toInt()
             val y = params[2].toInt() shl 6 or params[4].toInt()
+
+            //TODO temp clearing, needs a proper system
+            entity.edit().remove(Follow::class).remove(Shift::class)
+            entity.getComponent(Steps::class)?.clear()
+//            entity.send()//TODO send minimap flag removal
             entity.move(x, y, plane)
             return
         }
@@ -60,6 +70,15 @@ class CommandHandler : PacketHandler() {
             "tele", "tp" -> {
                 entity.move(parts[1].toInt(), parts[2].toInt(), if(parts.size > 3) parts[3].toInt() else 0)
             }
+            "follow" -> {
+                if(entity.getComponent(Follow::class) == null) {
+                    val position = entity.getComponent(Position::class)!!
+                    entity.step(position.x + 1, position.y)
+                    entity.edit().add(Follow(world.players().last()))
+                } else {
+                    entity.edit().remove(Follow::class.java)
+                }
+            }
             "dy" -> {
                 val position = entity.getComponent(Position::class)!!
                 val builder = world.getSystem(RegionBuilderSystem::class)
@@ -68,7 +87,10 @@ class CommandHandler : PacketHandler() {
 //                builder.reset(position.regionId)
                 builder.clear(position.regionId)
 //                builder.set(position.chunkX, position.chunkY, 0, position.chunkX, position.chunkY, 0, parts[1].toInt())
-                builder.set(position.chunkX, position.chunkY, 0, position.chunkX, position.chunkY, 0, 1, 2, parts[1].toInt())
+//                builder.set(position.chunkX, position.chunkY, 0, position.chunkX, position.chunkY, 0, 8, 8, parts[1].toInt())
+                builder.set(12342, 12342)
+//                builder.set(0, 0, 0, 383, 439, 0)
+//                builder.set(0, 0, 0, 386, 435, 0, 2, 3, 0)
 //                regionSystem.changeArea(position.chunkX + 1, position.chunkY - 1, 0, position.chunkX - 1, position.chunkY - 1, 0, 3, 2, 3)
 //                    regionSystem.changeRegion(position.regionId, position.regionId, 3)
 //                }
@@ -114,20 +136,45 @@ class CommandHandler : PacketHandler() {
 //                mob.change(intArrayOf(390, 456, 332, 326, 151, 177, 12138, 181), intArrayOf(10508, -10342, 4550))
             }
             "party" -> {
-                var count = 0
-                /*world.players().filterNot { it == entity.id }.forEach {
-                    world.delete(it)
+                es.dispatch(CreateBot("Dancer", 3086, 3505))
+                es.dispatch(CreateBot("Dancer", 3086, 3504))
+
+                for(x in 3086 .. 3090) {
+                    es.dispatch(CreateBot("Bot", x, 3497))
                 }
-                world.mobs().forEach {
-                    world.delete(it)
-                }*/
-                for (y in 3482 until 3518) {
-                    for (x in 3070 until 3104) {
-                        if ((x + y).rem(2) == 0) {
-                            es.dispatch(CreateMob(1, x, y))
-                        } else {
-                            es.dispatch(CreateBot("Bot ${count++}", x, y))
+                for(x in 3083 .. 3088) {
+                    es.dispatch(CreateBot("Bot", x, 3494))
+                }
+                for(x in 3085 .. 3088) {
+                    es.dispatch(CreateBot("Permeable", x, 3500))
+                }
+                for (y in (3489 .. 3491)) {
+                    for (x in 3082 .. 3090) {
+                        es.dispatch(CreateMob(1, x, y))
+                    }
+                }
+                world.schedule(1, 1) {
+                    when(tick) {
+                        1 -> {
+                            world.players().forEach {
+                                val bot = world.getEntity(it)
+                                if(bot.getComponent(DisplayName::class)?.name?.equals("Permeable") == true) {
+                                    bot.edit().add(Permeable())
+                                }
+                            }
+                            world.mobs().forEach {
+                                world.getEntity(it).edit().add(Stalk(entityId))
+                            }
                         }
+                        3 -> {
+                            val first = world.players().first { world.getEntity(it).getComponent(DisplayName::class)?.name?.equals("Dancer") == true }
+                            val second = world.players().last { world.getEntity(it).getComponent(DisplayName::class)?.name?.equals("Dancer") == true }
+
+                            world.getEntity(first).edit().add(Follow(second))
+                            world.getEntity(second).step(3087, 3504)
+                            world.getEntity(second).edit().add(Follow(first))
+                        }
+                        4 -> stop()
                     }
                 }
             }
@@ -153,21 +200,25 @@ class CommandHandler : PacketHandler() {
                         es.dispatch(CreateBot("Bot ${count++}", x, y))
                     }
                 }*/
-                es.dispatch(CreateBot("Bot ${count++}", position.x, position.y - 1))
+                es.dispatch(CreateBot("Bot ${count++}", position.x, position.y + 1))
             }
             "b" -> {
                 val bot = world.getEntity(world.players().last())
+                bot.edit().add(Follow(entityId)).add(RunToggled())
                 /*bot.edit().add(Hidden())
                 bot.updateAppearance()*/
-                world.deleteEntity(bot)
+//                world.deleteEntity(bot)
             }
             "mob" -> {
                 val position = entity.getComponent(Position::class)!!
-                for (y in (3482 until 3518)) {
-                    for (x in 3070 until 3104) {
-                        es.dispatch(CreateMob(1, x, y))
+                es.dispatch(CreateMob(1, position.x, position.y))
+
+                /*for (y in (3492 until 3508)) {
+                    for (x in 3080 until 3094) {
+                        if(x % 2 == 0 && y % 2 == 0)
+                            es.dispatch(CreateMob(1, x, y))
                     }
-                }
+                }*/
                 /*entity.schedule(4, 0) {
                     world.mobs().forEachIndexed { index, it ->
                         val displayName = DisplayName()
@@ -178,13 +229,20 @@ class CommandHandler : PacketHandler() {
                 }*/
             }
             "m" -> {
-                val mob = world.getEntity(world.mobs().first())
-//                val position = mob.getComponent(Position::class)!!
-//                mob.navigate(position.x + 1, position.y + 2)
+                /*world.mobs().forEach {
+//                    world.delete(it)
+                    val mob = world.getEntity(it)
+                    val position = mob.getComponent(Position::class)!!
+                    println("$position")
+//                    mob.step(position.x, position.y - 2)
+                }*/
+                world.mobs().forEach {
+                    world.getEntity(it).edit().add(Stalk(entityId))
+                }
 //                mob.animate(2312)
 //                mob.transform(mob.getComponent(Type::class)?.id ?: 0)
 //                mob.colour(70, 110, 90, 130, duration = 60)
-                world.delete(world.mobs().first())
+//                world.delete(world.mobs().first())
             }
             "hit" -> {
                 for (i in 0 until 5)
@@ -206,7 +264,7 @@ class CommandHandler : PacketHandler() {
             }
             "move" -> {
                 val position = entity.getComponent(Position::class)!!
-                val move = Navigate()
+                val move = Step()
                 move.x = position.x + 1
                 move.y = position.y - 2
                 entity.edit()?.add(move)

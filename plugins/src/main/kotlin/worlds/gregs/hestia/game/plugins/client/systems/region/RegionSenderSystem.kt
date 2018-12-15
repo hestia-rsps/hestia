@@ -6,12 +6,12 @@ import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.event.common.Subscribe
 import world.gregs.hestia.core.network.packets.Packet
 import worlds.gregs.hestia.GameConstants
-import worlds.gregs.hestia.game.api.SubscriptionSystem
-import worlds.gregs.hestia.game.api.region.Dynamic
-import worlds.gregs.hestia.game.api.region.Regions
+import worlds.gregs.hestia.api.SubscriptionSystem
+import worlds.gregs.hestia.api.region.Dynamic
+import worlds.gregs.hestia.api.region.Regions
 import worlds.gregs.hestia.game.events.UpdateMapRegion
-import worlds.gregs.hestia.game.plugins.core.components.map.Position
-import worlds.gregs.hestia.game.plugins.core.components.map.Viewport
+import worlds.gregs.hestia.api.core.components.Position
+import worlds.gregs.hestia.api.core.components.Viewport
 import worlds.gregs.hestia.network.out.DynamicMapRegion
 import worlds.gregs.hestia.network.out.MapRegion
 import worlds.gregs.hestia.services.Aspect

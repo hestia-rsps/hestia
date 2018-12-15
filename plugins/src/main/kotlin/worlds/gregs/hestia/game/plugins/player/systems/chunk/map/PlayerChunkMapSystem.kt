@@ -1,10 +1,9 @@
 package worlds.gregs.hestia.game.plugins.player.systems.chunk.map
 
-import worlds.gregs.hestia.game.api.player.Player
-import worlds.gregs.hestia.game.plugins.entity.systems.map.EntityChunkMap
-import worlds.gregs.hestia.game.plugins.entity.systems.map.EntityChunkSystem
+import worlds.gregs.hestia.api.entity.EntityChunkMap
+import worlds.gregs.hestia.api.player.PlayerChunk
 
-class PlayerChunkMapSystem : EntityChunkSystem(Player::class) {
+class PlayerChunkMapSystem : PlayerChunk() {
 
     private lateinit var map: PlayerChunkMap
 

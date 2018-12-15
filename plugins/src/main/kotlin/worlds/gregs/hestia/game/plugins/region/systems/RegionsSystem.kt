@@ -1,7 +1,7 @@
 package worlds.gregs.hestia.game.plugins.region.systems
 
 import com.artemis.ComponentMapper
-import worlds.gregs.hestia.game.api.region.Regions
+import worlds.gregs.hestia.api.region.Regions
 import worlds.gregs.hestia.game.plugins.region.components.RegionIdentifier
 import worlds.gregs.hestia.services.Aspect
 import java.util.*

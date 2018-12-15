@@ -7,11 +7,11 @@ import world.gregs.hestia.core.network.packets.Packet
 import world.gregs.hestia.core.services.Encryption
 import world.gregs.hestia.core.services.int
 import worlds.gregs.hestia.game.events.UpdateAppearance
-import worlds.gregs.hestia.game.api.SubscriptionSystem
+import worlds.gregs.hestia.api.SubscriptionSystem
 import worlds.gregs.hestia.game.plugins.entity.components.update.CombatLevel
 import worlds.gregs.hestia.game.plugins.entity.components.update.DisplayName
 import worlds.gregs.hestia.game.plugins.entity.components.update.Transform
-import worlds.gregs.hestia.game.api.player.Player
+import worlds.gregs.hestia.api.player.Player
 import worlds.gregs.hestia.game.plugins.player.component.update.Appearance
 import worlds.gregs.hestia.game.plugins.player.component.update.AppearanceData
 import worlds.gregs.hestia.game.plugins.player.component.update.appearance.*

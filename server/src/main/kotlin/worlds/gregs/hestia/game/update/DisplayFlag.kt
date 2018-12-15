@@ -3,9 +3,9 @@ package worlds.gregs.hestia.game.update
 enum class DisplayFlag {
     ADD,
     REMOVE,
+    MOVE,
     WALKING,
     RUNNING,
-    MOVE,
     UPDATE,
     HEIGHT,
     REGION,
@@ -19,4 +19,5 @@ enum class DisplayFlag {
             else -> 0
         }
     }
+
 }

@@ -1,7 +1,7 @@
 package worlds.gregs.hestia.game.plugins.client.systems.update
 
 import com.artemis.ComponentMapper
-import worlds.gregs.hestia.game.api.client.GlobalEntities
+import worlds.gregs.hestia.api.client.GlobalEntities
 import worlds.gregs.hestia.game.plugins.client.components.update.list.GlobalMobs
 import worlds.gregs.hestia.game.plugins.client.components.update.list.GlobalPlayers
 
