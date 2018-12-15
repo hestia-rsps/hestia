@@ -94,6 +94,14 @@ open class Position() : Component() {
             return create(from.x - to.x, from.y - to.y, from.plane - to.plane)
         }
 
+        inline fun delta(from: Position, to: Position, action: (Int, Int, Int) -> Unit) {
+            action(from.x - to.x, from.y - to.y, from.plane - to.plane)
+        }
+
+        inline fun regionDelta(from: Position, to: Position, action: (Int, Int, Int) -> Unit) {
+            action(from.regionX - to.regionX, from.regionY - to.regionY, from.plane - to.plane)
+        }
+
         fun clone(position: Position): Position {
             return create(position.x, position.y, position.plane)
         }

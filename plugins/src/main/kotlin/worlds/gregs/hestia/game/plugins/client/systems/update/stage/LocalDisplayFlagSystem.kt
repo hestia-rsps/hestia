@@ -18,7 +18,7 @@ class LocalDisplayFlagSystem : BaseDisplayFlagSystem(Aspect.all(NetworkSession::
     override fun initialize() {
         super.initialize()
         addCheck(DisplayFlag.REMOVE) { player, other ->
-            !world.entityManager.isActive(other) /* || local.hasFinished() */ || !withinDistance(positionMapper.get(player), other)
+            !world.entityManager.isActive(other) || !withinDistance(positionMapper.get(player), other)
         }
 
         addCheck(DisplayFlag.UPDATE) { player, other ->

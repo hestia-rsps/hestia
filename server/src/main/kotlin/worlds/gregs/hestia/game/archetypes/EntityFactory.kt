@@ -14,15 +14,15 @@ object EntityFactory {
     private val logger = LoggerFactory.getLogger(EntityFactory::class.java)
 
     fun <F : ArchetypeFactory> add(factory: F) {
-        EntityFactory.archetypes[factory::class] = factory.getBuilder().build(EntityFactory.world)
+        archetypes[factory::class] = factory.getBuilder().build(world)
     }
 
     fun <F : ArchetypeFactory> create(factory: KClass<F>): Int {
-        return EntityFactory.world.create(EntityFactory.archetypes[factory])
+        return world.create(archetypes[factory])
     }
 
     fun init(world: World) {
-        EntityFactory.world = world
+        this.world = world
     }
 
     fun load(loader: Loader) {
@@ -30,11 +30,11 @@ object EntityFactory {
         val time = measureNanoTime {
             val factories = loader.load<ArchetypeFactory>("worlds.gregs.hestia.game.archetypes")
             factories.forEach { factory ->
-                EntityFactory.add(factory)
+                add(factory)
             }
             count = factories.size
         }
-        EntityFactory.logger.debug("$count ${"archetype".plural(count)} loaded in ${time / 1000000}ms")
+        logger.debug("$count ${"archetype".plural(count)} loaded in ${time / 1000000}ms")
     }
 
 }

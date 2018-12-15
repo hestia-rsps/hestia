@@ -83,7 +83,7 @@ abstract class BaseMovementSystem(vararg classes: KClass<out Component>) : Itera
         val position = positionMapper.get(entityId)
         val sizeX = if(sizeMapper.has(entityId)) sizeMapper.get(entityId).sizeX else 1
         val sizeY = if(sizeMapper.has(entityId)) sizeMapper.get(entityId).sizeY else 1
-        if (check && (!world.entityManager.isActive(entityId) || (tiles != null && !tiles!!.checkWalkStep(position.plane, lastX, lastY, dir, sizeX, sizeY)))) {
+        if (check && (!world.entityManager.isActive(entityId) || (tiles != null && !tiles!!.isTileWalkable(lastX, lastY, position.plane, dir, sizeX, sizeY)))) {
             return false
         }
 

@@ -13,7 +13,3 @@ class Watch() : Component() {
 
     var entity = 0//Entity id
 }
-
-fun Entity.watch(entityId: Int) {
-    edit().add(Watch(entityId))
-}

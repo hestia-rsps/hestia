@@ -17,9 +17,9 @@ import world.gregs.hestia.core.services.load.PacketLoader
 import worlds.gregs.hestia.game.Engine
 import worlds.gregs.hestia.game.archetypes.EntityFactory
 import worlds.gregs.hestia.game.plugin.PluginLoader
-import worlds.gregs.hestia.network.GamePacketInboundHandler
 import worlds.gregs.hestia.network.LoginAttempt
 import worlds.gregs.hestia.network.LoginServerInboundHandler
+import worlds.gregs.hestia.network.GamePacketInboundHandler
 import worlds.gregs.hestia.network.WorldChangeListener
 import worlds.gregs.hestia.network.login.Filter
 
@@ -69,9 +69,8 @@ class GameServer(info: WorldDetails) : Engine(), WorldChangeListener {
             EntityFactory.load(pluginLoader)
 
             //List of game packets
-            val gamePackets = pluginLoader.load("worlds.gregs.hestia.network.in")
             //Handles client -> server communications
-            val gameHandler = GamePacketInboundHandler(server, gamePackets)
+            val gameHandler = GamePacketInboundHandler(server)
 
             //List of login packets
             val loginPackets = loader.load("worlds.gregs.hestia.network.login.in")

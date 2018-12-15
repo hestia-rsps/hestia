@@ -23,7 +23,3 @@ class Path() : Component() {
     var check = true
     lateinit var strategy: RouteStrategy
 }
-
-fun Entity.path(x: Int, y: Int, max: Int = -1, check: Boolean = true) {
-    edit().add(Path(x, y, FixedTileStrategy(x, y), max, check))
-}

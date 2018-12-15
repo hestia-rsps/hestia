@@ -8,6 +8,6 @@ import net.mostlyoriginal.api.system.core.PassiveSystem
  */
 abstract class TileClipping : PassiveSystem() {
 
-    abstract fun checkWalkStep(plane: Int, x: Int, y: Int, dir: Int, sizeX: Int, sizeY: Int): Boolean
+    abstract fun isTileWalkable(x: Int, y: Int, plane: Int, dir: Int, sizeX: Int, sizeY: Int): Boolean
 
 }

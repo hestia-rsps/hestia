@@ -1,16 +1,15 @@
-package worlds.gregs.hestia.network.`in`
+package worlds.gregs.hestia.game.plugins.client.systems.network.`in`
 
-import world.gregs.hestia.core.network.Session
 import world.gregs.hestia.core.network.packets.Packet
 import world.gregs.hestia.core.network.packets.PacketOpcode
 import world.gregs.hestia.core.network.packets.PacketSize
-import worlds.gregs.hestia.network.game.GamePacket
+import worlds.gregs.hestia.game.PacketHandler
 import worlds.gregs.hestia.network.login.Packets
 
 @PacketSize(8)
 @PacketOpcode(Packets.INTERFACE_BTN_1, Packets.INTERFACE_BTN_2, Packets.INTERFACE_BTN_3, Packets.INTERFACE_BTN_4, Packets.INTERFACE_BTN_5, Packets.INTERFACE_BTN_6, Packets.INTERFACE_BTN_7, Packets.INTERFACE_BTN_8, Packets.INTERFACE_BTN_9, Packets.INTERFACE_BTN_10)
-class InterfaceClick : GamePacket() {
-    override fun read(session: Session, packet: Packet, length: Int): Boolean {
+class InterfaceHandler : PacketHandler() {
+    override fun handle(entityId: Int, packet: Packet, length: Int) {
         val interfaceHash = packet.readInt2()
         val interfaceId = interfaceHash shr 16
         /*if (Utils.interfaceDefinitionsSize <= interfaceId) {
@@ -44,23 +43,18 @@ class InterfaceClick : GamePacket() {
             746 -> {
                 when(componentId) {
                     176 -> {
-                        if(entity != null) {
-                            entity!!.world.delete(entity!!.id)
-                        }
+                        world.delete(entityId)
                     }
                 }
             }
             548 -> {
                 when(componentId) {
                     182 -> {
-                        if(entity != null) {
-                            entity!!.world.delete(entity!!.id)
-                        }
+                        world.delete(entityId)
                     }
                 }
             }
         }
-        return true
     }
 
 }

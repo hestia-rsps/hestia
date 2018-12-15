@@ -1,6 +1,7 @@
 package worlds.gregs.hestia.game.plugins.region.systems
 
 import com.artemis.ComponentMapper
+import com.artemis.annotations.Wire
 import worlds.gregs.hestia.game.api.SubscriptionSystem
 import worlds.gregs.hestia.game.api.region.Region
 import worlds.gregs.hestia.game.api.region.Regions
@@ -16,6 +17,7 @@ import worlds.gregs.hestia.services.nearby
  * Unloads regions which has no prioritised entities in
  * Entities in this case refers to non-mob's (Players & bots)
  */
+@Wire(failOnNull = false)
 class RegionCleanSystem : SubscriptionSystem(Aspect.all(RegionPriorities::class)) {
     private lateinit var regionPrioritiesMapper: ComponentMapper<RegionPriorities>
     private lateinit var regionMapper: ComponentMapper<RegionIdentifier>

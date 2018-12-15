@@ -1,4 +1,4 @@
-package worlds.gregs.hestia.game.systems
+package worlds.gregs.hestia.game.plugins.movement.systems.calc
 
 import com.artemis.Entity
 import com.artemis.WorldConfigurationBuilder
@@ -12,9 +12,9 @@ import worlds.gregs.hestia.game.archetypes.PlayerFactory
 import worlds.gregs.hestia.game.events.CreatePlayer
 import worlds.gregs.hestia.game.plugins.MovementPlugin
 import worlds.gregs.hestia.game.plugins.core.components.map.Position
+import worlds.gregs.hestia.game.plugins.entity.systems.navigate
 import worlds.gregs.hestia.game.plugins.movement.components.RunToggled
 import worlds.gregs.hestia.game.plugins.movement.components.Steps
-import worlds.gregs.hestia.game.plugins.movement.components.calc.navigate
 import worlds.gregs.hestia.game.plugins.player.systems.PlayerCreation
 import worlds.gregs.hestia.game.update.DirectionUtils
 import worlds.gregs.hestia.services.dependsOn
@@ -23,8 +23,6 @@ import worlds.gregs.hestia.services.getSystem
 import worlds.gregs.hestia.services.remove
 
 internal class NavigationSystemTest : GameTest(WorldConfigurationBuilder().dependsOn(MovementPlugin::class).with(PlayerCreation())) {
-
-    //TODO clipping checks
 
     @BeforeEach
     override fun setUp() {

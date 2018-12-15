@@ -3,7 +3,7 @@ package worlds.gregs.hestia.game.plugins.client.systems.update.sync
 import com.artemis.ComponentMapper
 import world.gregs.hestia.core.network.packets.Packet
 import world.gregs.hestia.core.services.int
-import worlds.gregs.hestia.game.plugins.client.systems.update.bases.EntitySync
+import worlds.gregs.hestia.game.api.update.EntitySync
 import worlds.gregs.hestia.game.plugins.client.systems.update.bases.update.sync.BaseMobSyncSystem
 import worlds.gregs.hestia.game.plugins.core.components.entity.ClientIndex
 import worlds.gregs.hestia.game.plugins.core.components.map.Position

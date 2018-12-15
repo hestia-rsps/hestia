@@ -55,7 +55,7 @@ class TileCheckSystem : TileClipping() {
      * Checks if a tile is free
      * TODO refactor
      */
-    override fun checkWalkStep(plane: Int, x: Int, y: Int, dir: Int, size: Int, sizeY: Int): Boolean {
+    override fun isTileWalkable(x: Int, y: Int, plane: Int, dir: Int, size: Int, sizeY: Int): Boolean {
         var xOffset = DirectionUtils.DELTA_X[dir]
         var yOffset = DirectionUtils.DELTA_Y[dir]
         val rotation = getRotation(x + xOffset, y + yOffset, plane)
