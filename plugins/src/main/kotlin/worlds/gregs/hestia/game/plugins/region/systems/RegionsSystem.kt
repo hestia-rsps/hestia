@@ -19,6 +19,10 @@ class RegionsSystem : Regions(Aspect.all(RegionIdentifier::class)) {
         return list[regionId]
     }
 
+    override fun contains(regionId: Int): Boolean {
+        return list.containsKey(regionId)
+    }
+
     override fun inserted(entityId: Int) {
         val region = regionIdentifierMapper.get(entityId)
         list[region.id] = entityId

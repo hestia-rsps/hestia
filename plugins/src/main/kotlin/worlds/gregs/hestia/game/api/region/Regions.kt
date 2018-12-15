@@ -21,8 +21,6 @@ abstract class Regions(builder: Aspect.Builder) : SubscriptionSystem(builder) {
      * @param regionId The region to find
      * @return Whether entity with [regionId] has been created
      */
-    open fun contains(regionId: Int): Boolean {
-        return false
-    }
+    abstract fun contains(regionId: Int): Boolean
 
 }
