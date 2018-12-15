@@ -1,0 +1,138 @@
+$dokka.format:kotlin-website
+$dokka.linkExtension:html
+$dokka.location:worlds.gregs.hestia.game.events$schedule(com.artemis.World, kotlin.Int, kotlin.Int, kotlin.Function1((worlds.gregs.hestia.game.TickTask, kotlin.Unit)))worlds.gregs.hestia.game.events/com.artemis.-world/schedule.html
+$dokka.location:worlds.gregs.hestia.game.events$send(com.artemis.Entity, world.gregs.hestia.core.network.packets.Packet.Builder)worlds.gregs.hestia.game.events/com.artemis.-entity/send.html
+$dokka.location:worlds.gregs.hestia.game.plugins.entity.systems$animate(com.artemis.Entity, kotlin.Int, kotlin.Int)worlds.gregs.hestia.game.plugins.entity.systems/com.artemis.-entity/animate.html
+$dokka.location:worlds.gregs.hestia.game.plugins.entity.systems$batchAnim(com.artemis.Entity)worlds.gregs.hestia.game.plugins.entity.systems/com.artemis.-entity/batch-anim.html
+$dokka.location:worlds.gregs.hestia.game.plugins.entity.systems$colour(com.artemis.Entity, kotlin.Int, kotlin.Int, kotlin.Int, kotlin.Int, kotlin.Int, kotlin.Int)worlds.gregs.hestia.game.plugins.entity.systems/com.artemis.-entity/colour.html
+$dokka.location:worlds.gregs.hestia.game.plugins.entity.systems$face(com.artemis.Entity, kotlin.Int, kotlin.Int)worlds.gregs.hestia.game.plugins.entity.systems/com.artemis.-entity/face.html
+$dokka.location:worlds.gregs.hestia.game.plugins.entity.systems$force(com.artemis.Entity, kotlin.Int, worlds.gregs.hestia.game.plugins.core.components.map.Position, kotlin.Int, kotlin.Int)worlds.gregs.hestia.game.plugins.entity.systems/com.artemis.-entity/force.html
+$dokka.location:worlds.gregs.hestia.game.plugins.entity.systems$force(com.artemis.Entity, kotlin.String)worlds.gregs.hestia.game.plugins.entity.systems/com.artemis.-entity/force.html
+$dokka.location:worlds.gregs.hestia.game.plugins.entity.systems$force(com.artemis.Entity, worlds.gregs.hestia.game.plugins.core.components.map.Position, kotlin.Int, kotlin.Int, worlds.gregs.hestia.game.plugins.core.components.map.Position, kotlin.Int, kotlin.Boolean)worlds.gregs.hestia.game.plugins.entity.systems/com.artemis.-entity/force.html
+$dokka.location:worlds.gregs.hestia.game.plugins.entity.systems$graphic(com.artemis.Entity, kotlin.Int, kotlin.Int, kotlin.Int, kotlin.Int, kotlin.Boolean)worlds.gregs.hestia.game.plugins.entity.systems/com.artemis.-entity/graphic.html
+$dokka.location:worlds.gregs.hestia.game.plugins.entity.systems$hit(com.artemis.Entity, kotlin.Int, kotlin.Int, kotlin.Int, kotlin.Boolean, kotlin.Int, kotlin.Int)worlds.gregs.hestia.game.plugins.entity.systems/com.artemis.-entity/hit.html
+$dokka.location:worlds.gregs.hestia.game.plugins.entity.systems$interact(com.artemis.Entity, kotlin.Int, kotlin.Int, kotlin.Int, kotlin.Int, kotlin.Boolean, kotlin.Boolean)worlds.gregs.hestia.game.plugins.entity.systems/com.artemis.-entity/interact.html
+$dokka.location:worlds.gregs.hestia.game.plugins.entity.systems$move(com.artemis.Entity, kotlin.Int, kotlin.Int, kotlin.Int)worlds.gregs.hestia.game.plugins.entity.systems/com.artemis.-entity/move.html
+$dokka.location:worlds.gregs.hestia.game.plugins.entity.systems$move(com.artemis.Entity, worlds.gregs.hestia.game.plugins.core.components.map.Position)worlds.gregs.hestia.game.plugins.entity.systems/com.artemis.-entity/move.html
+$dokka.location:worlds.gregs.hestia.game.plugins.entity.systems$navigate(com.artemis.Entity, kotlin.Int, kotlin.Int, kotlin.Int, kotlin.Boolean)worlds.gregs.hestia.game.plugins.entity.systems/com.artemis.-entity/navigate.html
+$dokka.location:worlds.gregs.hestia.game.plugins.entity.systems$path(com.artemis.Entity, kotlin.Int, kotlin.Int, kotlin.Int, kotlin.Boolean)worlds.gregs.hestia.game.plugins.entity.systems/com.artemis.-entity/path.html
+$dokka.location:worlds.gregs.hestia.game.plugins.entity.systems$time(com.artemis.Entity, kotlin.Boolean, kotlin.Int, kotlin.Int, kotlin.Int)worlds.gregs.hestia.game.plugins.entity.systems/com.artemis.-entity/time.html
+$dokka.location:worlds.gregs.hestia.game.plugins.entity.systems$transform(com.artemis.Entity, kotlin.Int)worlds.gregs.hestia.game.plugins.entity.systems/com.artemis.-entity/transform.html
+$dokka.location:worlds.gregs.hestia.game.plugins.entity.systems$turn(com.artemis.Entity, kotlin.Int, kotlin.Int)worlds.gregs.hestia.game.plugins.entity.systems/com.artemis.-entity/turn.html
+$dokka.location:worlds.gregs.hestia.game.plugins.entity.systems$updateAppearance(com.artemis.Entity)worlds.gregs.hestia.game.plugins.entity.systems/com.artemis.-entity/update-appearance.html
+$dokka.location:worlds.gregs.hestia.game.plugins.entity.systems$updateMapRegion(com.artemis.Entity, kotlin.Boolean, kotlin.Boolean)worlds.gregs.hestia.game.plugins.entity.systems/com.artemis.-entity/update-map-region.html
+$dokka.location:worlds.gregs.hestia.game.plugins.entity.systems$watch(com.artemis.Entity, kotlin.Int)worlds.gregs.hestia.game.plugins.entity.systems/com.artemis.-entity/watch.html
+$dokka.location:worlds.gregs.hestia.game.plugins.mob.systems$change(com.artemis.Entity, kotlin.IntArray, kotlin.IntArray, kotlin.IntArray)worlds.gregs.hestia.game.plugins.mob.systems/com.artemis.-entity/change.html
+$dokka.location:worlds.gregs.hestia.game.plugins.player.systems$updateClanChat(com.artemis.Entity, kotlin.Boolean)worlds.gregs.hestia.game.plugins.player.systems/com.artemis.-entity/update-clan-chat.html
+$dokka.location:worlds.gregs.hestia.network.login$getHost(io.netty.channel.Channel)worlds.gregs.hestia.network.login/io.netty.channel.-channel/get-host.html
+$dokka.location:worlds.gregs.hestia.services$add(com.artemis.ArchetypeBuilder, kotlin.Array((kotlin.reflect.KClass((com.artemis.Component)))))worlds.gregs.hestia.services/com.artemis.-archetype-builder/add.html
+$dokka.location:worlds.gregs.hestia.services$all(com.artemis.Aspect.Builder, kotlin.Array((kotlin.reflect.KClass((com.artemis.Component)))))worlds.gregs.hestia.services/com.artemis.-aspect.-builder/all.html
+$dokka.location:worlds.gregs.hestia.services$dependsOn(com.artemis.WorldConfigurationBuilder, kotlin.Array((kotlin.reflect.KClass((com.artemis.ArtemisPlugin)))))worlds.gregs.hestia.services/com.artemis.-world-configuration-builder/depends-on.html
+$dokka.location:worlds.gregs.hestia.services$dependsOn(com.artemis.WorldConfigurationBuilder, kotlin.Array((kotlin.reflect.KClass((com.artemis.Component)))))worlds.gregs.hestia.services/com.artemis.-world-configuration-builder/depends-on.html
+$dokka.location:worlds.gregs.hestia.services$exclude(com.artemis.Aspect.Builder, kotlin.Array((kotlin.reflect.KClass((com.artemis.Component)))))worlds.gregs.hestia.services/com.artemis.-aspect.-builder/exclude.html
+$dokka.location:worlds.gregs.hestia.services$forEach(com.artemis.utils.IntBag, kotlin.Function1((kotlin.Int, kotlin.Unit)))worlds.gregs.hestia.services/com.artemis.utils.-int-bag/for-each.html
+$dokka.location:worlds.gregs.hestia.services$getComponent(com.artemis.Entity, kotlin.reflect.KClass((worlds.gregs.hestia.services.getComponent.T)))worlds.gregs.hestia.services/com.artemis.-entity/get-component.html
+$dokka.location:worlds.gregs.hestia.services$getMapper(com.artemis.World, kotlin.reflect.KClass((worlds.gregs.hestia.services.getMapper.T)))worlds.gregs.hestia.services/com.artemis.-world/get-mapper.html
+$dokka.location:worlds.gregs.hestia.services$getSystem(com.artemis.World, kotlin.reflect.KClass((worlds.gregs.hestia.services.getSystem.T)))worlds.gregs.hestia.services/com.artemis.-world/get-system.html
+$dokka.location:worlds.gregs.hestia.services$mobs(com.artemis.World)worlds.gregs.hestia.services/com.artemis.-world/mobs.html
+$dokka.location:worlds.gregs.hestia.services$nearby(kotlin.Int, kotlin.Int)worlds.gregs.hestia.services/kotlin.-int/nearby.html
+$dokka.location:worlds.gregs.hestia.services$one(com.artemis.Aspect.Builder, kotlin.Array((kotlin.reflect.KClass((com.artemis.Component)))))worlds.gregs.hestia.services/com.artemis.-aspect.-builder/one.html
+$dokka.location:worlds.gregs.hestia.services$players(com.artemis.World)worlds.gregs.hestia.services/com.artemis.-world/players.html
+$dokka.location:worlds.gregs.hestia.services$remove(com.artemis.EntityEdit, kotlin.reflect.KClass((com.artemis.Component)))worlds.gregs.hestia.services/com.artemis.-entity-edit/remove.html
+$dokka.location:worlds.gregs.hestia.services$send(net.mostlyoriginal.api.event.common.EventSystem, kotlin.Int, world.gregs.hestia.core.network.packets.Packet)worlds.gregs.hestia.services/net.mostlyoriginal.api.event.common.-event-system/send.html
+$dokka.location:worlds.gregs.hestia.services$send(net.mostlyoriginal.api.event.common.EventSystem, kotlin.Int, world.gregs.hestia.core.network.packets.Packet.Builder)worlds.gregs.hestia.services/net.mostlyoriginal.api.event.common.-event-system/send.html
+$dokka.location:worlds.gregs.hestia.services$toArray(com.artemis.utils.IntBag)worlds.gregs.hestia.services/com.artemis.utils.-int-bag/to-array.html
+$dokka.location:worlds.gregs.hestia.services$toggle(com.artemis.EntityEdit, worlds.gregs.hestia.services.toggle.T)worlds.gregs.hestia.services/com.artemis.-entity-edit/toggle.html
+$dokka.location:worlds.gregs.hestia.services$wrap(kotlin.String, kotlin.Int)worlds.gregs.hestia.services/kotlin.-string/wrap.html
+worlds.gregs.hestia
+worlds.gregs.hestia.game
+worlds.gregs.hestia.game.api
+worlds.gregs.hestia.game.api.client
+worlds.gregs.hestia.game.api.land
+worlds.gregs.hestia.game.api.map
+worlds.gregs.hestia.game.api.mob
+worlds.gregs.hestia.game.api.movement
+worlds.gregs.hestia.game.api.player
+worlds.gregs.hestia.game.api.region
+worlds.gregs.hestia.game.api.update
+worlds.gregs.hestia.game.archetypes
+worlds.gregs.hestia.game.events
+worlds.gregs.hestia.game.map
+worlds.gregs.hestia.game.path
+worlds.gregs.hestia.game.plugin
+worlds.gregs.hestia.game.plugins
+worlds.gregs.hestia.game.plugins.bot.systems
+worlds.gregs.hestia.game.plugins.client.components
+worlds.gregs.hestia.game.plugins.client.components.update.list
+worlds.gregs.hestia.game.plugins.client.components.update.stage
+worlds.gregs.hestia.game.plugins.client.systems.network
+worlds.gregs.hestia.game.plugins.client.systems.network.in
+worlds.gregs.hestia.game.plugins.client.systems.region
+worlds.gregs.hestia.game.plugins.client.systems.update
+worlds.gregs.hestia.game.plugins.client.systems.update.bases.flag
+worlds.gregs.hestia.game.plugins.client.systems.update.bases.update
+worlds.gregs.hestia.game.plugins.client.systems.update.bases.update.sync
+worlds.gregs.hestia.game.plugins.client.systems.update.bases.update.update
+worlds.gregs.hestia.game.plugins.client.systems.update.stage
+worlds.gregs.hestia.game.plugins.client.systems.update.sync
+worlds.gregs.hestia.game.plugins.client.systems.update.update
+worlds.gregs.hestia.game.plugins.client.systems.update.update.change
+worlds.gregs.hestia.game.plugins.client.systems.update.update.flag
+worlds.gregs.hestia.game.plugins.core.components
+worlds.gregs.hestia.game.plugins.core.components.entity
+worlds.gregs.hestia.game.plugins.core.components.map
+worlds.gregs.hestia.game.plugins.core.systems
+worlds.gregs.hestia.game.plugins.core.systems.cache
+worlds.gregs.hestia.game.plugins.entity.components.update
+worlds.gregs.hestia.game.plugins.entity.components.update.anim
+worlds.gregs.hestia.game.plugins.entity.components.update.direction
+worlds.gregs.hestia.game.plugins.entity.components.update.gfx
+worlds.gregs.hestia.game.plugins.entity.systems
+worlds.gregs.hestia.game.plugins.entity.systems.map
+worlds.gregs.hestia.game.plugins.entity.systems.sync
+worlds.gregs.hestia.game.plugins.entity.systems.update
+worlds.gregs.hestia.game.plugins.entity.systems.update.stage
+worlds.gregs.hestia.game.plugins.land.components
+worlds.gregs.hestia.game.plugins.land.systems
+worlds.gregs.hestia.game.plugins.map.components
+worlds.gregs.hestia.game.plugins.map.systems
+worlds.gregs.hestia.game.plugins.mob.component
+worlds.gregs.hestia.game.plugins.mob.component.update
+worlds.gregs.hestia.game.plugins.mob.systems
+worlds.gregs.hestia.game.plugins.mob.systems.chunk
+worlds.gregs.hestia.game.plugins.mob.systems.chunk.map
+worlds.gregs.hestia.game.plugins.mob.systems.region
+worlds.gregs.hestia.game.plugins.mob.systems.sync
+worlds.gregs.hestia.game.plugins.mob.systems.update
+worlds.gregs.hestia.game.plugins.movement.components
+worlds.gregs.hestia.game.plugins.movement.components.calc
+worlds.gregs.hestia.game.plugins.movement.components.types
+worlds.gregs.hestia.game.plugins.movement.systems
+worlds.gregs.hestia.game.plugins.movement.systems.calc
+worlds.gregs.hestia.game.plugins.movement.systems.update
+worlds.gregs.hestia.game.plugins.player.component
+worlds.gregs.hestia.game.plugins.player.component.update
+worlds.gregs.hestia.game.plugins.player.component.update.appearance
+worlds.gregs.hestia.game.plugins.player.systems
+worlds.gregs.hestia.game.plugins.player.systems.chunk
+worlds.gregs.hestia.game.plugins.player.systems.chunk.map
+worlds.gregs.hestia.game.plugins.player.systems.region
+worlds.gregs.hestia.game.plugins.player.systems.sync
+worlds.gregs.hestia.game.plugins.player.systems.update
+worlds.gregs.hestia.game.plugins.region.components
+worlds.gregs.hestia.game.plugins.region.systems
+worlds.gregs.hestia.game.plugins.region.systems.load
+worlds.gregs.hestia.game.region
+worlds.gregs.hestia.game.update
+worlds.gregs.hestia.network
+worlds.gregs.hestia.network.game
+worlds.gregs.hestia.network.login
+worlds.gregs.hestia.network.login.in
+worlds.gregs.hestia.network.login.out
+worlds.gregs.hestia.network.out
+worlds.gregs.hestia.network.update.mob
+worlds.gregs.hestia.network.update.player
+worlds.gregs.hestia.network.world.in
+worlds.gregs.hestia.network.world.out
+worlds.gregs.hestia.services
+worlds.gregs.hestia.services.definitions

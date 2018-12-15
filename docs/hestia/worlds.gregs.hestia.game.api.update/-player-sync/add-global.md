@@ -1,0 +1,10 @@
+---
+title: PlayerSync.addGlobal - hestia
+layout: api
+---
+
+<div class='api-docs-breadcrumbs'><a href="../../index.html">hestia</a> / <a href="../index.html">worlds.gregs.hestia.game.api.update</a> / <a href="index.html">PlayerSync</a> / <a href="./add-global.html">addGlobal</a></div>
+
+# addGlobal
+
+<div class="signature"><code><span class="keyword">open</span> <span class="keyword">fun </span><span class="identifier">addGlobal</span><span class="symbol">(</span><br/>&nbsp;&nbsp;&nbsp;&nbsp;<span class="keyword">vararg</span> <span class="parameterName" id="worlds.gregs.hestia.game.api.update.PlayerSync$addGlobal(kotlin.Array((worlds.gregs.hestia.game.update.DisplayFlag)), kotlin.Function3((world.gregs.hestia.core.network.packets.Packet.Builder, kotlin.Int, , kotlin.Unit)))/stages">stages</span><span class="symbol">:</span>&nbsp;<a href="../../worlds.gregs.hestia.game.update/-display-flag/index.html"><span class="identifier">DisplayFlag</span></a><span class="symbol">, </span><br/>&nbsp;&nbsp;&nbsp;&nbsp;<span class="parameterName" id="worlds.gregs.hestia.game.api.update.PlayerSync$addGlobal(kotlin.Array((worlds.gregs.hestia.game.update.DisplayFlag)), kotlin.Function3((world.gregs.hestia.core.network.packets.Packet.Builder, kotlin.Int, , kotlin.Unit)))/handler">handler</span><span class="symbol">:</span>&nbsp;<span class="identifier">Builder</span><span class="symbol">.</span><span class="symbol">(</span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">,</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">)</span>&nbsp;<span class="symbol">-&gt;</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a><br/><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-unit/index.html"><span class="identifier">Unit</span></a></code></div>

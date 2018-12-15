@@ -6,13 +6,14 @@ buildscript {
 
     dependencies {
         classpath "net.onedaybeard.artemis:artemis-odb-gradle-plugin:2.1.0"
+        classpath "org.jetbrains.dokka:dokka-gradle-plugin:0.9.17"
     }
 }
 
 plugins {
     id 'org.jetbrains.kotlin.jvm' version '1.3.0'
 }
-
+apply plugin: 'org.jetbrains.dokka'
 apply from: 'dependencies.gradle'
 
 dependencies {
@@ -54,4 +55,14 @@ allprojects {
     compileTestKotlin {
         kotlinOptions.jvmTarget = "1.8"
     }
+}
+
+dokka {
+    outputFormat = 'kotlin-website'
+    outputDirectory = "$buildDir/$outputFormat"
+
+    jdkVersion = 9
+
+    sourceDirs = files('server/src/main/kotlin', 'plugins/src/main/kotlin')
+
 }

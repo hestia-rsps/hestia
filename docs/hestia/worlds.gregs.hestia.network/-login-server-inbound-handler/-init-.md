@@ -1,0 +1,10 @@
+---
+title: LoginServerInboundHandler.<init> - hestia
+layout: api
+---
+
+<div class='api-docs-breadcrumbs'><a href="../../index.html">hestia</a> / <a href="../index.html">worlds.gregs.hestia.network</a> / <a href="index.html">LoginServerInboundHandler</a> / <a href="./-init-.html">&lt;init&gt;</a></div>
+
+# &lt;init&gt;
+
+<div class="signature"><code><span class="identifier">LoginServerInboundHandler</span><span class="symbol">(</span><br/>&nbsp;&nbsp;&nbsp;&nbsp;<span class="parameterName" id="worlds.gregs.hestia.network.LoginServerInboundHandler$<init>(world.gregs.hestia.core.WorldDetails, worlds.gregs.hestia.network.WorldChangeListener, world.gregs.hestia.core.services.load.PacketMap((world.gregs.hestia.core.network.packets.InboundPacket)))/info">info</span><span class="symbol">:</span>&nbsp;<span class="identifier">WorldDetails</span><span class="symbol">, </span><br/>&nbsp;&nbsp;&nbsp;&nbsp;<span class="parameterName" id="worlds.gregs.hestia.network.LoginServerInboundHandler$<init>(world.gregs.hestia.core.WorldDetails, worlds.gregs.hestia.network.WorldChangeListener, world.gregs.hestia.core.services.load.PacketMap((world.gregs.hestia.core.network.packets.InboundPacket)))/listener">listener</span><span class="symbol">:</span>&nbsp;<a href="../-world-change-listener/index.html"><span class="identifier">WorldChangeListener</span></a><span class="symbol">?</span>&nbsp;<span class="symbol">=</span>&nbsp;null<span class="symbol">, </span><br/>&nbsp;&nbsp;&nbsp;&nbsp;<span class="parameterName" id="worlds.gregs.hestia.network.LoginServerInboundHandler$<init>(world.gregs.hestia.core.WorldDetails, worlds.gregs.hestia.network.WorldChangeListener, world.gregs.hestia.core.services.load.PacketMap((world.gregs.hestia.core.network.packets.InboundPacket)))/packets">packets</span><span class="symbol">:</span>&nbsp;<span class="identifier">PacketMap</span><span class="symbol">&lt;</span><span class="identifier">InboundPacket</span><span class="symbol">&gt;</span><span class="symbol">)</span></code></div>

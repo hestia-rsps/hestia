@@ -1,0 +1,16 @@
+---
+title: BaseMovementSystem.addWalkSteps - hestia
+layout: api
+---
+
+<div class='api-docs-breadcrumbs'><a href="../../index.html">hestia</a> / <a href="../index.html">worlds.gregs.hestia.game.plugins.movement.systems.calc</a> / <a href="index.html">BaseMovementSystem</a> / <a href="./add-walk-steps.html">addWalkSteps</a></div>
+
+# addWalkSteps
+
+<div class="signature"><code><span class="keyword">protected</span> <span class="keyword">fun </span><span class="identifier">addWalkSteps</span><span class="symbol">(</span><br/>&nbsp;&nbsp;&nbsp;&nbsp;<span class="parameterName" id="worlds.gregs.hestia.game.plugins.movement.systems.calc.BaseMovementSystem$addWalkSteps(kotlin.Int, kotlin.Int, kotlin.Int, kotlin.Int, kotlin.Boolean)/entityId">entityId</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><br/>&nbsp;&nbsp;&nbsp;&nbsp;<span class="parameterName" id="worlds.gregs.hestia.game.plugins.movement.systems.calc.BaseMovementSystem$addWalkSteps(kotlin.Int, kotlin.Int, kotlin.Int, kotlin.Int, kotlin.Boolean)/destX">destX</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><br/>&nbsp;&nbsp;&nbsp;&nbsp;<span class="parameterName" id="worlds.gregs.hestia.game.plugins.movement.systems.calc.BaseMovementSystem$addWalkSteps(kotlin.Int, kotlin.Int, kotlin.Int, kotlin.Int, kotlin.Boolean)/destY">destY</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><br/>&nbsp;&nbsp;&nbsp;&nbsp;<span class="parameterName" id="worlds.gregs.hestia.game.plugins.movement.systems.calc.BaseMovementSystem$addWalkSteps(kotlin.Int, kotlin.Int, kotlin.Int, kotlin.Int, kotlin.Boolean)/maxStepsCount">maxStepsCount</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-int/index.html"><span class="identifier">Int</span></a><span class="symbol">, </span><br/>&nbsp;&nbsp;&nbsp;&nbsp;<span class="parameterName" id="worlds.gregs.hestia.game.plugins.movement.systems.calc.BaseMovementSystem$addWalkSteps(kotlin.Int, kotlin.Int, kotlin.Int, kotlin.Int, kotlin.Boolean)/check">check</span><span class="symbol">:</span>&nbsp;<a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a><br/><span class="symbol">)</span><span class="symbol">: </span><a href="https://kotlinlang.org/api/latest/jvm/stdlib/kotlin/-boolean/index.html"><span class="identifier">Boolean</span></a></code></div>
+
+Navigate directly to the destination
+
+### Parameters
+
+<code>check</code> - Stop at obstacles or no-clip through everything
