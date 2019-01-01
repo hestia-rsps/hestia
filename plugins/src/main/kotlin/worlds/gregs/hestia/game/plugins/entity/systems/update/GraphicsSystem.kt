@@ -3,7 +3,7 @@ package worlds.gregs.hestia.game.plugins.entity.systems.update
 import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.event.common.Subscribe
 import net.mostlyoriginal.api.system.core.PassiveSystem
-import worlds.gregs.hestia.game.plugins.core.components.Graphics
+import worlds.gregs.hestia.api.core.components.Graphics
 import worlds.gregs.hestia.game.plugins.entity.components.update.gfx.FirstGraphic
 import worlds.gregs.hestia.game.plugins.entity.components.update.gfx.FourthGraphic
 import worlds.gregs.hestia.game.plugins.entity.components.update.gfx.SecondGraphic

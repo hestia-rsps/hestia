@@ -4,11 +4,11 @@ import com.artemis.Entity
 import com.artemis.WorldConfigurationBuilder
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import worlds.gregs.hestia.api.core.components.Position
 import worlds.gregs.hestia.game.GameTest
 import worlds.gregs.hestia.game.archetypes.EntityFactory
 import worlds.gregs.hestia.game.archetypes.RegionFactory
 import worlds.gregs.hestia.game.plugins.RegionPlugin
-import worlds.gregs.hestia.game.plugins.core.components.map.Position
 import worlds.gregs.hestia.game.plugins.movement.components.Mobile
 import worlds.gregs.hestia.services.dependsOn
 

@@ -6,8 +6,8 @@ import net.mostlyoriginal.api.event.common.EventSystem
 import worlds.gregs.hestia.game.events.UpdateMapRegion
 import worlds.gregs.hestia.game.plugins.client.components.LastLoadedRegion
 import worlds.gregs.hestia.game.plugins.client.components.NetworkSession
-import worlds.gregs.hestia.game.plugins.core.components.map.Position
-import worlds.gregs.hestia.game.region.MapConstants.MAP_SIZES
+import worlds.gregs.hestia.api.core.components.Position
+import worlds.gregs.hestia.game.map.MapConstants.MAP_SIZES
 import worlds.gregs.hestia.services.Aspect
 
 /**

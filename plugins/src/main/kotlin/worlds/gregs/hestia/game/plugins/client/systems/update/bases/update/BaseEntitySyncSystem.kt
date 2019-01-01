@@ -3,10 +3,10 @@ package worlds.gregs.hestia.game.plugins.client.systems.update.bases.update
 import com.artemis.Component
 import com.artemis.ComponentMapper
 import world.gregs.hestia.core.network.packets.Packet
-import worlds.gregs.hestia.game.api.update.Sync
+import worlds.gregs.hestia.api.client.components.EntityUpdates
+import worlds.gregs.hestia.api.core.components.Viewport
+import worlds.gregs.hestia.api.update.Sync
 import worlds.gregs.hestia.game.plugins.client.components.NetworkSession
-import worlds.gregs.hestia.game.plugins.client.components.update.stage.EntityUpdates
-import worlds.gregs.hestia.game.plugins.core.components.map.Viewport
 import worlds.gregs.hestia.game.update.DisplayFlag
 import worlds.gregs.hestia.services.Aspect
 import java.util.*

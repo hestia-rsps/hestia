@@ -2,15 +2,15 @@ package worlds.gregs.hestia.game.plugins.region.systems
 
 import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
-import worlds.gregs.hestia.game.api.region.RegionBuilder
-import worlds.gregs.hestia.game.api.region.Regions
-import worlds.gregs.hestia.game.plugins.core.components.map.Chunk.toChunkPosition
-import worlds.gregs.hestia.game.plugins.core.components.map.Chunk.toRotatedChunkPosition
-import worlds.gregs.hestia.game.plugins.region.components.DynamicRegion
+import worlds.gregs.hestia.api.region.RegionBuilder
+import worlds.gregs.hestia.api.region.Regions
+import worlds.gregs.hestia.api.region.components.DynamicRegion
+import worlds.gregs.hestia.game.map.Chunk.toChunkPosition
+import worlds.gregs.hestia.game.map.Chunk.toRotatedChunkPosition
+import worlds.gregs.hestia.game.map.MapConstants.PLANE_RANGE
 import worlds.gregs.hestia.game.plugins.region.components.Loaded
 import worlds.gregs.hestia.game.plugins.region.components.Loading
 import worlds.gregs.hestia.game.plugins.region.components.RegionIdentifier
-import worlds.gregs.hestia.game.region.MapConstants.PLANE_RANGE
 
 /**
  * DynamicRegionBuilder
@@ -177,6 +177,15 @@ class RegionBuilderSystem : RegionBuilder() {
                 //Reset
                 reset(chunkX + x, chunkY + y, plane)
             }
+        }
+    }
+
+    override fun load(regionId: Int) {
+        val entityId = regions?.getEntityId(regionId) ?: return
+        val dynamic = dynamicMapper.get(entityId) ?: return
+
+        dynamic.regionData.forEach { position, chunk ->
+            set[position] = chunk
         }
     }
 

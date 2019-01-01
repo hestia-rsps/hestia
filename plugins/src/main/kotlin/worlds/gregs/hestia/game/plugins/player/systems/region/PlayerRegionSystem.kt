@@ -3,7 +3,7 @@ package worlds.gregs.hestia.game.plugins.player.systems.region
 import com.artemis.annotations.Wire
 import net.mostlyoriginal.api.event.common.Subscribe
 import net.mostlyoriginal.api.system.core.PassiveSystem
-import worlds.gregs.hestia.game.api.region.RegionPriority
+import worlds.gregs.hestia.api.region.RegionPriority
 import worlds.gregs.hestia.game.events.PlayerRegionChanged
 
 @Wire(failOnNull = false)

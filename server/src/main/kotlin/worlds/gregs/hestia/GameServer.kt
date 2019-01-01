@@ -4,6 +4,7 @@ import com.artemis.World
 import com.artemis.WorldConfigurationBuilder
 import com.artemis.link.EntityLinkManager
 import net.mostlyoriginal.api.event.common.EventSystem
+import org.slf4j.LoggerFactory
 import world.gregs.hestia.core.Settings
 import world.gregs.hestia.core.WorldDetails
 import world.gregs.hestia.core.network.NetworkConstants
@@ -17,21 +18,28 @@ import world.gregs.hestia.core.services.load.PacketLoader
 import worlds.gregs.hestia.game.Engine
 import worlds.gregs.hestia.game.archetypes.EntityFactory
 import worlds.gregs.hestia.game.plugin.PluginLoader
+import worlds.gregs.hestia.network.GamePacketInboundHandler
 import worlds.gregs.hestia.network.LoginAttempt
 import worlds.gregs.hestia.network.LoginServerInboundHandler
-import worlds.gregs.hestia.network.GamePacketInboundHandler
 import worlds.gregs.hestia.network.WorldChangeListener
 import worlds.gregs.hestia.network.login.Filter
+import kotlin.system.measureNanoTime
 
 class GameServer(info: WorldDetails) : Engine(), WorldChangeListener {
+    private val log = LoggerFactory.getLogger(this::class.java)
     private val loader = PacketLoader(Settings.getString("sourcePath"))
 
     private lateinit var network: Network
     private lateinit var server: World
 
     override fun tick(time: Long, delta: Float) {
-        server.setDelta(delta)
-        server.process()
+        val took = measureNanoTime {
+            server.setDelta(delta)
+            server.process()
+        }
+        if (took > 1000000L) {
+            log.info("Took ${(took / 1000000)}ms")
+        }
     }
 
     init {

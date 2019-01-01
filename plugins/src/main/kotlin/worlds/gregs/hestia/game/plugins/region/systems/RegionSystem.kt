@@ -3,10 +3,10 @@ package worlds.gregs.hestia.game.plugins.region.systems
 import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
 import net.mostlyoriginal.api.event.common.EventSystem
-import worlds.gregs.hestia.game.api.land.Land
-import worlds.gregs.hestia.game.api.map.Map
-import worlds.gregs.hestia.game.api.region.Region
-import worlds.gregs.hestia.game.api.region.Regions
+import worlds.gregs.hestia.api.land.Land
+import worlds.gregs.hestia.api.map.Map
+import worlds.gregs.hestia.api.region.Region
+import worlds.gregs.hestia.api.region.Regions
 import worlds.gregs.hestia.game.events.CreateRegion
 import worlds.gregs.hestia.game.plugins.region.components.Loaded
 import worlds.gregs.hestia.game.plugins.region.components.Loading
@@ -32,7 +32,6 @@ class RegionSystem : Region(Aspect.all(RegionIdentifier::class)) {
         if (regions?.contains(regionId) == true) {
             return
         }
-
         es.dispatch(CreateRegion(regionId))
     }
 

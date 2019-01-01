@@ -8,7 +8,7 @@ import worlds.gregs.hestia.game.GameTest
 import worlds.gregs.hestia.game.archetypes.EntityFactory
 import worlds.gregs.hestia.game.archetypes.RegionFactory
 import worlds.gregs.hestia.game.events.CreateRegion
-import worlds.gregs.hestia.game.plugins.core.components.map.Position.Companion.regionId
+import worlds.gregs.hestia.api.core.components.Position.Companion.regionId
 import worlds.gregs.hestia.game.plugins.region.components.RegionPriorities
 import worlds.gregs.hestia.game.plugins.region.systems.load.RegionCreation
 import worlds.gregs.hestia.services.getComponent

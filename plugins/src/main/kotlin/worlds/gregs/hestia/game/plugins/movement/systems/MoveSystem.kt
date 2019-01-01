@@ -2,10 +2,10 @@ package worlds.gregs.hestia.game.plugins.movement.systems
 
 import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.event.common.EventSystem
-import worlds.gregs.hestia.game.api.movement.Move
-import worlds.gregs.hestia.game.api.movement.Shift
+import worlds.gregs.hestia.api.movement.types.Move
+import worlds.gregs.hestia.api.movement.components.Shift
 import worlds.gregs.hestia.game.events.FlagMoveType
-import worlds.gregs.hestia.game.plugins.core.components.map.Position
+import worlds.gregs.hestia.api.core.components.Position
 import worlds.gregs.hestia.game.plugins.movement.components.types.MoveStep
 import worlds.gregs.hestia.game.plugins.movement.components.types.Moving
 import worlds.gregs.hestia.services.Aspect

@@ -1,13 +1,13 @@
 package worlds.gregs.hestia.game.plugins.client.systems.update.update.flag
 
 import com.artemis.ComponentMapper
-import worlds.gregs.hestia.game.api.client.MobUpdateFlags
+import worlds.gregs.hestia.api.client.MobUpdateFlags
+import worlds.gregs.hestia.api.client.components.EntityUpdates
+import worlds.gregs.hestia.api.core.components.Position
+import worlds.gregs.hestia.api.core.components.Renderable
+import worlds.gregs.hestia.api.core.components.Viewport
 import worlds.gregs.hestia.game.plugins.client.components.NetworkSession
 import worlds.gregs.hestia.game.plugins.client.components.update.list.GlobalMobs
-import worlds.gregs.hestia.game.plugins.client.components.update.stage.EntityUpdates
-import worlds.gregs.hestia.game.plugins.core.components.Renderable
-import worlds.gregs.hestia.game.plugins.core.components.map.Position
-import worlds.gregs.hestia.game.plugins.core.components.map.Viewport
 import worlds.gregs.hestia.game.plugins.entity.components.update.*
 import worlds.gregs.hestia.game.plugins.entity.components.update.anim.FirstAnimation
 import worlds.gregs.hestia.game.plugins.entity.components.update.anim.FourthAnimation

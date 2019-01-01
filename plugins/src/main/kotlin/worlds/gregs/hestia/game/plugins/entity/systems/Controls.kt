@@ -2,18 +2,18 @@ package worlds.gregs.hestia.game.plugins.entity.systems
 
 import com.artemis.Entity
 import net.mostlyoriginal.api.event.common.EventSystem
+import worlds.gregs.hestia.api.core.components.Position
+import worlds.gregs.hestia.api.core.components.Size
 import worlds.gregs.hestia.game.events.*
-import worlds.gregs.hestia.game.plugins.core.components.entity.Size
-import worlds.gregs.hestia.game.plugins.core.components.map.Position
 import worlds.gregs.hestia.game.plugins.entity.components.update.*
 import worlds.gregs.hestia.game.plugins.entity.components.update.direction.Face
 import worlds.gregs.hestia.game.plugins.entity.components.update.direction.Facing
 import worlds.gregs.hestia.game.plugins.entity.components.update.direction.Watch
-import worlds.gregs.hestia.game.plugins.movement.components.calc.Interact
-import worlds.gregs.hestia.game.plugins.movement.components.calc.Navigate
-import worlds.gregs.hestia.game.plugins.movement.components.calc.Path
+import worlds.gregs.hestia.game.plugins.movement.components.calc.Beside
+import worlds.gregs.hestia.game.plugins.movement.components.calc.Follow
+import worlds.gregs.hestia.game.plugins.movement.components.calc.Route
+import worlds.gregs.hestia.game.plugins.movement.components.calc.Step
 import worlds.gregs.hestia.game.plugins.movement.components.types.MoveStep
-import worlds.gregs.hestia.game.region.FixedTileStrategy
 import worlds.gregs.hestia.game.update.Marker
 import worlds.gregs.hestia.services.getComponent
 import worlds.gregs.hestia.services.getSystem
@@ -116,25 +116,19 @@ fun Entity.watch(entityId: Int) {
 }
 
 /**
- * Walk within interact distance
+ * Attempt to step beside position [x], [y]
  */
-fun Entity.interact(x: Int, y: Int, max: Int = -1, size: Int = 1, check: Boolean = true, calculate: Boolean = true) {
-    edit().add(Interact(x, y, max, size, check, calculate))
+fun Entity.beside(x: Int, y: Int, max: Int = -1, width: Int = 1, height: Int = 1, check: Boolean = true, calculate: Boolean = false, beside: Boolean = false) {
+    edit().add(Beside(x, y, max, width, height, check, calculate, beside))
 }
 
 /**
- * Navigate to position
+ * Attempt to step directly to position [x], [y]
  */
-fun Entity.navigate(x: Int, y: Int, max: Int = -1, check: Boolean = true) {
-    edit().add(Navigate(x, y, max, check))
+fun Entity.step(x: Int, y: Int, max: Int = -1, check: Boolean = true) {
+    edit().add(Step(x, y, max, check))
 }
 
-/**
- * Path find to position
- */
-fun Entity.path(x: Int, y: Int, max: Int = -1, check: Boolean = true) {
-    edit().add(Path(x, y, FixedTileStrategy(x, y), max, check))
-}
 
 /**
  * Instant move to position
@@ -148,6 +142,28 @@ fun Entity.move(position: Position) {
  */
 fun Entity.move(x: Int, y: Int, plane: Int = 0) {
     edit().add(MoveStep(x, y, plane))
+}
+
+/**
+ * Instant move to entity
+ */
+fun Entity.travel(entity: Entity, alternative: Boolean = false, success: (() -> Unit)? = null, failure: (() -> Unit)? = null) {
+    travel(entity.id, alternative, success, failure)
+}
+
+fun Entity.travel(entityId: Int, alternative: Boolean = false, success: (() -> Unit)? = null, failure: (() -> Unit)? = null) {
+    edit().add(Route(entityId, alternative, success, failure))
+}
+
+/**
+ * Follow an entity
+ */
+fun Entity.follow(entity: Entity) {
+    follow(entity.id)
+}
+
+fun Entity.follow(entityId: Int) {
+    edit().add(Follow(entityId))
 }
 
 /**

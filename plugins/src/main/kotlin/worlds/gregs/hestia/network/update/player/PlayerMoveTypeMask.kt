@@ -1,9 +1,9 @@
 package worlds.gregs.hestia.network.update.player
 
 import world.gregs.hestia.core.network.packets.Packet
-import worlds.gregs.hestia.game.api.movement.Move
-import worlds.gregs.hestia.game.api.movement.Run
-import worlds.gregs.hestia.game.api.movement.Walk
+import worlds.gregs.hestia.api.movement.types.Move
+import worlds.gregs.hestia.api.movement.types.Run
+import worlds.gregs.hestia.api.movement.types.Walk
 import worlds.gregs.hestia.game.update.UpdateEncoder
 
 class PlayerMoveTypeMask(private val walk: Walk?, private val run: Run?, private val move: Move?) : UpdateEncoder {

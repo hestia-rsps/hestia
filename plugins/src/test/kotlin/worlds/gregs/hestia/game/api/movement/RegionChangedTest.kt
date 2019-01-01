@@ -5,6 +5,8 @@ import com.artemis.WorldConfigurationBuilder
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import worlds.gregs.hestia.api.core.components.Position
+import worlds.gregs.hestia.api.movement.systems.RegionChanged
 import worlds.gregs.hestia.game.GameTest
 import worlds.gregs.hestia.game.archetypes.EntityFactory
 import worlds.gregs.hestia.game.archetypes.RegionFactory
@@ -12,9 +14,8 @@ import worlds.gregs.hestia.game.events.CreateRegion
 import worlds.gregs.hestia.game.plugin.Plugin
 import worlds.gregs.hestia.game.plugins.MovementPlugin
 import worlds.gregs.hestia.game.plugins.RegionPlugin
-import worlds.gregs.hestia.game.plugins.core.components.map.Position
 import worlds.gregs.hestia.game.plugins.entity.systems.move
-import worlds.gregs.hestia.game.plugins.entity.systems.navigate
+import worlds.gregs.hestia.game.plugins.entity.systems.step
 import worlds.gregs.hestia.game.plugins.movement.components.Mobile
 import worlds.gregs.hestia.services.dependsOn
 
@@ -53,7 +54,7 @@ internal class RegionChangedTest : GameTest(WorldConfigurationBuilder().dependsO
     @Test
     fun navigate() {
         val entity = create(63, 0)
-        entity.navigate(65, 0, 0)
+        entity.step(65, 0, 0)
         assertThrows<ChangedRegion> {
             tick()
         }

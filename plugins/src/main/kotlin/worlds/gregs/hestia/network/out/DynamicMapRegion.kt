@@ -2,13 +2,13 @@ package worlds.gregs.hestia.network.out
 
 import world.gregs.hestia.core.network.packets.Packet
 import world.gregs.hestia.core.services.int
-import worlds.gregs.hestia.game.api.region.Dynamic
-import worlds.gregs.hestia.game.api.region.Regions
-import worlds.gregs.hestia.game.plugins.core.components.map.Chunk.toChunkPosition
-import worlds.gregs.hestia.game.plugins.core.components.map.Position
+import worlds.gregs.hestia.api.region.Dynamic
+import worlds.gregs.hestia.api.region.Regions
+import worlds.gregs.hestia.game.map.Chunk.toChunkPosition
+import worlds.gregs.hestia.api.core.components.Position
 import worlds.gregs.hestia.game.plugins.region.systems.RegionBuilderSystem.Companion.forChunks
-import worlds.gregs.hestia.game.region.MapConstants.MAP_SIZES
-import worlds.gregs.hestia.game.region.MapConstants.PLANE_RANGE
+import worlds.gregs.hestia.game.map.MapConstants.MAP_SIZES
+import worlds.gregs.hestia.game.map.MapConstants.PLANE_RANGE
 import worlds.gregs.hestia.services.nearby
 
 class DynamicMapRegion(entityId: Int, position: Position, forceReload: Boolean, login: (Packet.Builder.(Int) -> Unit)?, regions: Regions, dynamic: Dynamic) : Packet.Builder(128, Packet.Type.VAR_SHORT) {

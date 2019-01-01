@@ -1,13 +1,8 @@
 package worlds.gregs.hestia.game.plugins.entity.components.update.direction
 
 import com.artemis.Component
-import com.artemis.Entity
 import com.artemis.annotations.PooledWeaver
-import worlds.gregs.hestia.game.plugins.core.components.entity.Size
-import worlds.gregs.hestia.game.plugins.core.components.map.Position
-import worlds.gregs.hestia.game.plugins.entity.components.update.direction.Facing.Companion.getFaceX
-import worlds.gregs.hestia.game.plugins.entity.components.update.direction.Facing.Companion.getFaceY
-import worlds.gregs.hestia.services.getComponent
+import worlds.gregs.hestia.api.core.components.Position
 
 @PooledWeaver
 class Facing : Component() {
