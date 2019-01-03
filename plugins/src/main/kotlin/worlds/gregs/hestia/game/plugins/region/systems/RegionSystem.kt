@@ -21,7 +21,9 @@ class RegionSystem : Region(Aspect.all(RegionIdentifier::class)) {
     private var land: Land? = null
     private lateinit var loadingMapper: ComponentMapper<Loading>
     private lateinit var loadedMapper: ComponentMapper<Loaded>
+    private lateinit var regionIdentifierMapper: ComponentMapper<RegionIdentifier>
     private var map: Map? = null
+    private val loadQueue = ArrayList<Int>()
 
     override fun inserted(entityId: Int) {
         //Begin loading process
@@ -32,7 +34,13 @@ class RegionSystem : Region(Aspect.all(RegionIdentifier::class)) {
         if (regions?.contains(regionId) == true) {
             return
         }
+
+        if(loadQueue.contains(regionId)) {
+            return
+        }
+
         es.dispatch(CreateRegion(regionId))
+        loadQueue.add(regionId)
     }
 
     override fun unload(entityId: Int) {
@@ -44,6 +52,8 @@ class RegionSystem : Region(Aspect.all(RegionIdentifier::class)) {
             land?.unload(entityId)
             //Remove loaded flag
             loadedMapper.remove(entityId)
+            //Remove from load queue
+            loadQueue.remove(regionIdentifierMapper.get(entityId).id)
         }
     }
 }

@@ -238,12 +238,12 @@ class PathFinderSystem : PassiveSystem() {
                 val deltaY = dir.deltaY
 
                 //Skip if horizontal out of bounds
-                if (deltaX == -1 && currentGraphX < 0 || deltaX == 1 && currentGraphX >= graphBounds) {
+                if (deltaX == -1 && currentGraphX <= 0 || deltaX == 1 && currentGraphX >= graphBounds) {
                     continue
                 }
 
                 //Skip if vertical out of bounds
-                if (deltaY == -1 && currentGraphY < 0 || deltaY == 1 && currentGraphY >= graphBounds) {
+                if (deltaY == -1 && currentGraphY <= 0 || deltaY == 1 && currentGraphY >= graphBounds) {
                     continue
                 }
 

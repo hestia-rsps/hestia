@@ -11,6 +11,6 @@ object MapConstants {
     val REGION_RANGE = 0 until REGION_SIZE
 
     fun isOutOfBounds(localX: Int, localY: Int): Boolean {
-        return localX !in REGION_RANGE || localY !in REGION_RANGE
+        return localX < 0 || localX >= REGION_SIZE || localY < 0 || localY >= REGION_SIZE
     }
 }

@@ -6,7 +6,6 @@ import worlds.gregs.hestia.api.collision.Collision
 import worlds.gregs.hestia.api.collision.EntityCollision
 import worlds.gregs.hestia.api.collision.ObjectCollision
 import worlds.gregs.hestia.api.core.components.Position
-import worlds.gregs.hestia.game.plugins.collision.components.Ghost
 
 @Wire(failOnNull = false)
 class CollisionSystem : Collision() {
@@ -26,8 +25,8 @@ class CollisionSystem : Collision() {
         if(x != null && y != null) {
             this.position.set(x, y, position.plane)
         }
-        val pos = if(x != null && y != null) this.position else position
 
+        val pos = if(x != null && y != null) this.position else position
         baseX = pos.xInRegion - 64
         baseY = pos.yInRegion - 64
         entityCollision?.load(entityId, position)

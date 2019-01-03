@@ -10,7 +10,6 @@ import worlds.gregs.hestia.game.PacketHandler
 import worlds.gregs.hestia.game.events.CreateBot
 import worlds.gregs.hestia.game.events.CreateMob
 import worlds.gregs.hestia.game.events.schedule
-import worlds.gregs.hestia.game.plugins.collision.components.Permeable
 import worlds.gregs.hestia.game.plugins.entity.components.update.CombatLevel
 import worlds.gregs.hestia.game.plugins.entity.components.update.DisplayName
 import worlds.gregs.hestia.game.plugins.entity.components.update.ForceMovement
@@ -18,6 +17,7 @@ import worlds.gregs.hestia.game.plugins.entity.systems.*
 import worlds.gregs.hestia.game.plugins.mob.component.update.UpdateCombatLevel
 import worlds.gregs.hestia.game.plugins.mob.component.update.UpdateDisplayName
 import worlds.gregs.hestia.game.plugins.mob.systems.change
+import worlds.gregs.hestia.game.plugins.movement.components.RandomWalk
 import worlds.gregs.hestia.game.plugins.movement.components.RunToggled
 import worlds.gregs.hestia.game.plugins.movement.components.Steps
 import worlds.gregs.hestia.game.plugins.movement.components.calc.Follow
@@ -135,46 +135,28 @@ class CommandHandler : PacketHandler() {
                 mob.change()
 //                mob.change(intArrayOf(390, 456, 332, 326, 151, 177, 12138, 181), intArrayOf(10508, -10342, 4550))
             }
+            "players" -> {
+                println(world.players().size)
+            }
             "party" -> {
-                es.dispatch(CreateBot("Dancer", 3086, 3505))
-                es.dispatch(CreateBot("Dancer", 3086, 3504))
-
-                for(x in 3086 .. 3090) {
-                    es.dispatch(CreateBot("Bot", x, 3497))
-                }
-                for(x in 3083 .. 3088) {
-                    es.dispatch(CreateBot("Bot", x, 3494))
-                }
-                for(x in 3085 .. 3088) {
-                    es.dispatch(CreateBot("Permeable", x, 3500))
-                }
-                for (y in (3489 .. 3491)) {
-                    for (x in 3082 .. 3090) {
-                        es.dispatch(CreateMob(1, x, y))
+                val position = entity.getComponent(Position::class)!!
+                var count = 0
+//                es.dispatch(CreateBot("Bot ${count++}", position.x, position.y))
+                for (y in position.y.nearby(22)) {
+                    for (x in position.x.nearby(22)) {
+                        es.dispatch(CreateBot("Bot ${count++}", x, y))
                     }
                 }
+                println("Created $count")
                 world.schedule(1, 1) {
                     when(tick) {
-                        1 -> {
-                            world.players().forEach {
+                        2 -> {
+                            world.players().filterNot { it == entityId }.forEach {
                                 val bot = world.getEntity(it)
-                                if(bot.getComponent(DisplayName::class)?.name?.equals("Permeable") == true) {
-                                    bot.edit().add(Permeable())
-                                }
-                            }
-                            world.mobs().forEach {
-                                world.getEntity(it).edit().add(Stalk(entityId))
+                                bot.edit().add(RandomWalk())
                             }
                         }
-                        3 -> {
-                            val first = world.players().first { world.getEntity(it).getComponent(DisplayName::class)?.name?.equals("Dancer") == true }
-                            val second = world.players().last { world.getEntity(it).getComponent(DisplayName::class)?.name?.equals("Dancer") == true }
-
-                            world.getEntity(first).edit().add(Follow(second))
-                            world.getEntity(second).step(3087, 3504)
-                            world.getEntity(second).edit().add(Follow(first))
-                        }
-                        4 -> stop()
+                        3 -> stop()
                     }
                 }
             }

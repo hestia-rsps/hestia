@@ -11,7 +11,7 @@ abstract class ClippingMasks : PassiveSystem() {
      * @param localY The local y coordinate of the wall
      * @param plane The plane coordinate of the wall
      */
-    abstract fun getMask(entityId: Int, clipping: Clipping, localX: Int, localY: Int, plane: Int): Int
+    abstract tailrec fun getMask(entityId: Int, clipping: Clipping, localX: Int, localY: Int, plane: Int): Int
 
     /**
      * Adds clipping masks for an object

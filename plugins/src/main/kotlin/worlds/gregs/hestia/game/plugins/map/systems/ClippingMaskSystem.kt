@@ -196,10 +196,19 @@ class ClippingMaskSystem : ClippingMasks() {
         }
     }
 
-    override fun getMask(entityId: Int, clipping: Clipping, localX: Int, localY: Int, plane: Int): Int {
-        return handleMaskBounds(entityId, clipping, localX, localY, plane) { x, y, plane ->
-            clipping.getMask(x, y, plane)
-        } ?: 0
+
+    override tailrec fun getMask(entityId: Int, clipping: Clipping, localX: Int, localY: Int, plane: Int): Int {
+        //We're using duplicate of handleMaskBounds here to avoid the high-order function performance hit
+        return if (isOutOfBounds(localX, localY)) {
+            val region = regionMapper.get(entityId)
+            val offsetX = if(localX > 64) 1 else if(localX < 0) -1 else 0
+            val offsetY = if(localY > 64) 1 else if(localY < 0) -1 else 0
+            val newEntityId = regions?.getEntityId(((region.regionX + offsetX) shl 8) + (region.regionY + offsetY)) ?: return 0
+            val newClipping = getClipping(newEntityId, clipping is ProjectileClipping) ?: return 0
+            getMask(newEntityId, newClipping, (localX - offsetX * 64) % 64, (localY - offsetY * 64) % 64, plane)
+        } else {
+            clipping.getMask(localX, localY, plane)
+        }
     }
 
     /**

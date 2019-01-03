@@ -24,7 +24,7 @@ class MovementPlugin : Plugin {
         b.with(MOVE_PRIORITY, MoveSystem())
         b.with(NAVIGATION_PRIORITY, DirectStepSystem())
         b.with(NAVIGATION_PRIORITY, StepBesideSystem())
-        b.with(PRE_NAVIGATION_PRIORITY, StrategySystem(), PathSystem())
+        b.with(PRE_NAVIGATION_PRIORITY, RandomWalkSystem(), StrategySystem(), PathSystem())//TODO shouldn't random walk be in it's own pre_strategy and path priority?
         b.with(WALK_PRIORITY, WalkSystem())
         b.with(RUN_PRIORITY, RunSystem())
         b.with(PRE_SHIFT_PRIORITY, FollowSystem())

@@ -34,7 +34,6 @@ class GameServer(info: WorldDetails) : Engine(), WorldChangeListener {
 
     override fun tick(time: Long, delta: Float) {
         val took = measureNanoTime {
-            server.setDelta(delta)
             server.process()
         }
         if (took > 1000000L) {
@@ -75,6 +74,9 @@ class GameServer(info: WorldDetails) : Engine(), WorldChangeListener {
             //Load entity archetypes
             EntityFactory.init(server)
             EntityFactory.load(pluginLoader)
+
+            //Set delta
+            server.setDelta(1F)
 
             //List of game packets
             //Handles client -> server communications
