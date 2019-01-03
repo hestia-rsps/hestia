@@ -24,8 +24,8 @@ allprojects {
     apply plugin: "kotlin"
     apply plugin: "artemis"
 
-    group 'world.gregs.hestia'
-    version '0.1.0'
+    group 'worlds.gregs.hestia'
+    version '0.1.3'
 
     repositories {
         mavenCentral()
