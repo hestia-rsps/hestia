@@ -1,4 +1,4 @@
-package worlds.gregs.hestia.game
+package worlds.gregs.hestia.tools
 
 import org.junit.jupiter.api.Test
 import kotlin.system.measureNanoTime

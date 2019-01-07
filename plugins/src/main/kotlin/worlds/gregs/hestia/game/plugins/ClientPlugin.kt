@@ -2,7 +2,6 @@ package worlds.gregs.hestia.game.plugins
 
 import com.artemis.WorldConfigurationBuilder
 import worlds.gregs.hestia.game.plugin.Plugin
-import worlds.gregs.hestia.game.plugin.Plugin.Companion.INTERFACE_PRIORITY
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.LOGIN_DETAILS_PRIORITY
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.MAP_REGION_PRIORITY
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.PRE_SYNC_PRIORITY
@@ -13,9 +12,7 @@ import worlds.gregs.hestia.game.plugin.Plugin.Companion.UPDATE_FLAG_PRIORITY
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.UPDATE_SYNC_PRIORITY
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.UPDATE_UPDATE_PRIORITY
 import worlds.gregs.hestia.game.plugins.client.systems.network.*
-import worlds.gregs.hestia.game.plugins.client.systems.network.`in`.CommandHandler
-import worlds.gregs.hestia.game.plugins.client.systems.network.`in`.InterfaceHandler
-import worlds.gregs.hestia.game.plugins.client.systems.network.`in`.WalkingHandler
+import worlds.gregs.hestia.game.plugins.client.systems.network.`in`.*
 import worlds.gregs.hestia.game.plugins.client.systems.region.ClientRegionChangeSystem
 import worlds.gregs.hestia.game.plugins.client.systems.region.ClientRegionLoadSystem
 import worlds.gregs.hestia.game.plugins.client.systems.region.RegionSenderSystem
@@ -36,9 +33,9 @@ import worlds.gregs.hestia.game.plugins.movement.systems.update.MovementStageChe
 class ClientPlugin : Plugin {
 
     override fun setup(b: WorldConfigurationBuilder) {
+        b.with(CommandHandler(), InterfaceHandler(), WalkingHandler(), ScreenHandler(), CloseInterfaceHandler(), WorldMapHandler())
+
         b.with(LOGIN_DETAILS_PRIORITY, ClientConnectSystem())
-        b.with(INTERFACE_PRIORITY, InterfaceSystem())
-        b.with(CommandHandler(), InterfaceHandler(), WalkingHandler())
         b.with(PacketSystem(), PacketSender(), ClientDisconnectSystem(), GlobalEntitySystem(), ClientNetworkSystem())
         b.with(UPDATE_FLAG_PRIORITY, PlayerUpdateFlagSystem(), MobUpdateFlagSystem())
         b.with(UPDATE_DISPLAY_FLAG_PRIORITY, LocalDisplayFlagSystem(), GlobalDisplayFlagSystem(), MovementStageChecks())

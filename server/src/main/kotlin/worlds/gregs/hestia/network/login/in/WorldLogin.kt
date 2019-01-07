@@ -1,6 +1,5 @@
 package worlds.gregs.hestia.network.login.`in`
 
-import worlds.gregs.hestia.game.events.CreatePlayer
 import world.gregs.hestia.core.network.Session
 import world.gregs.hestia.core.network.packets.Packet
 import world.gregs.hestia.core.network.packets.PacketOpcode
@@ -9,6 +8,7 @@ import world.gregs.hestia.core.network.packets.out.Response
 import world.gregs.hestia.core.services.Cache
 import world.gregs.hestia.core.services.Encryption
 import world.gregs.hestia.core.services.formatUsername
+import worlds.gregs.hestia.game.events.CreatePlayer
 import worlds.gregs.hestia.network.game.GamePacket
 
 @PacketSize(-2)
@@ -114,7 +114,7 @@ class WorldLogin : GamePacket() {
         }*/
         val salt: String = Encryption.salt
         val password = Encryption.hashSHA("test$salt")
-        es.dispatch(CreatePlayer(session, username/*, password*/))
+        es.dispatch(CreatePlayer(session, username/*, password*/, displayMode, screenWidth, screenHeight))
 //        player.init(ClientDetails(session, username, displayMode, screenWidth, screenHeight), world)
 //        session.setDecoder(3, player)
 //        player.start()
