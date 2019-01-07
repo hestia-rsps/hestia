@@ -13,14 +13,18 @@ class PacketSender : PassiveSystem() {
 
     @Subscribe
     fun send(event: OutBoundPacket) {
-        val component = networkSessionMapper.get(event.entity)
-        val channel = component.channel
+        if(networkSessionMapper.has(event.entity)) {
+            val component = networkSessionMapper.get(event.entity)
+            if (component != null) {
+                val channel = component.channel
 
-        if(channel.isOpen) {
-            synchronized(channel) {
-                val future = channel.writeAndFlush(event.packet)
-                if(event.close) {
-                    future.addListener(ChannelFutureListener.CLOSE) ?: channel.close()
+                if (channel.isOpen) {
+                    synchronized(channel) {
+                        val future = channel.writeAndFlush(event.packet)
+                        if (event.close) {
+                            future.addListener(ChannelFutureListener.CLOSE) ?: channel.close()
+                        }
+                    }
                 }
             }
         }

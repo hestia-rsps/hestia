@@ -17,9 +17,17 @@ abstract class GameTest(private val config: WorldConfigurationBuilder) {
     open fun setUp() {
         es = EventSystem()
         config.with(es)
+        config(config)
         val config = config.build()
         world = World(config)
         EntityFactory.init(world)
+        start()
+    }
+
+    open fun start() {
+    }
+
+    open fun config(config: WorldConfigurationBuilder) {
     }
 
     open fun tick() {
