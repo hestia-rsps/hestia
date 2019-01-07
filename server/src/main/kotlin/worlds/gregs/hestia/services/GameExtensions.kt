@@ -3,6 +3,7 @@ package worlds.gregs.hestia.services
 import com.artemis.*
 import com.artemis.utils.IntBag
 import net.mostlyoriginal.api.event.common.EventSystem
+import org.apache.commons.text.WordUtils
 import world.gregs.hestia.core.network.packets.Packet
 import worlds.gregs.hestia.api.mob.Mob
 import worlds.gregs.hestia.api.player.Player
@@ -28,6 +29,10 @@ fun EventSystem.send(entity: Int, builder: Packet.Builder) {
 
 fun EventSystem.send(entity: Int, packet: Packet) {
     dispatch(OutBoundPacket(entity, packet))
+}
+
+fun String.wrap(maxLength: Int = 45): List<String> {
+    return WordUtils.wrap(this, maxLength).split(System.lineSeparator())
 }
 
 fun Int.nearby(size: Int): IntRange {
