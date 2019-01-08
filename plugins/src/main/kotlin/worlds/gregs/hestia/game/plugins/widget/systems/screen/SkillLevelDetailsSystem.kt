@@ -4,8 +4,14 @@ import worlds.gregs.hestia.game.plugins.widget.components.screen.SkillLevelDetai
 import worlds.gregs.hestia.game.plugins.widget.systems.BaseScreen
 
 class SkillLevelDetailsSystem : BaseScreen(SkillLevelDetails::class) {
-    override var id = 741
+    override fun getId(entityId: Int): Int {
+        return ID
+    }
 
-    override fun click(entityId: Int, componentId: Int, option: Int) {
+    override fun click(entityId: Int, interfaceHash: Int, componentId: Int, option: Int) {
+    }
+
+    companion object {
+        private const val ID = 741
     }
 }

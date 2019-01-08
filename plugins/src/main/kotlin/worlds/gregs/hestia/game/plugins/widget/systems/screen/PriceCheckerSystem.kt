@@ -4,8 +4,15 @@ import worlds.gregs.hestia.game.plugins.widget.components.screen.PriceChecker
 import worlds.gregs.hestia.game.plugins.widget.systems.BaseScreen
 
 class PriceCheckerSystem : BaseScreen(PriceChecker::class) {
-    override var id = 206
 
-    override fun click(entityId: Int, componentId: Int, option: Int) {
+    override fun getId(entityId: Int): Int {
+        return ID
+    }
+
+    override fun click(entityId: Int, interfaceHash: Int, componentId: Int, option: Int) {
+    }
+
+    companion object {
+        private const val ID = 206
     }
 }

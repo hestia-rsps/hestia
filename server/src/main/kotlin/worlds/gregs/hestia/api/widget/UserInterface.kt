@@ -1,6 +1,7 @@
 package worlds.gregs.hestia.api.widget
 
 import net.mostlyoriginal.api.system.core.PassiveSystem
+import worlds.gregs.hestia.api.widget.components.Frame
 import worlds.gregs.hestia.api.widget.components.FullScreenWidget
 import worlds.gregs.hestia.api.widget.components.ScreenWidget
 import kotlin.reflect.KClass
@@ -10,11 +11,12 @@ abstract class UserInterface : PassiveSystem() {
     /**
      * Handles all interface button presses
      * @param entityId The id of the entity who pressed the button
+     * @param interfaceHash Hash of widgetId & componentId values
      * @param widgetId The id of the widget that the button is on
      * @param componentId The id of the component that was pressed
      * @param option The right click option that was pressed
      */
-    abstract fun click(entityId: Int, widgetId: Int, componentId: Int, option: Int)
+    abstract fun click(entityId: Int, interfaceHash: Int, widgetId: Int, componentId: Int, option: Int)
 
     /**
      * Opens a screen interface if one is not already open
@@ -43,5 +45,6 @@ abstract class UserInterface : PassiveSystem() {
      * @param entityId The entity
      */
     abstract fun close(entityId: Int)
+    abstract fun close(entityId: Int, clazz: KClass<out Frame>)
 
 }

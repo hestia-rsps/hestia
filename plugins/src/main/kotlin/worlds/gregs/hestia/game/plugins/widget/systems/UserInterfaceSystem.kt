@@ -2,14 +2,15 @@ package worlds.gregs.hestia.game.plugins.widget.systems
 
 import com.artemis.Entity
 import com.artemis.utils.Bag
-import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.event.common.Subscribe
+import worlds.gregs.hestia.api.widget.GameFrame
 import worlds.gregs.hestia.api.widget.UserInterface
 import worlds.gregs.hestia.api.widget.Widget
+import worlds.gregs.hestia.api.widget.components.Frame
 import worlds.gregs.hestia.api.widget.components.FullScreenWidget
 import worlds.gregs.hestia.api.widget.components.ScreenWidget
 import worlds.gregs.hestia.game.events.ButtonClick
-import worlds.gregs.hestia.game.events.OpenWidget
+import worlds.gregs.hestia.network.game.out.message
 import kotlin.reflect.KClass
 
 class UserInterfaceSystem : UserInterface() {
@@ -26,13 +27,12 @@ class UserInterfaceSystem : UserInterface() {
 
     @Subscribe
     private fun click(event: ButtonClick) {
-        click(event.entityId, event.widgetId, event.componentId, event.option)
+        click(event.entityId, event.interfaceHash, event.widgetId, event.componentId, event.option)
     }
 
-    override fun click(entityId: Int, widgetId: Int, componentId: Int, option: Int) {
-        println("Button click $widgetId $componentId $option")
+    override fun click(entityId: Int, interfaceHash: Int, widgetId: Int, componentId: Int, option: Int) {
         widgets.filter { it.getId(entityId) == widgetId }.forEach {
-            it.click(entityId, componentId, option)
+            it.click(entityId, interfaceHash, componentId, option)
         }
     }
 
@@ -41,10 +41,9 @@ class UserInterfaceSystem : UserInterface() {
     }
 
     private fun open(entity: Entity, widget: ScreenWidget) {
-        val has = widgets.filterIsInstance<BaseScreen>().any { it.subscription.entities.size() > 0 }
+        val has = widgets.filterIsInstance<BaseScreen>().any { it.subscription.entities.contains(entity.id) }
         if (has) {
-            println("Screen widget already open")
-//            entity.message("Please close the interface you have open before opening another.")
+            entity.message("Please close the interface you have open before opening another.")
             return
         }
 
@@ -56,10 +55,9 @@ class UserInterfaceSystem : UserInterface() {
     }
 
     private fun open(entity: Entity, widget: FullScreenWidget) {
-        val has = widgets.filterIsInstance<BaseFullScreen>().any { it.subscription.entities.size() > 0 }
+        val has = widgets.filterIsInstance<BaseFullScreen>().any { it.subscription.entities.contains(entity.id) }
         if (has) {
-            println("Full screen widget already open")
-//            entity.message("Please close the interface you have open before opening another.")
+            entity.message("Please close the interface you have open before opening another.")
             return
         }
 
@@ -76,6 +74,14 @@ class UserInterfaceSystem : UserInterface() {
         return widgets.any { clazz.isInstance(it) && it.subscription.entities.contains(entityId) }
     }
 
+    override fun close(entityId: Int, clazz: KClass<out Frame>) {
+        val edit = world.getEntity(entityId).edit()
+        val all = world.componentManager.getComponentsFor(entityId, Bag())
+        all.filter { clazz.isInstance(it) }.forEach {
+            edit.remove(it)
+        }
+    }
+
     override fun close(entityId: Int) {
         val edit = world.getEntity(entityId).edit()
         val all = world.componentManager.getComponentsFor(entityId, Bag())
@@ -83,13 +89,9 @@ class UserInterfaceSystem : UserInterface() {
             edit.remove(it)
         }
         all.filterIsInstance<FullScreenWidget>().forEach {
-            edit.remove(it)
+            if(it !is GameFrame) {//TODO handle better
+                edit.remove(it)
+            }
         }
-    }
-
-    private lateinit var es: EventSystem
-    @Subscribe
-    fun open(event: OpenWidget) {
-//        es.send(event.entityId, InterfaceOpen(event.widgetId))
     }
 }

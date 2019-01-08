@@ -4,8 +4,15 @@ import worlds.gregs.hestia.game.plugins.widget.components.screen.EquipmentBonuse
 import worlds.gregs.hestia.game.plugins.widget.systems.BaseScreen
 
 class EquipmentBonusesSystem : BaseScreen(EquipmentBonuses::class) {
-    override var id = 667
 
-    override fun click(entityId: Int, componentId: Int, option: Int) {
+    override fun getId(entityId: Int): Int {
+        return ID
+    }
+
+    override fun click(entityId: Int, interfaceHash: Int, componentId: Int, option: Int) {
+    }
+
+    companion object {
+        private const val ID = 667
     }
 }

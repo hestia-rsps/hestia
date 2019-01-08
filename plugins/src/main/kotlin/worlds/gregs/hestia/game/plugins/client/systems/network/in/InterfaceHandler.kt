@@ -2,19 +2,17 @@ package worlds.gregs.hestia.game.plugins.client.systems.network.`in`
 
 import net.mostlyoriginal.api.event.common.EventSystem
 import world.gregs.hestia.core.network.packets.Packet
-import world.gregs.hestia.core.network.packets.PacketOpcode
-import world.gregs.hestia.core.network.packets.PacketSize
-import worlds.gregs.hestia.game.PacketHandler
+import world.gregs.hestia.core.network.packets.PacketInfo
+import worlds.gregs.hestia.game.PacketHandlerSystem
 import worlds.gregs.hestia.game.events.ButtonClick
-import worlds.gregs.hestia.network.login.Packets
+import worlds.gregs.hestia.network.game.Packets
 
-@PacketSize(8)
-@PacketOpcode(Packets.INTERFACE_BTN_1, Packets.INTERFACE_BTN_2, Packets.INTERFACE_BTN_3, Packets.INTERFACE_BTN_4, Packets.INTERFACE_BTN_5, Packets.INTERFACE_BTN_6, Packets.INTERFACE_BTN_7, Packets.INTERFACE_BTN_8, Packets.INTERFACE_BTN_9, Packets.INTERFACE_BTN_10)
-class InterfaceHandler : PacketHandler() {
+@PacketInfo(8, Packets.INTERFACE_BTN_1, Packets.INTERFACE_BTN_2, Packets.INTERFACE_BTN_3, Packets.INTERFACE_BTN_4, Packets.INTERFACE_BTN_5, Packets.INTERFACE_BTN_6, Packets.INTERFACE_BTN_7, Packets.INTERFACE_BTN_8, Packets.INTERFACE_BTN_9, Packets.INTERFACE_BTN_10)
+class InterfaceHandler : PacketHandlerSystem() {
 
     private lateinit var es: EventSystem
 
-    override fun handle(entityId: Int, packet: Packet, length: Int) {
+    override fun handle(entityId: Int, packet: Packet) {
         val interfaceHash = packet.readInt2()
         val interfaceId = interfaceHash shr 16
         /*if (Utils.interfaceDefinitionsSize <= interfaceId) {
@@ -44,7 +42,7 @@ class InterfaceHandler : PacketHandler() {
             else -> 0
         }
 
-        es.dispatch(ButtonClick(entityId, interfaceId, componentId, option))
+        es.dispatch(ButtonClick(entityId, interfaceHash, option))
     }
 
 }

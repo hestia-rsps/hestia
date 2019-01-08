@@ -4,12 +4,19 @@ import worlds.gregs.hestia.game.plugins.widget.components.screen.ItemsKeptOnDeat
 import worlds.gregs.hestia.game.plugins.widget.systems.BaseScreen
 
 class ItemsKeptOnDeathSystem : BaseScreen(ItemsKeptOnDeath::class) {
-    override var id = 17
 
-    override fun click(entityId: Int, componentId: Int, option: Int) {
+    override fun getId(entityId: Int): Int {
+        return ID
+    }
+
+    override fun click(entityId: Int, interfaceHash: Int, componentId: Int, option: Int) {
         when(componentId) {
             28 -> {//What if I enter the wilderness?
             }
         }
+    }
+
+    companion object {
+        private const val ID = 17
     }
 }

@@ -6,8 +6,8 @@ import net.mostlyoriginal.api.event.common.EventSystem
 import worlds.gregs.hestia.api.widget.GameFrame
 import worlds.gregs.hestia.api.widget.Widget
 import worlds.gregs.hestia.game.plugins.widget.systems.frame.getId
-import worlds.gregs.hestia.network.out.InterfaceClose
-import worlds.gregs.hestia.network.out.InterfaceOpen
+import worlds.gregs.hestia.network.game.out.InterfaceClose
+import worlds.gregs.hestia.network.game.out.InterfaceOpen
 import worlds.gregs.hestia.services.send
 import kotlin.reflect.KClass
 
@@ -24,17 +24,41 @@ abstract class BaseWidget(component: KClass<out Component>) : Widget(component) 
         close(entityId)
     }
 
+    override fun getWindow(entityId: Int): Int? {
+        return if(gameFrameMapper.has(entityId)) {
+            gameFrameMapper.get(entityId).getId()
+        } else {
+            null
+        }
+    }
+
+
+    override fun getIndex(entityId: Int): Int {
+        return if(gameFrameMapper.has(entityId)) {
+            getIndex(gameFrameMapper.get(entityId).resizable)
+        } else {
+            0
+        }
+    }
+
+    open fun getIndex(resizable: Boolean): Int {
+        return 0
+    }
+
     override fun open(entityId: Int) {
-        if(gameFrameMapper.has(entityId)) {
-            val gameFrame = gameFrameMapper.get(entityId)
-            es.send(entityId, InterfaceOpen(frame, gameFrame.getId(), getIndex(gameFrame.resizable), getId(entityId)))
+        val window = getWindow(entityId)
+        if(window != null) {
+            val index = getIndex(entityId)
+            val id = getId(entityId)
+            es.send(entityId, InterfaceOpen(frame, window, index, id))
         }
     }
 
     override fun close(entityId: Int) {
-        if(gameFrameMapper.has(entityId)) {
-            val gameFrame = gameFrameMapper.get(entityId)
-            es.send(entityId, InterfaceClose(gameFrame.getId(), getIndex(gameFrame.resizable)))
+        val window = getWindow(entityId)
+        if(window != null) {
+            val index = getIndex(entityId)
+            es.send(entityId, InterfaceClose(window, index))
         }
     }
 }

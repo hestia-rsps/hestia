@@ -2,26 +2,24 @@ package worlds.gregs.hestia.game.plugins.client.systems.network.`in`
 
 import com.artemis.ComponentMapper
 import world.gregs.hestia.core.network.packets.Packet
-import world.gregs.hestia.core.network.packets.PacketOpcode
-import world.gregs.hestia.core.network.packets.PacketSize
+import world.gregs.hestia.core.network.packets.PacketInfo
 import worlds.gregs.hestia.api.movement.components.Shift
-import worlds.gregs.hestia.game.PacketHandler
+import worlds.gregs.hestia.game.PacketHandlerSystem
 import worlds.gregs.hestia.game.plugins.movement.components.Steps
 import worlds.gregs.hestia.game.plugins.movement.components.calc.Follow
 import worlds.gregs.hestia.game.plugins.movement.components.calc.Path
 import worlds.gregs.hestia.game.plugins.movement.strategies.FixedTileStrategy
-import worlds.gregs.hestia.network.login.Packets
+import worlds.gregs.hestia.network.game.Packets
 
-@PacketSize(-1)
-@PacketOpcode(Packets.WALKING, Packets.MINI_MAP_WALKING)
-class WalkingHandler : PacketHandler() {
+@PacketInfo(-1, Packets.WALKING, Packets.MINI_MAP_WALKING)
+class WalkingHandler : PacketHandlerSystem() {
     private lateinit var pathMapper: ComponentMapper<Path>
     private lateinit var stepsMapper: ComponentMapper<Steps>
     private lateinit var followMapper: ComponentMapper<Follow>
     private lateinit var shiftMapper: ComponentMapper<Shift>
 
-    override fun handle(entityId: Int, packet: Packet, length: Int) {
-        val size = if (packet.opcode == Packets.MINI_MAP_WALKING) length - 13 else length
+    override fun handle(entityId: Int, packet: Packet) {
+        val size = packet.readableBytes() - if (packet.opcode == Packets.MINI_MAP_WALKING) 13 else 0
         val baseX = packet.readLEShortA()
         val baseY = packet.readLEShortA()
         val running = packet.readByte() == 1
