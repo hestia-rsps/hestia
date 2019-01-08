@@ -7,9 +7,8 @@ import world.gregs.hestia.core.network.packets.PacketSize
 import world.gregs.hestia.core.network.packets.out.Response
 import world.gregs.hestia.core.services.Cache
 import world.gregs.hestia.core.services.Encryption
-import world.gregs.hestia.core.services.formatUsername
 import worlds.gregs.hestia.game.events.CreatePlayer
-import worlds.gregs.hestia.network.game.GamePacket
+import worlds.gregs.hestia.network.game.`in`.GamePacket
 
 @PacketSize(-2)
 @PacketOpcode(16)
@@ -22,7 +21,7 @@ class WorldLogin : GamePacket() {
             session.send(ClientResponse(AddressingFeature.Responses.SERVER_BEING_UPDATED))
             return
         }*/
-        val username = packet.readString().formatUsername()
+        val username = packet.readString().toLowerCase().capitalize()
         packet.readUnsignedByte() // unknown
         val displayMode = packet.readUnsignedByte()
         val screenWidth = packet.readShort()

@@ -8,7 +8,7 @@ import world.gregs.hestia.core.network.login.LoginHandshake
 import world.gregs.hestia.core.network.login.LoginRequestListener
 import world.gregs.hestia.core.network.packets.InboundPacket
 import world.gregs.hestia.core.network.packets.Packet
-import worlds.gregs.hestia.network.game.GamePacket
+import worlds.gregs.hestia.network.game.`in`.GamePacket
 import worlds.gregs.hestia.network.login.`in`.WorldLogin
 import worlds.gregs.hestia.services.getSystem
 

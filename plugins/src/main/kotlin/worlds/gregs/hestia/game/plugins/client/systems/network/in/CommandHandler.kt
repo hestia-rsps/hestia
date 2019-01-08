@@ -10,6 +10,7 @@ import worlds.gregs.hestia.game.PacketHandler
 import worlds.gregs.hestia.game.events.CreateBot
 import worlds.gregs.hestia.game.events.CreateMob
 import worlds.gregs.hestia.game.events.schedule
+import worlds.gregs.hestia.game.plugins.dialogue.systems.DialoguesSystem
 import worlds.gregs.hestia.game.plugins.entity.components.update.CombatLevel
 import worlds.gregs.hestia.game.plugins.entity.components.update.DisplayName
 import worlds.gregs.hestia.game.plugins.entity.components.update.ForceMovement
@@ -32,9 +33,9 @@ import worlds.gregs.hestia.game.plugins.region.systems.RegionBuilderSystem
 import worlds.gregs.hestia.game.plugins.widget.components.screen.CustomScreenWidget
 import worlds.gregs.hestia.game.plugins.widget.systems.screen.CustomScreenWidgetSystem
 import worlds.gregs.hestia.game.update.Marker
+import worlds.gregs.hestia.network.game.out.Config
+import worlds.gregs.hestia.network.game.out.ConfigFile
 import worlds.gregs.hestia.network.login.Packets
-import worlds.gregs.hestia.network.out.Config
-import worlds.gregs.hestia.network.out.ConfigFile
 import worlds.gregs.hestia.services.*
 
 @PacketSize(-1)
@@ -71,6 +72,9 @@ class CommandHandler : PacketHandler() {
 
         println("Command ${parts[0]}")
         when (parts[0]) {
+            "di" -> {
+                world.getSystem(DialoguesSystem::class).startDialogue(entityId, "Man")
+            }
             "inter" -> {
                 val id = parts[1].toInt()
                 if(entity.getComponent(CustomScreenWidget::class) == null) {

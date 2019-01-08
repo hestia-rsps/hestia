@@ -4,7 +4,10 @@ import worlds.gregs.hestia.game.plugins.widget.components.screen.TaskList
 import worlds.gregs.hestia.game.plugins.widget.systems.BaseScreen
 
 class TaskListSystem : BaseScreen(TaskList::class) {
-    override var id = 917
+
+    override fun getId(entityId: Int): Int {
+        return ID
+    }
 
     override fun click(entityId: Int, componentId: Int, option: Int) {
         when (componentId) {
@@ -29,5 +32,9 @@ class TaskListSystem : BaseScreen(TaskList::class) {
                 val area = if (componentId == 153) 7 else (componentId - 123) / 2
             }
         }
+    }
+
+    companion object {
+        private const val ID = 917
     }
 }

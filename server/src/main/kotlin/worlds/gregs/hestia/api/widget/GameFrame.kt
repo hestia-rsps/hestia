@@ -1,8 +1,8 @@
 package worlds.gregs.hestia.api.widget
 
-import com.artemis.Component
+import worlds.gregs.hestia.api.widget.components.FullScreenWidget
 
-class GameFrame() : Component() {
+class GameFrame() : FullScreenWidget() {
 
     constructor(displayMode: Int, width: Int, height: Int) : this() {
         this.displayMode = displayMode

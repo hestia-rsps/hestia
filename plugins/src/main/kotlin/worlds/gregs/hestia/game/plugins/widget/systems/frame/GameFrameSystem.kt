@@ -2,46 +2,35 @@ package worlds.gregs.hestia.game.plugins.widget.systems.frame
 
 import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
-import net.mostlyoriginal.api.event.common.EventSystem
 import worlds.gregs.hestia.api.widget.GameFrame
 import worlds.gregs.hestia.api.widget.UserInterface
-import worlds.gregs.hestia.api.widget.Widget
+import worlds.gregs.hestia.game.plugins.widget.components.frame.tabs.LogoutTab
 import worlds.gregs.hestia.game.plugins.widget.components.full.WorldMap
-import worlds.gregs.hestia.game.plugins.widget.components.tabs.LogoutTab
+import worlds.gregs.hestia.game.plugins.widget.systems.BaseFullScreen
 import worlds.gregs.hestia.game.plugins.widget.systems.frame.GameFrameSystem.Companion.FIXED_ID
 import worlds.gregs.hestia.game.plugins.widget.systems.frame.GameFrameSystem.Companion.RESIZABLE_ID
-import worlds.gregs.hestia.network.out.WindowsPane
+import worlds.gregs.hestia.network.game.out.WindowsPane
 import worlds.gregs.hestia.services.send
 
-@Wire(failOnNull = false)
-class GameFrameSystem : Widget(GameFrame::class) {
+@Wire(failOnNull = false, injectInherited = true)
+class GameFrameSystem : BaseFullScreen(GameFrame::class) {
 
-    private lateinit var es: EventSystem
     private lateinit var gameFrameMapper: ComponentMapper<GameFrame>
     private lateinit var logoutMapper: ComponentMapper<LogoutTab>
     private var ui: UserInterface? = null
-    override var id = -1
 
     override fun getId(entityId: Int): Int {
-        if(gameFrameMapper.has(entityId)) {
-            val gameFrame = gameFrameMapper.get(entityId)
-            return if(gameFrame.resizable) RESIZABLE_ID else FIXED_ID
+        return if(gameFrameMapper.has(entityId)) {
+            gameFrameMapper.get(entityId).getId()
+        } else {
+            -1
         }
-        return -1
-    }
-
-    override fun inserted(entityId: Int) {
-        open(entityId)
-    }
-
-    override fun getIndex(resizable: Boolean): Int {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
     override fun open(entityId: Int) {
-        if(gameFrameMapper.has(entityId)) {
-            val gameFrame = gameFrameMapper.get(entityId)
-            es.send(entityId, WindowsPane(gameFrame.getId(), 0))
+        val window = getId(entityId)
+        if(window != -1) {
+            es.send(entityId, WindowsPane(window, 0))
         }
     }
 

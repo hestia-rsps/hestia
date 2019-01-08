@@ -33,7 +33,7 @@ import worlds.gregs.hestia.game.plugins.movement.systems.update.MovementStageChe
 class ClientPlugin : Plugin {
 
     override fun setup(b: WorldConfigurationBuilder) {
-        b.with(CommandHandler(), InterfaceHandler(), WalkingHandler(), ScreenHandler(), CloseInterfaceHandler(), WorldMapHandler())
+        b.with(CommandHandler(), InterfaceHandler(), WalkingHandler(), ScreenHandler(), CloseInterfaceHandler(), WorldMapHandler(), DialogueContinueHandler())
 
         b.with(LOGIN_DETAILS_PRIORITY, ClientConnectSystem())
         b.with(PacketSystem(), PacketSender(), ClientDisconnectSystem(), GlobalEntitySystem(), ClientNetworkSystem())

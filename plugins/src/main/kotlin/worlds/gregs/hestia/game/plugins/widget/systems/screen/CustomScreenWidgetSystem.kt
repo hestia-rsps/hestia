@@ -5,14 +5,16 @@ import worlds.gregs.hestia.game.plugins.widget.components.screen.CustomScreenWid
 import worlds.gregs.hestia.game.plugins.widget.systems.BaseScreen
 
 class CustomScreenWidgetSystem : BaseScreen(CustomScreenWidget::class) {
-    override var id = -1
 
     private lateinit var customScreenWidgetMapper: ComponentMapper<CustomScreenWidget>
 
-    override fun inserted(entityId: Int) {
-        val customScreenWidget = customScreenWidgetMapper.get(entityId)
-        id = customScreenWidget.id
-        super.inserted(entityId)
+    override fun getId(entityId: Int): Int {
+        return if(customScreenWidgetMapper.has(entityId)) {
+            val customScreenWidget = customScreenWidgetMapper.get(entityId)
+            customScreenWidget.id
+        } else {
+            -1
+        }
     }
 
     override fun click(entityId: Int, componentId: Int, option: Int) {

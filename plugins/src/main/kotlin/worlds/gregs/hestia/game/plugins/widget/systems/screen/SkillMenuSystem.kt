@@ -3,11 +3,14 @@ package worlds.gregs.hestia.game.plugins.widget.systems.screen
 import worlds.gregs.hestia.game.Configs.SKILL_MENU
 import worlds.gregs.hestia.game.plugins.widget.components.screen.SkillMenu
 import worlds.gregs.hestia.game.plugins.widget.systems.BaseScreen
-import worlds.gregs.hestia.network.out.Config
+import worlds.gregs.hestia.network.game.out.Config
 import worlds.gregs.hestia.services.send
 
 class SkillMenuSystem : BaseScreen(SkillMenu::class) {
-    override var id = 499
+
+    override fun getId(entityId: Int): Int {
+        return ID
+    }
 
     override fun click(entityId: Int, componentId: Int, option: Int) {
         when(componentId) {
@@ -20,5 +23,9 @@ class SkillMenuSystem : BaseScreen(SkillMenu::class) {
             28 -> {//More info
             }
         }
+    }
+
+    companion object {
+        private const val ID = 499
     }
 }

@@ -4,8 +4,14 @@ import worlds.gregs.hestia.game.plugins.widget.components.screen.SoundOptions
 import worlds.gregs.hestia.game.plugins.widget.systems.BaseScreen
 
 class SoundsOptionsSystem : BaseScreen(SoundOptions::class) {
-    override var id = 743
+    override fun getId(entityId: Int): Int {
+        return ID
+    }
 
     override fun click(entityId: Int, componentId: Int, option: Int) {
+    }
+
+    companion object {
+        private const val ID = 743
     }
 }

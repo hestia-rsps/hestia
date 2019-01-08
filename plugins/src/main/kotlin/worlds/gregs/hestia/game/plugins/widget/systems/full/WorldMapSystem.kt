@@ -6,15 +6,18 @@ import worlds.gregs.hestia.api.widget.GameFrame
 import worlds.gregs.hestia.game.plugins.widget.components.full.WorldMap
 import worlds.gregs.hestia.game.plugins.widget.systems.BaseFullScreen
 import worlds.gregs.hestia.game.plugins.widget.systems.frame.getId
-import worlds.gregs.hestia.network.out.GlobalConfig
-import worlds.gregs.hestia.network.out.WindowsPane
+import worlds.gregs.hestia.network.game.out.GlobalConfig
+import worlds.gregs.hestia.network.game.out.WindowsPane
 import worlds.gregs.hestia.services.send
 
 class WorldMapSystem : BaseFullScreen(WorldMap::class) {
-    override var id = 755
 
     private lateinit var gameFrameMapper: ComponentMapper<GameFrame>
     private lateinit var positionMapper: ComponentMapper<Position>
+
+    override fun getId(entityId: Int): Int {
+        return ID
+    }
 
     override fun open(entityId: Int) {
         super.open(entityId)
@@ -31,10 +34,6 @@ class WorldMapSystem : BaseFullScreen(WorldMap::class) {
         }
     }
 
-    override fun getIndex(resizable: Boolean): Int {
-        return 0
-    }
-
     override fun click(entityId: Int, componentId: Int, option: Int) {
         if(componentId == 44) {
             //Close button
@@ -42,4 +41,7 @@ class WorldMapSystem : BaseFullScreen(WorldMap::class) {
         println("Click world map $componentId")
     }
 
+    companion object {
+        private const val ID = 755
+    }
 }

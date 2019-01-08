@@ -1,6 +1,7 @@
 package worlds.gregs.hestia.api.widget
 
 import net.mostlyoriginal.api.system.core.PassiveSystem
+import worlds.gregs.hestia.api.widget.components.Frame
 import worlds.gregs.hestia.api.widget.components.FullScreenWidget
 import worlds.gregs.hestia.api.widget.components.ScreenWidget
 import kotlin.reflect.KClass
@@ -43,5 +44,6 @@ abstract class UserInterface : PassiveSystem() {
      * @param entityId The entity
      */
     abstract fun close(entityId: Int)
+    abstract fun close(entityId: Int, clazz: KClass<out Frame>)
 
 }
