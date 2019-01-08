@@ -3,8 +3,8 @@ package worlds.gregs.hestia.game.plugins.player.systems.sync
 import com.artemis.ComponentMapper
 import worlds.gregs.hestia.GameConstants.PLAYERS_LIMIT
 import worlds.gregs.hestia.api.SubscriptionSystem
-import worlds.gregs.hestia.api.player.Player
 import worlds.gregs.hestia.api.core.components.ClientIndex
+import worlds.gregs.hestia.api.player.Player
 import worlds.gregs.hestia.services.Aspect
 
 class MaximumPlayerLimitReached : Exception()
@@ -12,6 +12,7 @@ class MaximumPlayerLimitReached : Exception()
 class PlayerIndexSystem : SubscriptionSystem(Aspect.all(ClientIndex::class, Player::class)) {
 
     private lateinit var clientIndexMapper: ComponentMapper<ClientIndex>
+    private lateinit var playerMapper: ComponentMapper<Player>
 
     private val playerList = ArrayList<Int>()
 

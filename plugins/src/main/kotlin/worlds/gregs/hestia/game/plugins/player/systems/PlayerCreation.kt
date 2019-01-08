@@ -6,6 +6,7 @@ import net.mostlyoriginal.api.event.common.Subscribe
 import net.mostlyoriginal.api.system.core.PassiveSystem
 import worlds.gregs.hestia.api.client.ClientNetwork
 import worlds.gregs.hestia.api.core.components.Position
+import worlds.gregs.hestia.api.widget.GameFrame
 import worlds.gregs.hestia.game.archetypes.EntityFactory
 import worlds.gregs.hestia.game.archetypes.PlayerFactory
 import worlds.gregs.hestia.game.events.CreatePlayer
@@ -17,6 +18,7 @@ class PlayerCreation : PassiveSystem() {
 
     private lateinit var displayNameMapper: ComponentMapper<DisplayName>
     private lateinit var positionMapper: ComponentMapper<Position>
+    private lateinit var gameFrameMapper: ComponentMapper<GameFrame>
     private var network: ClientNetwork? = null
     private val count = AtomicInteger(0)
 
@@ -27,6 +29,11 @@ class PlayerCreation : PassiveSystem() {
         if(event.session.channel != null) {
             network?.setup(entityId, event.session.channel!!)
         }
+
+        val gameFrame = gameFrameMapper.get(entityId)
+        gameFrame.displayMode = event.displayMode
+        gameFrame.width = event.screenWidth
+        gameFrame.height = event.screenHeight
 
         event.session.id = entityId
 
