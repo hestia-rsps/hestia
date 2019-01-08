@@ -28,7 +28,7 @@ class WornEquipmentTabSystem : BaseFrame(WornEquipmentTab::class) {
         es.send(entityId, SendItems(94, (0 until 15).toList()))
     }
 
-    override fun click(entityId: Int, componentId: Int, option: Int) {
+    override fun click(entityId: Int, interfaceHash: Int, componentId: Int, option: Int) {
         when(componentId) {
             8, 11, 14, 17, 20, 23, 26, 29, 32, 35, 38, 50 -> {
                 val index = if(componentId == 50) 11 else (componentId - 8) / 3

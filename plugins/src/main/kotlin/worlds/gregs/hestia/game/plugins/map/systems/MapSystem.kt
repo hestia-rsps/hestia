@@ -15,8 +15,9 @@ class MapSystem : Map() {
     private lateinit var projectileMapper: ComponentMapper<ProjectileClipping>
 
     override fun unload(entityId: Int) {
-        projectileMapper.remove(entityId)
-        clippingMapper.remove(entityId)
+        //TODO fix clipping maps not reloading
+//        projectileMapper.remove(entityId)
+//        clippingMapper.remove(entityId)
     }
 
     override fun getClipping(entityId: Int?): Clipping? {

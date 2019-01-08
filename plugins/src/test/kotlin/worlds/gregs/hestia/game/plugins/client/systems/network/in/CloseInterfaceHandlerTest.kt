@@ -6,6 +6,7 @@ import com.nhaarman.mockitokotlin2.mock
 import org.junit.jupiter.api.Test
 import world.gregs.hestia.core.network.packets.Packet
 import worlds.gregs.hestia.api.widget.components.ScreenWidget
+import worlds.gregs.hestia.game.plugins.widget.systems.screen.CustomScreenWidgetSystem
 import worlds.gregs.hestia.services.getSystem
 import worlds.gregs.hestia.tools.InterfaceTester
 
@@ -21,7 +22,7 @@ internal class CloseInterfaceHandlerTest : InterfaceTester(WorldConfigurationBui
     @Test
     fun `Close an open screen widget`() {
         //Given
-        open(ScreenWidget::class)
+        open(CustomScreenWidgetSystem::class)
         //When
         sendClose()
         tick()
@@ -32,7 +33,7 @@ internal class CloseInterfaceHandlerTest : InterfaceTester(WorldConfigurationBui
     @Test
     fun `Close another entities`() {
         //Given
-        open(ScreenWidget::class)
+        open(CustomScreenWidgetSystem::class)
         //When
         sendClose(1)
         //Then
@@ -42,6 +43,6 @@ internal class CloseInterfaceHandlerTest : InterfaceTester(WorldConfigurationBui
     private fun sendClose(entityId: Int = 0) {
         val system = world.getSystem(CloseInterfaceHandler::class)
         val packet = Packet.Builder().build()
-        system.handle(entityId, packet, packet.length)
+        system.handle(entityId, packet)
     }
 }

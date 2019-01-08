@@ -37,6 +37,7 @@ class PlayerCreation : PassiveSystem() {
 
         event.session.id = entityId
 
+
         val displayName = displayNameMapper.get(entityId)
         displayName?.name = event.name
 

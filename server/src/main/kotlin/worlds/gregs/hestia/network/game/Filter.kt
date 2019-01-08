@@ -1,4 +1,4 @@
-package worlds.gregs.hestia.network.login
+package worlds.gregs.hestia.network.game
 
 import com.google.common.collect.ConcurrentHashMultiset
 import io.netty.channel.Channel
@@ -15,13 +15,13 @@ import java.net.InetSocketAddress
 @ChannelHandler.Sharable
 class Filter : ChannelInboundHandlerAdapter() {
 
-    val connections: ConcurrentHashMultiset<String> = ConcurrentHashMultiset.create<String>()
+    private val connections: ConcurrentHashMultiset<String> = ConcurrentHashMultiset.create<String>()
 
     override fun channelRegistered(ctx: ChannelHandlerContext?) {
         val session = ctx?.channel()?.attr(SESSION_KEY)?.get()
                 ?: throw IllegalStateException("Session is null")
 
-        val host = getHost(ctx.channel())
+        val host = ctx.channel().getHost()
 
         if(host.equals(NetworkConstants.LOCALHOST, true)) {
             return
@@ -42,7 +42,7 @@ class Filter : ChannelInboundHandlerAdapter() {
     }
 
     override fun channelUnregistered(ctx: ChannelHandlerContext?) {
-        val host = getHost(ctx?.channel())
+        val host = ctx?.channel().getHost()
 
         if(host.equals(NetworkConstants.LOCALHOST, true)) {
             return
@@ -53,11 +53,6 @@ class Filter : ChannelInboundHandlerAdapter() {
 
         //Continue as normal
         ctx?.fireChannelUnregistered()
-    }
-
-    //Purely for testing
-    open fun getHost(channel: Channel?): String {
-        return channel.getHost()
     }
 
     companion object {

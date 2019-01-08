@@ -35,6 +35,8 @@ class InterfacePlugin : Plugin {
         b.with(ChatSettingsSystem(), ChatBoxSystem(), PrivateChatSystem(), ChatBackgroundSystem(), DialogueBoxSystem())
         //Minimap orbs
         b.with(HealthOrbSystem(), PrayerOrbSystem(), EnergyOrbSystem(), SummoningOrbSystem())
+        //Friends chat
+        b.with(FriendsChatSetupSystem())
     }
 
 }

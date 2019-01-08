@@ -19,7 +19,7 @@ class TaskSystemTabSystem : BaseFrame(TaskSystemTab::class) {
         return if(resizable) RESIZABLE_INDEX else FIXED_INDEX
     }
 
-    override fun click(entityId: Int, componentId: Int, option: Int) {
+    override fun click(entityId: Int, interfaceHash: Int, componentId: Int, option: Int) {
         when(componentId) {
             99, 142, 147, 152, 157, 162 -> {//Select task
                 val index = if(componentId == 99) 0 else (componentId - 137)/5

@@ -7,7 +7,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import world.gregs.hestia.core.network.packets.Packet
 import worlds.gregs.hestia.api.widget.GameFrame
-import worlds.gregs.hestia.game.plugins.widget.components.screen.GraphicsOptions
+import worlds.gregs.hestia.game.plugins.widget.systems.screen.GraphicsOptionsSystem
 import worlds.gregs.hestia.services.getSystem
 import worlds.gregs.hestia.tools.InterfaceTester
 
@@ -24,7 +24,7 @@ internal class ScreenHandlerTest : InterfaceTester(WorldConfigurationBuilder().w
 
     @BeforeEach
     fun setup() {
-        close(GraphicsOptions::class)
+        open(GraphicsOptionsSystem::class)
         gameFrame.displayMode = 0
         gameFrame.width = 0
         gameFrame.height = 0
@@ -39,13 +39,23 @@ internal class ScreenHandlerTest : InterfaceTester(WorldConfigurationBuilder().w
     }
 
     @Test
-    fun `No reload when graphics options interface open`() {
+    fun `No reload when graphics options interface closed`() {
         //Given
-        open(GraphicsOptions::class)
+        close(GraphicsOptionsSystem::class)
         //When
         sendScreen(gameMode = 1)
         //Then
         assertReloaded(0)
+    }
+
+    @Test
+    fun `Reload when graphics options interface open`() {
+        //Given
+        open(GraphicsOptionsSystem::class)
+        //When
+        sendScreen(gameMode = 1)
+        //Then
+        assertReloaded(1)
     }
 
     @Test
@@ -95,8 +105,6 @@ internal class ScreenHandlerTest : InterfaceTester(WorldConfigurationBuilder().w
 
     @Test
     fun `Screen dimensions change when graphics interface open and no game mode change`() {
-        //Given
-        open(GraphicsOptions::class)
         //When
         sendScreen(width = 100, height = 100)
         //Then
@@ -105,6 +113,8 @@ internal class ScreenHandlerTest : InterfaceTester(WorldConfigurationBuilder().w
 
     @Test
     fun `Screen dimensions change when graphics interface closed and game mode changed`() {
+        //Given
+        close(GraphicsOptionsSystem::class)
         //When
         sendScreen(width = 100, height = 100)
         //Then
@@ -127,7 +137,7 @@ internal class ScreenHandlerTest : InterfaceTester(WorldConfigurationBuilder().w
     private fun sendScreen(entityId: Int = 0, gameMode: Int = 0, width: Int = 765, height: Int = 503) {
         val system = world.getSystem(ScreenHandler::class)
         val packet = packet(gameMode, width, height)
-        system.handle(entityId, packet, packet.length)
+        system.handle(entityId, packet)
     }
 
     private fun packet(gameMode: Int, width: Int, height: Int): Packet {

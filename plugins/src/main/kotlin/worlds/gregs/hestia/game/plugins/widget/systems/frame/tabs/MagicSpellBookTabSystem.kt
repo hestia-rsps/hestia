@@ -14,7 +14,7 @@ class MagicSpellBookTabSystem : BaseFrame(LogoutTab::class) {
         return MODERN_SPELLBOOK
     }
 
-    override fun click(entityId: Int, componentId: Int, option: Int) {
+    override fun click(entityId: Int, interfaceHash: Int, componentId: Int, option: Int) {
         when(componentId) {
             2 -> {//Defensive casting
             }

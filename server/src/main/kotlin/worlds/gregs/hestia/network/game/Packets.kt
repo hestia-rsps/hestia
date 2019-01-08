@@ -1,12 +1,11 @@
-package worlds.gregs.hestia.network.login
+package worlds.gregs.hestia.network.game
 
 object Packets {
 
     const val JOIN_FRIEND_CHAT = 1
     const val OBJECT_2 = 2
     const val ENTER_INTEGER = 3
-    const val INTERFACE_BTN_3 = 4//TODO sort out
-    const val SWITCH_DETAIL = 4//TODO sort out
+    const val INTERFACE_BTN_3 = 4
     const val MOVE_CAMERA = 5
     const val REMOVE_FRIEND = 8
     const val MOB_CLICK_1 = 9

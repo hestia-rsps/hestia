@@ -30,7 +30,7 @@ internal class UserInterfaceSystemTest : GameTest(WorldConfigurationBuilder()) {
     @BeforeEach
     fun setup() {
         reset(widget)
-        whenever(widget.id).thenReturn(11)
+        whenever(widget.getId(any())).thenReturn(11)
         whenever(system.subscription).thenReturn(mock())
         whenever(system.subscription.entities).thenReturn(mock())
         whenever(widget.subscription).thenReturn(mock())
@@ -229,11 +229,11 @@ internal class UserInterfaceSystemTest : GameTest(WorldConfigurationBuilder()) {
     }
 
     private fun click(entity: Int = 0, widget: Int = 11, component: Int = 0, option: Int = 0) {
-        ui.click(entity, widget, component, option)
+        ui.click(entity, 0, widget, component, option)
     }
 
     private fun assertClick(times: Int, entity: Int = 0, component: Int = 0, option: Int = 0) {
-        verify(widget, times(times)).click(entity, component, option)
+        verify(widget, times(times)).click(entity, 0, component, option)
     }
 
 }

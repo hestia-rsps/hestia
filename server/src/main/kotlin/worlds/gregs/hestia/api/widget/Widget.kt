@@ -18,7 +18,7 @@ abstract class Widget(component: KClass<out Component>) : SubscriptionSystem(Asp
         return 0
     }
 
-    abstract fun click(entityId: Int, componentId: Int, option: Int)
+    abstract fun click(entityId: Int, interfaceHash: Int, componentId: Int, option: Int)
 
     abstract fun open(entityId: Int)
 

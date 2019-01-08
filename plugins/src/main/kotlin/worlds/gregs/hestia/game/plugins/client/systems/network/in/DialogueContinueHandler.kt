@@ -4,24 +4,22 @@ import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
 import org.slf4j.LoggerFactory
 import world.gregs.hestia.core.network.packets.Packet
-import world.gregs.hestia.core.network.packets.PacketOpcode
-import world.gregs.hestia.core.network.packets.PacketSize
+import world.gregs.hestia.core.network.packets.PacketInfo
 import worlds.gregs.hestia.api.dialogue.DialogueBase
-import worlds.gregs.hestia.game.PacketHandler
+import worlds.gregs.hestia.game.PacketHandlerSystem
 import worlds.gregs.hestia.game.plugins.dialogue.systems.types.BaseEntityDialogue
 import worlds.gregs.hestia.game.plugins.dialogue.systems.types.OptionsDialogue
 import worlds.gregs.hestia.game.plugins.widget.components.frame.chat.DialogueBox
-import worlds.gregs.hestia.network.login.Packets
+import worlds.gregs.hestia.network.game.Packets
 
-@PacketSize(6)
-@PacketOpcode(Packets.DIALOGUE_CONTINUE)
+@PacketInfo(6, Packets.DIALOGUE_CONTINUE)
 @Wire(failOnNull = false)
-class DialogueContinueHandler : PacketHandler() {
+class DialogueContinueHandler : PacketHandlerSystem() {
     private val logger = LoggerFactory.getLogger(DialogueContinueHandler::class.java)
     private lateinit var dialogueBoxMapper: ComponentMapper<DialogueBox>
     private var system: DialogueBase? = null
 
-    override fun handle(entityId: Int, packet: Packet, length: Int) {
+    override fun handle(entityId: Int, packet: Packet) {
         val interfaceHash = packet.readInt2()
         packet.readLEShortA()
         val interfaceId = interfaceHash shr 16

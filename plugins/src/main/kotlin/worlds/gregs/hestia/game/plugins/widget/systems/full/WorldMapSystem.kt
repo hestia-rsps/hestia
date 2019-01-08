@@ -34,7 +34,7 @@ class WorldMapSystem : BaseFullScreen(WorldMap::class) {
         }
     }
 
-    override fun click(entityId: Int, componentId: Int, option: Int) {
+    override fun click(entityId: Int, interfaceHash: Int, componentId: Int, option: Int) {
         if(componentId == 44) {
             //Close button
         }

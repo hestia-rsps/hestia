@@ -10,6 +10,7 @@ import worlds.gregs.hestia.game.plugin.Plugin.Companion.UPDATE_DISPLAY_CHANGE_PR
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.UPDATE_FINISH_PRIORITY
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.UPDATE_GLOBAL_ENTITY_PRIORITY
 import worlds.gregs.hestia.game.plugins.player.systems.PlayerCreation
+import worlds.gregs.hestia.game.plugins.player.systems.PlayerLoginSystem
 import worlds.gregs.hestia.game.plugins.player.systems.chunk.PlayerChunkChangeSystem
 import worlds.gregs.hestia.game.plugins.player.systems.chunk.PlayerChunkSubscriptionSystem
 import worlds.gregs.hestia.game.plugins.player.systems.chunk.PlayerChunkSystem
@@ -29,7 +30,7 @@ class PlayerPlugin : Plugin {
 
     override fun setup(b: WorldConfigurationBuilder) {
         b.with(PlayerCreation())
-        b.with(PlayerChunkSubscriptionSystem(), PlayerChunkSystem(), PlayerRegionSubscriptionSystem(), PlayerRegionSystem())
+        b.with(PlayerChunkSubscriptionSystem(), PlayerChunkSystem(), PlayerRegionSubscriptionSystem(), PlayerRegionSystem(), PlayerLoginSystem())
         b.with(PLAYER_INDEX_PRIORITY, PlayerIndexSystem())
         b.with(PlayerChunkMap(), PlayerUpdateFlagInserts())
         b.with(PRE_SHIFT_PRIORITY, PlayerChunkChangeSystem(), PlayerRegionChangeSystem())
