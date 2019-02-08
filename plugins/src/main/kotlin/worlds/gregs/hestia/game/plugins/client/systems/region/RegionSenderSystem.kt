@@ -12,8 +12,8 @@ import worlds.gregs.hestia.api.region.Regions
 import worlds.gregs.hestia.game.events.UpdateMapRegion
 import worlds.gregs.hestia.api.core.components.Position
 import worlds.gregs.hestia.api.core.components.Viewport
-import worlds.gregs.hestia.network.out.DynamicMapRegion
-import worlds.gregs.hestia.network.out.MapRegion
+import worlds.gregs.hestia.network.game.out.DynamicMapRegion
+import worlds.gregs.hestia.network.game.out.MapRegion
 import worlds.gregs.hestia.services.Aspect
 import worlds.gregs.hestia.services.send
 import worlds.gregs.hestia.services.toArray

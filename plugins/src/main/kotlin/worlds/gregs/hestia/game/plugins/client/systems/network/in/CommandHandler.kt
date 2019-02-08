@@ -2,14 +2,15 @@ package worlds.gregs.hestia.game.plugins.client.systems.network.`in`
 
 import net.mostlyoriginal.api.event.common.EventSystem
 import world.gregs.hestia.core.network.packets.Packet
-import world.gregs.hestia.core.network.packets.PacketOpcode
-import world.gregs.hestia.core.network.packets.PacketSize
+import world.gregs.hestia.core.network.packets.PacketInfo
 import worlds.gregs.hestia.api.core.components.Position
 import worlds.gregs.hestia.api.movement.components.Shift
-import worlds.gregs.hestia.game.PacketHandler
+import worlds.gregs.hestia.game.PacketHandlerSystem
 import worlds.gregs.hestia.game.events.CreateBot
 import worlds.gregs.hestia.game.events.CreateMob
 import worlds.gregs.hestia.game.events.schedule
+import worlds.gregs.hestia.game.events.send
+import worlds.gregs.hestia.game.plugins.dialogue.systems.DialoguesSystem
 import worlds.gregs.hestia.game.plugins.entity.components.update.CombatLevel
 import worlds.gregs.hestia.game.plugins.entity.components.update.DisplayName
 import worlds.gregs.hestia.game.plugins.entity.components.update.ForceMovement
@@ -29,17 +30,21 @@ import worlds.gregs.hestia.game.plugins.player.component.update.UpdateUnknown
 import worlds.gregs.hestia.game.plugins.player.component.update.appearance.Hidden
 import worlds.gregs.hestia.game.plugins.player.systems.updateClanChat
 import worlds.gregs.hestia.game.plugins.region.systems.RegionBuilderSystem
+import worlds.gregs.hestia.game.plugins.widget.components.screen.CustomScreenWidget
+import worlds.gregs.hestia.game.plugins.widget.systems.screen.CustomScreenWidgetSystem
 import worlds.gregs.hestia.game.update.Marker
-import worlds.gregs.hestia.network.login.Packets
+import worlds.gregs.hestia.network.game.Packets
+import worlds.gregs.hestia.network.game.out.Config
+import worlds.gregs.hestia.network.game.out.ConfigFile
+import worlds.gregs.hestia.network.game.out.InterfaceComponentText
 import worlds.gregs.hestia.services.*
 
-@PacketSize(-1)
-@PacketOpcode(Packets.COMMAND)
-class CommandHandler : PacketHandler() {
+@PacketInfo(-1, Packets.COMMAND)
+class CommandHandler : PacketHandlerSystem() {
 
     private lateinit var es: EventSystem
 
-    override fun handle(entityId: Int, packet: Packet, length: Int) {
+    override fun handle(entityId: Int, packet: Packet) {
         packet.readUnsignedByte()//client command
         packet.readUnsignedByte()
         val command = packet.readString()
@@ -67,6 +72,31 @@ class CommandHandler : PacketHandler() {
 
         println("Command ${parts[0]}")
         when (parts[0]) {
+            "text" -> {
+                entity.send(InterfaceComponentText(parts[1].toInt(), parts[2].toInt(), parts[3]))
+            }
+            "di" -> {
+                world.getSystem(DialoguesSystem::class).startDialogue(entityId, "Man")
+            }
+            "inter" -> {
+                val id = parts[1].toInt()
+                if(entity.getComponent(CustomScreenWidget::class) == null) {
+                    entity.edit().add(CustomScreenWidget(id))
+                } else {
+                    if(id == -1) {
+                        entity.edit().remove(CustomScreenWidget::class)
+                    } else {
+                        entity.getComponent(CustomScreenWidget::class)!!.id = id
+                        world.getSystem(CustomScreenWidgetSystem::class).open(entityId)
+                    }
+                }
+            }
+            "config" -> {
+                es.send(entityId, Config(parts[1].toInt(), parts[2].toInt()))
+            }
+            "configf" -> {
+                es.send(entityId, ConfigFile(parts[1].toInt(), parts[2].toInt()))
+            }
             "tele", "tp" -> {
                 entity.move(parts[1].toInt(), parts[2].toInt(), if(parts.size > 3) parts[3].toInt() else 0)
             }

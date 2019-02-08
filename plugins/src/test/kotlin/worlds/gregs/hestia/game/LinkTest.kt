@@ -11,6 +11,7 @@ import org.junit.jupiter.api.Test
 import worlds.gregs.hestia.game.plugins.movement.components.RunToggled
 import worlds.gregs.hestia.services.getComponent
 import worlds.gregs.hestia.services.getSystem
+import worlds.gregs.hestia.tools.PlayerTester
 
 @PreserveProcessVisiblity
 class LinkTest : PlayerTester(WorldConfigurationBuilder().with(EntityLinkManager())) {
