@@ -10,8 +10,9 @@ import worlds.gregs.hestia.api.widget.components.Frame
 import worlds.gregs.hestia.api.widget.components.FullScreenWidget
 import worlds.gregs.hestia.api.widget.components.ScreenWidget
 import worlds.gregs.hestia.game.events.ButtonClick
-import worlds.gregs.hestia.network.game.out.message
+import worlds.gregs.hestia.game.events.send
 import kotlin.reflect.KClass
+import world.gregs.hestia.core.network.protocol.encoders.messages.Chat
 
 class UserInterfaceSystem : UserInterface() {
 
@@ -43,7 +44,7 @@ class UserInterfaceSystem : UserInterface() {
     private fun open(entity: Entity, widget: ScreenWidget) {
         val has = widgets.filterIsInstance<BaseScreen>().any { it.subscription.entities.contains(entity.id) }
         if (has) {
-            entity.message("Please close the interface you have open before opening another.")
+            entity.send(Chat(0, 0, null, message = "Please close the interface you have open before opening another."))//TODO .message()
             return
         }
 
@@ -57,7 +58,7 @@ class UserInterfaceSystem : UserInterface() {
     private fun open(entity: Entity, widget: FullScreenWidget) {
         val has = widgets.filterIsInstance<BaseFullScreen>().any { it.subscription.entities.contains(entity.id) }
         if (has) {
-            entity.message("Please close the interface you have open before opening another.")
+            entity.send(Chat(0, 0, null, message = "Please close the interface you have open before opening another."))
             return
         }
 

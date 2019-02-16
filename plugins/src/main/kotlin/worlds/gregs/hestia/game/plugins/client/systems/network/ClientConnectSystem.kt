@@ -6,7 +6,7 @@ import worlds.gregs.hestia.api.SubscriptionSystem
 import worlds.gregs.hestia.api.core.components.ClientIndex
 import worlds.gregs.hestia.game.plugins.client.components.NetworkSession
 import worlds.gregs.hestia.game.plugins.entity.components.update.DisplayName
-import worlds.gregs.hestia.network.game.out.LoginDetails
+import worlds.gregs.hestia.network.game.encoders.messages.LoginDetails
 import worlds.gregs.hestia.services.Aspect
 import worlds.gregs.hestia.services.send
 

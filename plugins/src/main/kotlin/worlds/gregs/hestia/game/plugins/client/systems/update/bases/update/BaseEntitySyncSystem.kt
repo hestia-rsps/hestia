@@ -2,7 +2,7 @@ package worlds.gregs.hestia.game.plugins.client.systems.update.bases.update
 
 import com.artemis.Component
 import com.artemis.ComponentMapper
-import world.gregs.hestia.core.network.packets.Packet
+import world.gregs.hestia.core.network.codec.packet.PacketBuilder
 import worlds.gregs.hestia.api.client.components.EntityUpdates
 import worlds.gregs.hestia.api.core.components.Viewport
 import worlds.gregs.hestia.api.update.Sync
@@ -15,7 +15,7 @@ import kotlin.reflect.KClass
 abstract class BaseEntitySyncSystem(vararg classes: KClass<out Component>) : Sync(Aspect.all(NetworkSession::class, Viewport::class, *classes)) {
 
     private lateinit var entityUpdatesMapper: ComponentMapper<EntityUpdates>
-    internal lateinit var packet: Packet.Builder
+    internal lateinit var packet: PacketBuilder
     internal var total = 0//Total number of entities
     private var added = 0//Number of new local entities added
     internal lateinit var iterator: MutableIterator<Int>
@@ -26,7 +26,7 @@ abstract class BaseEntitySyncSystem(vararg classes: KClass<out Component>) : Syn
     /**
      * Get the packet to write too
      */
-    abstract fun packet(entityId: Int): Packet.Builder
+    abstract fun packet(entityId: Int): PacketBuilder
 
     open fun start() {
         packet.startBitAccess()

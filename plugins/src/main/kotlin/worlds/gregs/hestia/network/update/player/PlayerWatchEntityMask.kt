@@ -1,14 +1,15 @@
 package worlds.gregs.hestia.network.update.player
 
 import com.artemis.ComponentMapper
+import world.gregs.hestia.core.network.codec.packet.Modifier
+import world.gregs.hestia.core.network.codec.packet.PacketBuilder
 import worlds.gregs.hestia.game.plugins.entity.components.update.direction.Watching
 import worlds.gregs.hestia.game.update.UpdateEncoder
-import world.gregs.hestia.core.network.packets.Packet
 
 class PlayerWatchEntityMask(private val watchingMapper: ComponentMapper<Watching>) : UpdateEncoder {
 
-    override val encode: Packet.Builder.(Int, Int) -> Unit = { _, other ->
-        writeShortA(watchingMapper.get(other)?.clientIndex ?: -1)
+    override val encode: PacketBuilder.(Int, Int) -> Unit = { _, other ->
+        writeShort(watchingMapper.get(other)?.clientIndex ?: -1, Modifier.ADD)
     }
 
 }

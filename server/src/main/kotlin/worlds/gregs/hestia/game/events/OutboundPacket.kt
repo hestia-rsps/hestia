@@ -3,13 +3,11 @@ package worlds.gregs.hestia.game.events
 import com.artemis.Entity
 import net.mostlyoriginal.api.event.common.Event
 import net.mostlyoriginal.api.event.common.EventSystem
-import world.gregs.hestia.core.network.packets.Packet
+import world.gregs.hestia.core.network.codec.packet.Packet
 import worlds.gregs.hestia.services.getSystem
 
-data class OutBoundPacket(val entity: Int, val packet: Packet, val close: Boolean = false) : Event {
-    constructor(entity: Int, packet: Packet.Builder, close: Boolean = false) : this(entity, packet.build(), close)
-}
+data class OutBoundPacket(val entity: Int, val packet: Packet, val close: Boolean = false) : Event
 
-fun Entity.send(builder: Packet.Builder) {
-    world.getSystem(EventSystem::class).dispatch(OutBoundPacket(this.id, builder.build()))
+fun Entity.send(packet: Packet) {
+    world.getSystem(EventSystem::class).dispatch(OutBoundPacket(this.id, packet))
 }

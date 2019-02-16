@@ -9,7 +9,7 @@ import worlds.gregs.hestia.game.plugins.widget.components.full.WorldMap
 import worlds.gregs.hestia.game.plugins.widget.systems.BaseFullScreen
 import worlds.gregs.hestia.game.plugins.widget.systems.frame.GameFrameSystem.Companion.FIXED_ID
 import worlds.gregs.hestia.game.plugins.widget.systems.frame.GameFrameSystem.Companion.RESIZABLE_ID
-import worlds.gregs.hestia.network.game.out.WindowsPane
+import worlds.gregs.hestia.network.game.encoders.messages.WidgetWindowsPane
 import worlds.gregs.hestia.services.send
 
 @Wire(failOnNull = false, injectInherited = true)
@@ -30,7 +30,7 @@ class GameFrameSystem : BaseFullScreen(GameFrame::class) {
     override fun open(entityId: Int) {
         val window = getId(entityId)
         if(window != -1) {
-            es.send(entityId, WindowsPane(window, 0))
+            es.send(entityId, WidgetWindowsPane(window, 0))
         }
     }
 

@@ -1,18 +1,18 @@
 package worlds.gregs.hestia.game.plugins.map.systems
 
 import com.artemis.annotations.Wire
-import world.gregs.hestia.core.network.packets.Packet
+import io.netty.buffer.Unpooled
 import worlds.gregs.hestia.api.map.ClippingMasks
 import worlds.gregs.hestia.api.map.MapSettings
 import worlds.gregs.hestia.game.map.Flags
 import worlds.gregs.hestia.game.map.Flags.BLOCKED_TILE
 import worlds.gregs.hestia.game.map.Flags.BRIDGE_TILE
-import worlds.gregs.hestia.game.plugins.region.systems.RegionBuilderSystem.Companion.forChunks
-import worlds.gregs.hestia.game.plugins.region.systems.load.ChunkRotationSystem
 import worlds.gregs.hestia.game.map.MapConstants.PLANE_RANGE
 import worlds.gregs.hestia.game.map.MapConstants.REGION_PLANES
 import worlds.gregs.hestia.game.map.MapConstants.REGION_RANGE
 import worlds.gregs.hestia.game.map.MapConstants.REGION_SIZE
+import worlds.gregs.hestia.game.plugins.region.systems.RegionBuilderSystem.Companion.forChunks
+import worlds.gregs.hestia.game.plugins.region.systems.load.ChunkRotationSystem
 
 /**
  * MapSettingsSystem
@@ -31,15 +31,20 @@ class MapSettingsSystem : MapSettings() {
      */
     override fun load(mapContainerData: ByteArray): Array<Array<ByteArray>> {
         val mapSettings = Array(REGION_PLANES) { Array(REGION_SIZE) { ByteArray(REGION_SIZE) } }
-        val mapStream = Packet(mapContainerData)
+        val buffer = Unpooled.wrappedBuffer(mapContainerData)
+        var config: Int
         //For every region tile
         forChunks(REGION_RANGE, REGION_RANGE, PLANE_RANGE) { localX, localY, plane ->
-            var value = 2
-            while (value > 1) {
-                value = mapStream.readUnsignedByte()
+            loop@ while (true) {
+                config = if(buffer.isReadable(1)) buffer.readUnsignedByte().toInt() else 0
                 when {
-                    value <= 49 -> mapStream.readByte()
-                    value <= 81 -> mapSettings[plane][localX][localY] = (value - 49).toByte()
+                    config == 0 -> break@loop
+                    config == 1 -> {
+                        if(buffer.isReadable(1)) buffer.readByte()
+                        break@loop
+                    }
+                    config <= 49 -> if(buffer.isReadable(1)) buffer.readByte()
+                    config <= 81 -> mapSettings[plane][localX][localY] = (config - 49).toByte()
                 }
             }
         }

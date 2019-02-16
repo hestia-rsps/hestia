@@ -28,6 +28,6 @@ abstract class BasePlayerUpdateSystem : BasePlayerSyncSystem(), BaseUpdateSystem
     override fun process(entityId: Int) {
         super.process(entityId)
 
-        es.send(entityId, packet)
+        es.send(entityId, packet.build())
     }
 }

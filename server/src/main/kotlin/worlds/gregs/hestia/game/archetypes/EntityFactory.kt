@@ -3,7 +3,7 @@ package worlds.gregs.hestia.game.archetypes
 import com.artemis.Archetype
 import com.artemis.World
 import org.slf4j.LoggerFactory
-import world.gregs.hestia.core.services.load.Loader
+import world.gregs.hestia.core.services.Loader
 import world.gregs.hestia.core.services.plural
 import kotlin.reflect.KClass
 import kotlin.system.measureNanoTime

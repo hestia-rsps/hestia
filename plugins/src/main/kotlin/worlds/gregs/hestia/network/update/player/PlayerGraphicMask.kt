@@ -1,15 +1,17 @@
 package worlds.gregs.hestia.network.update.player
 
 import com.artemis.ComponentMapper
-import worlds.gregs.hestia.game.plugins.entity.components.update.gfx.FirstGraphic
-import worlds.gregs.hestia.api.core.components.Graphics
-import worlds.gregs.hestia.game.update.UpdateEncoder
-import world.gregs.hestia.core.network.packets.Packet
+import world.gregs.hestia.core.network.codec.packet.Endian
+import world.gregs.hestia.core.network.codec.packet.Modifier
+import world.gregs.hestia.core.network.codec.packet.PacketBuilder
 import world.gregs.hestia.core.services.int
+import worlds.gregs.hestia.api.core.components.Graphics
+import worlds.gregs.hestia.game.plugins.entity.components.update.gfx.FirstGraphic
+import worlds.gregs.hestia.game.update.UpdateEncoder
 
 class PlayerGraphicMask(private val componentMapper: ComponentMapper<out Graphics>) : UpdateEncoder {
 
-    override val encode: Packet.Builder.(Int, Int) -> Unit = { _, other ->
+    override val encode: PacketBuilder.(Int, Int) -> Unit = { _, other ->
         val graphic = componentMapper.get(other)
 
         //Speed/Height details
@@ -29,13 +31,13 @@ class PlayerGraphicMask(private val componentMapper: ComponentMapper<out Graphic
         when (graphic) {
             is FirstGraphic -> {
                 writeShort(graphic.id)
-                writeLEInt(hash)
-                writeByteA(hash2)
+                writeInt(hash, order = Endian.LITTLE)
+                writeByte(hash2, Modifier.ADD)
             }
             else -> {
-                writeLEShortA(graphic?.id ?: -1)
-                writeInt2(hash)
-                writeByteC(hash2)
+                writeShort(graphic?.id ?: -1, Modifier.ADD, Endian.LITTLE)
+                writeInt(hash, Modifier.INVERSE, Endian.MIDDLE)
+                writeByte(hash2, Modifier.INVERSE)
             }
         }
     }

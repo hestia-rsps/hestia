@@ -1,7 +1,7 @@
 package worlds.gregs.hestia.game.plugins.client.systems.update.bases.update.sync
 
 import com.artemis.ComponentMapper
-import world.gregs.hestia.core.network.packets.Packet
+import world.gregs.hestia.core.network.codec.packet.PacketBuilder
 import worlds.gregs.hestia.api.client.components.EntityUpdates
 import worlds.gregs.hestia.api.core.components.Viewport
 import worlds.gregs.hestia.game.plugins.client.components.ClientPlayerPacket
@@ -16,7 +16,7 @@ abstract class BasePlayerSyncSystem : BaseEntitySyncSystem(GlobalPlayers::class,
     private lateinit var globalPlayersMapper: ComponentMapper<GlobalPlayers>
     private lateinit var clientPlayerPacketMapper: ComponentMapper<ClientPlayerPacket>
 
-    override fun packet(entityId: Int): Packet.Builder {
+    override fun packet(entityId: Int): PacketBuilder {
         return clientPlayerPacketMapper.get(entityId).packet
     }
 

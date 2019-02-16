@@ -1,6 +1,6 @@
 package worlds.gregs.hestia.game.plugins.client.systems.update.sync
 
-import world.gregs.hestia.core.network.packets.Packet
+import world.gregs.hestia.core.network.codec.packet.PacketBuilder
 import world.gregs.hestia.core.services.int
 import worlds.gregs.hestia.GameConstants.PLAYERS_LIMIT
 import worlds.gregs.hestia.api.update.EntitySync
@@ -11,8 +11,8 @@ import java.util.*
 
 class PlayerSyncSystem : BasePlayerSyncSystem(), EntitySync, PlayerSync {
 
-    override val localHandlers = HashMap<DisplayFlag, Packet.Builder.(Int, Int) -> Unit>()
-    override val globalHandlers = HashMap<DisplayFlag, Packet.Builder.(Int, Int) -> Unit>()
+    override val localHandlers = HashMap<DisplayFlag, PacketBuilder.(Int, Int) -> Unit>()
+    override val globalHandlers = HashMap<DisplayFlag, PacketBuilder.(Int, Int) -> Unit>()
     private var skip = -1//Counter for the number of players to skip
 
     override fun begin() {

@@ -1,6 +1,6 @@
 package worlds.gregs.hestia.services.definitions
 
-import world.gregs.hestia.core.network.packets.Packet
+import world.gregs.hestia.core.network.codec.packet.Packet
 import world.gregs.hestia.core.services.int
 
 class ObjectDefinition {
@@ -276,10 +276,10 @@ class ObjectDefinition {
             168 -> aBoolean3894 = true
             169 -> aBoolean3845 = true
             170 -> {
-                val anInt3383 = buffer.readUnsignedSmart()
+                val anInt3383 = buffer.readSmart()
             }
             171 -> {
-                val anInt3362 = buffer.readUnsignedSmart()
+                val anInt3362 = buffer.readSmart()
             }
             173 -> {
                 val anInt3302 = buffer.readUnsignedShort()
@@ -301,7 +301,7 @@ class ObjectDefinition {
                 }
                 for (index in 0 until length) {
                     val isString = buffer.readUnsignedByte() == 1
-                    val id = buffer.readTriByte()
+                    val id = buffer.readMedium()
                     parameters!![id] = if (isString) {
                         buffer.readString()
                     } else {

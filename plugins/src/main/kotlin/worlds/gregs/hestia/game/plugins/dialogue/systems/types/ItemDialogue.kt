@@ -4,7 +4,7 @@ import com.artemis.Entity
 import worlds.gregs.hestia.api.dialogue.DialogueBase
 import worlds.gregs.hestia.game.dialogue.Dialogues
 import worlds.gregs.hestia.game.events.send
-import worlds.gregs.hestia.network.game.out.ItemOnInterface
+import worlds.gregs.hestia.network.game.encoders.messages.WidgetItem
 
 class ItemDialogue(text: String) : BaseEntityDialogue(text) {
 
@@ -16,7 +16,7 @@ class ItemDialogue(text: String) : BaseEntityDialogue(text) {
 
         val interfaceId = getInterfaceId()
 
-        entity.send(ItemOnInterface(interfaceId, 2, item, -1))
+        entity.send(WidgetItem(interfaceId, 2, item, -1))
     }
 
     override fun getInterfaceId(): Int {

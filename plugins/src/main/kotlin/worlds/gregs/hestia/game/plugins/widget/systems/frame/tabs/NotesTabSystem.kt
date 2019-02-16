@@ -2,7 +2,7 @@ package worlds.gregs.hestia.game.plugins.widget.systems.frame.tabs
 
 import worlds.gregs.hestia.game.plugins.widget.components.frame.tabs.NotesTab
 import worlds.gregs.hestia.game.plugins.widget.systems.BaseFrame
-import worlds.gregs.hestia.network.game.out.ComponentSettings
+import worlds.gregs.hestia.network.game.encoders.messages.WidgetComponentSettings
 import worlds.gregs.hestia.services.send
 
 class NotesTabSystem : BaseFrame(NotesTab::class) {
@@ -17,7 +17,7 @@ class NotesTabSystem : BaseFrame(NotesTab::class) {
 
     override fun open(entityId: Int) {
         super.open(entityId)
-        es.send(entityId, ComponentSettings(getId(entityId), 9, 0, 30, 2621470))
+        es.send(entityId, WidgetComponentSettings(getId(entityId), 9, 0, 30, 2621470))
     }
 
     override fun click(entityId: Int, interfaceHash: Int, componentId: Int, option: Int) {

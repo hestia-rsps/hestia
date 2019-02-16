@@ -1,13 +1,13 @@
 package worlds.gregs.hestia.game.plugins.widget.systems.frame.tabs
 
 import net.mostlyoriginal.api.event.common.Subscribe
+import world.gregs.hestia.core.network.protocol.messages.FriendsChatSetupRequest
 import worlds.gregs.hestia.GameServer
 import worlds.gregs.hestia.api.widget.UserInterface
-import worlds.gregs.hestia.game.events.WorldPacket
+import worlds.gregs.hestia.game.events.FriendsChatSetupOpen
 import worlds.gregs.hestia.game.plugins.widget.components.frame.tabs.FriendsChatTab
 import worlds.gregs.hestia.game.plugins.widget.components.screen.FriendsChatSetup
 import worlds.gregs.hestia.game.plugins.widget.systems.BaseFrame
-import worlds.gregs.hestia.network.social.out.FriendsChatSetupRequest
 
 class FriendsChatTabSystem : BaseFrame(FriendsChatTab::class) {
 
@@ -36,10 +36,8 @@ class FriendsChatTabSystem : BaseFrame(FriendsChatTab::class) {
     }
 
     @Subscribe
-    fun send(event: WorldPacket) {
-        if(event.packet.opcode == 1) {
-            ui?.open(event.entity, FriendsChatSetup())
-        }
+    fun send(event: FriendsChatSetupOpen) {
+        ui?.open(event.entity, FriendsChatSetup())
     }
 
     companion object {

@@ -3,15 +3,14 @@ package worlds.gregs.hestia.game.plugins.player.systems.update
 import com.artemis.ComponentMapper
 import io.netty.buffer.Unpooled
 import net.mostlyoriginal.api.event.common.Subscribe
-import world.gregs.hestia.core.network.packets.Packet
-import world.gregs.hestia.core.services.Encryption
-import world.gregs.hestia.core.services.int
-import worlds.gregs.hestia.game.events.UpdateAppearance
+import world.gregs.hestia.core.cache.crypto.Encryption
+import world.gregs.hestia.core.network.codec.packet.PacketWriter
 import worlds.gregs.hestia.api.SubscriptionSystem
+import worlds.gregs.hestia.api.player.Player
+import worlds.gregs.hestia.game.events.UpdateAppearance
 import worlds.gregs.hestia.game.plugins.entity.components.update.CombatLevel
 import worlds.gregs.hestia.game.plugins.entity.components.update.DisplayName
 import worlds.gregs.hestia.game.plugins.entity.components.update.Transform
-import worlds.gregs.hestia.api.player.Player
 import worlds.gregs.hestia.game.plugins.player.component.update.Appearance
 import worlds.gregs.hestia.game.plugins.player.component.update.AppearanceData
 import worlds.gregs.hestia.game.plugins.player.component.update.appearance.*
@@ -49,7 +48,7 @@ class AppearanceSystem : SubscriptionSystem(Aspect.all(Player::class)) {
             return
         }
 
-        val packet = Packet.Builder()
+        val packet = PacketWriter()
 
         packet.apply {
             val skillLevel = false
@@ -66,7 +65,7 @@ class AppearanceSystem : SubscriptionSystem(Aspect.all(Player::class)) {
             writeString(namePrefixMapper.get(entityId)?.prefix ?: "")//Chat prefix
             writeByte(skullMapper.get(entityId)?.skull ?: -1)//Skull
             writeByte(headIconMapper.get(entityId)?.headIcon ?: -1)//Head icon
-            writeByte(hiddenMapper.has(entityId).int)//Hidden (displays visible to admins)
+            writeByte(hiddenMapper.has(entityId))//Hidden (displays visible to admins)
 
             if (transformMapper.has(entityId)) {
                 val transform = transformMapper.get(entityId)
@@ -109,7 +108,7 @@ class AppearanceSystem : SubscriptionSystem(Aspect.all(Player::class)) {
                 writeByte(summoningCombatLevelMapper.get(entityId)?.level ?: 0)//Combat level + summoning
                 writeByte(-1)//Skill level? or player height priority toggle
             }
-            writeByte(transformMapper.has(entityId).int)//Mob morph
+            writeByte(transformMapper.has(entityId))//Mob morph
             //Morph details
             if (transformMapper.has(entityId)) {
                 writeShort(-1)

@@ -1,17 +1,18 @@
 package worlds.gregs.hestia.network.update.player
 
 import com.artemis.ComponentMapper
-import worlds.gregs.hestia.game.update.Marker
+import world.gregs.hestia.core.network.codec.packet.Modifier
+import world.gregs.hestia.core.network.codec.packet.PacketBuilder
 import worlds.gregs.hestia.game.plugins.entity.components.update.Damage
+import worlds.gregs.hestia.game.update.Marker
 import worlds.gregs.hestia.game.update.UpdateEncoder
-import world.gregs.hestia.core.network.packets.Packet
 
 class HitsMask(private val damageMapper: ComponentMapper<Damage>, private val mob: Boolean) : UpdateEncoder {
 
-    override val encode: Packet.Builder.(Int, Int) -> Unit = { player, other ->
+    override val encode: PacketBuilder.(Int, Int) -> Unit = { player, other ->
         val damage = damageMapper.get(other)
         if(mob) {
-            writeByteC(damage.hits.size)
+            writeByte(damage.hits.size, Modifier.INVERSE)
         } else {
             writeByte(damage.hits.size)
         }
@@ -40,7 +41,7 @@ class HitsMask(private val damageMapper: ComponentMapper<Damage>, private val mo
             if(mob) {
                 writeByte(percentage)
             } else {
-                writeByteC(percentage)
+                writeByte(percentage, Modifier.INVERSE)
             }
         }
     }

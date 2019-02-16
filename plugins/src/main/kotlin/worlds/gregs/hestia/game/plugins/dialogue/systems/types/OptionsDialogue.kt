@@ -1,12 +1,12 @@
 package worlds.gregs.hestia.game.plugins.dialogue.systems.types
 
 import com.artemis.Entity
+import world.gregs.hestia.core.network.protocol.encoders.messages.WidgetComponentText
 import worlds.gregs.hestia.api.dialogue.DialogueBase
 import worlds.gregs.hestia.game.dialogue.Dialogue
 import worlds.gregs.hestia.game.dialogue.Dialogues
 import worlds.gregs.hestia.game.dialogue.faces.DialogueRedirect
 import worlds.gregs.hestia.game.events.send
-import worlds.gregs.hestia.network.game.out.InterfaceComponentText
 import java.security.InvalidParameterException
 
 class OptionsDialogue : BaseChatDialogue("") {
@@ -27,7 +27,7 @@ class OptionsDialogue : BaseChatDialogue("") {
         ui.openChatInterface(entity.id, interfaceId)
 
         if(title != null) {
-            entity.send(InterfaceComponentText(interfaceId, componentStart, title!!))
+            entity.send(WidgetComponentText(interfaceId, componentStart, title!!))
         }
 
         if(lines.size > 5) {
@@ -35,7 +35,7 @@ class OptionsDialogue : BaseChatDialogue("") {
         }
 
         lines.forEachIndexed { index, line ->
-            entity.send(InterfaceComponentText(interfaceId, componentStart + index + 1, line))
+            entity.send(WidgetComponentText(interfaceId, componentStart + index + 1, line))
         }
     }
 }
