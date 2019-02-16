@@ -14,12 +14,11 @@ import worlds.gregs.hestia.game.plugin.Plugin.Companion.SHIFT_PRIORITY
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.WALK_PRIORITY
 import worlds.gregs.hestia.game.plugins.movement.systems.*
 import worlds.gregs.hestia.game.plugins.movement.systems.calc.*
-import worlds.gregs.hestia.game.plugins.movement.systems.update.MovementUpdateHandlers
 
 class MovementPlugin : Plugin {
 
     override fun setup(b: WorldConfigurationBuilder) {
-        b.with(MovementUpdateHandlers(), PathFinderSystem(), FollowSubscriptionSystem(), StalkSubscriptionSystem())
+        b.with(PathFinderSystem(), FollowSubscriptionSystem(), StalkSubscriptionSystem())
         b.with(MOBILE_PRIORITY, MobileSystem())
         b.with(MOVE_PRIORITY, MoveSystem())
         b.with(NAVIGATION_PRIORITY, DirectStepSystem())

@@ -4,7 +4,7 @@ import com.artemis.Entity
 import com.artemis.WorldConfigurationBuilder
 import org.junit.jupiter.api.BeforeEach
 import world.gregs.hestia.core.network.Session
-import worlds.gregs.hestia.api.core.components.Position
+import worlds.gregs.hestia.game.entity.Position
 import worlds.gregs.hestia.game.GameTest
 import worlds.gregs.hestia.game.archetypes.EntityFactory
 import worlds.gregs.hestia.game.archetypes.PlayerFactory

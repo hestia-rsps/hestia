@@ -6,8 +6,8 @@ import net.mostlyoriginal.api.system.core.PassiveSystem
 import worlds.gregs.hestia.game.archetypes.BotFactory
 import worlds.gregs.hestia.game.archetypes.EntityFactory
 import worlds.gregs.hestia.game.events.CreateBot
-import worlds.gregs.hestia.api.core.components.Position
-import worlds.gregs.hestia.game.plugins.entity.components.update.DisplayName
+import worlds.gregs.hestia.game.entity.Position
+import worlds.gregs.hestia.game.update.components.DisplayName
 
 class BotCreation : PassiveSystem() {
 

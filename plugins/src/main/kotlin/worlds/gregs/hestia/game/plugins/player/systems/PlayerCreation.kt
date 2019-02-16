@@ -5,12 +5,12 @@ import com.artemis.annotations.Wire
 import net.mostlyoriginal.api.event.common.Subscribe
 import net.mostlyoriginal.api.system.core.PassiveSystem
 import worlds.gregs.hestia.api.client.ClientNetwork
-import worlds.gregs.hestia.api.core.components.Position
+import worlds.gregs.hestia.game.entity.Position
 import worlds.gregs.hestia.api.widget.GameFrame
 import worlds.gregs.hestia.game.archetypes.EntityFactory
 import worlds.gregs.hestia.game.archetypes.PlayerFactory
 import worlds.gregs.hestia.game.events.CreatePlayer
-import worlds.gregs.hestia.game.plugins.entity.components.update.DisplayName
+import worlds.gregs.hestia.game.update.components.DisplayName
 import java.util.concurrent.atomic.AtomicInteger
 
 @Wire(failOnNull = false)
@@ -36,7 +36,6 @@ class PlayerCreation : PassiveSystem() {
         gameFrame.height = event.screenHeight
 
         event.session.id = entityId
-
 
         val displayName = displayNameMapper.get(entityId)
         displayName?.name = event.name

@@ -4,10 +4,10 @@ import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
 import world.gregs.hestia.core.services.int
 import worlds.gregs.hestia.api.collision.EntityCollision
-import worlds.gregs.hestia.api.core.components.Position
-import worlds.gregs.hestia.api.core.components.Size
-import worlds.gregs.hestia.api.core.components.height
-import worlds.gregs.hestia.api.core.components.width
+import worlds.gregs.hestia.game.entity.Position
+import worlds.gregs.hestia.game.entity.Size
+import worlds.gregs.hestia.game.entity.height
+import worlds.gregs.hestia.game.entity.width
 import worlds.gregs.hestia.api.mob.MobChunk
 import worlds.gregs.hestia.api.movement.components.Shift
 import worlds.gregs.hestia.api.player.PlayerChunk

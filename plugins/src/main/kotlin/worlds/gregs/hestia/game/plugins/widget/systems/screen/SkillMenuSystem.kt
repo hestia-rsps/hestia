@@ -3,7 +3,7 @@ package worlds.gregs.hestia.game.plugins.widget.systems.screen
 import worlds.gregs.hestia.game.Configs.SKILL_MENU
 import worlds.gregs.hestia.game.plugins.widget.components.screen.SkillMenu
 import worlds.gregs.hestia.game.plugins.widget.systems.BaseScreen
-import worlds.gregs.hestia.network.game.out.Config
+import worlds.gregs.hestia.network.client.encoders.messages.Config
 import worlds.gregs.hestia.services.send
 
 class SkillMenuSystem : BaseScreen(SkillMenu::class) {

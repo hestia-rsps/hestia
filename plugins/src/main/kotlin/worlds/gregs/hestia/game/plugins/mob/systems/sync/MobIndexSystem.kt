@@ -3,7 +3,7 @@ package worlds.gregs.hestia.game.plugins.mob.systems.sync
 import com.artemis.ComponentMapper
 import worlds.gregs.hestia.api.SubscriptionSystem
 import worlds.gregs.hestia.api.mob.Mob
-import worlds.gregs.hestia.api.core.components.ClientIndex
+import worlds.gregs.hestia.game.client.ClientIndex
 import worlds.gregs.hestia.services.Aspect
 
 class MaximumMobLimitReached : Exception()

@@ -3,8 +3,8 @@ package worlds.gregs.hestia.game.plugins.collision.systems
 import com.artemis.WorldConfigurationBuilder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import worlds.gregs.hestia.api.core.components.Position
-import worlds.gregs.hestia.api.core.components.Size
+import worlds.gregs.hestia.game.entity.Position
+import worlds.gregs.hestia.game.entity.Size
 import worlds.gregs.hestia.api.movement.components.Shift
 import worlds.gregs.hestia.tools.PlayerTester
 import worlds.gregs.hestia.game.plugins.player.systems.chunk.PlayerChunkSubscriptionSystem

@@ -2,7 +2,7 @@ package worlds.gregs.hestia.game.plugins.collision.systems
 
 import com.artemis.annotations.Wire
 import worlds.gregs.hestia.api.collision.ObjectCollision
-import worlds.gregs.hestia.api.core.components.Position
+import worlds.gregs.hestia.game.entity.Position
 import worlds.gregs.hestia.api.map.Map
 import worlds.gregs.hestia.api.region.Regions
 
@@ -53,8 +53,8 @@ class ObjectCollisionSystem : ObjectCollision() {
     }
 
     override fun collides(localX: Int, localY: Int, mask: Int): Boolean {
-        return if(single) {
-            if(localX < 0 || localX >= 64 || localY < 0 || localY >= 64) {
+        return if (single) {
+            if (localX < 0 || localX >= 64 || localY < 0 || localY >= 64) {
                 return false
             }
             val clipping = map?.getClipping(regions?.getEntityId(regionId))
@@ -69,5 +69,15 @@ class ObjectCollisionSystem : ObjectCollision() {
     companion object {
         private const val GRAPH_SIZE = 128
         private val clip = Array(GRAPH_SIZE) { IntArray(GRAPH_SIZE) }
+
+        private fun print(array: Array<IntArray>) {
+            for (y in array[0].indices.reversed()) {
+                for (x in array.indices) {
+                    print(if (array[x][y] != 0) 1 else " ")
+                    print(" ")
+                }
+                println()
+            }
+        }
     }
 }

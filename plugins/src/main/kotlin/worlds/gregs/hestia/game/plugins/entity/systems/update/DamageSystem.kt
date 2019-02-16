@@ -3,7 +3,7 @@ package worlds.gregs.hestia.game.plugins.entity.systems.update
 import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.event.common.Subscribe
 import net.mostlyoriginal.api.system.core.PassiveSystem
-import worlds.gregs.hestia.game.plugins.entity.components.update.Damage
+import worlds.gregs.hestia.game.update.components.Damage
 import worlds.gregs.hestia.game.events.Hit
 import worlds.gregs.hestia.game.update.Marker
 

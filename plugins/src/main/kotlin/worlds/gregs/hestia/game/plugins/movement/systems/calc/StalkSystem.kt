@@ -3,11 +3,11 @@ package worlds.gregs.hestia.game.plugins.movement.systems.calc
 import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
-import worlds.gregs.hestia.api.core.components.Position
-import worlds.gregs.hestia.api.core.components.Size
-import worlds.gregs.hestia.api.core.components.height
-import worlds.gregs.hestia.api.core.components.width
-import worlds.gregs.hestia.game.plugins.movement.components.Mobile
+import worlds.gregs.hestia.game.entity.Position
+import worlds.gregs.hestia.game.entity.Size
+import worlds.gregs.hestia.game.entity.height
+import worlds.gregs.hestia.game.entity.width
+import worlds.gregs.hestia.api.movement.Mobile
 import worlds.gregs.hestia.game.plugins.movement.components.calc.Beside
 import worlds.gregs.hestia.game.plugins.movement.components.calc.Stalk
 import worlds.gregs.hestia.services.Aspect

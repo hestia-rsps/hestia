@@ -2,7 +2,7 @@ package worlds.gregs.hestia.game.plugin
 
 import com.artemis.WorldConfigurationBuilder
 import org.slf4j.LoggerFactory
-import world.gregs.hestia.core.services.load.Loader
+import world.gregs.hestia.core.services.Loader
 import world.gregs.hestia.core.services.plural
 import kotlin.system.measureNanoTime
 

@@ -22,6 +22,7 @@ import worlds.gregs.hestia.game.plugins.region.components.Loaded
 import worlds.gregs.hestia.game.plugins.region.components.Loading
 import worlds.gregs.hestia.game.plugins.region.components.RegionIdentifier
 import worlds.gregs.hestia.services.Aspect
+import worlds.gregs.hestia.services.Xteas
 
 /**
  * RegionFileSystem
@@ -104,19 +105,24 @@ class RegionFileSystem : SubscriptionSystem(Aspect.all(RegionIdentifier::class, 
      * Loads clipping & objects from map files
      */
     private fun load(entityId: Int, x: Int, y: Int, regionX: Int, regionY: Int, rotation: Int? = null, chunkX: Int? = null, chunkY: Int? = null, chunkPlane: Int? = null) {
-        val index = cache?.getIndex(5)
+        val index = cache?.getIndex(5) ?: return
+
         //Get the archive id's for the regions
-        val landIndex = index?.getArchiveId("l${regionX}_$regionY") ?: -1
-        val mapIndex = index?.getArchiveId("m${regionX}_$regionY") ?: -1
+        val landIndex = index.getArchiveId("l${regionX}_$regionY")
+        val mapIndex = index.getArchiveId("m${regionX}_$regionY")
 
         //Make sure the cache has the necessary files
         if (landIndex == -1 || mapIndex == -1) {
             return
         }
 
+        val regionId = (regionX shl 8) + regionY
+
+        val keys = Xteas.KEY_TABLE.getOrNull(regionId)
+
         //Get the map files
-        val landContainerData = index?.getFile(landIndex)
-        val mapContainerData = index?.getFile(mapIndex)
+        val landContainerData = index.getFile(landIndex, keys)
+        val mapContainerData = index.getFile(mapIndex)
 
         var decodedSettings: Array<Array<ByteArray>>? = null
         try {

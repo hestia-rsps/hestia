@@ -3,8 +3,8 @@ package worlds.gregs.hestia.api.entity
 import com.artemis.Component
 import com.artemis.ComponentMapper
 import worlds.gregs.hestia.api.SubscriptionSystem
-import worlds.gregs.hestia.api.core.components.ClientIndex
-import worlds.gregs.hestia.api.core.components.Position
+import worlds.gregs.hestia.game.client.ClientIndex
+import worlds.gregs.hestia.game.entity.Position
 import worlds.gregs.hestia.game.map.Chunk
 import worlds.gregs.hestia.game.map.MapConstants
 import worlds.gregs.hestia.services.Aspect

@@ -3,9 +3,9 @@ package worlds.gregs.hestia.game.systems
 import com.artemis.World
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import world.gregs.hestia.core.services.load.Loader
+import world.gregs.hestia.core.services.Loader
 import worlds.gregs.hestia.game.archetypes.EntityFactory
-import worlds.gregs.hestia.api.core.components.Position
+import worlds.gregs.hestia.game.entity.Position
 import kotlin.system.measureNanoTime
 
 class ChunkTest {
@@ -26,7 +26,7 @@ class ChunkTest {
                 }
             }
         }
-        println("${150 * 150} regions creaed in ${time / 1000000}ms")
+        println("${150 * 150} regions created in ${time / 1000000}ms")
         val runtime = Runtime.getRuntime()
         val mb = 1024 * 1024
         println("Heap utilization statistics [MB]")

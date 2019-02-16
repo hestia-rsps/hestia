@@ -2,17 +2,17 @@ package worlds.gregs.hestia.game.plugins.widget.systems.frame.tabs
 
 import worlds.gregs.hestia.game.plugins.widget.components.frame.tabs.InventoryTab
 import worlds.gregs.hestia.game.plugins.widget.systems.BaseFrame
-import worlds.gregs.hestia.network.game.out.ComponentSettings
-import worlds.gregs.hestia.network.game.out.SendItems
+import worlds.gregs.hestia.network.client.encoders.messages.WidgetComponentSettings
+import worlds.gregs.hestia.network.client.encoders.messages.WidgetItems
 import worlds.gregs.hestia.services.send
 
 class InventoryTabSystem : BaseFrame(InventoryTab::class) {
 
     override fun open(entityId: Int) {
         super.open(entityId)
-        es.send(entityId, ComponentSettings(getId(entityId), 0, 0, 27, 4554126))
+        es.send(entityId, WidgetComponentSettings(getId(entityId), 0, 0, 27, 4554126))
 //        es.send(entityId, ComponentSettings(id, 0, 28, 55, 2097152))//TODO this is prob one of those special inventories, which one and is this necessary here?
-        es.send(entityId, SendItems(93, (0 until 24).toList()))
+        es.send(entityId, WidgetItems(93, (0 until 24).toList()))
     }
 
     override fun getId(entityId: Int): Int {

@@ -2,9 +2,9 @@ package worlds.gregs.hestia.game.plugins.core.systems
 
 import com.artemis.ComponentMapper
 import worlds.gregs.hestia.api.SubscriptionSystem
-import worlds.gregs.hestia.api.core.components.Renderable
-import worlds.gregs.hestia.api.core.components.Created
-import worlds.gregs.hestia.api.core.components.Viewport
+import worlds.gregs.hestia.game.entity.Created
+import worlds.gregs.hestia.game.update.components.Renderable
+import worlds.gregs.hestia.game.client.Viewport
 import worlds.gregs.hestia.services.Aspect
 
 /**

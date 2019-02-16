@@ -5,16 +5,16 @@ import worlds.gregs.hestia.api.widget.UserInterface
 import worlds.gregs.hestia.game.Configs.LEVEL_UP_DETAILS
 import worlds.gregs.hestia.game.Configs.SKILL_MENU
 import worlds.gregs.hestia.game.Configs.SKILL_STAT_FLASH
-import worlds.gregs.hestia.game.Skill
+import worlds.gregs.hestia.game.client.Skill
 import worlds.gregs.hestia.game.plugins.widget.components.frame.tabs.StatsTab
 import worlds.gregs.hestia.game.plugins.widget.components.screen.SkillLevelDetails
 import worlds.gregs.hestia.game.plugins.widget.components.screen.SkillMenu
 import worlds.gregs.hestia.game.plugins.widget.systems.BaseFrame
 import worlds.gregs.hestia.game.plugins.widget.systems.screen.SkillLevelDetailsSystem
 import worlds.gregs.hestia.game.plugins.widget.systems.screen.SkillMenuSystem
-import worlds.gregs.hestia.network.game.out.Config
-import worlds.gregs.hestia.network.game.out.ConfigFile
-import worlds.gregs.hestia.network.game.out.SkillLevel
+import worlds.gregs.hestia.network.client.encoders.messages.Config
+import worlds.gregs.hestia.network.client.encoders.messages.ConfigFile
+import worlds.gregs.hestia.network.client.encoders.messages.SkillLevel
 import worlds.gregs.hestia.services.send
 import kotlin.math.pow
 
@@ -38,7 +38,7 @@ class StatsTabSystem : BaseFrame(StatsTab::class) {
         es.send(entityId, Config(SKILL_STAT_FLASH, total))
 
         Skill.values().forEach {
-            es.send(entityId, SkillLevel(it, 99, 14000000))
+            es.send(entityId, SkillLevel(it.ordinal, 99, 14000000))
         }
     }
 

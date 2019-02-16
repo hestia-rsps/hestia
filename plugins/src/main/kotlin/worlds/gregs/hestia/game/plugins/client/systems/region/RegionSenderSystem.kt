@@ -4,17 +4,21 @@ import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
 import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.event.common.Subscribe
-import world.gregs.hestia.core.network.packets.Packet
+import world.gregs.hestia.core.network.codec.packet.PacketBuilder
 import worlds.gregs.hestia.GameConstants
 import worlds.gregs.hestia.api.SubscriptionSystem
+import worlds.gregs.hestia.game.entity.Position
+import worlds.gregs.hestia.game.client.Viewport
 import worlds.gregs.hestia.api.region.Dynamic
 import worlds.gregs.hestia.api.region.Regions
 import worlds.gregs.hestia.game.events.UpdateMapRegion
-import worlds.gregs.hestia.api.core.components.Position
-import worlds.gregs.hestia.api.core.components.Viewport
-import worlds.gregs.hestia.network.game.out.DynamicMapRegion
-import worlds.gregs.hestia.network.game.out.MapRegion
+import worlds.gregs.hestia.game.map.Chunk.toChunkPosition
+import worlds.gregs.hestia.game.map.MapConstants.MAP_SIZES
+import worlds.gregs.hestia.game.map.MapConstants.PLANE_RANGE
+import worlds.gregs.hestia.network.client.encoders.messages.MapRegion
+import worlds.gregs.hestia.network.client.encoders.messages.MapRegionDynamic
 import worlds.gregs.hestia.services.Aspect
+import worlds.gregs.hestia.services.nearby
 import worlds.gregs.hestia.services.send
 import worlds.gregs.hestia.services.toArray
 
@@ -32,7 +36,7 @@ class RegionSenderSystem : SubscriptionSystem(Aspect.all(Position::class, Viewpo
         send(entityId, true, false)
     }
 
-    private val login: Packet.Builder.(Int) -> Unit = { entityId ->
+    private val login: PacketBuilder.(Int) -> Unit = { entityId ->
         val position = positionMapper.get(entityId)
         val viewport = viewportMapper.get(entityId)
 
@@ -65,9 +69,50 @@ class RegionSenderSystem : SubscriptionSystem(Aspect.all(Position::class, Viewpo
         val position = positionMapper.get(entityId)
         val regionEntityId = regions?.getEntityId(position.regionId)
         if(regionEntityId != null && dynamic?.isDynamic(regionEntityId) == true) {
-            es.send(entityId, DynamicMapRegion(entityId, position, forceRefresh, if(local) login else null, regions!!, dynamic!!))
+            val mapHash = MAP_SIZES[0] shr 4
+            val data = encodeDynamicData(position, mapHash)
+            es.send(entityId, MapRegionDynamic(entityId, position.chunkX, position.chunkY, forceRefresh, 0, mapHash, if (local) login else null, data.first, data.second))
         } else {
-            es.send(entityId, MapRegion(entityId, position, forceRefresh, if(local) login else null))
+            es.send(entityId, MapRegion(entityId, position.chunkX, position.chunkY, forceRefresh, 0, MAP_SIZES[0] shr 4, if (local) login else null))
+        }
+    }
+
+    private fun encodeDynamicData(position: Position, mapHash: Int): Pair<List<Int?>, Int> {
+        var chunkCount = 0
+        val list = ArrayList<Int?>()
+        //For all chunks within view
+        forChunks(position.chunkX.nearby(mapHash), position.chunkY.nearby(mapHash), PLANE_RANGE) { chunkX, chunkY, plane ->
+            //Calculate region id
+            val regionId = (chunkX / 8 shl 8) + chunkY / 8
+            //Get id of it's region
+            val regionEntityId = regions!!.getEntityId(regionId)
+
+            //Check if region exists and is a dynamic region
+            if (regionEntityId == null || !dynamic!!.isDynamic(regionEntityId)) {
+                list.add(null)//Send blank chunk
+                return@forChunks
+            }
+
+            //Calculate the chunks shift
+            val hash = toChunkPosition(chunkX, chunkY, plane)
+            //Get the dynamic region data
+            val data = dynamic!!.get(regionEntityId)!!.regionData[hash]
+            list.add(data)
+            if(data != null) {
+                chunkCount++
+            }
+        }
+        return Pair(list, chunkCount)
+    }
+
+    //FIXME RegionBuilderSystem.kt
+    private inline fun forChunks(rangeX: IntRange, rangeY: IntRange, rangeZ: IntRange, action: (Int, Int, Int) -> Unit) {
+        for (plane in rangeZ) {
+            for (chunkX in rangeX) {
+                for (chunkY in rangeY) {
+                    action.invoke(chunkX, chunkY, plane)
+                }
+            }
         }
     }
 }

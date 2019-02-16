@@ -5,9 +5,9 @@ import net.mostlyoriginal.api.event.common.Subscribe
 import worlds.gregs.hestia.api.SubscriptionSystem
 import worlds.gregs.hestia.game.events.UpdateMapRegion
 import worlds.gregs.hestia.game.plugins.client.components.LastLoadedRegion
-import worlds.gregs.hestia.game.plugins.client.components.NetworkSession
-import worlds.gregs.hestia.api.core.components.Position
-import worlds.gregs.hestia.api.core.components.Viewport
+import worlds.gregs.hestia.game.client.NetworkSession
+import worlds.gregs.hestia.game.entity.Position
+import worlds.gregs.hestia.game.client.Viewport
 import worlds.gregs.hestia.services.Aspect
 
 /**

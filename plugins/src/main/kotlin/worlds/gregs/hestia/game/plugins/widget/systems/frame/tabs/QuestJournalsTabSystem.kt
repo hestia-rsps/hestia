@@ -4,7 +4,7 @@ import worlds.gregs.hestia.game.Configs.QUEST_POINTS
 import worlds.gregs.hestia.game.Configs.UNSTABLE_FOUNDATIONS_QUEST
 import worlds.gregs.hestia.game.plugins.widget.components.frame.tabs.QuestJournalsTab
 import worlds.gregs.hestia.game.plugins.widget.systems.BaseFrame
-import worlds.gregs.hestia.network.game.out.Config
+import worlds.gregs.hestia.network.client.encoders.messages.Config
 import worlds.gregs.hestia.services.send
 
 class QuestJournalsTabSystem : BaseFrame(QuestJournalsTab::class) {

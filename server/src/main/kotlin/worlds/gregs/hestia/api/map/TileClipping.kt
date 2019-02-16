@@ -1,7 +1,7 @@
 package worlds.gregs.hestia.api.map
 
 import net.mostlyoriginal.api.system.core.PassiveSystem
-import worlds.gregs.hestia.api.core.components.Position
+import worlds.gregs.hestia.game.entity.Position
 import worlds.gregs.hestia.game.update.Direction
 
 /**

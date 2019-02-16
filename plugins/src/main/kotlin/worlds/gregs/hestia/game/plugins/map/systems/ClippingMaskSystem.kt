@@ -2,7 +2,7 @@ package worlds.gregs.hestia.game.plugins.map.systems
 
 import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
-import worlds.gregs.hestia.api.core.components.Position
+import worlds.gregs.hestia.game.entity.Position
 import worlds.gregs.hestia.api.map.Clipping
 import worlds.gregs.hestia.api.map.ClippingMasks
 import worlds.gregs.hestia.api.map.Map

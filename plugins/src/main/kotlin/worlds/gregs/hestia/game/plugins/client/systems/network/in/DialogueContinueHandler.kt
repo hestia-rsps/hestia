@@ -3,27 +3,29 @@ package worlds.gregs.hestia.game.plugins.client.systems.network.`in`
 import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
 import org.slf4j.LoggerFactory
-import world.gregs.hestia.core.network.packets.Packet
-import world.gregs.hestia.core.network.packets.PacketInfo
+import worlds.gregs.hestia.GameServer
 import worlds.gregs.hestia.api.dialogue.DialogueBase
-import worlds.gregs.hestia.game.PacketHandlerSystem
+import worlds.gregs.hestia.game.MessageHandlerSystem
 import worlds.gregs.hestia.game.plugins.dialogue.systems.types.BaseEntityDialogue
 import worlds.gregs.hestia.game.plugins.dialogue.systems.types.OptionsDialogue
 import worlds.gregs.hestia.game.plugins.widget.components.frame.chat.DialogueBox
-import worlds.gregs.hestia.network.game.Packets
+import worlds.gregs.hestia.network.client.decoders.messages.DialogueContinue
 
-@PacketInfo(6, Packets.DIALOGUE_CONTINUE)
 @Wire(failOnNull = false)
-class DialogueContinueHandler : PacketHandlerSystem() {
+class DialogueContinueHandler : MessageHandlerSystem<DialogueContinue>() {
     private val logger = LoggerFactory.getLogger(DialogueContinueHandler::class.java)
     private lateinit var dialogueBoxMapper: ComponentMapper<DialogueBox>
     private var system: DialogueBase? = null
 
-    override fun handle(entityId: Int, packet: Packet) {
-        val interfaceHash = packet.readInt2()
-        packet.readLEShortA()
-        val interfaceId = interfaceHash shr 16
-        var buttonId = interfaceHash and 0xFF
+    override fun initialize() {
+        super.initialize()
+        GameServer.gameMessages.bind(this)
+    }
+
+    override fun handle(entityId: Int, message: DialogueContinue) {
+        val (hash, component) = message
+        val interfaceId = hash shr 16
+        var buttonId = hash and 0xFF
 
         if(dialogueBoxMapper.has(entityId)) {
             //Check interfaces match

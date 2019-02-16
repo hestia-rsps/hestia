@@ -4,12 +4,12 @@ import com.artemis.Component
 import com.artemis.ComponentMapper
 import com.artemis.systems.IteratingSystem
 import worlds.gregs.hestia.api.collision.Collision
-import worlds.gregs.hestia.api.core.components.Position
-import worlds.gregs.hestia.api.core.components.Size
-import worlds.gregs.hestia.api.core.components.height
-import worlds.gregs.hestia.api.core.components.width
+import worlds.gregs.hestia.game.entity.Position
+import worlds.gregs.hestia.game.entity.Size
+import worlds.gregs.hestia.game.entity.height
+import worlds.gregs.hestia.game.entity.width
 import worlds.gregs.hestia.api.map.TileClipping
-import worlds.gregs.hestia.game.plugins.movement.components.Mobile
+import worlds.gregs.hestia.api.movement.Mobile
 import worlds.gregs.hestia.game.plugins.movement.components.Steps
 import worlds.gregs.hestia.game.update.Direction
 import worlds.gregs.hestia.game.update.DirectionUtils

@@ -1,7 +1,7 @@
 package worlds.gregs.hestia.api.movement.systems
 
 import com.artemis.Component
-import worlds.gregs.hestia.api.core.components.Position
+import worlds.gregs.hestia.game.entity.Position
 import worlds.gregs.hestia.api.movement.components.Shift
 import kotlin.reflect.KClass
 

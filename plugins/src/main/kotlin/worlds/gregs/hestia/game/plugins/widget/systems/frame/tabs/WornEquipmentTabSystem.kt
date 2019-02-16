@@ -7,7 +7,7 @@ import worlds.gregs.hestia.game.plugins.widget.components.screen.EquipmentBonuse
 import worlds.gregs.hestia.game.plugins.widget.components.screen.ItemsKeptOnDeath
 import worlds.gregs.hestia.game.plugins.widget.components.screen.PriceChecker
 import worlds.gregs.hestia.game.plugins.widget.systems.BaseFrame
-import worlds.gregs.hestia.network.game.out.SendItems
+import worlds.gregs.hestia.network.client.encoders.messages.WidgetItems
 import worlds.gregs.hestia.services.send
 
 @Wire(failOnNull = false, injectInherited = true)
@@ -25,7 +25,7 @@ class WornEquipmentTabSystem : BaseFrame(WornEquipmentTab::class) {
 
     override fun open(entityId: Int) {
         super.open(entityId)
-        es.send(entityId, SendItems(94, (0 until 15).toList()))
+        es.send(entityId, WidgetItems(94, (0 until 15).toList()))
     }
 
     override fun click(entityId: Int, interfaceHash: Int, componentId: Int, option: Int) {

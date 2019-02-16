@@ -10,7 +10,7 @@ import worlds.gregs.hestia.api.mob.Mob
 import worlds.gregs.hestia.game.archetypes.EntityFactory
 import worlds.gregs.hestia.game.archetypes.MobFactory
 import worlds.gregs.hestia.game.events.CreateMob
-import worlds.gregs.hestia.api.core.components.ClientIndex
+import worlds.gregs.hestia.game.client.ClientIndex
 import worlds.gregs.hestia.game.plugins.mob.systems.MobCreation
 import worlds.gregs.hestia.services.Aspect
 import worlds.gregs.hestia.services.getComponent

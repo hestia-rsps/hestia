@@ -2,16 +2,16 @@ package worlds.gregs.hestia.game.plugins.map.systems
 
 import com.artemis.annotations.Wire
 import worlds.gregs.hestia.api.collision.Collision
-import worlds.gregs.hestia.api.core.components.Position
+import worlds.gregs.hestia.game.entity.Position
 import worlds.gregs.hestia.api.map.ClippingMasks
 import worlds.gregs.hestia.api.map.Map
 import worlds.gregs.hestia.api.map.TileClipping
 import worlds.gregs.hestia.api.region.Regions
 import worlds.gregs.hestia.game.map.Chunk.getRotatedChunkRotation
 import worlds.gregs.hestia.game.map.Chunk.toChunkPosition
-import worlds.gregs.hestia.game.movement.PrimaryNavigation
-import worlds.gregs.hestia.game.movement.SecondaryNavigation
-import worlds.gregs.hestia.game.movement.TertiaryNavigation
+import worlds.gregs.hestia.game.entity.movement.PrimaryNavigation
+import worlds.gregs.hestia.game.entity.movement.SecondaryNavigation
+import worlds.gregs.hestia.game.entity.movement.TertiaryNavigation
 import worlds.gregs.hestia.game.plugins.region.systems.DynamicSystem
 import worlds.gregs.hestia.game.update.Direction
 

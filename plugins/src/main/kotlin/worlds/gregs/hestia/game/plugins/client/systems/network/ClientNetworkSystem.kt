@@ -2,9 +2,9 @@ package worlds.gregs.hestia.game.plugins.client.systems.network
 
 import com.artemis.ComponentMapper
 import io.netty.channel.Channel
-import worlds.gregs.hestia.api.client.components.Client
 import worlds.gregs.hestia.api.client.ClientNetwork
-import worlds.gregs.hestia.game.plugins.client.components.NetworkSession
+import worlds.gregs.hestia.api.client.components.Client
+import worlds.gregs.hestia.game.client.NetworkSession
 
 /**
  * ClientNetworkSystem
