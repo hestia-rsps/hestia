@@ -3,38 +3,39 @@ package worlds.gregs.hestia
 import com.artemis.World
 import com.artemis.WorldConfigurationBuilder
 import com.artemis.link.EntityLinkManager
+import io.netty.channel.ChannelHandlerContext
 import net.mostlyoriginal.api.event.common.EventSystem
 import org.slf4j.LoggerFactory
 import world.gregs.hestia.core.Settings
 import world.gregs.hestia.core.network.NetworkConstants
+import world.gregs.hestia.core.network.Pipeline
 import world.gregs.hestia.core.network.Session
 import world.gregs.hestia.core.network.client.AutoConnection
-import world.gregs.hestia.core.network.codec.Encoder
-import world.gregs.hestia.core.network.codec.Pipeline
-import world.gregs.hestia.core.network.codec.inbound.packet.PacketHandler
-import world.gregs.hestia.core.network.login.LoginHandshake
-import world.gregs.hestia.core.network.login.LoginHandshakeDecoder
+import world.gregs.hestia.core.network.codec.decode.SimplePacketDecoder
+import world.gregs.hestia.core.network.codec.message.SimpleMessageDecoder
+import world.gregs.hestia.core.network.codec.message.SimpleMessageEncoder
+import world.gregs.hestia.core.network.codec.message.SimpleMessageHandler
+import world.gregs.hestia.core.network.protocol.Details
 import world.gregs.hestia.core.network.server.Network
-import world.gregs.hestia.core.services.Cache
-import world.gregs.hestia.core.services.load.PacketLoader
-import world.gregs.hestia.core.world.WorldDetails
+import world.gregs.hestia.core.services.Loader
 import worlds.gregs.hestia.game.Engine
 import worlds.gregs.hestia.game.archetypes.EntityFactory
 import worlds.gregs.hestia.game.plugin.PluginLoader
-import worlds.gregs.hestia.network.LoginAttempt
 import worlds.gregs.hestia.network.WorldChangeListener
-import worlds.gregs.hestia.network.game.Filter
-import worlds.gregs.hestia.network.game.GameClientConnection
-import worlds.gregs.hestia.network.game.GamePacketDecoder
-import worlds.gregs.hestia.network.game.GamePacketHandler
-import worlds.gregs.hestia.network.game.`in`.GameLogin
-import worlds.gregs.hestia.network.social.SocialConnection
-import worlds.gregs.hestia.network.social.SocialPacketDecoder
+import worlds.gregs.hestia.network.game.*
+import worlds.gregs.hestia.network.world.WorldCodec
+import worlds.gregs.hestia.network.world.WorldConnection
+import worlds.gregs.hestia.network.world.WorldDetails
+import worlds.gregs.hestia.network.world.WorldMessages
 import kotlin.system.measureNanoTime
 
-class GameServer : Engine(), WorldChangeListener {
+class GameServer(worldDetails: Details) : Engine(), WorldChangeListener {
     private val log = LoggerFactory.getLogger(this::class.java)
-    private val loader = PacketLoader(Settings.getString("sourcePath"))
+    /**
+     * Packets to redirect to social server
+     * [Opcode, Size, Process after handshake]
+     */
+    private val socialDecoders = ArrayList<Triple<Int, Int, Boolean>>()
 
     private lateinit var network: Network
     var server: World? = null//TODO rename to world after kotlin 1.3.30 fix
@@ -50,19 +51,21 @@ class GameServer : Engine(), WorldChangeListener {
 
     init {
         //List of social server packets
-        val socialPackets = loader.load("worlds.gregs.hestia.network.social.in")
-        SocialPacketDecoder.packets = socialPackets
+        val codec = WorldCodec(socialDecoders)
 
-        val pipeline = Pipeline()
+        val pipeline = Pipeline {
+            it.addLast(SimplePacketDecoder(codec))
+        }
+
         pipeline.apply {
-            //Decodes incoming social server packets
-            add(SocialPacketDecoder::class)
-            //Processes social server packets
-            add(PacketHandler(socialPackets))
-            //Handles dis/connecting to social server
-            add(SocialConnection())
-            //Encodes outgoing packets
-            add(Encoder())
+            //Decode
+            add(SimpleMessageDecoder(codec))
+            //Handle
+            add(SimpleMessageHandler(WorldMessages(worldDetails, loginSessions)))
+            //Encode
+            add(SimpleMessageEncoder(codec))
+            //Connection
+            add(WorldConnection(worldDetails))
         }
         //Checks for social server connection every 10 seconds
         AutoConnection(pipeline, NetworkConstants.LOCALHOST, NetworkConstants.BASE_PORT - 1)
@@ -75,7 +78,7 @@ class GameServer : Engine(), WorldChangeListener {
             //Configure game world
             val builder = WorldConfigurationBuilder().with(eventSystem, EntityLinkManager())
             //Load plugin folder
-            val pluginLoader = PacketLoader(Settings.getString("pluginPath"))
+            val pluginLoader = Loader(Settings.getString("pluginPath"))
             //Load plugins
             PluginLoader().setup(builder, pluginLoader)
 
@@ -91,17 +94,22 @@ class GameServer : Engine(), WorldChangeListener {
             //Set delta
             server.setDelta(1F)
 
+            //Game codec
+            val codec = GameCodec()
+            //Handles messages
+            val handshake = GameHandshake(gameMessages)
             //Setup network pipeline
-            val pipeline = Pipeline()
+            val pipeline = Pipeline {
+                //Decodes packets
+                it.addLast(GamePacketDecoder(socialDecoders, codec, handshake))
+            }
             pipeline.apply {
-                //Filters multi-login limits
-                add(Filter())
-                //Decodes login packet
-                add(LoginHandshakeDecoder::class)
-                //After game login, pipeline switches with game decoders
-                add(LoginHandshake(GameLogin(), LoginAttempt(server, GamePacketDecoder::class, GamePacketHandler(), GameClientConnection())))
-                //Outgoing packet encoder
-                add(Encoder())
+                //Redirects or decodes packets into messages
+                add(GameMessageDecoder(socialDecoders, codec, handshake))
+                //Handle
+                add(handshake)
+                //Encode
+                add(SimpleMessageEncoder(codec))
             }
 
             //Initiate the server
@@ -116,19 +124,17 @@ class GameServer : Engine(), WorldChangeListener {
     }
 
     companion object {
+        private val loginSessions = HashMap<Int, ChannelHandlerContext>()
         val eventSystem = EventSystem()
-        lateinit var worldDetails: WorldDetails
-        var worldSession: Session? = null
+        val gameMessages = GameMessages(loginSessions)
         lateinit var server: GameServer
-        val socialPackets = HashMap<Int, Int>()
-        val loginSessions = HashMap<Int, Session>()
+        var worldSession: Session? = null//TODO handle better
 
         fun start(args: Array<String>) {
             val id = if (args.isNotEmpty()) args[0].toInt() else -1
             Settings.load()
-            Cache.init()
-            worldDetails = WorldDetails("Main World", NetworkConstants.LOCALHOST, "UK", WorldDetails.Country.UK, WorldDetails.Setting.MEMBERS)
-            server = GameServer()
+            val worldDetails = WorldDetails(NetworkConstants.LOCALHOST, "UK", WorldDetails.Country.UK, 0, "Main World", WorldDetails.Setting.MEMBERS)
+            server = GameServer(worldDetails)
             //Stand-alone boot
             if (id != -1) {
                 worldDetails.id = id

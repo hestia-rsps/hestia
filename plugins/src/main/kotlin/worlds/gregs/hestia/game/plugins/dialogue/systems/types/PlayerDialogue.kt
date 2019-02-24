@@ -5,8 +5,8 @@ import worlds.gregs.hestia.api.dialogue.DialogueBase
 import worlds.gregs.hestia.game.dialogue.Dialogues
 import worlds.gregs.hestia.game.events.send
 import worlds.gregs.hestia.game.plugins.entity.components.update.DisplayName
-import worlds.gregs.hestia.network.game.out.InterfaceComponentAnimation
-import worlds.gregs.hestia.network.game.out.PlayerOnInterface
+import worlds.gregs.hestia.network.game.encoders.messages.WidgetComponentAnimation
+import worlds.gregs.hestia.network.game.encoders.messages.WidgetHeadPlayer
 import worlds.gregs.hestia.services.getComponent
 
 class PlayerDialogue(text: String) : BaseEntityDialogue(text) {
@@ -22,10 +22,10 @@ class PlayerDialogue(text: String) : BaseEntityDialogue(text) {
 
         val interfaceId = getInterfaceId()
 
-        entity.send(PlayerOnInterface(interfaceId, 2))
+        entity.send(WidgetHeadPlayer(interfaceId, 2))
 
         if(animation != -1) {
-            entity.send(InterfaceComponentAnimation(interfaceId, 2, animation))
+            entity.send(WidgetComponentAnimation(interfaceId, 2, animation))
         }
     }
 

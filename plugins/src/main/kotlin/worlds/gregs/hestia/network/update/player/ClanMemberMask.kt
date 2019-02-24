@@ -1,16 +1,16 @@
 package worlds.gregs.hestia.network.update.player
 
 import com.artemis.ComponentMapper
-import worlds.gregs.hestia.game.update.UpdateEncoder
-import world.gregs.hestia.core.network.packets.Packet
-import world.gregs.hestia.core.services.int
+import world.gregs.hestia.core.network.codec.packet.Modifier
+import world.gregs.hestia.core.network.codec.packet.PacketBuilder
 import worlds.gregs.hestia.game.plugins.player.component.update.UpdateClanMember
+import worlds.gregs.hestia.game.update.UpdateEncoder
 
 class ClanMemberMask(private val clanMemberMapper: ComponentMapper<UpdateClanMember>) : UpdateEncoder {
 
-    override val encode: Packet.Builder.(Int, Int) -> Unit = { _, other ->
+    override val encode: PacketBuilder.(Int, Int) -> Unit = { _, other ->
         val clanMember = clanMemberMapper.get(other)
-        writeByteC(clanMember.inSameClanChat.int)
+        writeByte(clanMember.inSameClanChat, Modifier.INVERSE)
     }
 
 }

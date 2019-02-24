@@ -4,11 +4,12 @@ import com.artemis.*
 import com.artemis.utils.IntBag
 import net.mostlyoriginal.api.event.common.EventSystem
 import org.apache.commons.text.WordUtils
-import world.gregs.hestia.core.network.packets.Packet
+import world.gregs.hestia.core.network.codec.message.Message
+import world.gregs.hestia.core.network.codec.packet.Packet
 import worlds.gregs.hestia.api.mob.Mob
 import worlds.gregs.hestia.api.player.Player
+import worlds.gregs.hestia.game.events.OutBoundMessage
 import worlds.gregs.hestia.game.events.OutBoundPacket
-import java.util.*
 import kotlin.reflect.KClass
 
 /*
@@ -22,10 +23,9 @@ fun WorldConfigurationBuilder.dependsOn(vararg clazz: KClass<out ArtemisPlugin>)
     return dependsOn(*clazz.map { it.java }.toTypedArray())
 }
 
-fun EventSystem.send(entity: Int, builder: Packet.Builder) {
-    send(entity, builder.build())
+fun EventSystem.send(entity: Int, message: Message) {
+    dispatch(OutBoundMessage(entity, message))
 }
-
 
 fun EventSystem.send(entity: Int, packet: Packet) {
     dispatch(OutBoundPacket(entity, packet))
@@ -40,7 +40,7 @@ fun Int.nearby(size: Int): IntRange {
 }
 
 fun IntBag.toArray(): IntArray {
-    return Arrays.copyOf(data, size())
+    return data.copyOf(size())
 }
 
 fun IntBag.forEach(function: (Int) -> Unit) {

@@ -1,25 +1,20 @@
 package worlds.gregs.hestia.network.game
 
-import io.netty.buffer.ByteBuf
-import org.slf4j.LoggerFactory
-import world.gregs.hestia.core.network.codec.decode.PacketDecoder
-import worlds.gregs.hestia.GameServer.Companion.socialPackets
-import worlds.gregs.hestia.game.PacketHandlerSystem
+import io.netty.channel.ChannelHandlerContext
+import world.gregs.hestia.core.network.codec.HandshakeCodec
+import world.gregs.hestia.core.network.codec.decode.SimplePacketHandshakeDecoder
+import world.gregs.hestia.core.network.codec.message.MessageHandshake
 
-class GamePacketDecoder : PacketDecoder() {
+/**
+ * Handles sizes of packets being redirected to social server
+ */
+class GamePacketDecoder(private val socialCodec: List<Triple<Int, Int, Boolean>>, codec: HandshakeCodec, handshake: MessageHandshake) : SimplePacketHandshakeDecoder(codec, handshake) {
 
-    override val logger = LoggerFactory.getLogger(GamePacketDecoder::class.java)!!
-
-    override fun getSize(opcode: Int): Int? {
-        return socialPackets.getOrDefault(opcode, PacketHandlerSystem.gamePackets.getSize(opcode))
+    override fun getSize(ctx: ChannelHandlerContext, opcode: Int): Int? {
+        return socialSize(opcode, handshake.shook(ctx)) ?: super.getSize(ctx, opcode)
     }
 
-    override fun missingSize(buf: ByteBuf, opcode: Int, out: MutableList<Any>) {
-        //Clears buffer to stop accumulation
-        if(opcode != 16) {
-            logger.warn("Unhandled packet: $opcode")
-        }
-        buf.skipBytes(buf.readableBytes())
-        out.add(0)
+    private fun socialSize(opcode: Int, handshake: Boolean): Int? {
+        return socialCodec.firstOrNull { it.first == opcode && it.third == handshake }?.second
     }
 }

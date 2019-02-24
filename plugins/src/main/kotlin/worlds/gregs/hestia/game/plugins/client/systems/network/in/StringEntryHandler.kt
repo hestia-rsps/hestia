@@ -1,22 +1,20 @@
 package worlds.gregs.hestia.game.plugins.client.systems.network.`in`
 
-import com.artemis.ComponentMapper
-import world.gregs.hestia.core.network.packets.Packet
-import world.gregs.hestia.core.network.packets.PacketInfo
+import world.gregs.hestia.core.network.protocol.messages.FriendsChatName
 import worlds.gregs.hestia.GameServer
-import worlds.gregs.hestia.api.core.components.ClientIndex
-import worlds.gregs.hestia.game.PacketHandlerSystem
-import worlds.gregs.hestia.network.game.Packets
-import worlds.gregs.hestia.network.social.out.FriendsChatName
+import worlds.gregs.hestia.game.MessageHandlerSystem
+import worlds.gregs.hestia.network.game.decoders.messages.StringEntry
 
-@PacketInfo(-1, Packets.ENTER_STRING)
-class StringEntryHandler : PacketHandlerSystem() {
+class StringEntryHandler : MessageHandlerSystem<StringEntry>() {
 
-    private lateinit var clientIndexMapper: ComponentMapper<ClientIndex>
+    override fun initialize() {
+        super.initialize()
+        GameServer.gameMessages.bind(this)
+    }
 
-    override fun handle(entityId: Int, packet: Packet) {
+    override fun handle(entityId: Int, message: StringEntry) {
         //TODO handling/call back other things
-        GameServer.worldSession?.write(FriendsChatName(entityId, packet.readString()))
+        GameServer.worldSession?.write(FriendsChatName(entityId, message.text))
     }
 
 }

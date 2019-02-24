@@ -3,19 +3,22 @@ package worlds.gregs.hestia.game.map
 import io.netty.buffer.Unpooled
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import world.gregs.hestia.core.network.packets.Packet
-import world.gregs.hestia.core.services.Cache
+import world.gregs.hestia.core.cache.Cache
+import world.gregs.hestia.core.cache.CacheStore
+import world.gregs.hestia.core.network.codec.packet.PacketReader
 
 internal class MapIndexDecoderTest {
 
+    private lateinit var cache: Cache
+
     @BeforeEach
     fun setUp() {
-        Cache.init("../../hestia/data/cache/")
+        cache = CacheStore("../../hestia/data/cache/")
     }
 
     @Test
     fun decode() {
-        val index = Cache.getIndex(5)!!
+        val index = cache.getIndex(5)
 
         val range = 0..162
 
@@ -34,7 +37,7 @@ internal class MapIndexDecoderTest {
                     val mapContainerData = if (mapIndex == -1) null else index.getFile(mapIndex, 0)
                     val mapSettings = if (mapContainerData == null) null else Array(4) { Array(64) { ByteArray(64) } }
                     if (mapContainerData != null) {
-                        val mapStream = Packet(mapContainerData)
+                        val mapStream = PacketReader(mapContainerData)
                         for (plane in 0..3) {
                             for (x in 0..63) {
                                 for (y in 0..63) {
@@ -67,18 +70,18 @@ internal class MapIndexDecoderTest {
                     }
                     if (landContainerData != null) {
                         val map = HashMap<Int, Int>()
-                        val landStream = Packet(landContainerData)
+                        val landStream = PacketReader(landContainerData)
                         var objectId = -1
                         var incr: Int
                         while (true) {
-                            incr = landStream.readSmart2()
+                            incr = landStream.readLargeSmart()
                             if (incr == 0)
                                 break
                             objectId += incr
                             var location = 0
                             var incr2: Int
                             while (true) {
-                                incr2 = landStream.readUnsignedSmart()
+                                incr2 = landStream.readSmart()
                                 if (incr2 == 0)
                                     break
                                 location += incr2 - 1
@@ -95,7 +98,7 @@ internal class MapIndexDecoderTest {
                                 if (mapSettings != null && mapSettings[1][localX][localY].toInt() and 2 == 2) {
                                     objectPlane--
                                 }
-                                if(plane < 0 || plane >= 4 && !(objectPlane < 0 || objectPlane >= 4)) {
+                                if (plane < 0 || plane >= 4 && !(objectPlane < 0 || objectPlane >= 4)) {
                                     println("Necessary!?")
                                 }
                                 if (objectPlane < 0 || objectPlane >= 4 || plane < 0 || plane >= 4) {
@@ -129,14 +132,14 @@ internal class MapIndexDecoderTest {
 
     @Test
     fun test() {
-        val index = Cache.getIndex(5)!!
+        val index = cache.getIndex(5)
         val range = 0..162
         var counter = 0
         for (x in range) {
             for (y in range) {
                 val id = index.getArchiveId("n${x}_$y")
                 if (id != -1) {
-                    val npcSpawnsContainerData = Cache.getIndex(5)?.getFile(id, 0, null)
+                    val npcSpawnsContainerData = cache.getIndex(5).getFile(id, 0, null)
                     println("Found: n${x}_$y ${x * 64} ${y * 64}")
                     if (npcSpawnsContainerData != null) {
                         val buffer = Unpooled.wrappedBuffer(npcSpawnsContainerData)

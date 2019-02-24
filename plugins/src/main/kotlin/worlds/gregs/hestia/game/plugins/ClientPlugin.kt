@@ -11,7 +11,10 @@ import worlds.gregs.hestia.game.plugin.Plugin.Companion.UPDATE_FINISH_PRIORITY
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.UPDATE_FLAG_PRIORITY
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.UPDATE_SYNC_PRIORITY
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.UPDATE_UPDATE_PRIORITY
-import worlds.gregs.hestia.game.plugins.client.systems.network.*
+import worlds.gregs.hestia.game.plugins.client.systems.network.ClientConnectSystem
+import worlds.gregs.hestia.game.plugins.client.systems.network.ClientDisconnectSystem
+import worlds.gregs.hestia.game.plugins.client.systems.network.ClientNetworkSystem
+import worlds.gregs.hestia.game.plugins.client.systems.network.PacketSender
 import worlds.gregs.hestia.game.plugins.client.systems.network.`in`.*
 import worlds.gregs.hestia.game.plugins.client.systems.region.ClientRegionChangeSystem
 import worlds.gregs.hestia.game.plugins.client.systems.region.ClientRegionLoadSystem
@@ -33,10 +36,10 @@ import worlds.gregs.hestia.game.plugins.movement.systems.update.MovementStageChe
 class ClientPlugin : Plugin {
 
     override fun setup(b: WorldConfigurationBuilder) {
-        b.with(CommandHandler(), InterfaceHandler(), WalkingHandler(), ScreenHandler(), CloseInterfaceHandler(), WorldMapHandler(), DialogueContinueHandler(), StringEntryHandler())
+        b.with(ConsoleCommandHandler(), WidgetClickHandler(), WalkTargetHandler(), ScreenChangeHandler(), ScreenCloseHandler(), WorldMapOpenHandler(), DialogueContinueHandler(), StringEntryHandler())
 
         b.with(LOGIN_DETAILS_PRIORITY, ClientConnectSystem())
-        b.with(PacketSystem(), PacketSender(), ClientDisconnectSystem(), GlobalEntitySystem(), ClientNetworkSystem())
+        b.with(PacketSender(), ClientDisconnectSystem(), GlobalEntitySystem(), ClientNetworkSystem())
         b.with(UPDATE_FLAG_PRIORITY, PlayerUpdateFlagSystem(), MobUpdateFlagSystem())
         b.with(UPDATE_DISPLAY_FLAG_PRIORITY, LocalDisplayFlagSystem(), GlobalDisplayFlagSystem(), MovementStageChecks())
         b.with(UPDATE_SYNC_PRIORITY, PlayerSyncSystem(), MobSyncSystem())

@@ -1,9 +1,9 @@
 package worlds.gregs.hestia.game.plugins.client.systems.update.bases.update
 
 import com.artemis.ComponentMapper
-import world.gregs.hestia.core.network.packets.Packet
-import worlds.gregs.hestia.game.plugins.client.systems.update.update.PlayerUpdateSystem
+import world.gregs.hestia.core.network.codec.packet.PacketBuilder
 import worlds.gregs.hestia.api.core.components.Created
+import worlds.gregs.hestia.game.plugins.client.systems.update.update.PlayerUpdateSystem
 import worlds.gregs.hestia.game.update.DisplayFlag
 import worlds.gregs.hestia.game.update.UpdateFlag
 
@@ -14,7 +14,7 @@ interface BaseUpdateSystem {
 
     fun isGlobal(type: DisplayFlag?, update: Boolean): Boolean
 
-    fun update(entityId: Int, local: Int, data: Packet.Builder, createdMapper: ComponentMapper<Created>, added: Boolean) {
+    fun update(entityId: Int, local: Int, data: PacketBuilder, createdMapper: ComponentMapper<Created>, added: Boolean) {
         //Is it the entities initial update?
         val created = createdMapper.has(entityId) || added
         //Does the entity have any UpdateFlag's that need updating?
@@ -39,10 +39,10 @@ interface BaseUpdateSystem {
 
         data.writeByte(maskData)
 
-        if (maskData >= 256) {
+        if (maskData >= 256) {//0x80
             data.writeByte(maskData shr 8)
         }
-        if (maskData >= 65536) {
+        if (maskData >= 65536) {//0x800
             data.writeByte(maskData shr 16)
         }
 

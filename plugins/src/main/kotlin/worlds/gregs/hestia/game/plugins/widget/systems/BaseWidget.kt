@@ -6,8 +6,8 @@ import net.mostlyoriginal.api.event.common.EventSystem
 import worlds.gregs.hestia.api.widget.GameFrame
 import worlds.gregs.hestia.api.widget.Widget
 import worlds.gregs.hestia.game.plugins.widget.systems.frame.getId
-import worlds.gregs.hestia.network.game.out.InterfaceClose
-import worlds.gregs.hestia.network.game.out.InterfaceOpen
+import worlds.gregs.hestia.network.game.encoders.messages.WidgetClose
+import worlds.gregs.hestia.network.game.encoders.messages.WidgetOpen
 import worlds.gregs.hestia.services.send
 import kotlin.reflect.KClass
 
@@ -50,7 +50,7 @@ abstract class BaseWidget(component: KClass<out Component>) : Widget(component) 
         if(window != null) {
             val index = getIndex(entityId)
             val id = getId(entityId)
-            es.send(entityId, InterfaceOpen(frame, window, index, id))
+            es.send(entityId, WidgetOpen(frame, window, index, id))
         }
     }
 
@@ -58,7 +58,7 @@ abstract class BaseWidget(component: KClass<out Component>) : Widget(component) 
         val window = getWindow(entityId)
         if(window != null) {
             val index = getIndex(entityId)
-            es.send(entityId, InterfaceClose(window, index))
+            es.send(entityId, WidgetClose(window, index))
         }
     }
 }

@@ -6,8 +6,8 @@ import worlds.gregs.hestia.game.Configs.HALLOWEEN_EMOTES
 import worlds.gregs.hestia.game.Configs.STRONGHOLD_SECURITY_EMOTES
 import worlds.gregs.hestia.game.plugins.widget.components.frame.tabs.EmotesTab
 import worlds.gregs.hestia.game.plugins.widget.systems.BaseFrame
-import worlds.gregs.hestia.network.game.out.ComponentSettings
-import worlds.gregs.hestia.network.game.out.Config
+import worlds.gregs.hestia.network.game.encoders.messages.Config
+import worlds.gregs.hestia.network.game.encoders.messages.WidgetComponentSettings
 import worlds.gregs.hestia.services.send
 
 class EmotesTabSystem : BaseFrame(EmotesTab::class) {
@@ -24,7 +24,7 @@ class EmotesTabSystem : BaseFrame(EmotesTab::class) {
         super.open(entityId)
 
         for (i in 0 until 149) {
-            es.send(entityId, ComponentSettings(getId(entityId), i, 0, 190, 2150))
+            es.send(entityId, WidgetComponentSettings(getId(entityId), i, 0, 190, 2150))
         }
 
         es.send(entityId, Config(GOLBIN_QUEST_EMOTES, 7))

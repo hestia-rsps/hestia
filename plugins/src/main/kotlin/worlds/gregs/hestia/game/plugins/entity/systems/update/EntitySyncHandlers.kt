@@ -3,7 +3,7 @@ package worlds.gregs.hestia.game.plugins.entity.systems.update
 import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
 import net.mostlyoriginal.api.system.core.PassiveSystem
-import world.gregs.hestia.core.network.packets.Packet
+import world.gregs.hestia.core.network.codec.packet.PacketBuilder
 import worlds.gregs.hestia.api.core.components.Position
 import worlds.gregs.hestia.api.core.components.Position.Companion.regionDelta
 import worlds.gregs.hestia.api.core.components.Viewport
@@ -41,7 +41,7 @@ class EntitySyncHandlers : PassiveSystem() {
         }
     }
 
-    private fun sendMovementUpdate(packet: Packet.Builder, player: Int, other: Int) {
+    private fun sendMovementUpdate(packet: PacketBuilder, player: Int, other: Int) {
         val type = getUpdateType(player, other)
         if (type != null) {
             //Move to global players

@@ -2,7 +2,7 @@ package worlds.gregs.hestia.game.plugins.widget.systems.frame.orbs
 
 import worlds.gregs.hestia.game.plugins.widget.components.frame.orbs.EnergyOrb
 import worlds.gregs.hestia.game.plugins.widget.systems.BaseFrame
-import worlds.gregs.hestia.network.game.out.RunEnergy
+import worlds.gregs.hestia.network.game.encoders.messages.RunEnergy
 import worlds.gregs.hestia.services.send
 
 class EnergyOrbSystem : BaseFrame(EnergyOrb::class) {

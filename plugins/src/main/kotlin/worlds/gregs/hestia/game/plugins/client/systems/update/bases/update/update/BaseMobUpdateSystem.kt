@@ -2,9 +2,9 @@ package worlds.gregs.hestia.game.plugins.client.systems.update.bases.update.upda
 
 import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.event.common.EventSystem
+import worlds.gregs.hestia.api.core.components.Created
 import worlds.gregs.hestia.game.plugins.client.systems.update.bases.update.BaseUpdateSystem
 import worlds.gregs.hestia.game.plugins.client.systems.update.bases.update.sync.BaseMobSyncSystem
-import worlds.gregs.hestia.api.core.components.Created
 import worlds.gregs.hestia.game.update.DisplayFlag
 import worlds.gregs.hestia.services.send
 
@@ -28,6 +28,6 @@ abstract class BaseMobUpdateSystem : BaseMobSyncSystem(), BaseUpdateSystem {
     override fun process(entityId: Int) {
         super.process(entityId)
 
-        es.send(entityId, packet)
+        es.send(entityId, packet.build())
     }
 }

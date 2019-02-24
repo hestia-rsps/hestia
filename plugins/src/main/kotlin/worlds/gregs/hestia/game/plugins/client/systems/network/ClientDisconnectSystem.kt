@@ -2,12 +2,12 @@ package worlds.gregs.hestia.game.plugins.client.systems.network
 
 import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.event.common.EventSystem
+import world.gregs.hestia.core.network.protocol.messages.PlayerLogout
 import worlds.gregs.hestia.GameServer
 import worlds.gregs.hestia.api.SubscriptionSystem
 import worlds.gregs.hestia.game.plugins.client.components.ExitLobby
 import worlds.gregs.hestia.game.plugins.client.components.NetworkSession
-import worlds.gregs.hestia.network.game.out.Logout
-import worlds.gregs.hestia.network.social.out.PlayerLogout
+import worlds.gregs.hestia.network.game.encoders.messages.Logout
 import worlds.gregs.hestia.services.Aspect
 import worlds.gregs.hestia.services.send
 

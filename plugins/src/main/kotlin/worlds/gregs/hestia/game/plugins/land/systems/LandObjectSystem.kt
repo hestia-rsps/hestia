@@ -2,19 +2,20 @@ package worlds.gregs.hestia.game.plugins.land.systems
 
 import com.artemis.annotations.Wire
 import net.mostlyoriginal.api.event.common.EventSystem
-import world.gregs.hestia.core.network.packets.Packet
+import world.gregs.hestia.core.network.codec.packet.PacketReader
 import worlds.gregs.hestia.api.land.Land
 import worlds.gregs.hestia.api.land.LandObjects
 import worlds.gregs.hestia.game.events.CreateObject
 import worlds.gregs.hestia.game.map.Flags.BRIDGE_TILE
-import worlds.gregs.hestia.game.plugins.core.systems.cache.ObjectDefinitionSystem
-import worlds.gregs.hestia.game.plugins.region.systems.load.ChunkRotationSystem
 import worlds.gregs.hestia.game.map.MapConstants.PLANE_RANGE
 import worlds.gregs.hestia.game.map.MapConstants.isOutOfBounds
+import worlds.gregs.hestia.game.plugins.core.systems.cache.ObjectDefinitionSystem
+import worlds.gregs.hestia.game.plugins.region.systems.load.ChunkRotationSystem
+import worlds.gregs.hestia.game.plugins.region.systems.load.RegionFileSystem
 
 /**
  * MapObjectSystem
- * Adds region objects using [Land] from the [worlds.gregs.hestia.game.plugins.region.systems.load.RegionFileSystem] data
+ * Adds region objects using [Land] from the [RegionFileSystem] data
  */
 @Wire(failOnNull = false)
 class LandObjectSystem : LandObjects() {
@@ -24,12 +25,12 @@ class LandObjectSystem : LandObjects() {
     private lateinit var es: EventSystem
 
     override fun load(entityId: Int, x: Int, y: Int, landContainerData: ByteArray, settings: Array<Array<ByteArray>>?, rotation: Int?, chunkX: Int?, chunkY: Int?, chunkPlane: Int?) {
-        val landStream = Packet(landContainerData)
+        val landStream = PacketReader(landContainerData)
         //Loop around all the data
         var objectId = -1
         var skip: Int
         while (true) {
-            skip = landStream.readSmart2()
+            skip = landStream.readLargeSmart()
             if (skip == 0) {
                 break
             }
@@ -37,7 +38,7 @@ class LandObjectSystem : LandObjects() {
             var location = 0
             var data: Int
             while (true) {
-                data = landStream.readUnsignedSmart()
+                data = landStream.readSmart()
                 if (data == 0) {
                     break
                 }

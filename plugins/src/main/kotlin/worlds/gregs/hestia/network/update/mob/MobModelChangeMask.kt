@@ -1,13 +1,15 @@
 package worlds.gregs.hestia.network.update.mob
 
 import com.artemis.ComponentMapper
-import worlds.gregs.hestia.game.update.UpdateEncoder
-import world.gregs.hestia.core.network.packets.Packet
+import world.gregs.hestia.core.network.codec.packet.Endian
+import world.gregs.hestia.core.network.codec.packet.Modifier
+import world.gregs.hestia.core.network.codec.packet.PacketBuilder
 import worlds.gregs.hestia.game.plugins.mob.component.update.ModelChange
+import worlds.gregs.hestia.game.update.UpdateEncoder
 
 class MobModelChangeMask(private val modelChangeMapper: ComponentMapper<ModelChange>) : UpdateEncoder {
 
-    override val encode: Packet.Builder.(Int, Int) -> Unit = { _, other ->
+    override val encode: PacketBuilder.(Int, Int) -> Unit = { _, other ->
         val modelChange = modelChangeMapper.get(other)
         val models = modelChange.models
         val colours = modelChange.colours
@@ -29,7 +31,7 @@ class MobModelChangeMask(private val modelChangeMapper: ComponentMapper<ModelCha
             hash = hash or 0x8
         }
 
-        writeByteS(hash)
+        writeByte(hash, Modifier.SUBTRACT)
         models?.forEach {
             writeShort(it)
         }
@@ -37,7 +39,7 @@ class MobModelChangeMask(private val modelChangeMapper: ComponentMapper<ModelCha
             writeShort(it)
         }
         textures?.forEach {
-            writeLEShortA(it)
+            writeShort(it, Modifier.ADD, Endian.LITTLE)
         }
     }
 

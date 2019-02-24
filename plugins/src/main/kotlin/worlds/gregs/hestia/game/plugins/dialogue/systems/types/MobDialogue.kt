@@ -4,8 +4,8 @@ import com.artemis.Entity
 import worlds.gregs.hestia.api.dialogue.DialogueBase
 import worlds.gregs.hestia.game.dialogue.Dialogues
 import worlds.gregs.hestia.game.events.send
-import worlds.gregs.hestia.network.game.out.InterfaceComponentAnimation
-import worlds.gregs.hestia.network.game.out.MobOnInterface
+import worlds.gregs.hestia.network.game.encoders.messages.WidgetComponentAnimation
+import worlds.gregs.hestia.network.game.encoders.messages.WidgetHeadMob
 
 class MobDialogue(text: String) : BaseEntityDialogue(text) {
 
@@ -18,10 +18,10 @@ class MobDialogue(text: String) : BaseEntityDialogue(text) {
 
         val interfaceId = getInterfaceId()
 
-        entity.send(MobOnInterface(interfaceId, 2, mob))
+        entity.send(WidgetHeadMob(interfaceId, 2, mob))
 
         if(animation != -1) {
-            entity.send(InterfaceComponentAnimation(interfaceId, 2, animation))
+            entity.send(WidgetComponentAnimation(interfaceId, 2, animation))
         }
     }
 

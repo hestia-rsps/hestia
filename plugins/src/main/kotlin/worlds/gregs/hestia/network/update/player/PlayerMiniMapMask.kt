@@ -1,15 +1,15 @@
 package worlds.gregs.hestia.network.update.player
 
 import com.artemis.ComponentMapper
-import worlds.gregs.hestia.game.update.UpdateEncoder
-import world.gregs.hestia.core.network.packets.Packet
-import world.gregs.hestia.core.services.int
+import world.gregs.hestia.core.network.codec.packet.Modifier
+import world.gregs.hestia.core.network.codec.packet.PacketBuilder
 import worlds.gregs.hestia.game.plugins.player.component.update.PlayerMiniMapDot
+import worlds.gregs.hestia.game.update.UpdateEncoder
 
 class PlayerMiniMapMask(private val miniMapDotMapper: ComponentMapper<PlayerMiniMapDot>) : UpdateEncoder {
 
-    override val encode: Packet.Builder.(Int, Int) -> Unit = { _, other ->
-        writeByteS(miniMapDotMapper.get(other)?.p?.int ?: 0)
+    override val encode: PacketBuilder.(Int, Int) -> Unit = { _, other ->
+        writeByte(miniMapDotMapper.get(other)?.p ?: false, Modifier.INVERSE)
     }
 
 }

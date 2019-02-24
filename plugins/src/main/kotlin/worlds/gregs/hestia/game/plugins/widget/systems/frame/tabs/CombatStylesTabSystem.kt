@@ -4,8 +4,8 @@ import com.artemis.annotations.Wire
 import worlds.gregs.hestia.game.Configs.COMBAT_STYLE
 import worlds.gregs.hestia.game.plugins.widget.components.frame.tabs.CombatStylesTab
 import worlds.gregs.hestia.game.plugins.widget.systems.BaseFrame
-import worlds.gregs.hestia.network.game.out.Config
-import worlds.gregs.hestia.network.game.out.UnlockComponentOption
+import worlds.gregs.hestia.network.game.encoders.messages.Config
+import worlds.gregs.hestia.network.game.encoders.messages.WidgetComponentSettings
 import worlds.gregs.hestia.services.send
 
 @Wire(injectInherited = true)
@@ -22,13 +22,13 @@ class CombatStylesTabSystem : BaseFrame(CombatStylesTab::class) {
 
     fun lock(entityId: Int) {
         for (componentId in 11..14) {
-            es.send(entityId, UnlockComponentOption(getId(entityId), componentId, -1, 0))
+            es.send(entityId, WidgetComponentSettings(getId(entityId), componentId, -1, 0))
         }
     }
 
     fun unlock(entityId: Int) {
         for (componentId in 11..14) {
-            es.send(entityId, UnlockComponentOption(getId(entityId), componentId, -1, 0, 0))
+            es.send(entityId, WidgetComponentSettings(getId(entityId), componentId, -1, 0, options = *intArrayOf(0)))
         }
     }
 

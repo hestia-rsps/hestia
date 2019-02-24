@@ -1,9 +1,9 @@
 package worlds.gregs.hestia.game.plugins.dialogue.systems.types
 
 import com.artemis.Entity
+import world.gregs.hestia.core.network.protocol.encoders.messages.WidgetComponentText
 import worlds.gregs.hestia.api.dialogue.DialogueBase
 import worlds.gregs.hestia.game.events.send
-import worlds.gregs.hestia.network.game.out.InterfaceComponentText
 import java.security.InvalidParameterException
 
 abstract class BaseEntityDialogue(text: String) : BaseChatDialogue(text) {
@@ -20,11 +20,11 @@ abstract class BaseEntityDialogue(text: String) : BaseChatDialogue(text) {
         }
 
         if (title != null) {
-            entity.send(InterfaceComponentText(interfaceId, getComponentStart(), title!!))
+            entity.send(WidgetComponentText(interfaceId, getComponentStart(), title!!))
         }
 
         lines.forEachIndexed { index, text ->
-            entity.send(InterfaceComponentText(interfaceId, getComponentStart() + index + 1, text))
+            entity.send(WidgetComponentText(interfaceId, getComponentStart() + index + 1, text))
         }
     }
 

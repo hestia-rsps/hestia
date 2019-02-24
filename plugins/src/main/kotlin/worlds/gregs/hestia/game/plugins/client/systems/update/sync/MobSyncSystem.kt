@@ -1,12 +1,12 @@
 package worlds.gregs.hestia.game.plugins.client.systems.update.sync
 
 import com.artemis.ComponentMapper
-import world.gregs.hestia.core.network.packets.Packet
+import world.gregs.hestia.core.network.codec.packet.PacketBuilder
 import world.gregs.hestia.core.services.int
-import worlds.gregs.hestia.api.update.EntitySync
-import worlds.gregs.hestia.game.plugins.client.systems.update.bases.update.sync.BaseMobSyncSystem
 import worlds.gregs.hestia.api.core.components.ClientIndex
 import worlds.gregs.hestia.api.core.components.Position
+import worlds.gregs.hestia.api.update.EntitySync
+import worlds.gregs.hestia.game.plugins.client.systems.update.bases.update.sync.BaseMobSyncSystem
 import worlds.gregs.hestia.game.plugins.entity.components.update.Type
 import worlds.gregs.hestia.game.plugins.entity.components.update.direction.Face
 import worlds.gregs.hestia.game.update.DirectionUtils
@@ -14,7 +14,7 @@ import worlds.gregs.hestia.game.update.DisplayFlag
 
 class MobSyncSystem : BaseMobSyncSystem(), EntitySync {
 
-    override val localHandlers = HashMap<DisplayFlag, Packet.Builder.(Int, Int) -> Unit>()
+    override val localHandlers = HashMap<DisplayFlag, PacketBuilder.(Int, Int) -> Unit>()
     private var movingCheck: ((Int) -> Boolean)? = null
     private lateinit var typeMapper: ComponentMapper<Type>
     private lateinit var clientIndexMapper: ComponentMapper<ClientIndex>
