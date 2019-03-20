@@ -5,7 +5,7 @@ import com.artemis.WorldConfigurationBuilder
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import worlds.gregs.hestia.api.core.components.Position
+import worlds.gregs.hestia.game.entity.Position
 import worlds.gregs.hestia.api.movement.systems.RegionChanged
 import worlds.gregs.hestia.game.GameTest
 import worlds.gregs.hestia.game.archetypes.EntityFactory
@@ -16,7 +16,7 @@ import worlds.gregs.hestia.game.plugins.MovementPlugin
 import worlds.gregs.hestia.game.plugins.RegionPlugin
 import worlds.gregs.hestia.game.plugins.entity.systems.move
 import worlds.gregs.hestia.game.plugins.entity.systems.step
-import worlds.gregs.hestia.game.plugins.movement.components.Mobile
+import worlds.gregs.hestia.api.movement.Mobile
 import worlds.gregs.hestia.services.dependsOn
 
 internal class RegionChangedTest : GameTest(WorldConfigurationBuilder().dependsOn(RegionPlugin::class, MovementPlugin::class).with(Plugin.PRE_SHIFT_PRIORITY, RegionChange())) {

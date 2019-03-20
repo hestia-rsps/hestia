@@ -4,16 +4,16 @@ import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
 import worlds.gregs.hestia.api.SubscriptionSystem
 import worlds.gregs.hestia.api.`object`.GameObject
+import worlds.gregs.hestia.game.entity.Position
 import worlds.gregs.hestia.api.map.ClippingMasks
 import worlds.gregs.hestia.api.region.Regions
 import worlds.gregs.hestia.game.map.Flags.FLOOR_DECO_BLOCKS_WALK
+import worlds.gregs.hestia.game.map.MapConstants.isOutOfBounds
 import worlds.gregs.hestia.game.plugins.`object`.component.ObjectType
 import worlds.gregs.hestia.game.plugins.`object`.component.Rotation
-import worlds.gregs.hestia.api.core.components.Position
 import worlds.gregs.hestia.game.plugins.core.systems.cache.ObjectDefinitionSystem
 import worlds.gregs.hestia.game.plugins.map.systems.ClippingMaskSystem.Companion.ADD_MASK
 import worlds.gregs.hestia.game.plugins.map.systems.ClippingMaskSystem.Companion.REMOVE_MASK
-import worlds.gregs.hestia.game.map.MapConstants.isOutOfBounds
 import worlds.gregs.hestia.services.Aspect
 
 @Wire(failOnNull = false)

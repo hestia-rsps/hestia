@@ -2,7 +2,7 @@ package worlds.gregs.hestia.game.plugins.entity.systems.update
 
 import com.artemis.ComponentMapper
 import com.artemis.systems.IteratingSystem
-import worlds.gregs.hestia.game.plugins.entity.components.update.direction.Face
+import worlds.gregs.hestia.game.update.components.direction.Face
 import worlds.gregs.hestia.api.movement.components.Shift
 import worlds.gregs.hestia.services.Aspect
 

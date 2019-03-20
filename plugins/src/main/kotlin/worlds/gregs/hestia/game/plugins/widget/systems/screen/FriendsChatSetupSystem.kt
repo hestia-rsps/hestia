@@ -6,7 +6,7 @@ import worlds.gregs.hestia.GameServer
 import worlds.gregs.hestia.api.widget.UserInterface
 import worlds.gregs.hestia.game.plugins.widget.components.screen.FriendsChatSetup
 import worlds.gregs.hestia.game.plugins.widget.systems.BaseScreen
-import worlds.gregs.hestia.network.game.encoders.messages.Script
+import worlds.gregs.hestia.network.client.encoders.messages.Script
 import worlds.gregs.hestia.services.send
 
 class FriendsChatSetupSystem : BaseScreen(FriendsChatSetup::class) {

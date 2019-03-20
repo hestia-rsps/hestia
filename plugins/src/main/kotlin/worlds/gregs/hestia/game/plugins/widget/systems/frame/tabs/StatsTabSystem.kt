@@ -5,16 +5,16 @@ import worlds.gregs.hestia.api.widget.UserInterface
 import worlds.gregs.hestia.game.Configs.LEVEL_UP_DETAILS
 import worlds.gregs.hestia.game.Configs.SKILL_MENU
 import worlds.gregs.hestia.game.Configs.SKILL_STAT_FLASH
-import worlds.gregs.hestia.game.Skill
+import worlds.gregs.hestia.game.client.Skill
 import worlds.gregs.hestia.game.plugins.widget.components.frame.tabs.StatsTab
 import worlds.gregs.hestia.game.plugins.widget.components.screen.SkillLevelDetails
 import worlds.gregs.hestia.game.plugins.widget.components.screen.SkillMenu
 import worlds.gregs.hestia.game.plugins.widget.systems.BaseFrame
 import worlds.gregs.hestia.game.plugins.widget.systems.screen.SkillLevelDetailsSystem
 import worlds.gregs.hestia.game.plugins.widget.systems.screen.SkillMenuSystem
-import worlds.gregs.hestia.network.game.encoders.messages.Config
-import worlds.gregs.hestia.network.game.encoders.messages.ConfigFile
-import worlds.gregs.hestia.network.game.encoders.messages.SkillLevel
+import worlds.gregs.hestia.network.client.encoders.messages.Config
+import worlds.gregs.hestia.network.client.encoders.messages.ConfigFile
+import worlds.gregs.hestia.network.client.encoders.messages.SkillLevel
 import worlds.gregs.hestia.services.send
 import kotlin.math.pow
 

@@ -9,7 +9,7 @@ import worlds.gregs.hestia.game.MessageHandlerSystem
 import worlds.gregs.hestia.game.plugins.dialogue.systems.types.BaseEntityDialogue
 import worlds.gregs.hestia.game.plugins.dialogue.systems.types.OptionsDialogue
 import worlds.gregs.hestia.game.plugins.widget.components.frame.chat.DialogueBox
-import worlds.gregs.hestia.network.game.decoders.messages.DialogueContinue
+import worlds.gregs.hestia.network.client.decoders.messages.DialogueContinue
 
 @Wire(failOnNull = false)
 class DialogueContinueHandler : MessageHandlerSystem<DialogueContinue>() {

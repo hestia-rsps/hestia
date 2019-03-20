@@ -2,7 +2,7 @@ package worlds.gregs.hestia.game.plugins.widget.systems.frame.orbs
 
 import worlds.gregs.hestia.game.plugins.widget.components.frame.orbs.SummoningOrb
 import worlds.gregs.hestia.game.plugins.widget.systems.BaseFrame
-import worlds.gregs.hestia.network.game.encoders.messages.Config
+import worlds.gregs.hestia.network.client.encoders.messages.Config
 import worlds.gregs.hestia.services.send
 
 class SummoningOrbSystem : BaseFrame(SummoningOrb::class) {

@@ -2,9 +2,9 @@ package worlds.gregs.hestia.game.plugins.movement.systems
 
 import com.artemis.ComponentMapper
 import com.artemis.systems.IntervalIteratingSystem
-import worlds.gregs.hestia.api.core.components.Position
+import worlds.gregs.hestia.game.entity.Position
 import worlds.gregs.hestia.api.movement.components.Shift
-import worlds.gregs.hestia.game.plugins.movement.components.Mobile
+import worlds.gregs.hestia.api.movement.Mobile
 import worlds.gregs.hestia.game.plugins.movement.components.RandomWalk
 import worlds.gregs.hestia.game.plugins.movement.components.Steps
 import worlds.gregs.hestia.game.plugins.movement.components.calc.Follow

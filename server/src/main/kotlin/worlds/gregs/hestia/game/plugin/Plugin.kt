@@ -3,7 +3,7 @@ package worlds.gregs.hestia.game.plugin
 import com.artemis.ArtemisPlugin
 import com.artemis.WorldConfigurationBuilder
 
-interface Plugin : ArtemisPlugin {
+interface Plugin : ArtemisPlugin {//TODO rename to config?
 
     open fun active(): Boolean {
         return true

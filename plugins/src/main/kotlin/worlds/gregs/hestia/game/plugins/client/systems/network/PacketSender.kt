@@ -6,7 +6,7 @@ import net.mostlyoriginal.api.event.common.Subscribe
 import net.mostlyoriginal.api.system.core.PassiveSystem
 import worlds.gregs.hestia.game.events.OutBoundMessage
 import worlds.gregs.hestia.game.events.OutBoundPacket
-import worlds.gregs.hestia.game.plugins.client.components.NetworkSession
+import worlds.gregs.hestia.game.client.NetworkSession
 
 class PacketSender : PassiveSystem() {
 
@@ -33,14 +33,14 @@ class PacketSender : PassiveSystem() {
 
     @Subscribe
     fun send(event: OutBoundPacket) {
-        if(networkSessionMapper.has(event.entity)) {
-            val component = networkSessionMapper.get(event.entity)
+        val (entity, packet) = event
+        if(networkSessionMapper.has(entity)) {
+            val component = networkSessionMapper.get(entity)
             if (component != null) {
                 val channel = component.channel
-
                 if (channel.isOpen) {
                     synchronized(channel) {
-                        val future = channel.writeAndFlush(event.packet.buffer)
+                        val future = channel.writeAndFlush(packet.buffer)
                         if (event.close) {
                             future.addListener(ChannelFutureListener.CLOSE) ?: channel.close()
                         }

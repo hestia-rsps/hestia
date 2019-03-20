@@ -8,12 +8,8 @@ import world.gregs.hestia.core.network.codec.packet.PacketWriter
 import worlds.gregs.hestia.api.SubscriptionSystem
 import worlds.gregs.hestia.api.player.Player
 import worlds.gregs.hestia.game.events.UpdateAppearance
-import worlds.gregs.hestia.game.plugins.entity.components.update.CombatLevel
-import worlds.gregs.hestia.game.plugins.entity.components.update.DisplayName
-import worlds.gregs.hestia.game.plugins.entity.components.update.Transform
-import worlds.gregs.hestia.game.plugins.player.component.update.Appearance
-import worlds.gregs.hestia.game.plugins.player.component.update.AppearanceData
 import worlds.gregs.hestia.game.plugins.player.component.update.appearance.*
+import worlds.gregs.hestia.game.update.components.*
 import worlds.gregs.hestia.services.Aspect
 
 class AppearanceSystem : SubscriptionSystem(Aspect.all(Player::class)) {
@@ -48,6 +44,7 @@ class AppearanceSystem : SubscriptionSystem(Aspect.all(Player::class)) {
             return
         }
 
+
         val packet = PacketWriter()
 
         packet.apply {
@@ -62,7 +59,7 @@ class AppearanceSystem : SubscriptionSystem(Aspect.all(Player::class)) {
 //            flag = flag and ((1 and 0xf2) shr 6)//Something about trimming title
             writeByte(flag)//Flag
             writeByte(titleMapper.get(entityId)?.title ?: 1)//Title
-            writeString(namePrefixMapper.get(entityId)?.prefix ?: "")//Chat prefix
+//            writeString(namePrefixMapper.get(entityId)?.prefix ?: "")//Chat prefix
             writeByte(skullMapper.get(entityId)?.skull ?: -1)//Skull
             writeByte(headIconMapper.get(entityId)?.headIcon ?: -1)//Head icon
             writeByte(hiddenMapper.has(entityId))//Hidden (displays visible to admins)

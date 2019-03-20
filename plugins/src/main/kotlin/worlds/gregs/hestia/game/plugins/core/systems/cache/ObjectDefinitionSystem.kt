@@ -16,10 +16,6 @@ class ObjectDefinitionSystem : PassiveSystem() {
             return lastArchiveId * 256 + (cacheSystem.getIndex(16).getValidFilesCount(lastArchiveId))
         }
 
-    private fun getArchiveId(id: Int): Int {
-        return id.ushr(-1135990488)
-    }
-
     fun get(id: Int): ObjectDefinition {
         var definition = cache[id]
 
@@ -27,7 +23,7 @@ class ObjectDefinitionSystem : PassiveSystem() {
             definition = ObjectDefinition()
             definition.id = id
 
-            val data = cacheSystem.getIndex(16).getFile(getArchiveId(id), id and 0xff)
+            val data = cacheSystem.getFile(16, id.ushr(8), id and 0xff)
             if (data != null) {
                 definition.readValueLoop(PacketReader(data))
             }

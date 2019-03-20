@@ -2,11 +2,11 @@ package worlds.gregs.hestia.game.plugins.movement.systems.calc
 
 import com.artemis.ComponentMapper
 import worlds.gregs.hestia.api.SubscriptionSystem
-import worlds.gregs.hestia.api.core.components.Position
-import worlds.gregs.hestia.api.core.components.Size
-import worlds.gregs.hestia.api.core.components.height
-import worlds.gregs.hestia.api.core.components.width
-import worlds.gregs.hestia.game.plugins.entity.components.update.direction.Watch
+import worlds.gregs.hestia.game.entity.Position
+import worlds.gregs.hestia.game.entity.Size
+import worlds.gregs.hestia.game.entity.height
+import worlds.gregs.hestia.game.entity.width
+import worlds.gregs.hestia.game.update.components.direction.Watch
 import worlds.gregs.hestia.game.plugins.movement.components.calc.Beside
 import worlds.gregs.hestia.game.plugins.movement.components.calc.Follow
 import worlds.gregs.hestia.game.plugins.movement.systems.calc.StepBesideSystem.Companion.withinContact

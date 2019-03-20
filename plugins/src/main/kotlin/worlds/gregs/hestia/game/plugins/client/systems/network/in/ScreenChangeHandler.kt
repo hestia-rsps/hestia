@@ -7,7 +7,7 @@ import worlds.gregs.hestia.api.widget.GameFrame
 import worlds.gregs.hestia.api.widget.UserInterface
 import worlds.gregs.hestia.game.MessageHandlerSystem
 import worlds.gregs.hestia.game.plugins.widget.systems.screen.GraphicsOptionsSystem
-import worlds.gregs.hestia.network.game.decoders.messages.ScreenChange
+import worlds.gregs.hestia.network.client.decoders.messages.ScreenChange
 
 @Wire(failOnNull = false)
 class ScreenChangeHandler : MessageHandlerSystem<ScreenChange>() {

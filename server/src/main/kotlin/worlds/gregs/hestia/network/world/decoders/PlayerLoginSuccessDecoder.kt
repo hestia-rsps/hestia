@@ -9,7 +9,7 @@ import world.gregs.hestia.core.network.protocol.messages.PlayerLoginSuccess
 class PlayerLoginSuccessDecoder : MessageDecoder<PlayerLoginSuccess>(Packet.Type.VAR_BYTE, LOGIN_SUCCESS) {
 
     override fun decode(ctx: ChannelHandlerContext, packet: Packet): PlayerLoginSuccess? {
-        return PlayerLoginSuccess(packet.readShort(), packet.readString(), packet.readByte(), packet.readUnsignedShort(), packet.readUnsignedShort())
+        return PlayerLoginSuccess(packet.readShort(), packet.readString(), (0 until packet.readByte()).map { packet.readInt() }.toIntArray(), packet.readByte(), packet.readUnsignedShort(), packet.readUnsignedShort())
     }
 
 }

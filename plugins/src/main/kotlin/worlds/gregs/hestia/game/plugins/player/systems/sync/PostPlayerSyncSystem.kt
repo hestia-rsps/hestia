@@ -3,9 +3,9 @@ package worlds.gregs.hestia.game.plugins.player.systems.sync
 import com.artemis.ComponentMapper
 import com.artemis.systems.IteratingSystem
 import net.mostlyoriginal.api.event.common.Subscribe
-import worlds.gregs.hestia.api.core.components.Renderable
+import worlds.gregs.hestia.game.update.components.Renderable
 import worlds.gregs.hestia.game.events.FlagMoveType
-import worlds.gregs.hestia.game.plugins.player.component.update.*
+import worlds.gregs.hestia.game.update.components.*
 import worlds.gregs.hestia.services.Aspect
 
 class PostPlayerSyncSystem : IteratingSystem(Aspect.all(Renderable::class)) {

@@ -11,9 +11,7 @@ import worlds.gregs.hestia.network.world.decoders.messages.ClientPacketOut
 class ClientMessageDecoder : MessageDecoder<ClientPacketOut>(Packet.Type.VAR_SHORT, CLIENT_MESSAGE) {
 
     override fun decode(ctx: ChannelHandlerContext, packet: Packet): ClientPacketOut? {
-        val entity = packet.readInt()
-        val buffer = Unpooled.copiedBuffer(packet.buffer.discardReadBytes())
-        return ClientPacketOut(entity, PacketReader(buffer = buffer))
+        return ClientPacketOut(packet.readInt(), PacketReader(buffer = Unpooled.copiedBuffer(packet.buffer.discardReadBytes())))
     }
 
 }

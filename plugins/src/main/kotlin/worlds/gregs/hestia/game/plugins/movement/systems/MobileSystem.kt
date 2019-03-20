@@ -2,8 +2,8 @@ package worlds.gregs.hestia.game.plugins.movement.systems
 
 import com.artemis.ComponentMapper
 import com.artemis.systems.IteratingSystem
-import worlds.gregs.hestia.api.core.components.Position
-import worlds.gregs.hestia.game.plugins.movement.components.Mobile
+import worlds.gregs.hestia.game.entity.Position
+import worlds.gregs.hestia.api.movement.Mobile
 import worlds.gregs.hestia.services.Aspect
 
 /**

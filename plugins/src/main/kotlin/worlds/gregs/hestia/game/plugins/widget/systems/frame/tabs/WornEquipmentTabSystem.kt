@@ -7,7 +7,7 @@ import worlds.gregs.hestia.game.plugins.widget.components.screen.EquipmentBonuse
 import worlds.gregs.hestia.game.plugins.widget.components.screen.ItemsKeptOnDeath
 import worlds.gregs.hestia.game.plugins.widget.components.screen.PriceChecker
 import worlds.gregs.hestia.game.plugins.widget.systems.BaseFrame
-import worlds.gregs.hestia.network.game.encoders.messages.WidgetItems
+import worlds.gregs.hestia.network.client.encoders.messages.WidgetItems
 import worlds.gregs.hestia.services.send
 
 @Wire(failOnNull = false, injectInherited = true)

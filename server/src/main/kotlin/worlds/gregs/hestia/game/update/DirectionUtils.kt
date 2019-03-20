@@ -1,7 +1,6 @@
 package worlds.gregs.hestia.game.update
 
 import worlds.gregs.hestia.game.update.Direction.Companion.fromDelta
-import worlds.gregs.hestia.game.update.Direction.Companion.fromDirection
 
 class DirectionUtils {
     companion object {
@@ -23,22 +22,8 @@ class DirectionUtils {
             return dir.value
         }
 
-        @JvmStatic
-        fun main(args: Array<String>) {
-            RUN_X.forEachIndexed { index, x ->
-                println("$x ${RUN_Y[index]} ${getPlayerRunningDirection(x, RUN_Y[index])} ${fromDirection(getPlayerRunningDirection(x, RUN_Y[index]))?.deltaX} ${fromDirection(getPlayerRunningDirection(x, RUN_Y[index]))?.deltaY}")
-            }
-
-            println("${TEST_X.map { -it }.reversed().union(TEST_X.toList())}")
-            println("${TEST_Y.map { -it }.reversed()} ${TEST_Y.toList()}")
-
-        }
-
         private val RUN_X = intArrayOf(-2, -1, 0, 1, 2, -2, 2, -2, 2, -2, 2, -2, -1, 0, 1, 2)
         private val RUN_Y = intArrayOf(-2, -2, -2, -2, -2, -1, -1, 0, 0, 1, 1, 2, 2, 2, 2, 2)
-
-        private val TEST_X = intArrayOf(2, -2, 2, -2, -1, 0, 1, 2)
-        private val TEST_Y = intArrayOf(0, 1, 1, 2, 2, 2, 2, 2)
 
         fun getPlayerRunningDirection(dx: Int, dy: Int): Int {
             RUN_X.forEachIndexed { i, x ->
@@ -51,13 +36,6 @@ class DirectionUtils {
 
         private val MOVE_X = intArrayOf(0, 1, 1, 1, 0, -1, -1, -1)
         private val MOVE_Y = intArrayOf(1, 1, 0, -1, -1, -1, 0, 1)
-
-        /*@JvmStatic
-        fun main(args: Array<String>) {
-            MOVE_X.forEachIndexed { index, x ->
-                println("$x ${MOVE_Y[index]} ${getMobMoveDirection(x, MOVE_Y[index])}")
-            }
-        }*/
 
         fun getMobMoveDirection(direction: Direction): Int {
             return if (direction == Direction.NONE) {

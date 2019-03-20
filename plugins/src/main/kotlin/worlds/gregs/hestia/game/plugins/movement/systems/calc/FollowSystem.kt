@@ -3,13 +3,13 @@ package worlds.gregs.hestia.game.plugins.movement.systems.calc
 import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
-import worlds.gregs.hestia.api.core.components.Position
+import worlds.gregs.hestia.game.entity.Position
 import worlds.gregs.hestia.api.mob.MobChunk
 import worlds.gregs.hestia.api.movement.components.Shift
 import worlds.gregs.hestia.api.player.PlayerChunk
 import worlds.gregs.hestia.game.plugins.movement.components.calc.Follow
 import worlds.gregs.hestia.game.plugins.movement.components.calc.Step
-import worlds.gregs.hestia.game.plugins.movement.components.types.Moving
+import worlds.gregs.hestia.game.update.components.Moving
 import worlds.gregs.hestia.game.update.DirectionUtils.Companion.getOffset
 import worlds.gregs.hestia.services.Aspect
 import worlds.gregs.hestia.services.mobs

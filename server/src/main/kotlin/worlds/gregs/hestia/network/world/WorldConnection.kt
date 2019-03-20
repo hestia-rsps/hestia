@@ -8,7 +8,7 @@ import world.gregs.hestia.core.network.protocol.encoders.messages.FriendsChatDis
 import world.gregs.hestia.core.network.protocol.messages.WorldInfo
 import worlds.gregs.hestia.GameServer
 import worlds.gregs.hestia.game.events.send
-import worlds.gregs.hestia.network.game.encoders.messages.FriendListDisconnect
+import worlds.gregs.hestia.network.client.encoders.messages.FriendListDisconnect
 import worlds.gregs.hestia.services.players
 
 @ChannelHandler.Sharable

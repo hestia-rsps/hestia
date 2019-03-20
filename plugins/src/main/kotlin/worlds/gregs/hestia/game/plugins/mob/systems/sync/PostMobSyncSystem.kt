@@ -2,10 +2,10 @@ package worlds.gregs.hestia.game.plugins.mob.systems.sync
 
 import com.artemis.ComponentMapper
 import com.artemis.systems.IteratingSystem
-import worlds.gregs.hestia.api.core.components.Renderable
-import worlds.gregs.hestia.game.plugins.mob.component.update.ModelChange
-import worlds.gregs.hestia.game.plugins.mob.component.update.UpdateCombatLevel
-import worlds.gregs.hestia.game.plugins.mob.component.update.UpdateDisplayName
+import worlds.gregs.hestia.game.update.components.Renderable
+import worlds.gregs.hestia.game.update.components.ModelChange
+import worlds.gregs.hestia.game.update.components.UpdateCombatLevel
+import worlds.gregs.hestia.game.update.components.UpdateDisplayName
 import worlds.gregs.hestia.services.Aspect
 
 class PostMobSyncSystem : IteratingSystem(Aspect.all(Renderable::class)) {

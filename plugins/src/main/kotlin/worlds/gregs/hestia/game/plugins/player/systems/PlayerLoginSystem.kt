@@ -6,10 +6,10 @@ import world.gregs.hestia.core.network.protocol.messages.PlayerLogin
 import world.gregs.hestia.core.network.protocol.messages.PlayerReconnect
 import worlds.gregs.hestia.GameServer
 import worlds.gregs.hestia.api.SubscriptionSystem
-import worlds.gregs.hestia.api.core.components.ClientIndex
+import worlds.gregs.hestia.game.client.ClientIndex
 import worlds.gregs.hestia.api.player.Player
 import worlds.gregs.hestia.game.events.SocialLogin
-import worlds.gregs.hestia.game.plugins.entity.components.update.DisplayName
+import worlds.gregs.hestia.game.update.components.DisplayName
 import worlds.gregs.hestia.services.Aspect
 
 class PlayerLoginSystem : SubscriptionSystem(Aspect.all(ClientIndex::class, Player::class, DisplayName::class)) {

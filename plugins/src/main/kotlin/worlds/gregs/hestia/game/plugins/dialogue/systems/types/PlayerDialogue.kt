@@ -4,9 +4,9 @@ import com.artemis.Entity
 import worlds.gregs.hestia.api.dialogue.DialogueBase
 import worlds.gregs.hestia.game.dialogue.Dialogues
 import worlds.gregs.hestia.game.events.send
-import worlds.gregs.hestia.game.plugins.entity.components.update.DisplayName
-import worlds.gregs.hestia.network.game.encoders.messages.WidgetComponentAnimation
-import worlds.gregs.hestia.network.game.encoders.messages.WidgetHeadPlayer
+import worlds.gregs.hestia.game.update.components.DisplayName
+import worlds.gregs.hestia.network.client.encoders.messages.WidgetComponentAnimation
+import worlds.gregs.hestia.network.client.encoders.messages.WidgetHeadPlayer
 import worlds.gregs.hestia.services.getComponent
 
 class PlayerDialogue(text: String) : BaseEntityDialogue(text) {

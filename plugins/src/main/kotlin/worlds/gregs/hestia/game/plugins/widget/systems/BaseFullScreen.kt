@@ -1,7 +1,7 @@
 package worlds.gregs.hestia.game.plugins.widget.systems
 
 import worlds.gregs.hestia.api.widget.components.FullScreenWidget
-import worlds.gregs.hestia.network.game.encoders.messages.WidgetWindowsPane
+import worlds.gregs.hestia.network.client.encoders.messages.WidgetWindowsPane
 import worlds.gregs.hestia.services.send
 import kotlin.reflect.KClass
 

@@ -65,6 +65,18 @@ class Aspect {
     }
 }
 
+fun com.artemis.Aspect.Builder.all(vararg clazz: KClass<out Component>): com.artemis.Aspect.Builder {
+    return all(*clazz.map { it.java }.toTypedArray())
+}
+
+fun com.artemis.Aspect.Builder.one(vararg clazz: KClass<out Component>): com.artemis.Aspect.Builder {
+    return one(*clazz.map { it.java }.toTypedArray())
+}
+
+fun com.artemis.Aspect.Builder.exclude(vararg clazz: KClass<out Component>): com.artemis.Aspect.Builder {
+    return exclude(*clazz.map { it.java }.toTypedArray())
+}
+
 fun <T : BaseSystem>World.getSystem(type: KClass<T>) : T {
     return getSystem(type.java)
 }

@@ -2,8 +2,8 @@ package worlds.gregs.hestia.game.plugins.widget.systems.frame.tabs
 
 import worlds.gregs.hestia.game.plugins.widget.components.frame.tabs.InventoryTab
 import worlds.gregs.hestia.game.plugins.widget.systems.BaseFrame
-import worlds.gregs.hestia.network.game.encoders.messages.WidgetComponentSettings
-import worlds.gregs.hestia.network.game.encoders.messages.WidgetItems
+import worlds.gregs.hestia.network.client.encoders.messages.WidgetComponentSettings
+import worlds.gregs.hestia.network.client.encoders.messages.WidgetItems
 import worlds.gregs.hestia.services.send
 
 class InventoryTabSystem : BaseFrame(InventoryTab::class) {

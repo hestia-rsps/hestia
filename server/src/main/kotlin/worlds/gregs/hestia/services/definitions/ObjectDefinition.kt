@@ -110,7 +110,7 @@ class ObjectDefinition {
                     val size = buffer.readUnsignedByte()
                     modelIds[index] = IntArray(size)
                     for (subIndex in 0 until size) {
-                        modelIds[index]!![subIndex] = buffer.readBigSmart()
+                        modelIds[index]!![subIndex] = buffer.readShort()
                     }
                 }
                 if (opcode == 5 && !lowDetail) {
@@ -129,7 +129,7 @@ class ObjectDefinition {
             21 -> contouredGround = 1.toByte()
             22 -> delayShading = true
             23 -> cullingType = 1
-            24 -> animationId = buffer.readBigSmart()
+            24 -> animationId = buffer.readShort()
             27 -> solid = 1
             28 -> offsetMultiplier = buffer.readUnsignedByte() shl 2
             29 -> brightness = buffer.readByte().toByte()
@@ -183,12 +183,12 @@ class ObjectDefinition {
                 }
                 var tail = -1
                 if (opcode == 92) {
-                    tail = buffer.readBigSmart()
+                    tail = buffer.readShort()
                 }
                 val size = buffer.readUnsignedByte()
                 configObjectIds = IntArray(size + 2)
                 for (index in 0..size) {
-                    configObjectIds[index] = buffer.readBigSmart()
+                    configObjectIds[index] = buffer.readShort()
                 }
                 configObjectIds[size + 1] = tail
             }
@@ -244,7 +244,7 @@ class ObjectDefinition {
                 animationArray = IntArray(length)
                 anIntArray3833 = IntArray(length)
                 for (index in 0 until length) {
-                    anIntArray3833!![index] = buffer.readBigSmart()
+                    anIntArray3833!![index] = buffer.readShort()
                     val value = buffer.readUnsignedByte()
                     animationArray!![index] = value
                     animationIdTotal += value
@@ -316,10 +316,8 @@ class ObjectDefinition {
         val length = buffer.readUnsignedByte()
         for (index in 0 until length) {
             buffer.skip(1)
-            val length2 = buffer.readUnsignedByte()
-            for (i in 0 until length2) {
-                buffer.readBigSmart()
-            }
+            val amount = buffer.readUnsignedByte()
+            buffer.skip(amount * 2)
         }
     }
 

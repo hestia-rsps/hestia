@@ -4,7 +4,7 @@ import com.artemis.annotations.Wire
 import worlds.gregs.hestia.GameServer.Companion.gameMessages
 import worlds.gregs.hestia.api.widget.UserInterface
 import worlds.gregs.hestia.game.MessageHandlerSystem
-import worlds.gregs.hestia.network.game.decoders.messages.ScreenClose
+import worlds.gregs.hestia.network.client.decoders.messages.ScreenClose
 
 @Wire(failOnNull = false)
 class ScreenCloseHandler : MessageHandlerSystem<ScreenClose>() {

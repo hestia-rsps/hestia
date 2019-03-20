@@ -2,7 +2,7 @@ package worlds.gregs.hestia.game.plugins.collision.systems
 
 import com.artemis.annotations.Wire
 import worlds.gregs.hestia.api.collision.ObjectCollision
-import worlds.gregs.hestia.api.core.components.Position
+import worlds.gregs.hestia.game.entity.Position
 import worlds.gregs.hestia.api.map.Map
 import worlds.gregs.hestia.api.region.Regions
 

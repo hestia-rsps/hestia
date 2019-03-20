@@ -9,7 +9,7 @@ import worlds.gregs.hestia.game.plugins.widget.components.full.WorldMap
 import worlds.gregs.hestia.game.plugins.widget.systems.BaseFullScreen
 import worlds.gregs.hestia.game.plugins.widget.systems.frame.GameFrameSystem.Companion.FIXED_ID
 import worlds.gregs.hestia.game.plugins.widget.systems.frame.GameFrameSystem.Companion.RESIZABLE_ID
-import worlds.gregs.hestia.network.game.encoders.messages.WidgetWindowsPane
+import worlds.gregs.hestia.network.client.encoders.messages.WidgetWindowsPane
 import worlds.gregs.hestia.services.send
 
 @Wire(failOnNull = false, injectInherited = true)

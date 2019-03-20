@@ -4,12 +4,12 @@ import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
 import net.mostlyoriginal.api.system.core.PassiveSystem
 import worlds.gregs.hestia.api.collision.Collision
-import worlds.gregs.hestia.api.core.components.Position
-import worlds.gregs.hestia.api.core.components.Size
+import worlds.gregs.hestia.game.entity.Position
+import worlds.gregs.hestia.game.entity.Size
 import worlds.gregs.hestia.api.movement.RouteStrategy
-import worlds.gregs.hestia.game.movement.PrimaryNavigation
-import worlds.gregs.hestia.game.movement.SecondaryNavigation
-import worlds.gregs.hestia.game.movement.TertiaryNavigation
+import worlds.gregs.hestia.game.entity.movement.PrimaryNavigation
+import worlds.gregs.hestia.game.entity.movement.SecondaryNavigation
+import worlds.gregs.hestia.game.entity.movement.TertiaryNavigation
 import worlds.gregs.hestia.game.update.Direction
 import worlds.gregs.hestia.services.nearby
 

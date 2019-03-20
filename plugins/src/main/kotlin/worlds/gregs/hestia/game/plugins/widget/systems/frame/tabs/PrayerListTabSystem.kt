@@ -4,9 +4,9 @@ import worlds.gregs.hestia.game.Configs.CURSES
 import worlds.gregs.hestia.game.Configs.PRAYER_POINTS
 import worlds.gregs.hestia.game.plugins.widget.components.frame.tabs.PrayerListTab
 import worlds.gregs.hestia.game.plugins.widget.systems.BaseFrame
-import worlds.gregs.hestia.network.game.encoders.messages.Config
-import worlds.gregs.hestia.network.game.encoders.messages.ConfigGlobal
-import worlds.gregs.hestia.network.game.encoders.messages.WidgetComponentSettings
+import worlds.gregs.hestia.network.client.encoders.messages.Config
+import worlds.gregs.hestia.network.client.encoders.messages.ConfigGlobal
+import worlds.gregs.hestia.network.client.encoders.messages.WidgetComponentSettings
 import worlds.gregs.hestia.services.send
 
 class PrayerListTabSystem : BaseFrame(PrayerListTab::class) {

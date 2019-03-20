@@ -2,16 +2,16 @@ package worlds.gregs.hestia.game.plugins.movement.systems
 
 import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.event.common.EventSystem
-import worlds.gregs.hestia.api.core.components.Position
+import worlds.gregs.hestia.game.entity.Position
 import worlds.gregs.hestia.api.movement.components.Shift
 import worlds.gregs.hestia.api.movement.types.Run
 import worlds.gregs.hestia.game.events.FlagMoveType
-import worlds.gregs.hestia.game.plugins.movement.components.Mobile
+import worlds.gregs.hestia.api.movement.Mobile
 import worlds.gregs.hestia.game.plugins.movement.components.RunToggled
 import worlds.gregs.hestia.game.plugins.movement.components.Steps
-import worlds.gregs.hestia.game.plugins.movement.components.types.RunStep
+import worlds.gregs.hestia.game.update.components.RunStep
 import worlds.gregs.hestia.game.plugins.movement.components.types.Running
-import worlds.gregs.hestia.game.plugins.movement.components.types.WalkStep
+import worlds.gregs.hestia.game.update.components.WalkStep
 import worlds.gregs.hestia.game.plugins.movement.components.types.Walking
 import worlds.gregs.hestia.services.Aspect
 

@@ -3,7 +3,7 @@ package worlds.gregs.hestia.game.plugins.client.systems.network.`in`
 import net.mostlyoriginal.api.event.common.EventSystem
 import world.gregs.hestia.core.network.protocol.encoders.messages.WidgetComponentText
 import worlds.gregs.hestia.GameServer
-import worlds.gregs.hestia.api.core.components.Position
+import worlds.gregs.hestia.game.entity.Position
 import worlds.gregs.hestia.api.movement.components.Shift
 import worlds.gregs.hestia.game.MessageHandlerSystem
 import worlds.gregs.hestia.game.events.CreateBot
@@ -11,30 +11,23 @@ import worlds.gregs.hestia.game.events.CreateMob
 import worlds.gregs.hestia.game.events.schedule
 import worlds.gregs.hestia.game.events.send
 import worlds.gregs.hestia.game.plugins.dialogue.systems.DialoguesSystem
-import worlds.gregs.hestia.game.plugins.entity.components.update.CombatLevel
-import worlds.gregs.hestia.game.plugins.entity.components.update.DisplayName
-import worlds.gregs.hestia.game.plugins.entity.components.update.ForceMovement
 import worlds.gregs.hestia.game.plugins.entity.systems.*
-import worlds.gregs.hestia.game.plugins.mob.component.update.UpdateCombatLevel
-import worlds.gregs.hestia.game.plugins.mob.component.update.UpdateDisplayName
 import worlds.gregs.hestia.game.plugins.mob.systems.change
 import worlds.gregs.hestia.game.plugins.movement.components.RandomWalk
 import worlds.gregs.hestia.game.plugins.movement.components.RunToggled
 import worlds.gregs.hestia.game.plugins.movement.components.Steps
 import worlds.gregs.hestia.game.plugins.movement.components.calc.Follow
 import worlds.gregs.hestia.game.plugins.movement.components.calc.Step
-import worlds.gregs.hestia.game.plugins.player.component.update.PlayerMiniMapDot
-import worlds.gregs.hestia.game.plugins.player.component.update.UpdateMovement
-import worlds.gregs.hestia.game.plugins.player.component.update.UpdateUnknown
 import worlds.gregs.hestia.game.plugins.player.component.update.appearance.Hidden
 import worlds.gregs.hestia.game.plugins.player.systems.updateClanChat
 import worlds.gregs.hestia.game.plugins.region.systems.RegionBuilderSystem
 import worlds.gregs.hestia.game.plugins.widget.components.screen.CustomScreenWidget
 import worlds.gregs.hestia.game.plugins.widget.systems.screen.CustomScreenWidgetSystem
 import worlds.gregs.hestia.game.update.Marker
-import worlds.gregs.hestia.network.game.decoders.messages.ConsoleCommand
-import worlds.gregs.hestia.network.game.encoders.messages.Config
-import worlds.gregs.hestia.network.game.encoders.messages.ConfigFile
+import worlds.gregs.hestia.game.update.components.*
+import worlds.gregs.hestia.network.client.decoders.messages.ConsoleCommand
+import worlds.gregs.hestia.network.client.encoders.messages.Config
+import worlds.gregs.hestia.network.client.encoders.messages.ConfigFile
 import worlds.gregs.hestia.services.*
 
 class ConsoleCommandHandler : MessageHandlerSystem<ConsoleCommand>() {
@@ -141,7 +134,7 @@ class ConsoleCommandHandler : MessageHandlerSystem<ConsoleCommand>() {
             }
             "colour" -> {
                 //70 110 90 130 green used for kalphite king
-                entity.colour(parts[1].toInt(), parts[2].toInt(), parts[3].toInt(), parts[4].toInt(), 1)
+                entity.colour(parts[1].toInt(), parts[2].toInt(), parts[3].toInt(), parts[4].toInt(), 10)
             }
             "bar" -> {
                 entity.time()
@@ -172,8 +165,9 @@ class ConsoleCommandHandler : MessageHandlerSystem<ConsoleCommand>() {
                 val position = entity.getComponent(Position::class)!!
                 var count = 0
 //                es.dispatch(CreateBot("Bot ${count++}", position.x, position.y))
-                for (y in position.y.nearby(22)) {
-                    for (x in position.x.nearby(22)) {
+                val size = 22
+                for (y in position.y.nearby(size)) {
+                    for (x in position.x.nearby(size)) {
                         es.dispatch(CreateBot("Bot ${count++}", x, y))
                     }
                 }
@@ -223,7 +217,7 @@ class ConsoleCommandHandler : MessageHandlerSystem<ConsoleCommand>() {
             }
             "mob" -> {
                 val position = entity.getComponent(Position::class)!!
-                es.dispatch(CreateMob(1, position.x, position.y))
+                es.dispatch(CreateMob(1, position.x, position.y + 1))
 
                 /*for (y in (3492 until 3508)) {
                     for (x in 3080 until 3094) {
@@ -298,7 +292,7 @@ class ConsoleCommandHandler : MessageHandlerSystem<ConsoleCommand>() {
                 entity.face(position.x, position.y - 1)
             }
             "watch" -> {
-                entity.watch(1)
+                entity.watch(world.players().last())
             }
             //Mob updating flags
             "mobdemo" -> {
@@ -363,7 +357,7 @@ class ConsoleCommandHandler : MessageHandlerSystem<ConsoleCommand>() {
                         }
                         12 -> {
                             mob.force("Change models & colours")
-                            mob.change(intArrayOf(390, 456, 332, 326, 151, 177, 12138, 181), intArrayOf(10508, -10342, 4550))
+                            mob.change(intArrayOf(390, 456, 332, 326, 151, 177, 12138, 181), intArrayOf(10508, -10342, 4550, 8))
                         }
                         13 -> {
                             mob.force("Colour overlay")

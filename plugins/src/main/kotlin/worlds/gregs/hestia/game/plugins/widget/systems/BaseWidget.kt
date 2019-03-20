@@ -6,8 +6,8 @@ import net.mostlyoriginal.api.event.common.EventSystem
 import worlds.gregs.hestia.api.widget.GameFrame
 import worlds.gregs.hestia.api.widget.Widget
 import worlds.gregs.hestia.game.plugins.widget.systems.frame.getId
-import worlds.gregs.hestia.network.game.encoders.messages.WidgetClose
-import worlds.gregs.hestia.network.game.encoders.messages.WidgetOpen
+import worlds.gregs.hestia.network.client.encoders.messages.WidgetClose
+import worlds.gregs.hestia.network.client.encoders.messages.WidgetOpen
 import worlds.gregs.hestia.services.send
 import kotlin.reflect.KClass
 

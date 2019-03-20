@@ -1,0 +1,92 @@
+package worlds.gregs.hestia.network.client
+
+import world.gregs.hestia.core.network.codec.MessageHandshakeCodec
+import world.gregs.hestia.core.network.protocol.decoders.LoginHandshakeDecoder
+import world.gregs.hestia.core.network.protocol.decoders.PingDecoder
+import world.gregs.hestia.core.network.protocol.encoders.*
+import worlds.gregs.hestia.network.client.decoders.*
+import worlds.gregs.hestia.network.client.encoders.*
+
+class ClientCodec : MessageHandshakeCodec() {
+
+    init {
+        bind(GameLoginDecoder(), true)
+        bind(LoginHandshakeDecoder(), true)
+
+        bind(ConsoleCommandDecoder())
+        bind(CutsceneActionDecoder())
+        bind(DialogueContinueDecoder())
+        bind(IntegerEntryDecoder())
+        bind(SecondaryTeleportDecoder())
+        bind(FloorItemOptionDecoder())
+        bind(KeysPressedDecoder())
+        bind(LatencyDecoder())
+        bind(MobOptionDecoder())
+        bind(MovedCameraDecoder())
+        bind(MovedMouseDecoder())
+        bind(ObjectOptionDecoder())
+        bind(PlayerOptionDecoder())
+        bind(ReceiveCountDecoder())
+        bind(ReflectionResponseDecoder())
+        bind(RegionLoadedDecoder())
+        bind(RegionLoadingDecoder())
+        bind(ScreenChangeDecoder())
+        bind(ScreenCloseDecoder())
+        bind(ClanNameDecoder())
+        bind(ResumeObjDialogueDecoder())
+        bind(ClanForumThreadDecoder())
+        bind(ClanChatKickDecoder())
+        bind(UnknownScriptDecoder())
+        bind(SkillcapeColourDecoder())
+        bind(StringEntryDecoder())
+        bind(ToolkitPreferencesDecoder())
+        bind(PingReplyDecoder())
+        bind(APCoordinateDecoder())
+        bind(ClanSettingsUpdateDecoder())
+        bind(UnknownDecoder())
+        bind(WalkMapDecoder())
+        bind(WalkMiniMapDecoder())
+        bind(WidgetOnFloorItemDecoder())
+        bind(WidgetOnMobDecoder())
+        bind(WidgetOnObjectDecoder())
+        bind(WidgetOnPlayerDecoder())
+        bind(WidgetOnWidgetDecoder())
+        bind(WidgetOptionDecoder())
+        bind(WidgetSwitchComponentDecoder())
+        bind(WindowClickDecoder())
+        bind(WindowFocusDecoder())
+        bind(WindowHoveredDecoder())
+        bind(WorldMapOpenDecoder())
+        bind(PingDecoder())
+
+        bind(ClientResponseEncoder())
+        bind(WidgetComponentSettingsEncoder())
+        bind(ConfigEncoder())
+        bind(ConfigFileEncoder())
+        bind(ConfigGlobalEncoder())
+        bind(FriendListDisconnectEncoder())
+        bind(LoginDetailsEncoder())
+        bind(LogoutEncoder())
+        bind(MapRegionDynamicEncoder())
+        bind(MapRegionEncoder())
+        bind(RunEnergyEncoder())
+        bind(ScriptEncoder())
+        bind(SkillLevelEncoder())
+        bind(WidgetCloseEncoder())
+        bind(WidgetComponentAnimationEncoder())
+        bind(WidgetComponentTextEncoder())
+        bind(WidgetHeadMobEncoder())
+        bind(WidgetHeadPlayerEncoder())
+        bind(WidgetItemEncoder())
+        bind(WidgetItemsEncoder())
+        bind(WidgetOpenEncoder())
+        bind(WidgetWindowsPaneEncoder())
+        bind(PlayerUpdateEncoder())
+        bind(MobUpdateEncoder())
+        bind(ClientMessageOutEncoder())
+
+        bind(ChatEncoder())
+        bind(FriendsChatDisconnectEncoder())
+        bind(FriendListUnlockEncoder())
+    }
+}

@@ -4,8 +4,8 @@ import com.artemis.annotations.Wire
 import worlds.gregs.hestia.game.Configs.COMBAT_STYLE
 import worlds.gregs.hestia.game.plugins.widget.components.frame.tabs.CombatStylesTab
 import worlds.gregs.hestia.game.plugins.widget.systems.BaseFrame
-import worlds.gregs.hestia.network.game.encoders.messages.Config
-import worlds.gregs.hestia.network.game.encoders.messages.WidgetComponentSettings
+import worlds.gregs.hestia.network.client.encoders.messages.Config
+import worlds.gregs.hestia.network.client.encoders.messages.WidgetComponentSettings
 import worlds.gregs.hestia.services.send
 
 @Wire(injectInherited = true)

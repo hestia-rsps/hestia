@@ -9,7 +9,7 @@ import world.gregs.hestia.core.network.codec.packet.Packet
 import world.gregs.hestia.core.network.codec.packet.PacketWriter
 import worlds.gregs.hestia.api.widget.GameFrame
 import worlds.gregs.hestia.game.plugins.widget.systems.screen.GraphicsOptionsSystem
-import worlds.gregs.hestia.network.game.decoders.messages.ScreenChange
+import worlds.gregs.hestia.network.client.decoders.messages.ScreenChange
 import worlds.gregs.hestia.services.getSystem
 import worlds.gregs.hestia.tools.InterfaceTester
 

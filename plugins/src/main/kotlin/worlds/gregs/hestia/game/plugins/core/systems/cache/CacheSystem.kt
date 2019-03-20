@@ -11,6 +11,16 @@ class CacheSystem : PassiveSystem() {
         return cache.getIndex(id)
     }
 
+    @Throws(ArrayIndexOutOfBoundsException::class)
+    fun getFile(index: Int, archive: Int): ByteArray? {
+        return cache.getFile(index, archive)
+    }
+
+    @Throws(ArrayIndexOutOfBoundsException::class)
+    fun getFile(index: Int, archive: Int, file: Int): ByteArray? {
+        return cache.getFile(index, archive, file)
+    }
+
     companion object {
         private val cache = CacheStore()
     }

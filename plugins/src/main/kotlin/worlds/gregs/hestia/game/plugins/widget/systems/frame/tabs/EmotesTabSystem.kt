@@ -6,8 +6,8 @@ import worlds.gregs.hestia.game.Configs.HALLOWEEN_EMOTES
 import worlds.gregs.hestia.game.Configs.STRONGHOLD_SECURITY_EMOTES
 import worlds.gregs.hestia.game.plugins.widget.components.frame.tabs.EmotesTab
 import worlds.gregs.hestia.game.plugins.widget.systems.BaseFrame
-import worlds.gregs.hestia.network.game.encoders.messages.Config
-import worlds.gregs.hestia.network.game.encoders.messages.WidgetComponentSettings
+import worlds.gregs.hestia.network.client.encoders.messages.Config
+import worlds.gregs.hestia.network.client.encoders.messages.WidgetComponentSettings
 import worlds.gregs.hestia.services.send
 
 class EmotesTabSystem : BaseFrame(EmotesTab::class) {
