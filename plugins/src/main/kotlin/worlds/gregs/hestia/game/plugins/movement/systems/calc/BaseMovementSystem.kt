@@ -4,16 +4,16 @@ import com.artemis.Component
 import com.artemis.ComponentMapper
 import com.artemis.systems.IteratingSystem
 import worlds.gregs.hestia.api.collision.Collision
-import worlds.gregs.hestia.game.entity.Position
-import worlds.gregs.hestia.game.entity.Size
-import worlds.gregs.hestia.game.entity.height
-import worlds.gregs.hestia.game.entity.width
+import worlds.gregs.hestia.game.entity.components.Position
+import worlds.gregs.hestia.game.entity.components.Size
+import worlds.gregs.hestia.game.entity.components.height
+import worlds.gregs.hestia.game.entity.components.width
 import worlds.gregs.hestia.api.map.TileClipping
 import worlds.gregs.hestia.api.movement.Mobile
 import worlds.gregs.hestia.game.plugins.movement.components.Steps
-import worlds.gregs.hestia.game.update.Direction
-import worlds.gregs.hestia.game.update.DirectionUtils
-import worlds.gregs.hestia.game.update.DirectionUtils.Companion.getMoveDirection
+import worlds.gregs.hestia.game.client.update.block.Direction
+import worlds.gregs.hestia.game.client.update.block.DirectionUtils
+import worlds.gregs.hestia.game.client.update.block.DirectionUtils.Companion.getMoveDirection
 import worlds.gregs.hestia.services.Aspect
 import kotlin.reflect.KClass
 

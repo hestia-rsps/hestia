@@ -1,7 +1,7 @@
 package worlds.gregs.hestia.api.widget
 
 import com.artemis.Component
-import worlds.gregs.hestia.api.SubscriptionSystem
+import worlds.gregs.hestia.artemis.SubscriptionSystem
 import worlds.gregs.hestia.services.Aspect
 import kotlin.reflect.KClass
 

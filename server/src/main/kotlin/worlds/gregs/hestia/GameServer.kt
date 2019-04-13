@@ -4,24 +4,30 @@ import com.artemis.World
 import com.artemis.WorldConfigurationBuilder
 import com.artemis.link.EntityLinkManager
 import io.netty.channel.ChannelHandlerContext
+import net.fbridault.eeel.EEELPlugin
 import net.mostlyoriginal.api.event.common.EventSystem
+import net.mostlyoriginal.api.event.common.SubscribeAnnotationFinder
 import org.slf4j.LoggerFactory
 import world.gregs.hestia.core.Settings
 import world.gregs.hestia.core.network.NetworkConstants
-import world.gregs.hestia.core.network.Pipeline
 import world.gregs.hestia.core.network.Session
 import world.gregs.hestia.core.network.client.AutoConnection
 import world.gregs.hestia.core.network.codec.decode.SimplePacketDecoder
 import world.gregs.hestia.core.network.codec.message.SimpleMessageDecoder
 import world.gregs.hestia.core.network.codec.message.SimpleMessageEncoder
 import world.gregs.hestia.core.network.codec.message.SimpleMessageHandler
+import world.gregs.hestia.core.network.pipe.SessionPipeline
 import world.gregs.hestia.core.network.protocol.Details
 import world.gregs.hestia.core.network.server.Network
 import world.gregs.hestia.core.services.Loader
+import worlds.gregs.hestia.artemis.PollingEventDispatcher
 import worlds.gregs.hestia.game.Engine
 import worlds.gregs.hestia.game.archetypes.EntityFactory
+import worlds.gregs.hestia.api.client.ClientPlugin
+import worlds.gregs.hestia.game.map.MapPlugin
+import worlds.gregs.hestia.game.plugin.Plugin.Companion.EVENT_PROCESS_PRORITY
+import worlds.gregs.hestia.game.plugin.Plugin.Companion.PACKET_PROCESS_PRIORITY
 import worlds.gregs.hestia.game.plugin.PluginLoader
-import worlds.gregs.hestia.game.update.ClientUpdatePlugin
 import worlds.gregs.hestia.network.WorldChangeListener
 import worlds.gregs.hestia.network.client.*
 import worlds.gregs.hestia.network.world.WorldCodec
@@ -55,7 +61,7 @@ class GameServer(worldDetails: Details) : Engine(), WorldChangeListener {
         //List of social server packets
         val codec = WorldCodec(socialDecoders)
 
-        val pipeline = Pipeline {
+        val pipeline = SessionPipeline {
             it.addLast(SimplePacketDecoder(codec))
         }
 
@@ -78,13 +84,18 @@ class GameServer(worldDetails: Details) : Engine(), WorldChangeListener {
             //Single init
             isRunning = true
             //Configure game world
-            val builder = WorldConfigurationBuilder().with(eventSystem, EntityLinkManager())
+            val builder = WorldConfigurationBuilder().with(EntityLinkManager())
+            builder.with(EVENT_PROCESS_PRORITY, eventSystem)
             //Load plugin folder
             val pluginLoader = Loader(Settings.getString("pluginPath"))
             //Load plugins
             PluginLoader().setup(builder, pluginLoader)
+            builder.register(BenchmarkStrategy())
+            builder.dependsOn(EEELPlugin::class.java)
             //Temp
-            builder.dependsOn(ClientUpdatePlugin::class.java)
+            builder.dependsOn(MapPlugin::class.java)
+            builder.dependsOn(ClientPlugin::class.java)
+            builder.with(PACKET_PROCESS_PRIORITY, gameMessages)
 
             //Build world config
             val config = builder.build()
@@ -101,7 +112,7 @@ class GameServer(worldDetails: Details) : Engine(), WorldChangeListener {
             //Handles messages
             val handshake = ClientHandshake(gameMessages)
             //Setup network pipeline
-            val pipeline = Pipeline {
+            val pipeline = SessionPipeline {
                 //Decodes packets
                 it.addLast("packet", ClientPacketDecoder(socialDecoders, gameCodec, handshake))
             }
@@ -127,7 +138,7 @@ class GameServer(worldDetails: Details) : Engine(), WorldChangeListener {
 
     companion object {
         private val loginSessions = HashMap<Int, ChannelHandlerContext>()
-        val eventSystem = EventSystem()
+        val eventSystem = EventSystem(PollingEventDispatcher(), SubscribeAnnotationFinder())
         val gameMessages = ClientMessages(loginSessions)
         lateinit var server: GameServer
         var worldSession: Session? = null//TODO handle better

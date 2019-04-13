@@ -1,9 +1,9 @@
 package worlds.gregs.hestia.game.plugins.mob.systems.sync
 
 import com.artemis.ComponentMapper
-import worlds.gregs.hestia.api.SubscriptionSystem
+import worlds.gregs.hestia.artemis.SubscriptionSystem
 import worlds.gregs.hestia.api.mob.Mob
-import worlds.gregs.hestia.game.client.ClientIndex
+import worlds.gregs.hestia.api.client.components.ClientIndex
 import worlds.gregs.hestia.services.Aspect
 
 class MaximumMobLimitReached : Exception()
@@ -24,6 +24,7 @@ class MobIndexSystem : SubscriptionSystem(Aspect.all(ClientIndex::class, Mob::cl
 
     override fun removed(entityId: Int) {
         val clientIndex = clientIndexMapper.get(entityId)
+        clientIndex.remove = true
         mobList.remove(clientIndex.index)
     }
 

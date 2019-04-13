@@ -2,7 +2,7 @@ package worlds.gregs.hestia.game.plugins.widget.systems.full
 
 import com.artemis.ComponentMapper
 import worlds.gregs.hestia.api.widget.GameFrame
-import worlds.gregs.hestia.game.entity.Position
+import worlds.gregs.hestia.game.entity.components.Position
 import worlds.gregs.hestia.game.plugins.widget.components.full.WorldMap
 import worlds.gregs.hestia.game.plugins.widget.systems.BaseFullScreen
 import worlds.gregs.hestia.game.plugins.widget.systems.frame.getId

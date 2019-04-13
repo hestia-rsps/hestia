@@ -5,7 +5,7 @@ import net.mostlyoriginal.api.event.common.EventSystem
 import world.gregs.hestia.core.network.codec.packet.PacketReader
 import worlds.gregs.hestia.api.land.Land
 import worlds.gregs.hestia.api.land.LandObjects
-import worlds.gregs.hestia.game.events.CreateObject
+import worlds.gregs.hestia.artemis.events.CreateObject
 import worlds.gregs.hestia.game.map.Flags.BRIDGE_TILE
 import worlds.gregs.hestia.game.map.MapConstants.PLANE_RANGE
 import worlds.gregs.hestia.game.map.MapConstants.isOutOfBounds

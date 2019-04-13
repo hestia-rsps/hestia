@@ -3,7 +3,7 @@ package worlds.gregs.hestia.game.plugins.movement.systems.calc
 import com.artemis.BaseSystem
 import com.artemis.WorldConfigurationBuilder
 import worlds.gregs.hestia.api.collision.ObjectCollision
-import worlds.gregs.hestia.game.entity.Position
+import worlds.gregs.hestia.game.entity.components.Position
 import worlds.gregs.hestia.game.GameTest
 import worlds.gregs.hestia.game.map.Flags
 import worlds.gregs.hestia.game.plugins.collision.systems.CollisionSystem

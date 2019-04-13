@@ -1,12 +1,12 @@
 package worlds.gregs.hestia.game.archetypes
 
 import com.artemis.ArchetypeBuilder
-import worlds.gregs.hestia.game.client.ClientIndex
-import worlds.gregs.hestia.game.entity.Position
-import worlds.gregs.hestia.game.update.components.Renderable
+import worlds.gregs.hestia.api.client.components.ClientIndex
+import worlds.gregs.hestia.game.entity.components.Position
+import worlds.gregs.hestia.api.client.update.components.Renderable
 import worlds.gregs.hestia.api.mob.Mob
-import worlds.gregs.hestia.game.entity.Type
-import worlds.gregs.hestia.game.update.components.direction.Face
+import worlds.gregs.hestia.game.entity.components.Type
+import worlds.gregs.hestia.api.client.update.components.direction.Face
 import worlds.gregs.hestia.api.movement.Mobile
 import worlds.gregs.hestia.services.add
 

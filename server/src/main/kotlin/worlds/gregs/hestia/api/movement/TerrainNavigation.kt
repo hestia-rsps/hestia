@@ -1,7 +1,7 @@
 package worlds.gregs.hestia.api.movement
 
 import worlds.gregs.hestia.api.collision.Collision
-import worlds.gregs.hestia.game.update.Direction
+import worlds.gregs.hestia.game.client.update.block.Direction
 
 interface TerrainNavigation {
 

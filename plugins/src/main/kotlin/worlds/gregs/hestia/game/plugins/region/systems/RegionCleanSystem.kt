@@ -2,7 +2,7 @@ package worlds.gregs.hestia.game.plugins.region.systems
 
 import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
-import worlds.gregs.hestia.api.SubscriptionSystem
+import worlds.gregs.hestia.artemis.SubscriptionSystem
 import worlds.gregs.hestia.api.region.Region
 import worlds.gregs.hestia.api.region.Regions
 import worlds.gregs.hestia.api.region.components.DynamicRegion
@@ -37,7 +37,7 @@ class RegionCleanSystem : SubscriptionSystem(Aspect.all(RegionPriorities::class)
         forChunks(region.regionX.nearby(1), region.regionY.nearby(1)) { regionX, regionY ->
             val regionId = (regionX shl 8) + regionY
             val entity = regions?.getEntityId(regionId) ?: return@forChunks
-            //Don't clean if has priorities
+            //Don't sync if has priorities
             if (regionPrioritiesMapper.has(entity)) {
                 return
             }

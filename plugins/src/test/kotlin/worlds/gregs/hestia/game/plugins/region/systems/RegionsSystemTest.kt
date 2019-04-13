@@ -7,8 +7,8 @@ import org.junit.jupiter.api.Test
 import worlds.gregs.hestia.game.GameTest
 import worlds.gregs.hestia.game.archetypes.EntityFactory
 import worlds.gregs.hestia.game.archetypes.RegionFactory
-import worlds.gregs.hestia.game.events.CreateRegion
-import worlds.gregs.hestia.game.entity.Position.Companion.regionId
+import worlds.gregs.hestia.artemis.events.CreateRegion
+import worlds.gregs.hestia.game.entity.components.Position.Companion.regionId
 import worlds.gregs.hestia.game.plugins.region.systems.load.RegionCreation
 import worlds.gregs.hestia.services.getSystem
 

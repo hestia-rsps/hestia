@@ -3,7 +3,7 @@ package worlds.gregs.hestia.game.plugins.client.systems.network.`in`
 import net.mostlyoriginal.api.event.common.EventSystem
 import worlds.gregs.hestia.GameServer
 import worlds.gregs.hestia.game.MessageHandlerSystem
-import worlds.gregs.hestia.game.events.ButtonClick
+import worlds.gregs.hestia.artemis.events.ButtonClick
 import worlds.gregs.hestia.network.client.decoders.messages.WidgetOption
 
 class WidgetOptionHandler : MessageHandlerSystem<WidgetOption>() {

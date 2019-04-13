@@ -1,6 +1,6 @@
 package worlds.gregs.hestia.game.map
 
-import worlds.gregs.hestia.game.update.Direction
+import worlds.gregs.hestia.game.client.update.block.Direction
 
 object Flags {
 

@@ -8,18 +8,19 @@ import worlds.gregs.hestia.network.client.encoders.messages.PlayerUpdate
 class PlayerUpdateEncoder : MessageEncoder<PlayerUpdate>() {
 
     override fun encode(builder: PacketBuilder, message: PlayerUpdate) {
-        val (stages, blocks) = message
         builder.apply {
             writeOpcode(69, Packet.Type.VAR_SHORT)
 
-            stages.forEach {
+            message.stages.forEach {
                 it.encode(this)
+                it.free()
             }
 
-            blocks.forEach {
+            message.blocks.forEach {
                 it.encode(this)
             }
         }
+        message.free()
     }
 
 }

@@ -12,7 +12,7 @@ import world.gregs.hestia.core.network.codec.message.SimpleIsaacMessageEncoder
 import world.gregs.hestia.core.network.getSession
 import world.gregs.hestia.core.network.protocol.messages.PlayerLoginSuccess
 import worlds.gregs.hestia.GameServer
-import worlds.gregs.hestia.game.events.CreatePlayer
+import worlds.gregs.hestia.artemis.events.CreatePlayer
 import worlds.gregs.hestia.network.client.ClientConnection
 import worlds.gregs.hestia.network.client.ClientPacketDecoder
 import worlds.gregs.hestia.network.client.encoders.messages.LoginDetails
@@ -51,14 +51,12 @@ class PlayerLoginSuccessHandler(private val sessions: HashMap<Int, ChannelHandle
             val playerSession = details.first
             val isaacKeys = details.second
 
-            val inRandom = Isaac(isaacKeys)
-            for (i in isaacKeys.indices)
-                isaacKeys[i] += 50
-            val outRandom = Isaac(isaacKeys)
+            val decrypt = Isaac(isaacKeys)
+            val encrypt = Isaac(isaacKeys.map { it + 50 }.toIntArray())
 
             playerSession.pipeline().apply {
-                get(ClientPacketDecoder::class.java).cipher = inRandom
-                replace("encoder", "encoder", object : SimpleIsaacMessageEncoder(codec, outRandom) {
+                get(ClientPacketDecoder::class.java).cipher = decrypt
+                replace("encoder", "encoder", object : SimpleIsaacMessageEncoder(codec, encrypt) {
                     override fun encode(ctx: ChannelHandlerContext, msg: Message, out: ByteBuf) {
                         if (msg is LoginDetails) {
                             val encoder = codec.get(msg::class) as? MessageEncoder<Message>

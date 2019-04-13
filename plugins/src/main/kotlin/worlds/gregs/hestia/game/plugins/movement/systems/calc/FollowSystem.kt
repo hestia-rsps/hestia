@@ -3,17 +3,18 @@ package worlds.gregs.hestia.game.plugins.movement.systems.calc
 import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
-import worlds.gregs.hestia.game.entity.Position
 import worlds.gregs.hestia.api.mob.MobChunk
 import worlds.gregs.hestia.api.movement.components.Shift
 import worlds.gregs.hestia.api.player.PlayerChunk
+import worlds.gregs.hestia.game.entity.components.Position
 import worlds.gregs.hestia.game.plugins.movement.components.calc.Follow
 import worlds.gregs.hestia.game.plugins.movement.components.calc.Step
-import worlds.gregs.hestia.game.update.components.Moving
-import worlds.gregs.hestia.game.update.DirectionUtils.Companion.getOffset
+import worlds.gregs.hestia.game.client.update.block.DirectionUtils.Companion.getOffset
+import worlds.gregs.hestia.api.client.update.components.Moving
 import worlds.gregs.hestia.services.Aspect
 import worlds.gregs.hestia.services.mobs
 import worlds.gregs.hestia.services.players
+import worlds.gregs.hestia.services.toArray
 
 @Wire(failOnNull = false)
 class FollowSystem : IteratingSystem(Aspect.all(Position::class, Shift::class)) {
@@ -29,8 +30,8 @@ class FollowSystem : IteratingSystem(Aspect.all(Position::class, Shift::class)) 
         val position = positionMapper.get(entityId)
 
         //Get all followers
-        val players = (playerChunk?.get(position) ?: world.players().asList()).filter { followMapper.has(it) && followMapper.get(it).entity == entityId }
-        val mobs = (mobChunk?.get(position) ?: world.mobs().asList()).filter { followMapper.has(it) && followMapper.get(it).entity == entityId }
+        val players = (playerChunk?.get(position) ?: world.players().toArray().asList()).filter { followMapper.has(it) && followMapper.get(it).entity == entityId }
+        val mobs = (mobChunk?.get(position) ?: world.mobs().toArray().asList()).filter { followMapper.has(it) && followMapper.get(it).entity == entityId }
 
         //TODO a nicer way of getting all and testing getting entities
         val entities = players.union(mobs)

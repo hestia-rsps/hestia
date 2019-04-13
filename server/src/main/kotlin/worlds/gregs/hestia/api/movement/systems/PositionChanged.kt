@@ -3,7 +3,7 @@ package worlds.gregs.hestia.api.movement.systems
 import com.artemis.Component
 import com.artemis.ComponentMapper
 import com.artemis.systems.IteratingSystem
-import worlds.gregs.hestia.game.entity.Position
+import worlds.gregs.hestia.game.entity.components.Position
 import worlds.gregs.hestia.api.movement.components.Shift
 import worlds.gregs.hestia.services.Aspect
 import kotlin.reflect.KClass

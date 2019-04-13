@@ -2,9 +2,9 @@ package worlds.gregs.hestia.game.plugins.`object`.systems
 
 import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
-import worlds.gregs.hestia.api.SubscriptionSystem
+import worlds.gregs.hestia.artemis.SubscriptionSystem
 import worlds.gregs.hestia.api.`object`.GameObject
-import worlds.gregs.hestia.game.entity.Position
+import worlds.gregs.hestia.game.entity.components.Position
 import worlds.gregs.hestia.api.map.ClippingMasks
 import worlds.gregs.hestia.api.region.Regions
 import worlds.gregs.hestia.game.map.Flags.FLOOR_DECO_BLOCKS_WALK

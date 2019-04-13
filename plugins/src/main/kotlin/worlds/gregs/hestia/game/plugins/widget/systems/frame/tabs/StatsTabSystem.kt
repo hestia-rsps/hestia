@@ -5,7 +5,7 @@ import worlds.gregs.hestia.api.widget.UserInterface
 import worlds.gregs.hestia.game.Configs.LEVEL_UP_DETAILS
 import worlds.gregs.hestia.game.Configs.SKILL_MENU
 import worlds.gregs.hestia.game.Configs.SKILL_STAT_FLASH
-import worlds.gregs.hestia.game.client.Skill
+import worlds.gregs.hestia.game.entity.player.Skill
 import worlds.gregs.hestia.game.plugins.widget.components.frame.tabs.StatsTab
 import worlds.gregs.hestia.game.plugins.widget.components.screen.SkillLevelDetails
 import worlds.gregs.hestia.game.plugins.widget.components.screen.SkillMenu

@@ -4,7 +4,7 @@ import com.artemis.ComponentMapper
 import io.netty.channel.Channel
 import worlds.gregs.hestia.api.client.ClientNetwork
 import worlds.gregs.hestia.api.client.components.Client
-import worlds.gregs.hestia.game.client.NetworkSession
+import worlds.gregs.hestia.api.client.components.NetworkSession
 
 /**
  * ClientNetworkSystem

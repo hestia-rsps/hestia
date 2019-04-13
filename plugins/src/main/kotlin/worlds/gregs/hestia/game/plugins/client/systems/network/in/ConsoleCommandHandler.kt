@@ -3,13 +3,12 @@ package worlds.gregs.hestia.game.plugins.client.systems.network.`in`
 import net.mostlyoriginal.api.event.common.EventSystem
 import world.gregs.hestia.core.network.protocol.encoders.messages.WidgetComponentText
 import worlds.gregs.hestia.GameServer
-import worlds.gregs.hestia.game.entity.Position
+import worlds.gregs.hestia.api.client.update.components.*
 import worlds.gregs.hestia.api.movement.components.Shift
+import worlds.gregs.hestia.artemis.events.*
 import worlds.gregs.hestia.game.MessageHandlerSystem
-import worlds.gregs.hestia.game.events.CreateBot
-import worlds.gregs.hestia.game.events.CreateMob
-import worlds.gregs.hestia.game.events.schedule
-import worlds.gregs.hestia.game.events.send
+import worlds.gregs.hestia.game.client.update.block.Marker
+import worlds.gregs.hestia.game.entity.components.Position
 import worlds.gregs.hestia.game.plugins.dialogue.systems.DialoguesSystem
 import worlds.gregs.hestia.game.plugins.entity.systems.*
 import worlds.gregs.hestia.game.plugins.mob.systems.change
@@ -23,8 +22,6 @@ import worlds.gregs.hestia.game.plugins.player.systems.updateClanChat
 import worlds.gregs.hestia.game.plugins.region.systems.RegionBuilderSystem
 import worlds.gregs.hestia.game.plugins.widget.components.screen.CustomScreenWidget
 import worlds.gregs.hestia.game.plugins.widget.systems.screen.CustomScreenWidgetSystem
-import worlds.gregs.hestia.game.update.Marker
-import worlds.gregs.hestia.game.update.components.*
 import worlds.gregs.hestia.network.client.decoders.messages.ConsoleCommand
 import worlds.gregs.hestia.network.client.encoders.messages.Config
 import worlds.gregs.hestia.network.client.encoders.messages.ConfigFile
@@ -41,11 +38,10 @@ class ConsoleCommandHandler : MessageHandlerSystem<ConsoleCommand>() {
 
     override fun handle(entityId: Int, message: ConsoleCommand) {
         val (command) = message
-        val parts = command.split(" ")
-        handle(entityId, command, parts)
+        handle(entityId, command)
     }
 
-    private fun handle(entityId: Int, command: String, parts: List<String>) {
+    private fun handle(entityId: Int, command: String, parts: List<String> = command.split(" ")) {
 
         val entity = world.getEntity(entityId)
 
@@ -97,7 +93,7 @@ class ConsoleCommandHandler : MessageHandlerSystem<ConsoleCommand>() {
                 if(entity.getComponent(Follow::class) == null) {
                     val position = entity.getComponent(Position::class)!!
                     entity.step(position.x + 1, position.y)
-                    entity.edit().add(Follow(world.players().last()))
+                    entity.edit().add(Follow(world.players().get(world.players().size() - 1)))
                 } else {
                     entity.edit().remove(Follow::class.java)
                 }
@@ -154,12 +150,15 @@ class ConsoleCommandHandler : MessageHandlerSystem<ConsoleCommand>() {
                 }
             }
             "model" -> {
-                val mob = world.getEntity(world.mobs().first())
+                val mob = world.getEntity(world.mobs().get(0))
                 mob.change()
 //                mob.change(intArrayOf(390, 456, 332, 326, 151, 177, 12138, 181), intArrayOf(10508, -10342, 4550))
             }
             "players" -> {
-                println(world.players().size)
+                println(world.players().size())
+            }
+            "mobs" -> {
+                println(world.mobs().size())
             }
             "party" -> {
                 val position = entity.getComponent(Position::class)!!
@@ -175,7 +174,7 @@ class ConsoleCommandHandler : MessageHandlerSystem<ConsoleCommand>() {
                 world.schedule(1, 1) {
                     when(tick) {
                         2 -> {
-                            world.players().filterNot { it == entityId }.forEach {
+                            world.players().toArray().filterNot { it == entityId }.forEach {
                                 val bot = world.getEntity(it)
                                 bot.edit().add(RandomWalk())
                             }
@@ -201,30 +200,45 @@ class ConsoleCommandHandler : MessageHandlerSystem<ConsoleCommand>() {
             "bot" -> {
                 val position = entity.getComponent(Position::class)!!
                 var count = 0
-                /*for (y in (3482 until 3518)) {
-                    for (x in 3070 until 3104) {
+                for (y in position.y.nearby(11)) {
+                    for (x in position.x.nearby(11)) {
                         es.dispatch(CreateBot("Bot ${count++}", x, y))
                     }
+                }
+                /*es.dispatch(CreateBot("Bot ${count++}", position.x, position.y + 1))
+                es.dispatch(CreateBot("Bot ${count++}", position.x, position.y + 2))
+                es.dispatch(CreateBot("Bot ${count++}", position.x, position.y + 3))
+                world.schedule(1, 1) {
+                    when(tick) {
+                        0 -> es.dispatch(Disconnect(world.players()[1]))
+                        3 -> es.dispatch(CreateBot("Bot 0", position.x, position.y + 4))
+                        4 -> stop()
+                    }
+                    val first = world.getEntity(world.players().get(1))
+                    val second = world.getEntity(world.players().get(2))
+                    first.step(position.x, position.y + 4)
+                    second.step(position.x, position.y + 1)
                 }*/
-                es.dispatch(CreateBot("Bot ${count++}", position.x, position.y + 1))
+//                    es.dispatch(CreateBot("Bot ${count++}", position.x, position.y + 200))
             }
             "b" -> {
-                val bot = world.getEntity(world.players().last())
-                bot.edit().add(Follow(entityId)).add(RunToggled())
+                val bot = world.getEntity(world.players().get(world.players().size() - 1))
+                println("Remove bot ${bot.id}")
+                es.dispatch(Disconnect(bot))
+//                bot.edit().add(Follow(entityId)).add(RunToggled())
                 /*bot.edit().add(Hidden())
                 bot.updateAppearance()*/
 //                world.deleteEntity(bot)
             }
             "mob" -> {
                 val position = entity.getComponent(Position::class)!!
-                es.dispatch(CreateMob(1, position.x, position.y + 1))
+//                es.dispatch(CreateMob(1, position.x, position.y + 1))
 
-                /*for (y in (3492 until 3508)) {
-                    for (x in 3080 until 3094) {
-                        if(x % 2 == 0 && y % 2 == 0)
-                            es.dispatch(CreateMob(1, x, y))
+                for (y in position.y.nearby(11)) {
+                    for (x in position.x.nearby(11)) {
+                        es.dispatch(CreateMob(1, x, y))
                     }
-                }*/
+                }
                 /*entity.schedule(4, 0) {
                     world.mobs().forEachIndexed { index, it ->
                         val displayName = DisplayName()
@@ -235,14 +249,14 @@ class ConsoleCommandHandler : MessageHandlerSystem<ConsoleCommand>() {
                 }*/
             }
             "m" -> {
-                /*world.mobs().forEach {
-//                    world.delete(it)
-                    val mob = world.getEntity(it)
-                    val position = mob.getComponent(Position::class)!!
-                    println("$position")
-//                    mob.step(position.x, position.y - 2)
-                }*/
                 world.mobs().forEach {
+                    world.delete(it)
+//                    val mob = world.getEntity(it)
+//                    val position = mob.getComponent(Position::class)!!
+//                    println("$position")
+//                    mob.step(position.x, position.y - 2)
+                }
+                /*world.mobs().forEach {
                     val mob = world.getEntity(it)
                     mob.force("Animations")
                     mob.animate(855)
@@ -250,7 +264,7 @@ class ConsoleCommandHandler : MessageHandlerSystem<ConsoleCommand>() {
                     mob.animate(857)
                     mob.animate(858)
 //                    world.getEntity(it).edit().add(Stalk(entityId))
-                }
+                }*/
 //                mob.animate(2312)
 //                mob.transform(mob.getComponent(Type::class)?.id ?: 0)
 //                mob.colour(70, 110, 90, 130, duration = 60)
@@ -292,11 +306,11 @@ class ConsoleCommandHandler : MessageHandlerSystem<ConsoleCommand>() {
                 entity.face(position.x, position.y - 1)
             }
             "watch" -> {
-                entity.watch(world.players().last())
+                entity.watch(world.players().get(world.players().size() - 1))
             }
             //Mob updating flags
             "mobdemo" -> {
-                val mob = world.getEntity(world.mobs().first())
+                val mob = world.getEntity(world.mobs().get(0))
                 world.schedule(0, 1) {
                     when (tick) {
                         0 -> {

@@ -1,10 +1,10 @@
 package worlds.gregs.hestia.network.update.sync.player
 
 import world.gregs.hestia.core.network.codec.packet.PacketBuilder
-import worlds.gregs.hestia.game.update.sync.SyncStage
-import worlds.gregs.hestia.game.update.sync.SyncStage.Companion.UPDATE
+import worlds.gregs.hestia.api.client.update.sync.SyncStage
+import worlds.gregs.hestia.api.client.update.sync.SyncStage.Companion.UPDATE
 
-class UpdatePlayerSync : SyncStage {
+object UpdatePlayerSync : SyncStage {
 
     override fun encode(builder: PacketBuilder) {
         builder.apply {

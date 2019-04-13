@@ -1,8 +1,8 @@
 package worlds.gregs.hestia.api.map
 
 import net.mostlyoriginal.api.system.core.PassiveSystem
-import worlds.gregs.hestia.game.entity.Position
-import worlds.gregs.hestia.game.update.Direction
+import worlds.gregs.hestia.game.entity.components.Position
+import worlds.gregs.hestia.game.client.update.block.Direction
 
 /**
  * TileClipping

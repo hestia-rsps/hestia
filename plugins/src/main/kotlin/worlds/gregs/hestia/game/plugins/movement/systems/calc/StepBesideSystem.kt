@@ -4,7 +4,7 @@ import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
 import world.gregs.hestia.core.services.int
 import worlds.gregs.hestia.game.plugins.movement.components.calc.Beside
-import worlds.gregs.hestia.game.update.DirectionUtils.Companion.getOffset
+import worlds.gregs.hestia.game.client.update.block.DirectionUtils.Companion.getOffset
 
 /**
  * StepBesideSystem

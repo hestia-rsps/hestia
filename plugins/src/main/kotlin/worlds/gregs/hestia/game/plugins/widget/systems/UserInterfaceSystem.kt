@@ -10,8 +10,8 @@ import worlds.gregs.hestia.api.widget.Widget
 import worlds.gregs.hestia.api.widget.components.Frame
 import worlds.gregs.hestia.api.widget.components.FullScreenWidget
 import worlds.gregs.hestia.api.widget.components.ScreenWidget
-import worlds.gregs.hestia.game.events.ButtonClick
-import worlds.gregs.hestia.game.events.send
+import worlds.gregs.hestia.artemis.events.ButtonClick
+import worlds.gregs.hestia.artemis.events.send
 import worlds.gregs.hestia.game.plugins.widget.systems.frame.GameFrameSystem
 import kotlin.reflect.KClass
 
@@ -43,7 +43,7 @@ class UserInterfaceSystem : UserInterface() {
     }
 
     private fun open(entity: Entity, widget: ScreenWidget) {
-        val has = widgets.filterIsInstance<BaseScreen>().any { it.subscription.entities.contains(entity.id) }
+        val has = widgets.filterIsInstance<BaseScreen>().any { it.subscription.activeEntityIds.get(entity.id) }
         if (has) {
             entity.send(Chat(0, 0, null, message = "Please close the interface you have open before opening another."))//TODO .message()
             return
@@ -57,7 +57,7 @@ class UserInterfaceSystem : UserInterface() {
     }
 
     private fun open(entity: Entity, widget: FullScreenWidget) {
-        val has = widgets.filterIsInstance<BaseFullScreen>().any { it !is GameFrameSystem && it.subscription.entities.contains(entity.id) }
+        val has = widgets.filterIsInstance<BaseFullScreen>().any { it !is GameFrameSystem && it.subscription.activeEntityIds.get(entity.id) }
         if (has) {
             entity.send(Chat(0, 0, null, message = "Please close the interface you have open before opening another."))
             return
@@ -67,13 +67,13 @@ class UserInterfaceSystem : UserInterface() {
     }
 
     override fun reload(entityId: Int) {
-        widgets.filter { it.subscription.entities.contains(entityId) }.forEach {
+        widgets.filter { it.subscription.activeEntityIds.get(entityId) }.forEach {
             it.open(entityId)
         }
     }
 
     override fun contains(entityId: Int, clazz: KClass<out Widget>): Boolean {
-        return widgets.any { clazz.isInstance(it) && it.subscription.entities.contains(entityId) }
+        return widgets.any { clazz.isInstance(it) && it.subscription.activeEntityIds.get(entityId) }
     }
 
     override fun close(entityId: Int, clazz: KClass<out Frame>) {
