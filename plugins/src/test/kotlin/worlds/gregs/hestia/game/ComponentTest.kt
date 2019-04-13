@@ -4,21 +4,32 @@ import com.artemis.Component
 import com.artemis.ComponentMapper
 import com.artemis.WorldConfigurationBuilder
 import com.artemis.WorldConfigurationBuilder.Priority.LOWEST
+import com.artemis.annotations.DelayedComponentRemoval
 import com.artemis.systems.IteratingSystem
 import org.junit.jupiter.api.Test
+import worlds.gregs.hestia.artemis.SubscriptionSystem
 import worlds.gregs.hestia.services.Aspect
-import worlds.gregs.hestia.services.getSystem
 
-internal class ComponentTest : GameTest(WorldConfigurationBuilder().with(LOWEST, CompSystem())) {
-    internal class Comp : Component() {
+internal class ComponentTest : GameTest(WorldConfigurationBuilder().with(LOWEST, CompSystem(), Loop())) {
+    internal class Comp : Component()
 
-    }
+    @DelayedComponentRemoval
+    internal class LateComp : Component()
 
-    internal class CompSystem : IteratingSystem(Aspect.all(Comp::class)) {
+    internal class Loop : IteratingSystem(Aspect.exclude(Comp::class, LateComp::class)) {
+
+        private lateinit var lateCompMapper: ComponentMapper<LateComp>
+        private lateinit var compMapper: ComponentMapper<Comp>
+
         override fun process(entityId: Int) {
-
+            println("Process ${compMapper.has(1)} ${lateCompMapper.has(1)}")
         }
 
+    }
+    internal class CompSystem : SubscriptionSystem(Aspect.one(Comp::class, LateComp::class)) {
+
+
+        private lateinit var lateCompMapper: ComponentMapper<LateComp>
         private lateinit var compMapper: ComponentMapper<Comp>
 
         override fun inserted(entityId: Int) {
@@ -27,21 +38,20 @@ internal class ComponentTest : GameTest(WorldConfigurationBuilder().with(LOWEST,
 
         override fun removed(entityId: Int) {
             val comp = compMapper.get(entityId)
-            println("Removed $comp")
+            val lateComp = lateCompMapper.get(entityId)
+            println("Removed $comp $lateComp")
         }
 
-        fun remove(entityId: Int) {
-            compMapper.remove(entityId)
-        }
     }
 
     @Test
     fun test() {
+        world.createEntity()
         val entity = world.createEntity()
-        entity.edit().add(Comp())
+        entity.edit().add(Comp()).add(LateComp())
         tick()
-        val sys = world.getSystem(CompSystem::class)
-        sys.remove(entity.id)
+        world.delete(1)
+        tick()
         tick()
     }
 }

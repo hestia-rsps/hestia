@@ -4,11 +4,11 @@ import com.artemis.Entity
 import com.artemis.WorldConfigurationBuilder
 import org.junit.jupiter.api.BeforeEach
 import world.gregs.hestia.core.network.Session
-import worlds.gregs.hestia.game.entity.Position
+import worlds.gregs.hestia.game.entity.components.Position
 import worlds.gregs.hestia.game.GameTest
 import worlds.gregs.hestia.game.archetypes.EntityFactory
 import worlds.gregs.hestia.game.archetypes.PlayerFactory
-import worlds.gregs.hestia.game.events.CreatePlayer
+import worlds.gregs.hestia.artemis.events.CreatePlayer
 import worlds.gregs.hestia.game.plugins.player.systems.PlayerCreation
 import worlds.gregs.hestia.services.getComponent
 import worlds.gregs.hestia.services.getSystem

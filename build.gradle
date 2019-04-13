@@ -10,7 +10,7 @@ buildscript {
 }
 
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.3.21'
+    id 'org.jetbrains.kotlin.jvm' version '1.3.30'
 }
 
 sourceCompatibility = 11.0
@@ -45,13 +45,16 @@ allprojects {
     weave {
         enableArtemisPlugin = true
         enablePooledWeaving = true
+        generateLinkMutators = true
         optimizeEntitySystems = true
         dependsOn build
         classesDir = sourceSets.main.output.classesDirs.first()
     }
-
+    
     compileKotlin {
-        kotlinOptions.jvmTarget = "1.8"
+        kotlinOptions {
+            jvmTarget = "1.8"
+        }
     }
 
     compileTestKotlin {

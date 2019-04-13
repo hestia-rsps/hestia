@@ -2,21 +2,17 @@ package worlds.gregs.hestia.game.plugins.entity.systems.sync
 
 import com.artemis.ComponentMapper
 import com.artemis.systems.IteratingSystem
-import worlds.gregs.hestia.game.update.components.Renderable
-import worlds.gregs.hestia.game.update.components.anim.FirstAnimation
-import worlds.gregs.hestia.game.update.components.anim.FourthAnimation
-import worlds.gregs.hestia.game.update.components.anim.SecondAnimation
-import worlds.gregs.hestia.game.update.components.anim.ThirdAnimation
-import worlds.gregs.hestia.game.update.components.direction.Facing
-import worlds.gregs.hestia.game.update.components.direction.Watching
-import worlds.gregs.hestia.game.update.components.gfx.FirstGraphic
-import worlds.gregs.hestia.game.update.components.gfx.FourthGraphic
-import worlds.gregs.hestia.game.update.components.gfx.SecondGraphic
-import worlds.gregs.hestia.game.update.components.gfx.ThirdGraphic
-import worlds.gregs.hestia.game.update.components.Moving
-import worlds.gregs.hestia.game.update.components.RunStep
-import worlds.gregs.hestia.game.update.components.WalkStep
-import worlds.gregs.hestia.game.update.components.*
+import worlds.gregs.hestia.api.client.update.components.anim.FirstAnimation
+import worlds.gregs.hestia.api.client.update.components.anim.FourthAnimation
+import worlds.gregs.hestia.api.client.update.components.anim.SecondAnimation
+import worlds.gregs.hestia.api.client.update.components.anim.ThirdAnimation
+import worlds.gregs.hestia.api.client.update.components.direction.Facing
+import worlds.gregs.hestia.api.client.update.components.direction.Watching
+import worlds.gregs.hestia.api.client.update.components.gfx.FirstGraphic
+import worlds.gregs.hestia.api.client.update.components.gfx.FourthGraphic
+import worlds.gregs.hestia.api.client.update.components.gfx.SecondGraphic
+import worlds.gregs.hestia.api.client.update.components.gfx.ThirdGraphic
+import worlds.gregs.hestia.api.client.update.components.*
 import worlds.gregs.hestia.services.Aspect
 
 class PostEntitySyncSystem : IteratingSystem(Aspect.all(Renderable::class)) {

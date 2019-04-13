@@ -1,6 +1,6 @@
 package worlds.gregs.hestia.game.map
 
-import worlds.gregs.hestia.game.entity.Position
+import worlds.gregs.hestia.game.entity.components.Position
 
 object Chunk {
 

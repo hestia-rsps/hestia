@@ -4,9 +4,9 @@ import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.event.common.EventSystem
 import world.gregs.hestia.core.network.protocol.messages.PlayerLogout
 import worlds.gregs.hestia.GameServer
-import worlds.gregs.hestia.api.SubscriptionSystem
+import worlds.gregs.hestia.artemis.SubscriptionSystem
 import worlds.gregs.hestia.game.plugins.client.components.ExitLobby
-import worlds.gregs.hestia.game.client.NetworkSession
+import worlds.gregs.hestia.api.client.components.NetworkSession
 import worlds.gregs.hestia.network.client.encoders.messages.Logout
 import worlds.gregs.hestia.services.Aspect
 import worlds.gregs.hestia.services.send

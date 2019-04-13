@@ -6,10 +6,10 @@ import net.mostlyoriginal.api.system.core.PassiveSystem
 import worlds.gregs.hestia.api.`object`.GameObject
 import worlds.gregs.hestia.game.archetypes.EntityFactory
 import worlds.gregs.hestia.game.archetypes.ObjectFactory
-import worlds.gregs.hestia.game.events.CreateObject
+import worlds.gregs.hestia.artemis.events.CreateObject
 import worlds.gregs.hestia.game.plugins.`object`.component.ObjectType
 import worlds.gregs.hestia.game.plugins.`object`.component.Rotation
-import worlds.gregs.hestia.game.entity.Position
+import worlds.gregs.hestia.game.entity.components.Position
 
 class ObjectCreation : PassiveSystem() {
 

@@ -7,7 +7,7 @@ import worlds.gregs.hestia.api.land.Land
 import worlds.gregs.hestia.api.map.Map
 import worlds.gregs.hestia.api.region.Region
 import worlds.gregs.hestia.api.region.Regions
-import worlds.gregs.hestia.game.events.CreateRegion
+import worlds.gregs.hestia.artemis.events.CreateRegion
 import worlds.gregs.hestia.game.plugins.region.components.Loaded
 import worlds.gregs.hestia.game.plugins.region.components.Loading
 import worlds.gregs.hestia.game.plugins.region.components.RegionIdentifier

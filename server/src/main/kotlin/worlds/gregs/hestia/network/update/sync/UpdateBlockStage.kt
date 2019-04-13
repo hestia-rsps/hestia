@@ -1,8 +1,9 @@
 package worlds.gregs.hestia.network.update.sync
 
 import world.gregs.hestia.core.network.codec.packet.PacketBuilder
-import worlds.gregs.hestia.game.update.block.UpdateBlock
-import worlds.gregs.hestia.game.update.sync.SyncStage
+import worlds.gregs.hestia.api.client.update.block.UpdateBlock
+import worlds.gregs.hestia.api.client.update.sync.SyncStage
+import worlds.gregs.hestia.artemis.ConcurrentObjectPool
 import worlds.gregs.hestia.network.update.codec.MobEncoders
 import worlds.gregs.hestia.network.update.codec.PlayerEncoders
 import worlds.gregs.hestia.network.update.codec.UpdateBlockEncoder
@@ -10,7 +11,10 @@ import worlds.gregs.hestia.network.update.codec.UpdateBlockEncoder
 /**
  * Encodes an entities [UpdateBlock]s
  */
-data class UpdateBlockStage(val blocks: List<UpdateBlock>, val mob: Boolean) : SyncStage {
+class UpdateBlockStage : SyncStage {
+
+    val blocks = ArrayList<UpdateBlock>()
+    var mob: Boolean = false
 
     override fun encode(builder: PacketBuilder) {
         var maskData = 0
@@ -41,9 +45,22 @@ data class UpdateBlockStage(val blocks: List<UpdateBlock>, val mob: Boolean) : S
         }
     }
 
+
+    override fun free() {
+        pool.free(this)
+    }
+
     companion object {
+        private val pool = ConcurrentObjectPool(UpdateBlockStage::class.java)
         private val mobEncoders = MobEncoders()
         private val playerEncoders = PlayerEncoders()
+
+        fun create(mob: Boolean): UpdateBlockStage {
+            val obj = pool.obtain()
+            obj.blocks.clear()
+            obj.mob = mob
+            return obj
+        }
 
         @Suppress("UNCHECKED_CAST")
         fun encode(builder: PacketBuilder, block: UpdateBlock, mob: Boolean) {

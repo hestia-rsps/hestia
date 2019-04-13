@@ -2,7 +2,7 @@ package worlds.gregs.hestia.game.plugins.movement.components
 
 import com.artemis.Component
 import com.artemis.annotations.PooledWeaver
-import worlds.gregs.hestia.game.update.Direction
+import worlds.gregs.hestia.game.client.update.block.Direction
 import java.util.concurrent.ConcurrentLinkedQueue
 
 @PooledWeaver

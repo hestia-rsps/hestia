@@ -3,7 +3,7 @@ package worlds.gregs.hestia.game.plugins.core.systems
 import com.artemis.BaseSystem
 import net.mostlyoriginal.api.event.common.Subscribe
 import worlds.gregs.hestia.game.TickTask
-import worlds.gregs.hestia.game.events.TaskEvent
+import worlds.gregs.hestia.artemis.events.TaskEvent
 import java.util.*
 
 class TickTaskSystem : BaseSystem() {

@@ -2,19 +2,19 @@ package worlds.gregs.hestia.game.plugins.entity.systems
 
 import com.artemis.Entity
 import net.mostlyoriginal.api.event.common.EventSystem
-import worlds.gregs.hestia.game.entity.Position
-import worlds.gregs.hestia.game.entity.Size
-import worlds.gregs.hestia.game.events.*
+import worlds.gregs.hestia.artemis.events.*
+import worlds.gregs.hestia.game.client.update.block.Marker
+import worlds.gregs.hestia.api.client.update.components.direction.Face
+import worlds.gregs.hestia.api.client.update.components.direction.Facing
+import worlds.gregs.hestia.api.client.update.components.direction.Watch
+import worlds.gregs.hestia.api.client.update.components.*
+import worlds.gregs.hestia.game.entity.components.Position
+import worlds.gregs.hestia.game.entity.components.Size
 import worlds.gregs.hestia.game.plugins.movement.components.calc.Beside
 import worlds.gregs.hestia.game.plugins.movement.components.calc.Follow
 import worlds.gregs.hestia.game.plugins.movement.components.calc.Route
 import worlds.gregs.hestia.game.plugins.movement.components.calc.Step
 import worlds.gregs.hestia.game.plugins.movement.components.types.MoveStep
-import worlds.gregs.hestia.game.update.components.*
-import worlds.gregs.hestia.game.update.components.direction.Face
-import worlds.gregs.hestia.game.update.components.direction.Facing
-import worlds.gregs.hestia.game.update.components.direction.Watch
-import worlds.gregs.hestia.game.update.Marker
 import worlds.gregs.hestia.services.getComponent
 import worlds.gregs.hestia.services.getSystem
 

@@ -1,11 +1,17 @@
 package worlds.gregs.hestia.network.update.sync.player
 
 import world.gregs.hestia.core.network.codec.packet.PacketBuilder
-import worlds.gregs.hestia.game.entity.Position
-import worlds.gregs.hestia.game.update.sync.SyncStage
-import worlds.gregs.hestia.game.update.sync.SyncStage.Companion.MOVE
+import worlds.gregs.hestia.artemis.ConcurrentObjectPool
+import worlds.gregs.hestia.api.client.update.sync.SyncStage
+import worlds.gregs.hestia.api.client.update.sync.SyncStage.Companion.MOVE
+import worlds.gregs.hestia.game.entity.components.Position
 
-data class MoveLocalPlayerSync(val position: Position, val mobile: Position, val global: Boolean, val update: Boolean) : SyncStage {
+class MoveLocalPlayerSync : SyncStage {
+
+    lateinit var position: Position
+    lateinit var mobile: Position
+    var global: Boolean = false
+    var update: Boolean = false
 
     override fun encode(builder: PacketBuilder) {
         builder.apply {
@@ -25,6 +31,23 @@ data class MoveLocalPlayerSync(val position: Position, val mobile: Position, val
                 val y = deltaY + if (deltaY < 0) 32 else 0
                 builder.writeBits(12, y + (x shl 5) + (deltaPlane shl 10))
             }
+        }
+    }
+
+    override fun free() {
+        pool.free(this)
+    }
+
+    companion object {
+        private val pool = ConcurrentObjectPool(MoveLocalPlayerSync::class.java)
+
+        fun create(position: Position, mobile: Position, global: Boolean, update: Boolean): MoveLocalPlayerSync {
+            val obj = pool.obtain()
+            obj.position = position
+            obj.mobile = mobile
+            obj.global = global
+            obj.update = update
+            return obj
         }
     }
 

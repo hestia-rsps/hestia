@@ -9,7 +9,6 @@ import world.gregs.hestia.core.network.protocol.ClientOpcodes.REGION
 import worlds.gregs.hestia.network.client.encoders.messages.MapRegion
 import worlds.gregs.hestia.services.Xteas
 
-
 class MapRegionEncoder : MessageEncoder<MapRegion>() {
 
     override fun encode(builder: PacketBuilder, message: MapRegion) {

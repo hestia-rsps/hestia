@@ -3,11 +3,11 @@ package worlds.gregs.hestia.game.plugins.movement.systems.calc
 import com.artemis.BaseSystem
 import com.artemis.Entity
 import org.assertj.core.api.Assertions.assertThat
-import worlds.gregs.hestia.game.entity.Position
-import worlds.gregs.hestia.game.entity.Size
+import worlds.gregs.hestia.game.entity.components.Position
+import worlds.gregs.hestia.game.entity.components.Size
 import worlds.gregs.hestia.api.movement.Mobile
 import worlds.gregs.hestia.game.plugins.movement.components.Steps
-import worlds.gregs.hestia.game.update.Direction
+import worlds.gregs.hestia.game.client.update.block.Direction
 import worlds.gregs.hestia.services.getComponent
 import worlds.gregs.hestia.services.getSystem
 

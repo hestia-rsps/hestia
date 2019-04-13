@@ -1,10 +1,6 @@
 package world.gregs.hestia.tools
 
-import java.io.BufferedReader
-import java.io.File
-import java.io.FileReader
-import java.nio.ByteBuffer
-import java.nio.file.Files
+import java.io.*
 import java.util.regex.Pattern
 import kotlin.system.measureTimeMillis
 
@@ -30,10 +26,9 @@ class OpcodeFinder(private vararg val processors: OpcodeExtractor) {
         fun read(path: String) {
             matches.clear()
             log("'$className' read in ${measureTimeMillis {
-                val bytes = Files.readAllBytes(File(path, "$className.dat").toPath())
-                val buffer = ByteBuffer.wrap(bytes)
-                while (buffer.hasRemaining()) {
-                    matches.add(Pair(buffer.get().toInt(), buffer.get().toInt()))
+                val stream = DataInputStream(File(path, "$className.dat").inputStream())
+                while (stream.available() > 0) {
+                    matches.add(Pair(stream.read(), stream.readByte().toInt()))
                 }
             }}ms")
         }
@@ -48,13 +43,12 @@ class OpcodeFinder(private vararg val processors: OpcodeExtractor) {
 
         fun write(path: String) {
             matches.sortBy { it.first }
-            log("'$className' wrote in ${measureTimeMillis {
-                ByteBuffer.allocate(matches.size * 2).apply {
-                    matches.forEach {
-                        put(it.first.toByte())
-                        put(it.second.toByte())
-                    }
-                    Files.write(File(path, "$className.dat").toPath(), this.array())
+            val file = File(path, "$className.dat")
+            log("'${file.absolutePath}' wrote in ${measureTimeMillis {
+                val stream = DataOutputStream(file.outputStream())
+                matches.forEach {
+                    stream.writeByte(it.first)
+                    stream.writeByte(it.second)
                 }
             }}ms")
         }
@@ -114,8 +108,14 @@ class OpcodeFinder(private vararg val processors: OpcodeExtractor) {
 
         @JvmStatic
         fun main(args: Array<String>) {
+            /*
+                Examples
+                Class names - Class318 Class192 Class133
+                Extract & print - e C:\Users\Greg\IdeaProjects\hestia-client\client p Class318
+                Extract & write - e C:\Users\Greg\IdeaProjects\hestia-client\client w C:\Users\Greg\IdeaProjects\hestia\ Class192
+                Read & print - r C:\Users\Greg\IdeaProjects\hestia\ p Class192
+             */
             if (args.size < 2) {
-                //C:\client\ Class318 Class192 Class133
                 help()
             }
 
@@ -132,6 +132,11 @@ class OpcodeFinder(private vararg val processors: OpcodeExtractor) {
                 }
             }
 
+            if(write && args.size < 5) {
+                help()
+                return
+            }
+
             val extractors = args.copyOfRange(if (write) 4 else 3, args.size).map { OpcodeFinder.OpcodeExtractor(it) }.toTypedArray()
 
             val finder = OpcodeFinder(*extractors)
@@ -141,7 +146,6 @@ class OpcodeFinder(private vararg val processors: OpcodeExtractor) {
                 "e", "extract" -> finder.extract(inDirectory)
                 else -> help()
             }
-
             extractors.forEach {
                 if (write) {
                     it.write(args[3])

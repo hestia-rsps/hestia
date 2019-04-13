@@ -2,8 +2,8 @@ package worlds.gregs.hestia.api.movement.systems
 
 import com.artemis.Component
 import com.artemis.ComponentMapper
-import worlds.gregs.hestia.api.SubscriptionSystem
-import worlds.gregs.hestia.game.entity.Position
+import worlds.gregs.hestia.artemis.SubscriptionSystem
+import worlds.gregs.hestia.game.entity.components.Position
 import worlds.gregs.hestia.game.map.Chunk.toChunkPosition
 import worlds.gregs.hestia.services.Aspect
 import kotlin.reflect.KClass

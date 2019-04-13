@@ -1,7 +1,7 @@
 package worlds.gregs.hestia.api.collision
 
 import net.mostlyoriginal.api.system.core.PassiveSystem
-import worlds.gregs.hestia.game.entity.Position
+import worlds.gregs.hestia.game.entity.components.Position
 
 abstract class EntityCollision : PassiveSystem() {
 

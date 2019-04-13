@@ -2,7 +2,7 @@ package worlds.gregs.hestia.game.entity.movement
 
 import worlds.gregs.hestia.api.collision.Collision
 import worlds.gregs.hestia.api.movement.TerrainNavigation
-import worlds.gregs.hestia.game.update.Direction
+import worlds.gregs.hestia.game.client.update.block.Direction
 
 /**
  * SecondaryNavigation

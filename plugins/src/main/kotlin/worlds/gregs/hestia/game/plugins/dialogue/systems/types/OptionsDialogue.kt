@@ -6,7 +6,7 @@ import worlds.gregs.hestia.api.dialogue.DialogueBase
 import worlds.gregs.hestia.game.dialogue.Dialogue
 import worlds.gregs.hestia.game.dialogue.Dialogues
 import worlds.gregs.hestia.game.dialogue.faces.DialogueRedirect
-import worlds.gregs.hestia.game.events.send
+import worlds.gregs.hestia.artemis.events.send
 import java.security.InvalidParameterException
 
 class OptionsDialogue : BaseChatDialogue("") {

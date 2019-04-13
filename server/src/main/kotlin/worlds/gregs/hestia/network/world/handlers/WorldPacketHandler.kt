@@ -4,7 +4,7 @@ import io.netty.channel.ChannelHandlerContext
 import world.gregs.hestia.core.network.codec.message.MessageHandler
 import world.gregs.hestia.core.network.protocol.messages.FriendsChatSetupRequest
 import worlds.gregs.hestia.GameServer
-import worlds.gregs.hestia.game.events.FriendsChatSetupOpen
+import worlds.gregs.hestia.artemis.events.FriendsChatSetupOpen
 
 class WorldPacketHandler : MessageHandler<FriendsChatSetupRequest> {
 

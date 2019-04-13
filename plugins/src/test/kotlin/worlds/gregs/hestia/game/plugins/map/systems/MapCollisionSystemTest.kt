@@ -5,8 +5,8 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import worlds.gregs.hestia.api.map.TileClipping
 import worlds.gregs.hestia.game.plugins.movement.systems.calc.MovementTester
-import worlds.gregs.hestia.game.update.Direction
-import worlds.gregs.hestia.game.update.Direction.*
+import worlds.gregs.hestia.game.client.update.block.Direction
+import worlds.gregs.hestia.game.client.update.block.Direction.*
 import worlds.gregs.hestia.services.getSystem
 
 internal class MapCollisionSystemTest : MovementTester(false) {

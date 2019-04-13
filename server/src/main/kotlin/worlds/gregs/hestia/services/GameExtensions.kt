@@ -8,8 +8,8 @@ import world.gregs.hestia.core.network.codec.message.Message
 import world.gregs.hestia.core.network.codec.packet.Packet
 import worlds.gregs.hestia.api.mob.Mob
 import worlds.gregs.hestia.api.player.Player
-import worlds.gregs.hestia.game.events.OutBoundMessage
-import worlds.gregs.hestia.game.events.OutBoundPacket
+import worlds.gregs.hestia.artemis.events.OutBoundMessage
+import worlds.gregs.hestia.artemis.events.OutBoundPacket
 import kotlin.reflect.KClass
 
 /*
@@ -25,6 +25,10 @@ fun WorldConfigurationBuilder.dependsOn(vararg clazz: KClass<out ArtemisPlugin>)
 
 fun EventSystem.send(entity: Int, message: Message) {
     dispatch(OutBoundMessage(entity, message))
+}
+
+fun ArchetypeBuilder.add(vararg clazz: KClass<out Component>): ArchetypeBuilder {
+    return add(*clazz.map { it.java }.toTypedArray())
 }
 
 fun EventSystem.send(entity: Int, packet: Packet) {
@@ -44,8 +48,14 @@ fun IntBag.toArray(): IntArray {
 }
 
 fun IntBag.forEach(function: (Int) -> Unit) {
-    for(i in 0 until size()) {
-        function(get(i))
+    repeat(size()) {
+        function(data[it])
+    }
+}
+
+fun IntBag.forEachIndexed(function: (index: Int, Int) -> Unit) {
+    repeat(size()) {
+        function(it, data[it])
     }
 }
 
@@ -81,10 +91,10 @@ fun <T : BaseSystem>World.getSystem(type: KClass<T>) : T {
     return getSystem(type.java)
 }
 
-fun World.players(): IntArray {
-    return aspectSubscriptionManager.get(Aspect.all(Player::class)).entities.toArray()
+fun World.players(): IntBag {
+    return aspectSubscriptionManager.get(Aspect.all(Player::class)).entities
 }
 
-fun World.mobs(): IntArray {
-    return aspectSubscriptionManager.get(Aspect.all(Mob::class)).entities.toArray()
+fun World.mobs(): IntBag {
+    return aspectSubscriptionManager.get(Aspect.all(Mob::class)).entities
 }

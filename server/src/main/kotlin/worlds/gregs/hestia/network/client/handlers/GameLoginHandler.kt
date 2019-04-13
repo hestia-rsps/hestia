@@ -6,13 +6,15 @@ import worlds.gregs.hestia.GameServer.Companion.worldSession
 import worlds.gregs.hestia.network.client.ClientHandshake
 import worlds.gregs.hestia.network.client.decoders.messages.GameLogin
 import worlds.gregs.hestia.network.world.encoders.messages.PlayerLoginRequest
+import java.util.concurrent.atomic.AtomicInteger
 
 class GameLoginHandler(private val sessions: HashMap<Int, ChannelHandlerContext>) : MessageHandler<GameLogin> {
 
+    private val indices = AtomicInteger(1)
+
     override fun handle(ctx: ChannelHandlerContext, message: GameLogin) {
         val (packet) = message
-        val index = (1..Short.MAX_VALUE)
-                .firstOrNull { it > 0 && !sessions.containsKey(it) } ?: throw IllegalStateException("Maximum player login session reached")
+        val index = indices.getAndIncrement()
         sessions[index] = ctx
         worldSession?.write(PlayerLoginRequest(index, packet), true)
         ctx.pipeline().get(ClientHandshake::class.java).shake(ctx)

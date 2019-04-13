@@ -1,16 +1,28 @@
 package worlds.gregs.hestia.network.update.sync.mob
 
 import world.gregs.hestia.core.network.codec.packet.PacketBuilder
-import worlds.gregs.hestia.game.entity.Position
-import worlds.gregs.hestia.game.update.sync.SyncStage
+import worlds.gregs.hestia.api.client.update.components.direction.Face
+import worlds.gregs.hestia.api.client.update.sync.SyncStage
+import worlds.gregs.hestia.artemis.ConcurrentObjectPool
+import worlds.gregs.hestia.game.client.update.block.DirectionUtils
+import worlds.gregs.hestia.game.entity.components.Position
 
-data class AddMobSync(val clientIndex: Int, val direction: Int, val update: Boolean, val delta: Position, val plane: Int, val mobType: Int, val regionChange: Boolean) : SyncStage {
+class AddMobSync : SyncStage {
+
+    var clientIndex: Int = -1
+    var face: Face? = null
+    var update: Boolean = false
+    lateinit var delta: Position
+    var plane: Int = -1
+    var mobType: Int = -1
+    var regionChange: Boolean = false
 
     override fun encode(builder: PacketBuilder) {
         builder.apply {
             //Client index
             writeBits(15, clientIndex)
             //Facing
+            val direction = if (face != null) DirectionUtils.getFaceDirection(face!!.x, face!!.y) else 0//A costly calculation for updating, so we do it here in the encoding thread
             writeBits(3, (direction shr 11) - 4)
             //Update
             writeBits(1, update)
@@ -24,6 +36,28 @@ data class AddMobSync(val clientIndex: Int, val direction: Int, val update: Bool
             writeBits(5, delta.x + if (delta.x < 15) 32 else 0)
             //Moving region
             writeBits(1, regionChange)
+        }
+    }
+
+    override fun free() {
+        pool.free(this)
+    }
+
+    companion object {
+        private val pool = ConcurrentObjectPool(AddMobSync::class.java)
+
+        fun create(clientIndex: Int, face: Face?, update: Boolean, delta: Position, plane: Int, mobType: Int, regionChange: Boolean): AddMobSync {
+            val obj = pool.obtain()
+            obj.apply {
+                this.clientIndex = clientIndex
+                this.face = face
+                this.update = update
+                this.delta = delta
+                this.plane = plane
+                this.mobType = mobType
+                this.regionChange = regionChange
+            }
+            return obj
         }
     }
 
