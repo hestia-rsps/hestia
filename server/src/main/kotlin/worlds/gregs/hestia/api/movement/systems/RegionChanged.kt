@@ -1,8 +1,8 @@
 package worlds.gregs.hestia.api.movement.systems
 
 import com.artemis.Component
-import worlds.gregs.hestia.game.entity.Position
 import worlds.gregs.hestia.api.movement.components.Shift
+import worlds.gregs.hestia.game.entity.components.Position
 import kotlin.reflect.KClass
 
 abstract class RegionChanged(vararg classes: KClass<out Component>) : PositionChanged(*classes) {

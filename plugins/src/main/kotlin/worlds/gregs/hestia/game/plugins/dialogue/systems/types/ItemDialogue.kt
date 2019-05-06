@@ -3,7 +3,7 @@ package worlds.gregs.hestia.game.plugins.dialogue.systems.types
 import com.artemis.Entity
 import worlds.gregs.hestia.api.dialogue.DialogueBase
 import worlds.gregs.hestia.game.dialogue.Dialogues
-import worlds.gregs.hestia.game.events.send
+import worlds.gregs.hestia.artemis.events.send
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetItem
 
 class ItemDialogue(text: String) : BaseEntityDialogue(text) {

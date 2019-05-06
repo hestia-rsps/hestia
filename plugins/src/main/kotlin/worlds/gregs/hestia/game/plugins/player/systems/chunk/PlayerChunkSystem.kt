@@ -4,7 +4,7 @@ import com.artemis.annotations.Wire
 import net.mostlyoriginal.api.event.common.Subscribe
 import net.mostlyoriginal.api.system.core.PassiveSystem
 import worlds.gregs.hestia.api.region.Region
-import worlds.gregs.hestia.game.events.PlayerChunkChanged
+import worlds.gregs.hestia.artemis.events.PlayerChunkChanged
 import worlds.gregs.hestia.game.map.Chunk.getChunkX
 import worlds.gregs.hestia.game.map.Chunk.getChunkY
 import worlds.gregs.hestia.game.plugins.player.systems.chunk.map.PlayerChunkMap

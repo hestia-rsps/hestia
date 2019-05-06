@@ -1,6 +1,7 @@
 package worlds.gregs.hestia.game.plugins.widget.systems.frame.tabs
 
 import com.artemis.ComponentMapper
+import worlds.gregs.hestia.artemis.events.Disconnect
 import worlds.gregs.hestia.game.plugins.client.components.ExitLobby
 import worlds.gregs.hestia.game.plugins.widget.components.frame.tabs.LogoutTab
 import worlds.gregs.hestia.game.plugins.widget.systems.BaseFrame
@@ -21,10 +22,10 @@ class LogoutTabSystem : BaseFrame(LogoutTab::class) {
         when(componentId) {
             6 -> {//Lobby
                 exitLobbyMapper.create(entityId)
-                world.delete(entityId)
+                es.dispatch(Disconnect(entityId))
             }
             13 -> {//Login
-                world.delete(entityId)
+                es.dispatch(Disconnect(entityId))
             }
         }
     }

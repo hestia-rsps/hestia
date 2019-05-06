@@ -5,10 +5,10 @@ import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
 import net.mostlyoriginal.api.event.common.EventSystem
 import worlds.gregs.hestia.api.`object`.GameObject
-import worlds.gregs.hestia.game.entity.Position
-import worlds.gregs.hestia.game.entity.Size
-import worlds.gregs.hestia.game.entity.height
-import worlds.gregs.hestia.game.entity.width
+import worlds.gregs.hestia.game.entity.components.Position
+import worlds.gregs.hestia.game.entity.components.Size
+import worlds.gregs.hestia.game.entity.components.height
+import worlds.gregs.hestia.game.entity.components.width
 import worlds.gregs.hestia.api.mob.Mob
 import worlds.gregs.hestia.api.player.Player
 import worlds.gregs.hestia.game.plugins.movement.components.calc.Path

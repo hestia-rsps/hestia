@@ -5,7 +5,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import world.gregs.hestia.core.services.Loader
 import worlds.gregs.hestia.game.archetypes.EntityFactory
-import worlds.gregs.hestia.game.entity.Position
+import worlds.gregs.hestia.game.entity.components.Position
 import kotlin.system.measureNanoTime
 
 class ChunkTest {

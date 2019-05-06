@@ -3,7 +3,7 @@ package worlds.gregs.hestia.game.plugins.mob.systems.region
 import net.mostlyoriginal.api.event.common.EventSystem
 import worlds.gregs.hestia.api.mob.Mob
 import worlds.gregs.hestia.api.movement.systems.RegionChanged
-import worlds.gregs.hestia.game.events.MobRegionChanged
+import worlds.gregs.hestia.artemis.events.MobRegionChanged
 
 class MobRegionChangeSystem : RegionChanged(Mob::class) {
 

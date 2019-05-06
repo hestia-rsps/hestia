@@ -1,7 +1,7 @@
 package worlds.gregs.hestia.api.region
 
 import com.artemis.Aspect
-import worlds.gregs.hestia.api.SubscriptionSystem
+import worlds.gregs.hestia.artemis.SubscriptionSystem
 
 /**
  * Regions

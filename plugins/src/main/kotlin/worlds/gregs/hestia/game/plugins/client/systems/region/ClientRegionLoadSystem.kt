@@ -3,10 +3,10 @@ package worlds.gregs.hestia.game.plugins.client.systems.region
 import com.artemis.ComponentMapper
 import com.artemis.systems.IteratingSystem
 import net.mostlyoriginal.api.event.common.EventSystem
-import worlds.gregs.hestia.game.events.UpdateMapRegion
+import worlds.gregs.hestia.artemis.events.UpdateMapRegion
 import worlds.gregs.hestia.game.plugins.client.components.LastLoadedRegion
-import worlds.gregs.hestia.game.client.NetworkSession
-import worlds.gregs.hestia.game.entity.Position
+import worlds.gregs.hestia.api.client.components.NetworkSession
+import worlds.gregs.hestia.game.entity.components.Position
 import worlds.gregs.hestia.game.map.MapConstants.MAP_SIZES
 import worlds.gregs.hestia.services.Aspect
 

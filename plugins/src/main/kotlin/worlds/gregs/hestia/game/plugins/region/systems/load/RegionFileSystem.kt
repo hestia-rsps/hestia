@@ -5,12 +5,12 @@ import com.artemis.annotations.Wire
 import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.event.common.Subscribe
 import org.slf4j.LoggerFactory
-import worlds.gregs.hestia.api.SubscriptionSystem
+import worlds.gregs.hestia.artemis.SubscriptionSystem
 import worlds.gregs.hestia.api.land.LandObjects
 import worlds.gregs.hestia.api.map.Map
 import worlds.gregs.hestia.api.map.MapSettings
 import worlds.gregs.hestia.api.region.Dynamic
-import worlds.gregs.hestia.game.events.LoadRegion
+import worlds.gregs.hestia.artemis.events.LoadRegion
 import worlds.gregs.hestia.game.map.Chunk.getChunkX
 import worlds.gregs.hestia.game.map.Chunk.getChunkY
 import worlds.gregs.hestia.game.map.Chunk.getRotatedChunkPlane

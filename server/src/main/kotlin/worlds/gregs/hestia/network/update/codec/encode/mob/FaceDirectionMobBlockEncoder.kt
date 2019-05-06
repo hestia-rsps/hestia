@@ -2,7 +2,7 @@ package worlds.gregs.hestia.network.update.codec.encode.mob
 
 import world.gregs.hestia.core.network.codec.packet.Endian
 import world.gregs.hestia.core.network.codec.packet.PacketBuilder
-import worlds.gregs.hestia.game.update.block.blocks.mob.FaceDirectionMobBlock
+import worlds.gregs.hestia.game.client.update.block.blocks.mob.FaceDirectionMobBlock
 import worlds.gregs.hestia.network.update.codec.UpdateBlockEncoder
 
 class FaceDirectionMobBlockEncoder : UpdateBlockEncoder<FaceDirectionMobBlock> {

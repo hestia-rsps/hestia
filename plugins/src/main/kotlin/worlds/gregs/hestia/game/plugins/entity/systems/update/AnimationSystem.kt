@@ -3,12 +3,12 @@ package worlds.gregs.hestia.game.plugins.entity.systems.update
 import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.event.common.Subscribe
 import net.mostlyoriginal.api.system.core.PassiveSystem
-import worlds.gregs.hestia.game.update.components.Animation
-import worlds.gregs.hestia.game.events.Animate
-import worlds.gregs.hestia.game.update.components.anim.FirstAnimation
-import worlds.gregs.hestia.game.update.components.anim.FourthAnimation
-import worlds.gregs.hestia.game.update.components.anim.SecondAnimation
-import worlds.gregs.hestia.game.update.components.anim.ThirdAnimation
+import worlds.gregs.hestia.api.client.update.components.Animation
+import worlds.gregs.hestia.artemis.events.Animate
+import worlds.gregs.hestia.api.client.update.components.anim.FirstAnimation
+import worlds.gregs.hestia.api.client.update.components.anim.FourthAnimation
+import worlds.gregs.hestia.api.client.update.components.anim.SecondAnimation
+import worlds.gregs.hestia.api.client.update.components.anim.ThirdAnimation
 
 class AnimationSystem : PassiveSystem() {
     private lateinit var firstAnimationMapper: ComponentMapper<FirstAnimation>

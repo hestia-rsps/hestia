@@ -3,12 +3,12 @@ package worlds.gregs.hestia.game.plugins.entity.systems.update
 import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.event.common.Subscribe
 import net.mostlyoriginal.api.system.core.PassiveSystem
-import worlds.gregs.hestia.game.update.components.Graphics
-import worlds.gregs.hestia.game.update.components.gfx.FirstGraphic
-import worlds.gregs.hestia.game.update.components.gfx.FourthGraphic
-import worlds.gregs.hestia.game.update.components.gfx.SecondGraphic
-import worlds.gregs.hestia.game.update.components.gfx.ThirdGraphic
-import worlds.gregs.hestia.game.events.Graphic
+import worlds.gregs.hestia.api.client.update.components.Graphics
+import worlds.gregs.hestia.api.client.update.components.gfx.FirstGraphic
+import worlds.gregs.hestia.api.client.update.components.gfx.FourthGraphic
+import worlds.gregs.hestia.api.client.update.components.gfx.SecondGraphic
+import worlds.gregs.hestia.api.client.update.components.gfx.ThirdGraphic
+import worlds.gregs.hestia.artemis.events.Graphic
 
 class GraphicsSystem : PassiveSystem() {
     private lateinit var firstGraphicMapper: ComponentMapper<FirstGraphic>

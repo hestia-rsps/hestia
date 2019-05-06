@@ -4,10 +4,10 @@ import com.artemis.Entity
 import com.artemis.WorldConfigurationBuilder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import worlds.gregs.hestia.game.entity.Position
+import worlds.gregs.hestia.game.entity.components.Position
 import worlds.gregs.hestia.tools.PlayerTester
 import worlds.gregs.hestia.game.plugins.MovementPlugin
-import worlds.gregs.hestia.game.update.components.direction.Watch
+import worlds.gregs.hestia.api.client.update.components.direction.Watch
 import worlds.gregs.hestia.game.plugins.entity.systems.follow
 import worlds.gregs.hestia.game.plugins.entity.systems.step
 import worlds.gregs.hestia.services.dependsOn

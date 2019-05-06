@@ -1,7 +1,7 @@
 package worlds.gregs.hestia.network.update.sync
 
 import world.gregs.hestia.core.network.codec.packet.PacketBuilder
-import worlds.gregs.hestia.game.update.sync.SyncStage
+import worlds.gregs.hestia.api.client.update.sync.SyncStage
 
 /**
  * Encodes the start of finish of a bit access stage
@@ -14,6 +14,11 @@ data class AccessStage(val start: Boolean) : SyncStage {
         } else {
             builder.finishBitAccess()
         }
+    }
+
+    companion object {
+        val START = AccessStage(true)
+        val END = AccessStage(false)
     }
 
 }

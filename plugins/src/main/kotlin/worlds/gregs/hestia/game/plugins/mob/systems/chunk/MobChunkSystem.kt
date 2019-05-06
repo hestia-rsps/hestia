@@ -2,7 +2,7 @@ package worlds.gregs.hestia.game.plugins.mob.systems.chunk
 
 import net.mostlyoriginal.api.event.common.Subscribe
 import net.mostlyoriginal.api.system.core.PassiveSystem
-import worlds.gregs.hestia.game.events.MobChunkChanged
+import worlds.gregs.hestia.artemis.events.MobChunkChanged
 import worlds.gregs.hestia.game.plugins.mob.systems.chunk.map.MobChunkMap
 
 class MobChunkSystem : PassiveSystem() {

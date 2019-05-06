@@ -21,9 +21,4 @@ class ObservableTest {
         name = "Carl"
         println(name)
     }
-
-
-
-    fun t() {
-    }
 }

@@ -5,9 +5,9 @@ import net.mostlyoriginal.api.event.common.Subscribe
 import net.mostlyoriginal.api.system.core.PassiveSystem
 import worlds.gregs.hestia.game.archetypes.EntityFactory
 import worlds.gregs.hestia.game.archetypes.MobFactory
-import worlds.gregs.hestia.game.entity.Type
-import worlds.gregs.hestia.game.entity.Position
-import worlds.gregs.hestia.game.events.CreateMob
+import worlds.gregs.hestia.game.entity.components.Type
+import worlds.gregs.hestia.game.entity.components.Position
+import worlds.gregs.hestia.artemis.events.CreateMob
 
 class MobCreation : PassiveSystem() {
 

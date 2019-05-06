@@ -3,7 +3,7 @@ package worlds.gregs.hestia.game.plugins.dialogue.systems.types
 import com.artemis.Entity
 import world.gregs.hestia.core.network.protocol.encoders.messages.WidgetComponentText
 import worlds.gregs.hestia.api.dialogue.DialogueBase
-import worlds.gregs.hestia.game.events.send
+import worlds.gregs.hestia.artemis.events.send
 import java.security.InvalidParameterException
 
 abstract class BaseEntityDialogue(text: String) : BaseChatDialogue(text) {

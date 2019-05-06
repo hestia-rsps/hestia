@@ -2,12 +2,16 @@ package worlds.gregs.hestia.network.update.sync.player
 
 import world.gregs.hestia.core.network.codec.packet.PacketBuilder
 import world.gregs.hestia.core.services.int
-import worlds.gregs.hestia.game.update.Direction
-import worlds.gregs.hestia.game.update.DirectionUtils.Companion.getPlayerRunningDirection
-import worlds.gregs.hestia.game.update.DirectionUtils.Companion.getPlayerWalkingDirection
-import worlds.gregs.hestia.game.update.sync.SyncStage
+import worlds.gregs.hestia.artemis.ConcurrentObjectPool
+import worlds.gregs.hestia.game.client.update.block.Direction
+import worlds.gregs.hestia.game.client.update.block.DirectionUtils.Companion.getPlayerRunningDirection
+import worlds.gregs.hestia.game.client.update.block.DirectionUtils.Companion.getPlayerWalkingDirection
+import worlds.gregs.hestia.api.client.update.sync.SyncStage
 
-class MovementPlayerSync(private val nextWalkDirection: Direction, private val nextRunDirection: Direction?, private val update: Boolean) : SyncStage {
+class MovementPlayerSync : SyncStage {
+    lateinit var nextWalkDirection: Direction
+    var nextRunDirection: Direction? = null
+    var update: Boolean = false
 
     override fun encode(builder: PacketBuilder) {
         builder.apply {
@@ -24,8 +28,8 @@ class MovementPlayerSync(private val nextWalkDirection: Direction, private val n
         //If running
         if (nextRunDirection != null) {
             //Add additional movement
-            dx += nextRunDirection.deltaX
-            dy += nextRunDirection.deltaY
+            dx += nextRunDirection!!.deltaX
+            dy += nextRunDirection!!.deltaY
 
             //Calculate direction
             direction = getPlayerRunningDirection(dx, dy)
@@ -50,6 +54,22 @@ class MovementPlayerSync(private val nextWalkDirection: Direction, private val n
         } else {
             builder.writeBits(2, running.int + 1)
             builder.writeBits(running.int + 3, direction)//Direction
+        }
+    }
+
+    override fun free() {
+        pool.free(this)
+    }
+
+    companion object {
+        private val pool = ConcurrentObjectPool(MovementPlayerSync::class.java)
+
+        fun create(nextWalkDirection: Direction, nextRunDirection: Direction?, update: Boolean): MovementPlayerSync {
+            val obj = pool.obtain()
+            obj.nextWalkDirection = nextWalkDirection
+            obj.nextRunDirection = nextRunDirection
+            obj.update = update
+            return obj
         }
     }
 

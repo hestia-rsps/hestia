@@ -1,13 +1,18 @@
 package worlds.gregs.hestia.network.update.sync.mob
 
 import world.gregs.hestia.core.network.codec.packet.PacketBuilder
-import worlds.gregs.hestia.game.update.Direction
-import worlds.gregs.hestia.game.update.DirectionUtils.Companion.getMobMoveDirection
-import worlds.gregs.hestia.game.update.sync.SyncStage
-import worlds.gregs.hestia.game.update.sync.SyncStage.Companion.RUNNING
-import worlds.gregs.hestia.game.update.sync.SyncStage.Companion.WALKING
+import worlds.gregs.hestia.api.client.update.sync.SyncStage
+import worlds.gregs.hestia.api.client.update.sync.SyncStage.Companion.RUNNING
+import worlds.gregs.hestia.api.client.update.sync.SyncStage.Companion.WALKING
+import worlds.gregs.hestia.artemis.ConcurrentObjectPool
+import worlds.gregs.hestia.game.client.update.block.Direction
+import worlds.gregs.hestia.game.client.update.block.DirectionUtils.Companion.getMobMoveDirection
 
-class MovementMobSync(private val nextWalkDirection: Direction, private val nextRunDirection: Direction?, private val update: Boolean) : SyncStage {
+class MovementMobSync : SyncStage {
+
+    lateinit var nextWalkDirection: Direction
+    var nextRunDirection: Direction? = null
+    var update: Boolean = false
 
     override fun encode(builder: PacketBuilder) {
         builder.apply {
@@ -23,10 +28,26 @@ class MovementMobSync(private val nextWalkDirection: Direction, private val next
             writeBits(3, getMobMoveDirection(nextWalkDirection))
 
             if (nextRunDirection != null) {
-                writeBits(3, getMobMoveDirection(nextRunDirection))
+                writeBits(3, getMobMoveDirection(nextRunDirection!!))
             }
 
             writeBits(1, update)
+        }
+    }
+
+    override fun free() {
+        pool.free(this)
+    }
+
+    companion object {
+        private val pool = ConcurrentObjectPool(MovementMobSync::class.java)
+
+        fun create(nextWalkDirection: Direction, nextRunDirection: Direction?, update: Boolean): MovementMobSync {
+            val obj = pool.obtain()
+            obj.nextWalkDirection = nextWalkDirection
+            obj.nextRunDirection = nextRunDirection
+            obj.update = update
+            return obj
         }
     }
 

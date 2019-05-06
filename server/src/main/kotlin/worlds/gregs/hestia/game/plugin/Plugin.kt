@@ -17,6 +17,9 @@ interface Plugin : ArtemisPlugin {//TODO rename to config?
         const val PLAYER_INDEX_PRIORITY = WorldConfigurationBuilder.Priority.HIGHEST
         const val ENTITY_INDEX_PRIORITY = PLAYER_INDEX_PRIORITY - 1
 
+        const val PACKET_PROCESS_PRIORITY = WorldConfigurationBuilder.Priority.HIGHEST
+        const val EVENT_PROCESS_PRORITY = WorldConfigurationBuilder.Priority.HIGHEST - 1
+
         const val MOBILE_PRIORITY = 12000
         const val MOVE_PRIORITY = 11000
         const val PRE_NAVIGATION_PRIORITY = 10000
