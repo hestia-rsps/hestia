@@ -27,7 +27,6 @@ class PlayerCreation : PassiveSystem() {
         val entityId = EntityFactory.create(PlayerFactory::class)
 
         if(event.session.channel != null) {
-            println("Setup ${event.name} $entityId ${event.session} ${event.session.channel}")
             network?.setup(entityId, event.session.channel!!)
         }
 

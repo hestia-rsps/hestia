@@ -10,7 +10,7 @@ buildscript {
 }
 
 plugins {
-    id 'org.jetbrains.kotlin.jvm' version '1.3.30'
+    id 'org.jetbrains.kotlin.jvm' version '1.3.31'
 }
 
 sourceCompatibility = 11.0
@@ -27,7 +27,7 @@ allprojects {
     apply plugin: "artemis"
 
     group 'worlds.gregs.hestia'
-    version '0.2'
+    version '0.3.1'
 
     repositories {
         mavenCentral()
