@@ -36,7 +36,7 @@ abstract class Engine : Thread("Game Engine") {
             }
 
             try {
-                Thread.sleep(sleepTime)
+                sleep(sleepTime)
             } catch (e: InterruptedException) {
                 e.printStackTrace()
             }

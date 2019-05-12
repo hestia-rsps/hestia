@@ -20,9 +20,9 @@ fun WorldConfigurationBuilder.dependsOn(vararg clazz: KClass<out Component>): Wo
     return dependsOn(*clazz.map { it.java }.toTypedArray())
 }
 
-fun Aspect.Builder.all(vararg clazz: KClass<out Component>): com.artemis.Aspect.Builder {
-    return all(*clazz.map { it.java }.toTypedArray())
-}
+//fun Aspect.Builder.all(vararg clazz: KClass<out Component>): com.artemis.Aspect.Builder {
+//    return all(*clazz.map { it.java }.toTypedArray())
+//}
 
 fun Aspect.Builder.one(vararg clazz: KClass<out Component>): com.artemis.Aspect.Builder {
     return one(*clazz.map { it.java }.toTypedArray())
@@ -32,9 +32,9 @@ fun Aspect.Builder.exclude(vararg clazz: KClass<out Component>): com.artemis.Asp
     return exclude(*clazz.map { it.java }.toTypedArray())
 }
 
-fun ArchetypeBuilder.add(vararg clazz: KClass<out Component>): ArchetypeBuilder {
-    return add(*clazz.map { it.java }.toTypedArray())
-}
+//fun ArchetypeBuilder.add(vararg clazz: KClass<out Component>): ArchetypeBuilder {
+//    return add(*clazz.map { it.java }.toTypedArray())
+//}
 
 fun <T : Component> Entity.getComponent(type: KClass<T>): T? {
     val tf = world.componentManager.typeFactory

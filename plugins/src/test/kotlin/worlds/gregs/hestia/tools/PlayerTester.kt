@@ -7,9 +7,9 @@ import world.gregs.hestia.core.network.Session
 import worlds.gregs.hestia.game.entity.components.Position
 import worlds.gregs.hestia.game.GameTest
 import worlds.gregs.hestia.game.archetypes.EntityFactory
-import worlds.gregs.hestia.game.archetypes.PlayerFactory
+import worlds.gregs.hestia.core.archetypes.PlayerFactory
 import worlds.gregs.hestia.artemis.events.CreatePlayer
-import worlds.gregs.hestia.game.plugins.player.systems.PlayerCreation
+import worlds.gregs.hestia.core.plugins.player.systems.PlayerCreation
 import worlds.gregs.hestia.services.getComponent
 import worlds.gregs.hestia.services.getSystem
 

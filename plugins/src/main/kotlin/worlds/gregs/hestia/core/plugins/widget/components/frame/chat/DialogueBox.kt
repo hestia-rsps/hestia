@@ -1,0 +1,7 @@
+package worlds.gregs.hestia.core.plugins.widget.components.frame.chat
+
+import worlds.gregs.hestia.api.widget.components.Frame
+
+class DialogueBox : Frame() {
+    var id = 0
+}

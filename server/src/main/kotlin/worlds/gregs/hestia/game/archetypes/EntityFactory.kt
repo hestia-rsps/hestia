@@ -22,13 +22,13 @@ object EntityFactory {
     }
 
     fun init(world: World) {
-        this.world = world
+        EntityFactory.world = world
     }
 
     fun load(loader: Loader) {
         var count = 0
         val time = measureNanoTime {
-            val factories = loader.load<ArchetypeFactory>("worlds.gregs.hestia.game.archetypes")
+            val factories = loader.load<ArchetypeFactory>("worlds.gregs.hestia.core.archetypes")
             factories.forEach { factory ->
                 add(factory)
             }

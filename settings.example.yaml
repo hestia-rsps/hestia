@@ -7,3 +7,4 @@ sourcePath: "./server/src/main/kotlin/"
 pluginPath: "./plugins/src/main/kotlin/"
 connectionLimit: 2
 serverName: "Hestia"
+pluginRootPackage: "worlds.gregs.hestia.content.Root_plugin"

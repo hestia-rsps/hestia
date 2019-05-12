@@ -5,7 +5,7 @@ import com.artemis.WorldConfigurationBuilder
 import net.mostlyoriginal.api.event.common.EventSystem
 import org.junit.jupiter.api.BeforeEach
 import worlds.gregs.hestia.game.archetypes.EntityFactory
-import worlds.gregs.hestia.game.plugins.movement.systems.calc.MovementTester
+import worlds.gregs.hestia.core.plugins.movement.systems.calc.MovementTester
 
 abstract class GameTest(private val config: WorldConfigurationBuilder) {
 
