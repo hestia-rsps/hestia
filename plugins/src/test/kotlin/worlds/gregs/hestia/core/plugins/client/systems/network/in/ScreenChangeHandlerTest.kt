@@ -25,7 +25,8 @@ internal class ScreenChangeHandlerTest : InterfaceTester(WorldConfigurationBuild
     }
 
     @BeforeEach
-    fun setup() {
+    override fun setup() {
+        super.setup()
         open(GraphicsOptionsSystem::class)
         gameFrame.displayMode = 0
         gameFrame.width = 0

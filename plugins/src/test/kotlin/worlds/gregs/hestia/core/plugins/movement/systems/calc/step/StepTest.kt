@@ -10,7 +10,8 @@ import worlds.gregs.hestia.core.plugins.movement.systems.calc.PathTester
 internal class StepTest : PathTester(false, DirectStepSystem()) {
 
     @BeforeEach
-    fun setup() {
+    override fun setup() {
+        super.setup()
         reset(0, 0, 1, 1)
     }
 

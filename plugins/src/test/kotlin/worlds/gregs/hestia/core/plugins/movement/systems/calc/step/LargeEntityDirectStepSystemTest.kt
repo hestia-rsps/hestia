@@ -4,13 +4,14 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import worlds.gregs.hestia.core.plugins.entity.systems.step
-import worlds.gregs.hestia.core.plugins.movement.systems.calc.PathTester
 import worlds.gregs.hestia.core.plugins.movement.systems.calc.DirectStepSystem
+import worlds.gregs.hestia.core.plugins.movement.systems.calc.PathTester
 
 internal class LargeEntityDirectStepSystemTest : PathTester(false, DirectStepSystem()) {
 
     @BeforeEach
-    fun setup() {
+    override fun setup() {
+        super.setup()
         reset(0, 0, 1, 2)
     }
 

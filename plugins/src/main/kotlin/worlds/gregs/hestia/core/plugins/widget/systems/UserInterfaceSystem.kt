@@ -2,6 +2,7 @@ package worlds.gregs.hestia.core.plugins.widget.systems
 
 import com.artemis.Entity
 import com.artemis.utils.Bag
+import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.event.common.Subscribe
 import world.gregs.hestia.core.network.protocol.encoders.messages.Chat
 import worlds.gregs.hestia.api.widget.GameFrame
@@ -11,8 +12,12 @@ import worlds.gregs.hestia.api.widget.components.Frame
 import worlds.gregs.hestia.api.widget.components.FullScreenWidget
 import worlds.gregs.hestia.api.widget.components.ScreenWidget
 import worlds.gregs.hestia.artemis.events.ButtonClick
+import worlds.gregs.hestia.artemis.events.CloseDialogue
 import worlds.gregs.hestia.artemis.events.send
+import worlds.gregs.hestia.core.plugins.widget.components.frame.chat.DialogueBox
+import worlds.gregs.hestia.core.plugins.widget.events.ScreenClosed
 import worlds.gregs.hestia.core.plugins.widget.systems.frame.GameFrameSystem
+import worlds.gregs.hestia.core.plugins.widget.systems.frame.chat.DialogueBoxSystem
 import kotlin.reflect.KClass
 
 class UserInterfaceSystem : UserInterface() {
@@ -21,6 +26,7 @@ class UserInterfaceSystem : UserInterface() {
      * List of all widgets
      */
     private lateinit var widgets: List<Widget>
+    private lateinit var es: EventSystem
 
     override fun initialize() {
         super.initialize()
@@ -30,6 +36,17 @@ class UserInterfaceSystem : UserInterface() {
     @Subscribe
     private fun click(event: ButtonClick) {
         click(event.entityId, event.interfaceHash, event.widgetId, event.componentId, event.option)
+    }
+
+    /**
+     * Closes dialogue
+     */
+    @Subscribe
+    private fun closure(event: CloseDialogue) {
+        val (entityId) = event
+        if(contains(entityId, DialogueBoxSystem::class)) {
+            close(entityId, DialogueBox::class)
+        }
     }
 
     override fun click(entityId: Int, interfaceHash: Int, widgetId: Int, componentId: Int, option: Int) {
@@ -73,7 +90,7 @@ class UserInterfaceSystem : UserInterface() {
     }
 
     override fun contains(entityId: Int, clazz: KClass<out Widget>): Boolean {
-        return widgets.any { clazz.isInstance(it) && it.subscription.activeEntityIds.get(entityId) }
+        return widgets.any { clazz.isInstance(it) && it.subscription.activeEntityIds.get(entityId) }//Couldn't we just do ContentMap<>.has(entityId)
     }
 
     override fun close(entityId: Int, clazz: KClass<out Frame>) {
@@ -81,6 +98,9 @@ class UserInterfaceSystem : UserInterface() {
         val all = world.componentManager.getComponentsFor(entityId, Bag())
         all.filter { clazz.isInstance(it) }.forEach {
             edit.remove(it)
+            if(it is ScreenWidget) {
+                es.dispatch(ScreenClosed(entityId, it))
+            }
         }
     }
 
@@ -89,6 +109,7 @@ class UserInterfaceSystem : UserInterface() {
         val all = world.componentManager.getComponentsFor(entityId, Bag())
         all.filterIsInstance<ScreenWidget>().forEach {
             edit.remove(it)
+            es.dispatch(ScreenClosed(entityId, it))
         }
         all.filterIsInstance<FullScreenWidget>().forEach {
             if(it !is GameFrame) {//TODO handle better

@@ -2,7 +2,6 @@ package worlds.gregs.hestia.content
 
 import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.event.common.Event
-import worlds.gregs.hestia.artemis.events.ButtonClick
 import worlds.gregs.hestia.game.entity.components.Position
 
 data class FakeEvent(val option: String, val name: String) : Event
@@ -57,8 +56,6 @@ system {
     }
 
     dispose {
-        dialogue {
-        }
     }
     /*subscribe {
         insert {

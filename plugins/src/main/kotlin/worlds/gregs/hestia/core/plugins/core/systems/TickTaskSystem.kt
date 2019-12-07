@@ -2,8 +2,8 @@ package worlds.gregs.hestia.core.plugins.core.systems
 
 import com.artemis.BaseSystem
 import net.mostlyoriginal.api.event.common.Subscribe
+import worlds.gregs.hestia.artemis.events.TickTaskEvent
 import worlds.gregs.hestia.game.TickTask
-import worlds.gregs.hestia.artemis.events.TaskEvent
 import java.util.*
 
 class TickTaskSystem : BaseSystem() {
@@ -39,7 +39,7 @@ class TickTaskSystem : BaseSystem() {
     }
     
     @Subscribe
-    fun schedule(event: TaskEvent) {
+    fun schedule(event: TickTaskEvent) {
         schedule(event.delay, event.period, event.task)
     }
 

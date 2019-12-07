@@ -14,7 +14,7 @@ import worlds.gregs.hestia.api.widget.GameFrame
 import worlds.gregs.hestia.game.entity.components.Position
 import worlds.gregs.hestia.core.plugins.client.components.LastLoadedRegion
 import worlds.gregs.hestia.core.plugins.collision.components.Ghost
-import worlds.gregs.hestia.core.plugins.queue.components.SuspendingQueue
+import worlds.gregs.hestia.core.plugins.task.components.TaskQueue
 import worlds.gregs.hestia.core.plugins.widget.components.frame.chat.ChatBackground
 import worlds.gregs.hestia.core.plugins.widget.components.frame.chat.ChatBox
 import worlds.gregs.hestia.core.plugins.widget.components.frame.chat.ChatSettings
@@ -32,6 +32,6 @@ class PlayerFactory : ArchetypeFactory {
     override fun getBuilder(): ArchetypeBuilder {
         return ArchetypeBuilder().add(Player::class, ClientIndex::class, Renderable::class, Position::class, AppearanceData::class, DisplayName::class, Viewport::class, Mobile::class, LastLoadedRegion::class, Shift::class, Face::class, Ghost::class, GameFrame::class,
                 ClanChatTab::class, CombatStylesTab::class, EmotesTab::class, FriendsChatTab::class, FriendsListTab::class, InventoryTab::class, MagicSpellBookTab::class, MusicPlayerTab::class, NotesTab::class, OptionsTab::class, PrayerListTab::class, StatsTab::class, TaskSystemTab::class, WornEquipmentTab::class, QuestJournalsTab::class, LogoutTab::class, ChatSettings::class, ChatBox::class, ChatBackground::class, PrivateChat::class,
-                HealthOrb::class, PrayerOrb::class, EnergyOrb::class, SummoningOrb::class, SuspendingQueue::class)
+                HealthOrb::class, PrayerOrb::class, EnergyOrb::class, SummoningOrb::class, TaskQueue::class)
     }
 }

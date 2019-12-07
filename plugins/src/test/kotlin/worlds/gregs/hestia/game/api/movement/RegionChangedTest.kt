@@ -29,8 +29,8 @@ internal class RegionChangedTest : GameTest(WorldConfigurationBuilder().dependsO
     }
 
     @BeforeEach
-    override fun setUp() {
-        super.setUp()
+    override fun setup() {
+        super.setup()
         EntityFactory.add(RegionFactory())
     }
 

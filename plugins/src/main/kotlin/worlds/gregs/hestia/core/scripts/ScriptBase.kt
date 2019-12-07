@@ -6,12 +6,13 @@ import com.artemis.WorldConfigurationBuilder
 import com.artemis.annotations.Wire
 import net.mostlyoriginal.api.event.common.Event
 import worlds.gregs.hestia.api.dialogue.DialogueBase
+import worlds.gregs.hestia.api.task.Task
 import worlds.gregs.hestia.artemis.dsl.ArtemisEventListener
 import worlds.gregs.hestia.artemis.event.ExtendedEventDispatchStrategy
-import worlds.gregs.hestia.core.plugins.dialogue.components.DialogueQueue
+import worlds.gregs.hestia.core.plugins.task.systems.waitForScreen
 import worlds.gregs.hestia.core.scripts.dsl.*
-import worlds.gregs.hestia.game.queue.QueueContext
-import worlds.gregs.hestia.game.queue.QueueScope
+import worlds.gregs.hestia.game.task.DeferQueue
+import worlds.gregs.hestia.game.task.TaskPriority
 import kotlin.script.experimental.annotations.KotlinScript
 
 @KotlinScript(displayName = "Hestia Script", fileExtension = "script.kts", compilationConfiguration = ScriptConfiguration::class)
@@ -30,7 +31,7 @@ abstract class ScriptBase : ScriptBuilder() {
     /**
      * List of dialogue coroutines
      */
-    val dialogues = mutableMapOf<String, DialogueQueue>()
+    val dialogues = mutableMapOf<String, Task>()
 
     internal var dialogueBase: DialogueBase? = null
 
@@ -92,12 +93,18 @@ abstract class ScriptBase : ScriptBuilder() {
         }
     }
 
-    fun dialogue(name: String, action: DialogueQueue): String {
-        dialogues[name] = action
+    fun dialogue(name: String, priority: TaskPriority = TaskPriority.Normal, action: DeferQueue): String {
+        check(!dialogues.containsKey(name)) { "Dialogue '$name' already exists."}
+        dialogues[name] = queue(priority, action)
         return name
     }
 
-    fun dialogue(action: DialogueQueue) = action
+    private fun extension(queue: DeferQueue) = queue
 
-    fun <T: QueueContext> queue(action: suspend QueueScope<T>.() -> Unit) = action
+    /**
+     * If [priority] is [TaskPriority.Weak] then wait for screen to close before continuing
+     * @param priority The rule to start the task
+     * @param action The suspendable queue to process
+     */
+    fun queue(priority: TaskPriority = TaskPriority.Normal, action: DeferQueue) = Task(priority, if(priority == TaskPriority.Weak) extension { waitForScreen(); action() } else action)
 }

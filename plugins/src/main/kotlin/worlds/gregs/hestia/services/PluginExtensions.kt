@@ -2,7 +2,6 @@ package worlds.gregs.hestia.services
 
 import com.artemis.*
 import com.artemis.Aspect
-import org.apache.commons.text.WordUtils
 import kotlin.reflect.KClass
 
 /*
@@ -53,6 +52,6 @@ fun EntityEdit.remove(type: KClass<out Component>): EntityEdit {
     Generics
  */
 
-fun String.wrap(maxLength: Int = 45): List<String> {
-    return WordUtils.wrap(this, maxLength).split(System.lineSeparator())
-}
+//fun String.wrap(maxLength: Int = 45): List<String> {
+//    return WordUtils.wrap(this, maxLength).split(System.lineSeparator())
+//}

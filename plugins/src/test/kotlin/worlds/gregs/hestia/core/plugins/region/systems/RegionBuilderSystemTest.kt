@@ -16,8 +16,8 @@ internal class RegionBuilderSystemTest : GameTest(WorldConfigurationBuilder().wi
     private lateinit var system: RegionBuilderSystem
 
     @BeforeEach
-    override fun setUp() {
-        super.setUp()
+    override fun setup() {
+        super.setup()
         system = world.getSystem(RegionBuilderSystem::class)
         system.reset()
     }

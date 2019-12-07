@@ -22,7 +22,8 @@ ext {
 
     junit_version = "5.5.2"
     assertj_version = "3.14.0"
-    mockito_version = "1.10.19"
+    mockk_version = "1.9.3"
+    mockito_version = "2.0.2-beta"
     mockito_kotlin_version = "2.0.0-RC3"
 
     mainDependencies = [
@@ -63,6 +64,7 @@ ext {
     testDependencies = [
             jUnit        : "org.junit.jupiter:junit-jupiter-api:$junit_version",
             assertJ      : "org.assertj:assertj-core:$assertj_version",
+            mockk      : "io.mockk:mockk:$mockk_version",
             mockito      : "org.mockito:mockito-all:$mockito_version",
             mockitoKotlin: "com.nhaarman.mockitokotlin2:mockito-kotlin:$mockito_kotlin_version",
     ]

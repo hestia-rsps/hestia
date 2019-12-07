@@ -13,7 +13,8 @@ internal class RouteSystemTest : PathTester(true, PathSystem(), PathFinderSystem
 
 
     @BeforeEach
-    fun setup() {
+    override fun setup() {
+        super.setup()
         reset(0, 0, 1, 1)
     }
 

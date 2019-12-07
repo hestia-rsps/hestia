@@ -15,7 +15,8 @@ internal class MapCollisionSystemTest : MovementTester(false) {
     private var blocked: Array<Direction> = emptyArray()
 
     @BeforeEach
-    fun setup() {
+    override fun setup() {
+        super.setup()
         traverse = world.getSystem(MapCollisionSystem::class)
         reset(0, 0, 1, 1)
         blocked = emptyArray()

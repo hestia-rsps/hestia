@@ -1,9 +1,11 @@
 package worlds.gregs.hestia.core.plugins.widget.systems.screen
 
+import net.mostlyoriginal.api.event.common.Subscribe
 import world.gregs.hestia.core.network.protocol.messages.FriendsChatName
 import world.gregs.hestia.core.network.protocol.messages.FriendsChatSettings
 import worlds.gregs.hestia.GameServer
 import worlds.gregs.hestia.api.widget.UserInterface
+import worlds.gregs.hestia.artemis.events.StringEntered
 import worlds.gregs.hestia.core.plugins.widget.components.screen.FriendsChatSetup
 import worlds.gregs.hestia.core.plugins.widget.systems.BaseScreen
 import worlds.gregs.hestia.network.client.encoders.messages.Script
@@ -23,6 +25,13 @@ class FriendsChatSetupSystem : BaseScreen(FriendsChatSetup::class) {
         GameServer.worldSession?.write(FriendsChatSettings(entityId, ID shl 16, 0))
     }
 
+    @Subscribe
+    private fun chatPrefix(event: StringEntered) {
+        if(ui?.contains(event.entityId, FriendsChatSetupSystem::class) == true) {
+            GameServer.worldSession?.write(FriendsChatName(event.entityId, event.string))
+        }
+    }
+
     override fun click(entityId: Int, interfaceHash: Int, componentId: Int, option: Int) {
         when(componentId) {
             22 -> {//Chat name
@@ -38,9 +47,7 @@ class FriendsChatSetupSystem : BaseScreen(FriendsChatSetup::class) {
             23, 24, 25, 26, 33 -> {
                 GameServer.worldSession?.write(FriendsChatSettings(entityId, interfaceHash, option))
             }
-            3 -> {//Close
-                ui?.close(entityId)
-            }
+//            3 -> {}//Close
         }
     }
 

@@ -1,8 +1,7 @@
 package worlds.gregs.hestia.core.plugins.dialogue.systems.types
 
-import worlds.gregs.hestia.core.plugins.dialogue.components.DialogueContext
-import worlds.gregs.hestia.core.plugins.dialogue.components.EntityDialogue
-import worlds.gregs.hestia.game.queue.QueueScope
+import worlds.gregs.hestia.core.plugins.dialogue.systems.EntityDialogue
+import worlds.gregs.hestia.game.task.TaskScope
 import worlds.gregs.hestia.services.wrap
 
 data class PlayerDialogue(override val lines: List<String>, override val title: String?, val animation: Int) : EntityDialogue() {
@@ -11,9 +10,9 @@ data class PlayerDialogue(override val lines: List<String>, override val title: 
     }
 }
 
-suspend fun QueueScope<DialogueContext>.player(text: String, anim: Int = -1, title: String? = null) {
-    ctx.dialogue = PlayerDialogue(text.wrap(), title, anim)
-    suspend()
+suspend fun TaskScope.player(text: String, anim: Int = -1, title: String? = null) {
+    deferral = PlayerDialogue(text.wrap(), title, anim)
+    defer()
 }
 
 /*

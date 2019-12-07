@@ -28,7 +28,8 @@ internal class UserInterfaceSystemTest : GameTest(WorldConfigurationBuilder()) {
     }
 
     @BeforeEach
-    fun setup() {
+    override fun setup() {
+        super.setup()
         reset(widget)
         whenever(widget.getId(any())).thenReturn(11)
         whenever(system.subscription).thenReturn(mock())

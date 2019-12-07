@@ -30,8 +30,8 @@ internal class ChunkChangedTest : GameTest(WorldConfigurationBuilder().dependsOn
     }
 
     @BeforeEach
-    override fun setUp() {
-        super.setUp()
+    override fun setup() {
+        super.setup()
         EntityFactory.add(RegionFactory())
     }
 

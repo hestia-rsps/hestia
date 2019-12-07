@@ -4,19 +4,19 @@ import com.artemis.WorldConfigurationBuilder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import worlds.gregs.hestia.artemis.events.CreateRegion
+import worlds.gregs.hestia.core.archetypes.RegionFactory
+import worlds.gregs.hestia.core.plugins.region.systems.load.RegionCreation
 import worlds.gregs.hestia.game.GameTest
 import worlds.gregs.hestia.game.archetypes.EntityFactory
-import worlds.gregs.hestia.core.archetypes.RegionFactory
-import worlds.gregs.hestia.artemis.events.CreateRegion
 import worlds.gregs.hestia.game.entity.components.Position.Companion.regionId
-import worlds.gregs.hestia.core.plugins.region.systems.load.RegionCreation
 import worlds.gregs.hestia.services.getSystem
 
 internal class RegionsSystemTest : GameTest(WorldConfigurationBuilder().with(RegionsSystem(), RegionCreation())) {
 
     @BeforeEach
-    override fun setUp() {
-        super.setUp()
+    override fun setup() {
+        super.setup()
         EntityFactory.add(RegionFactory())
     }
 

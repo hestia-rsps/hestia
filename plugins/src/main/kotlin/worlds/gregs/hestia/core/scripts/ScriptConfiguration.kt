@@ -32,5 +32,6 @@ object ScriptConfiguration : ScriptCompilationConfiguration({
 
             "kotlin.*",
             "kotlinx.*",
+            "import kotlinx.coroutines.*",
             "net.mostlyoriginal.api.*")
 })

@@ -29,8 +29,8 @@ internal class RegionCleanSystemTest : GameTest(WorldConfigurationBuilder().with
     }
 
     @BeforeEach
-    override fun setUp() {
-        super.setUp()
+    override fun setup() {
+        super.setup()
         EntityFactory.add(RegionFactory())
         es.dispatch(CreateRegion(regionId(0, 0)))
         tick()

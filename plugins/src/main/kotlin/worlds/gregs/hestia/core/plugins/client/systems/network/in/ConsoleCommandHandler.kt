@@ -44,7 +44,7 @@ class ConsoleCommandHandler : MessageHandlerSystem<ConsoleCommand>() {
     private fun handle(entityId: Int, command: String, parts: List<String> = command.split(" ")) {
 
         if(command.contains(" ")) {
-            es.dispatch(Command(entityId, command, command.split(" ")[0]))
+            es.dispatch(Command(entityId, command.split(" ")[0], command))
         } else {
             es.dispatch(Command(entityId, command))
         }
@@ -215,11 +215,13 @@ class ConsoleCommandHandler : MessageHandlerSystem<ConsoleCommand>() {
             "bot" -> {
                 val position = entity.getComponent(Position::class)!!
                 var count = 0
-                for (y in position.y.nearby(11)) {
-                    for (x in position.x.nearby(11)) {
-                        es.dispatch(CreateBot("Bot ${count++}", x, y))
-                    }
-                }
+                    es.dispatch(CreateBot("Bot ${count++}", position.x, position.y + 200))
+                println("Created ${world.players().get(world.players().size() - 1)}")//16762
+//                for (y in position.y.nearby(11)) {
+//                    for (x in position.x.nearby(11)) {
+//                        es.dispatch(CreateBot("Bot ${count++}", x, y))
+//                    }
+//                }
                 /*es.dispatch(CreateBot("Bot ${count++}", position.x, position.y + 1))
                 es.dispatch(CreateBot("Bot ${count++}", position.x, position.y + 2))
                 es.dispatch(CreateBot("Bot ${count++}", position.x, position.y + 3))

@@ -4,16 +4,16 @@ import com.artemis.Entity
 import com.artemis.WorldConfigurationBuilder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import worlds.gregs.hestia.game.entity.components.Position
-import worlds.gregs.hestia.game.GameTest
 import worlds.gregs.hestia.api.movement.Mobile
+import worlds.gregs.hestia.game.GameTest
+import worlds.gregs.hestia.game.entity.components.Position
 import worlds.gregs.hestia.services.getComponent
 
 internal class MobileSystemTest : GameTest(WorldConfigurationBuilder().with(MobileSystem())) {
 
     @Test
     fun process() {
-        val entity = setup()
+        val entity = create()
         //Adding
         val mobile = Mobile()
         entity.edit().add(mobile)
@@ -43,7 +43,7 @@ internal class MobileSystemTest : GameTest(WorldConfigurationBuilder().with(Mobi
         assertThat(mobile.plane).isEqualTo(plane)
     }
 
-    private fun setup(): Entity {
+    private fun create(): Entity {
         val entity = world.createEntity()
         entity.edit().add(Position(0, 0, 0))
         tick()

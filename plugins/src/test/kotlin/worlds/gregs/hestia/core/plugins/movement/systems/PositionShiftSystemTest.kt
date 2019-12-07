@@ -4,16 +4,16 @@ import com.artemis.Entity
 import com.artemis.WorldConfigurationBuilder
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
-import worlds.gregs.hestia.game.entity.components.Position
 import worlds.gregs.hestia.api.movement.components.Shift
 import worlds.gregs.hestia.game.GameTest
+import worlds.gregs.hestia.game.entity.components.Position
 import worlds.gregs.hestia.services.getComponent
 
 internal class PositionShiftSystemTest : GameTest(WorldConfigurationBuilder().with(PositionShiftSystem())) {
 
     @Test
     fun process() {
-        val entity = setup()
+        val entity = create()
         val position = entity.getComponent(Position::class)!!
         check(position, 0, 0, 0)
         //Addition
@@ -32,7 +32,7 @@ internal class PositionShiftSystemTest : GameTest(WorldConfigurationBuilder().wi
         Assertions.assertThat(position.plane).isEqualTo(plane)
     }
 
-    private fun setup(): Entity {
+    private fun create(): Entity {
         val entity = world.createEntity()
         entity.edit().add(Position(0, 0, 0))
         tick()

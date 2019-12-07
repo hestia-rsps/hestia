@@ -6,15 +6,18 @@ import net.mostlyoriginal.api.event.common.Event
 import net.mostlyoriginal.api.system.core.PassiveSystem
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.fail
 import org.mockito.Matchers.anyInt
 import worlds.gregs.hestia.api.dialogue.DialogueBase
+import worlds.gregs.hestia.api.task.Task
 import worlds.gregs.hestia.artemis.event.ExtendedEventDispatchStrategy
-import worlds.gregs.hestia.core.plugins.dialogue.components.DialogueQueue
-import worlds.gregs.hestia.game.queue.QueueScope
+import worlds.gregs.hestia.game.task.DeferQueue
+import worlds.gregs.hestia.game.task.TaskPriority
+import worlds.gregs.hestia.game.task.TaskScope
 import worlds.gregs.hestia.services.Aspect
 
 internal class ScriptBaseTest {
@@ -84,21 +87,23 @@ internal class ScriptBaseTest {
     fun `Add named dialogue`() {
         //Given
         val name = "name"
-        val action = mock<DialogueQueue>()
+        val action = mock<DeferQueue>()
         //When
-        script.dialogue(name, action)
+        script.dialogue(name, TaskPriority.Normal, action)
         //Then
-        assertThat(script.dialogues).containsEntry(name, action)
+        assertThat(script.dialogues).containsEntry(name, Task(TaskPriority.Normal, action))
     }
 
     @Test
-    fun `Doesn't add unnamed dialogue`() {
+    fun `Duplicate dialogue name throws exception`() {
         //Given
-        val action = mock<DialogueQueue>()
-        //When
-        script.dialogue(action)
+        val name = "name"
+        val action = mock<DeferQueue>()
+        script.dialogue(name, TaskPriority.Weak, action)
         //Then
-        assertThat(script.dialogues).isEmpty()
+        assertThrows<IllegalStateException> {
+            script.dialogue(name, TaskPriority.Weak, action)
+        }
     }
 
     @Test
@@ -136,7 +141,7 @@ internal class ScriptBaseTest {
     fun `Registers dialogues`() {
         //Given
         val dialogueSystem = mock<DialogueBase>()
-        val dialogue = mock<DialogueQueue>()
+        val dialogue = Task(TaskPriority.Weak) {}
         val name = "name"
         script.dialogues[name] = dialogue
         script.dialogueBase = dialogueSystem
@@ -151,15 +156,29 @@ internal class ScriptBaseTest {
     }
 
     @Test
-    fun `Queue returns self`() {
+    fun `Queue returns self if priority is normal or strong`() {
         //Given
-        val action: suspend QueueScope<Nothing>.() -> Unit = {
+        val action: suspend TaskScope.() -> Unit = {
             fail("Action shouldn't have been called.")
         }
         //When
-        val queue = script.queue(action)
+        val task1 = script.queue(TaskPriority.Normal, action)
+        val task2 = script.queue(TaskPriority.Strong, action)
         //Then
-        assertEquals(action, queue)
+        assertEquals(action, task1.queue)
+        assertEquals(action, task2.queue)
+    }
+
+    @Test
+    fun `Queue appends screen suspension if weak`() {
+        //Given
+        val action: suspend TaskScope.() -> Unit = {
+            fail("Action shouldn't have been called.")
+        }
+        //When
+        val task = script.queue(TaskPriority.Weak, action)
+        //Then
+        assertNotEquals(action, task.queue)
     }
 
 }

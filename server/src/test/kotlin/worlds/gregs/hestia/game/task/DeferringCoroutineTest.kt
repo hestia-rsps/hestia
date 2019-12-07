@@ -1,4 +1,4 @@
-package worlds.gregs.hestia.game.queue
+package worlds.gregs.hestia.game.task
 
 import com.nhaarman.mockitokotlin2.eq
 import com.nhaarman.mockitokotlin2.mock
@@ -17,36 +17,33 @@ import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.coroutines.resume
 import kotlin.coroutines.resumeWithException
 
-internal class SuspendingCoroutineTest {
+internal class DeferringCoroutineTest {
 
-
-    lateinit var context: QueueContext
-    lateinit var coroutine: SuspendingCoroutine<QueueContext>
+    lateinit var coroutine: DeferringCoroutine
     lateinit var continuation: Continuation<Unit>
-    lateinit var scope: suspend QueueScope<QueueContext>.() -> Unit
+    lateinit var scope: suspend TaskScope.() -> Unit
 
     @BeforeEach
     fun setup() {
         continuation = mock()
         scope = mock()
-        context = mock()
-        coroutine = SuspendingCoroutine(EmptyCoroutineContext, scope, context)
+        coroutine = DeferringCoroutine(EmptyCoroutineContext, scope, TaskPriority.Weak)
         coroutine.nextStep = continuation
     }
 
     @Test
     fun `Starting state is initial`() {
         //Then
-        assertEquals(coroutine.state, SuspendingCoroutine.State.INITIAL)
+        assertEquals(coroutine.state, DeferringCoroutine.State.INITIAL)
         assertNull(coroutine.computeContinuation)
     }
 
     @Test
     fun `Next suspends`() {
         //Given
-        coroutine.state = SuspendingCoroutine.State.INITIAL
+        coroutine.state = DeferringCoroutine.State.INITIAL
         whenever(continuation.resume(eq(Unit))).then {
-            assertEquals(coroutine.state, SuspendingCoroutine.State.COMPUTING)
+            assertEquals(coroutine.state, DeferringCoroutine.State.COMPUTING)
             coroutine.resumeWith(Result.success(Unit))
         }
         //When
@@ -54,7 +51,7 @@ internal class SuspendingCoroutineTest {
             coroutine.next()
         }
         //Then
-        assertEquals(coroutine.state, SuspendingCoroutine.State.INITIAL)
+        assertEquals(coroutine.state, DeferringCoroutine.State.INITIAL)
         Assertions.assertNotNull(coroutine.computeContinuation)
         verify(continuation).resume(eq(Unit))
     }
@@ -62,9 +59,9 @@ internal class SuspendingCoroutineTest {
     @Test
     fun `Next failure cancels`() {
         //Given
-        coroutine.state = SuspendingCoroutine.State.INITIAL
+        coroutine.state = DeferringCoroutine.State.INITIAL
         whenever(continuation.resume(eq(Unit))).then {
-            assertEquals(coroutine.state, SuspendingCoroutine.State.COMPUTING)
+            assertEquals(coroutine.state, DeferringCoroutine.State.COMPUTING)
             coroutine.resumeWithException(CancellationException("Cancelled"))
         }
         //When
@@ -74,23 +71,23 @@ internal class SuspendingCoroutineTest {
             }
         }
         //Then
-        assertEquals(coroutine.state, SuspendingCoroutine.State.END)
-        Assertions.assertTrue(coroutine.ended())
+        assertEquals(coroutine.state, DeferringCoroutine.State.END)
+        Assertions.assertTrue(coroutine.stopped())
         verify(continuation).resume(eq(Unit))
     }
 
     @Test
-    fun `End cancels`() {
+    fun `End cancels`() = runBlocking {
         //Given
-        coroutine.state = SuspendingCoroutine.State.INITIAL
+        coroutine.state = DeferringCoroutine.State.INITIAL
         whenever(continuation.resume(eq(Unit))).then {
             coroutine.resumeWith(Result.success(Unit))
         }
         //When
-        coroutine.end()
+        coroutine.stop(false)
         //Then
-        assertEquals(SuspendingCoroutine.State.END, coroutine.state)
+        assertEquals(DeferringCoroutine.State.END, coroutine.state)
         assertNull(coroutine.nextStep)
-        assert(coroutine.ended())
+        assert(coroutine.stopped())
     }
 }

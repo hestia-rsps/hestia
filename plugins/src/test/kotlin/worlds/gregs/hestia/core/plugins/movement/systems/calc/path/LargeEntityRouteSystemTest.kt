@@ -11,7 +11,8 @@ import worlds.gregs.hestia.core.plugins.movement.systems.calc.PathTester
 internal class LargeEntityRouteSystemTest : PathTester(true, PathSystem(), PathFinderSystem()) {
 
     @BeforeEach
-    fun setup() {
+    override fun setup() {
+        super.setup()
         reset(0 ,0, 1, 2)
     }
 

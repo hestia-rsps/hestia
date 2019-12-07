@@ -1,14 +1,8 @@
 package worlds.gregs.hestia.core.plugins.dialogue.components
 
-import worlds.gregs.hestia.game.queue.QueueScope
+import worlds.gregs.hestia.game.task.DeferralType
 
 /**
- * A suspendable queue of [Dialogue]'s
- * The current active [Dialogue] is found inside [DialogueContext]
+ * Dialogue stores data to be sent & retrieved from the client during a [Queue]
  */
-typealias DialogueQueue = suspend QueueScope<DialogueContext>.() -> Unit
-
-/**
- * Dialogue stores data to be sent & retrieved from the client during a [DialogueQueue]
- */
-interface Dialogue
+interface Dialogue : DeferralType

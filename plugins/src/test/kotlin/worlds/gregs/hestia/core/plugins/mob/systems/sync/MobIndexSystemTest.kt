@@ -19,8 +19,8 @@ import worlds.gregs.hestia.services.getSystem
 internal class MobIndexSystemTest : GameTest(WorldConfigurationBuilder().with(MobCreation(), MobIndexSystem())) {
 
     @BeforeEach
-    override fun setUp() {
-        super.setUp()
+    override fun setup() {
+        super.setup()
         EntityFactory.add(MobFactory())
     }
 

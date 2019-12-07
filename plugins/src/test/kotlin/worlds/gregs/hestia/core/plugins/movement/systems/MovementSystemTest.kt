@@ -20,8 +20,8 @@ internal class MovementSystemTest : GameTest(WorldConfigurationBuilder().depends
 
 
     @BeforeEach
-    override fun setUp() {
-        super.setUp()
+    override fun setup() {
+        super.setup()
         EntityFactory.add(RegionFactory())
     }
 

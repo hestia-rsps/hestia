@@ -1,61 +1,57 @@
-package worlds.gregs.hestia.game.queue
+package worlds.gregs.hestia.game.task
 
 import kotlinx.coroutines.cancel
 import java.util.*
 import kotlin.coroutines.*
 
-class SuspendingCoroutine<T : QueueContext>(override val context: CoroutineContext, block: suspend QueueScope<T>.() -> Unit, override val ctx: T) : Continuation<Unit>, QueueScope<T> {
+class DeferringCoroutine(override val context: CoroutineContext, block: suspend TaskScope.() -> Unit, override val priority: TaskPriority) : Continuation<Unit>, TaskScope {
 
     internal enum class State { INITIAL, COMPUTING, END }
 
     internal var state: State = State.INITIAL
     internal var nextStep: Continuation<Unit>? = block.createCoroutine(receiver = this, completion = this)
-    var computeContinuation: Continuation<T>? = null
+    var computeContinuation: Continuation<DeferralType?>? = null
+    override var deferral: DeferralType? = null
 
-    /**
-     * @return Whether the coroutine has computed the last step.
-     */
-    fun ended() = nextStep == null
+    override fun stopped() = nextStep == null
 
-    override suspend fun suspend() = suspendCoroutine<Unit> { c ->
+    override suspend fun defer() = suspendCoroutine<Unit> { c ->
         nextStep = c
         resumeIterator()
     }
 
-    override fun end() {
+    override suspend fun stop(block: Boolean) {
         context.cancel()
         nextStep = null
         state = State.END
+        if(block) {
+            defer()
+        }
     }
 
-    /**
-     * Continues the dialogue
-     * @return Generic optional response
-     */
-    suspend fun next(): T {
+    override suspend fun next(): DeferralType? {
         return when (state) {
             State.INITIAL -> suspendCoroutine { c ->
                 state = State.COMPUTING
                 computeContinuation = c
                 nextStep!!.resume(Unit)
-                ctx
+                deferral
             }
             State.END -> throw NoSuchElementException()
             else -> throw IllegalStateException("Recursive dependency detected -- already computing next")
         }
     }
 
-    protected fun resumeIterator() {
+    private fun resumeIterator() {
         when (state) {
             State.COMPUTING -> {
                 state = State.INITIAL
-                computeContinuation?.resume(ctx)
+                computeContinuation?.resume(deferral)
             }
             else -> throw IllegalStateException("Was not supposed to be computing next value. Spurious yield?")
         }
     }
 
-    // Completion continuation implementation
     override fun resumeWith(result: Result<Unit>) {
         nextStep = null
         result
