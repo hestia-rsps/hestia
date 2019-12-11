@@ -2,11 +2,11 @@ package worlds.gregs.hestia.game
 
 import com.artemis.*
 import com.artemis.utils.IntBag
-import worlds.gregs.hestia.services.Aspect
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import worlds.gregs.hestia.game.entity.components.Position
+import worlds.gregs.hestia.services.Aspect
 import worlds.gregs.hestia.services.add
 
 internal class EntityTest {
@@ -18,13 +18,12 @@ internal class EntityTest {
     fun setUp() {
         val config = WorldConfigurationBuilder().build()
         world = World(config)
-//        test = ArchetypeBuilder().add(Position::class).build(world)
+        test = ArchetypeBuilder().add(Position::class).build(world)
     }
 
     @Test
     fun test() {
         world.create(test)
-
     }
 
     @Test

@@ -10,6 +10,7 @@ import net.mostlyoriginal.api.system.core.PassiveSystem
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions.assertTimeout
 import org.junit.jupiter.api.Test
+import worlds.gregs.hestia.artemis.event.PollingEventDispatcher
 import java.time.Duration
 import java.util.*
 

@@ -4,7 +4,6 @@ import com.artemis.World
 import com.artemis.WorldConfigurationBuilder
 import com.artemis.link.EntityLinkManager
 import io.netty.channel.ChannelHandlerContext
-import net.fbridault.eeel.EEELPlugin
 import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.event.common.SubscribeAnnotationFinder
 import org.slf4j.LoggerFactory
@@ -22,11 +21,11 @@ import world.gregs.hestia.core.network.protocol.Details
 import world.gregs.hestia.core.network.server.Network
 import world.gregs.hestia.core.services.Loader
 import worlds.gregs.hestia.api.client.ClientPlugin
-import worlds.gregs.hestia.artemis.PollingEventDispatcher
+import worlds.gregs.hestia.artemis.event.PollingEventDispatcher
 import worlds.gregs.hestia.game.Engine
 import worlds.gregs.hestia.game.archetypes.EntityFactory
 import worlds.gregs.hestia.game.map.MapPlugin
-import worlds.gregs.hestia.game.plugin.Plugin.Companion.EVENT_PROCESS_PRORITY
+import worlds.gregs.hestia.game.plugin.Plugin.Companion.EVENT_PROCESS_PRIORITY
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.PACKET_PROCESS_PRIORITY
 import worlds.gregs.hestia.game.plugin.PluginLoader
 import worlds.gregs.hestia.network.WorldChangeListener
@@ -47,10 +46,12 @@ class GameServer(worldDetails: Details) : Engine(), WorldChangeListener {
     private val socialDecoders = ArrayList<Triple<Int, Int, Boolean>>()
 
     private lateinit var network: Network
-    var server: World? = null//TODO rename to world after kotlin 1.3.30 fix
+    var server: World? = null//TODO rename to world after kotlin fix
 
     override fun tick(time: Long, delta: Float) {
         val took = measureNanoTime {
+//            println("Tick $delta")
+            server?.setDelta(600f)
             server?.process()
         }
         if (took > 1000000L) {
@@ -84,25 +85,27 @@ class GameServer(worldDetails: Details) : Engine(), WorldChangeListener {
         if (!isRunning) {
             //Single init
             isRunning = true
+            PluginLoader.init()
             //Configure game world
             val builder = WorldConfigurationBuilder().with(EntityLinkManager())
-            builder.with(EVENT_PROCESS_PRORITY, eventSystem)
-            //Load plugin folder
+            builder.with(EVENT_PROCESS_PRIORITY, eventSystem)
+            //Load archetypes folder
             val pluginLoader = Loader(Settings.getString("pluginPath"))
             //Load plugins
-            PluginLoader().setup(builder, pluginLoader)
-//            builder.register(BenchmarkStrategy())
-            builder.dependsOn(EEELPlugin::class.java)
-            //Temp
-            builder.dependsOn(MapPlugin::class.java)
-            builder.dependsOn(ClientPlugin::class.java)
-            builder.with(PACKET_PROCESS_PRIORITY, gameMessages)
+            PluginLoader.setup(builder)
 
+//            builder.register(BenchmarkStrategy())
+            //Temp
+            builder.dependsOn(MapPlugin::class.java)//TODO move to plugins/core
+            builder.dependsOn(ClientPlugin::class.java)//TODO remove
+            builder.with(PACKET_PROCESS_PRIORITY, gameMessages)
             //Build world config
             val config = builder.build()
             //Initialize world
             val server = World(config)
             this.server = server
+            //
+            PluginLoader.init(server, dispatcher)
             //Load entity archetypes
             EntityFactory.init(server)
             EntityFactory.load(pluginLoader)
@@ -141,7 +144,8 @@ class GameServer(worldDetails: Details) : Engine(), WorldChangeListener {
 
     companion object {
         private val loginSessions = HashMap<Int, ChannelHandlerContext>()
-        val eventSystem = EventSystem(PollingEventDispatcher(), SubscribeAnnotationFinder())
+        val dispatcher = PollingEventDispatcher()
+        val eventSystem = EventSystem(dispatcher, SubscribeAnnotationFinder())
         val gameMessages = ClientMessages(loginSessions)
         lateinit var server: GameServer
         var worldSession: Session? = null//TODO handle better
