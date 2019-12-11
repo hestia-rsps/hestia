@@ -1,0 +1,9 @@
+dependencies {
+    compile project(':server')
+    testCompile project(":server")
+    runtimeClasspath project(":server")
+
+    compile project(':plugins')
+    testCompile project(":plugins")
+    runtimeClasspath project(":plugins")
+}

@@ -10,13 +10,13 @@ import worlds.gregs.hestia.game.entity.components.Position.Companion.regionId
 import worlds.gregs.hestia.api.movement.systems.ChunkChanged
 import worlds.gregs.hestia.game.GameTest
 import worlds.gregs.hestia.game.archetypes.EntityFactory
-import worlds.gregs.hestia.game.archetypes.RegionFactory
+import worlds.gregs.hestia.core.archetypes.RegionFactory
 import worlds.gregs.hestia.artemis.events.CreateRegion
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.PRE_SHIFT_PRIORITY
-import worlds.gregs.hestia.game.plugins.MovementPlugin
-import worlds.gregs.hestia.game.plugins.RegionPlugin
-import worlds.gregs.hestia.game.plugins.entity.systems.move
-import worlds.gregs.hestia.game.plugins.entity.systems.step
+import worlds.gregs.hestia.core.plugins.MovementPlugin
+import worlds.gregs.hestia.core.plugins.RegionPlugin
+import worlds.gregs.hestia.core.plugins.entity.systems.move
+import worlds.gregs.hestia.core.plugins.entity.systems.step
 import worlds.gregs.hestia.api.movement.Mobile
 import worlds.gregs.hestia.services.dependsOn
 
@@ -30,8 +30,8 @@ internal class ChunkChangedTest : GameTest(WorldConfigurationBuilder().dependsOn
     }
 
     @BeforeEach
-    override fun setUp() {
-        super.setUp()
+    override fun setup() {
+        super.setup()
         EntityFactory.add(RegionFactory())
     }
 
