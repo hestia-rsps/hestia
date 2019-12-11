@@ -1,2 +1,2 @@
-include 'content', 'plugins', 'server'
+include 'content', 'core', 'engine'
 include 'tools'
