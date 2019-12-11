@@ -8,8 +8,8 @@ import com.artemis.link.EntityLinkManager
 import com.artemis.link.LinkAdapter
 import com.artemis.utils.Bag
 import org.junit.jupiter.api.Test
-import worlds.gregs.hestia.core.plugins.movement.components.RunToggled
-import worlds.gregs.hestia.services.getComponent
+import worlds.gregs.hestia.core.world.movement.components.RunToggled
+import worlds.gregs.hestia.core.getComponent
 import worlds.gregs.hestia.services.getSystem
 import worlds.gregs.hestia.tools.PlayerTester
 

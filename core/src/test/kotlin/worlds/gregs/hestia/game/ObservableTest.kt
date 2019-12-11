@@ -4,8 +4,8 @@ import com.artemis.Component
 import com.artemis.WorldConfigurationBuilder
 import com.artemis.annotations.PooledWeaver
 import org.junit.jupiter.api.Test
-import worlds.gregs.hestia.services.getComponent
-import worlds.gregs.hestia.services.remove
+import worlds.gregs.hestia.core.getComponent
+import worlds.gregs.hestia.core.remove
 
 class ObservableTest : GameTest(WorldConfigurationBuilder()) {
 

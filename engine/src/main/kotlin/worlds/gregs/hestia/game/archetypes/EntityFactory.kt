@@ -28,11 +28,12 @@ object EntityFactory {
     fun load(loader: Loader) {
         var count = 0
         val time = measureNanoTime {
-            val factories = loader.load<ArchetypeFactory>("worlds.gregs.hestia.core.archetypes")
-            factories.forEach { factory ->
-                add(factory)
-            }
-            count = factories.size
+            //FIXME
+//            val factories = loader.load<ArchetypeFactory>("worlds.gregs.hestia.core.archetypes")
+//            factories.forEach { factory ->
+//                add(factory)
+//            }
+//            count = factories.size
         }
         logger.debug("$count ${"archetype".plural(count)} loaded in ${time / 1000000}ms")
     }

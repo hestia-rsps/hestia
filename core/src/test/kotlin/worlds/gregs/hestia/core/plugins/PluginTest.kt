@@ -6,6 +6,15 @@ import com.artemis.WorldConfigurationBuilder
 import net.mostlyoriginal.api.event.common.EventSystem
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
+import worlds.gregs.hestia.core.client.ClientPlugin
+import worlds.gregs.hestia.core.entity.EntityPlugin
+import worlds.gregs.hestia.core.entity.mob.MobPlugin
+import worlds.gregs.hestia.core.entity.player.PlayerPlugin
+import worlds.gregs.hestia.core.misc.CorePlugin
+import worlds.gregs.hestia.core.world.land.LandPlugin
+import worlds.gregs.hestia.core.world.map.MapPlugin
+import worlds.gregs.hestia.core.world.movement.MovementPlugin
+import worlds.gregs.hestia.core.world.region.RegionPlugin
 import worlds.gregs.hestia.game.GameTest
 
 internal class PluginTest : GameTest(WorldConfigurationBuilder()) {

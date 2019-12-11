@@ -5,11 +5,11 @@ import com.artemis.World
 import com.artemis.WorldConfigurationBuilder
 import com.artemis.annotations.Wire
 import net.mostlyoriginal.api.event.common.Event
-import worlds.gregs.hestia.api.dialogue.DialogueBase
-import worlds.gregs.hestia.api.task.Task
+import worlds.gregs.hestia.core.task.model.Task
 import worlds.gregs.hestia.artemis.dsl.ArtemisEventListener
 import worlds.gregs.hestia.artemis.event.ExtendedEventDispatchStrategy
-import worlds.gregs.hestia.core.plugins.task.systems.waitForScreen
+import worlds.gregs.hestia.core.display.dialogue.api.DialogueBase
+import worlds.gregs.hestia.core.task.systems.waitForScreen
 import worlds.gregs.hestia.core.scripts.dsl.*
 import worlds.gregs.hestia.game.task.DeferQueue
 import worlds.gregs.hestia.game.task.TaskPriority
@@ -106,5 +106,5 @@ abstract class ScriptBase : ScriptBuilder() {
      * @param priority The rule to start the task
      * @param action The suspendable queue to process
      */
-    fun queue(priority: TaskPriority = TaskPriority.Normal, action: DeferQueue) = Task(priority, if(priority == TaskPriority.Weak) extension { waitForScreen(); action() } else action)
+    fun queue(priority: TaskPriority = TaskPriority.Normal, action: DeferQueue) = Task(priority, if (priority == TaskPriority.Weak) extension { waitForScreen(); action() } else action)
 }

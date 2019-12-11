@@ -12,9 +12,9 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.fail
 import org.mockito.Matchers.anyInt
-import worlds.gregs.hestia.api.dialogue.DialogueBase
-import worlds.gregs.hestia.api.task.Task
+import worlds.gregs.hestia.core.task.model.Task
 import worlds.gregs.hestia.artemis.event.ExtendedEventDispatchStrategy
+import worlds.gregs.hestia.core.display.dialogue.api.DialogueBase
 import worlds.gregs.hestia.game.task.DeferQueue
 import worlds.gregs.hestia.game.task.TaskPriority
 import worlds.gregs.hestia.game.task.TaskScope

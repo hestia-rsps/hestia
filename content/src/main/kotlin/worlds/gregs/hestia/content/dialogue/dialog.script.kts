@@ -1,10 +1,10 @@
 package worlds.gregs.hestia.content.dialogue
 
-import worlds.gregs.hestia.api.dialogue.DialogueBase
-import worlds.gregs.hestia.core.plugins.dialogue.systems.types.item
-import worlds.gregs.hestia.core.plugins.dialogue.systems.types.mob
-import worlds.gregs.hestia.core.plugins.dialogue.systems.types.options
-import worlds.gregs.hestia.core.plugins.dialogue.systems.types.player
+import worlds.gregs.hestia.core.display.dialogue.api.DialogueBase
+import worlds.gregs.hestia.core.display.dialogue.systems.types.item
+import worlds.gregs.hestia.core.display.dialogue.systems.types.mob
+import worlds.gregs.hestia.core.display.dialogue.systems.types.options
+import worlds.gregs.hestia.core.display.dialogue.systems.types.player
 import worlds.gregs.hestia.game.task.DeferQueue
 import worlds.gregs.hestia.game.task.TaskPriority
 import worlds.gregs.hestia.game.task.TaskScope

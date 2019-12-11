@@ -5,7 +5,7 @@ import com.nhaarman.mockitokotlin2.mock
 import com.nhaarman.mockitokotlin2.verify
 import com.nhaarman.mockitokotlin2.whenever
 import org.junit.jupiter.api.Test
-import worlds.gregs.hestia.api.dialogue.DialogueBase
+import worlds.gregs.hestia.core.display.dialogue.api.DialogueBase
 import worlds.gregs.hestia.artemis.events.Command
 import worlds.gregs.hestia.core.scripts.ScriptBase
 import worlds.gregs.hestia.scripts.ScriptTesterMock
