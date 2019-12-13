@@ -2,9 +2,9 @@ package worlds.gregs.hestia.core.world.region.logic.systems
 
 import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
-import worlds.gregs.hestia.api.region.RegionPriority
-import worlds.gregs.hestia.api.region.Regions
-import worlds.gregs.hestia.core.world.region.components.RegionPriorities
+import worlds.gregs.hestia.core.world.region.api.RegionPriority
+import worlds.gregs.hestia.core.world.region.api.Regions
+import worlds.gregs.hestia.core.world.region.model.components.RegionPriorities
 
 @Wire(failOnNull = false)
 class RegionPrioritySystem : RegionPriority() {

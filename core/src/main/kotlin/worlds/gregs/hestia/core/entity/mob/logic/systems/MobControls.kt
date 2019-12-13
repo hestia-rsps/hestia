@@ -1,7 +1,7 @@
 package worlds.gregs.hestia.core.entity.mob.logic.systems
 
 import com.artemis.Entity
-import worlds.gregs.hestia.api.client.update.components.ModelChange
+import worlds.gregs.hestia.core.display.update.model.components.ModelChange
 
 class MobControls
 /**

@@ -4,12 +4,12 @@ import com.artemis.WorldConfigurationBuilder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import worlds.gregs.hestia.game.GameTest
-import worlds.gregs.hestia.game.map.Chunk.getRotatedChunkPlane
-import worlds.gregs.hestia.game.map.Chunk.getRotatedChunkRotation
-import worlds.gregs.hestia.game.map.Chunk.getRotatedChunkX
-import worlds.gregs.hestia.game.map.Chunk.getRotatedChunkY
-import worlds.gregs.hestia.services.getSystem
+import worlds.gregs.hestia.GameTest
+import worlds.gregs.hestia.core.world.map.model.Chunk.getRotatedChunkPlane
+import worlds.gregs.hestia.core.world.map.model.Chunk.getRotatedChunkRotation
+import worlds.gregs.hestia.core.world.map.model.Chunk.getRotatedChunkX
+import worlds.gregs.hestia.core.world.map.model.Chunk.getRotatedChunkY
+import worlds.gregs.hestia.service.getSystem
 
 internal class RegionBuilderSystemTest : GameTest(WorldConfigurationBuilder().with(RegionBuilderSystem())) {
 

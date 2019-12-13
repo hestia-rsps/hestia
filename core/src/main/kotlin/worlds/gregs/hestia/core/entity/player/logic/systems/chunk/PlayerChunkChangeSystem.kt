@@ -1,9 +1,9 @@
 package worlds.gregs.hestia.core.entity.player.logic.systems.chunk
 
 import net.mostlyoriginal.api.event.common.EventSystem
-import worlds.gregs.hestia.api.movement.systems.ChunkChanged
-import worlds.gregs.hestia.api.player.Player
-import worlds.gregs.hestia.artemis.events.PlayerChunkChanged
+import worlds.gregs.hestia.core.world.movement.api.systems.ChunkChanged
+import worlds.gregs.hestia.game.entity.Player
+import worlds.gregs.hestia.core.entity.player.model.events.PlayerChunkChanged
 
 class PlayerChunkChangeSystem : ChunkChanged(Player::class) {
 

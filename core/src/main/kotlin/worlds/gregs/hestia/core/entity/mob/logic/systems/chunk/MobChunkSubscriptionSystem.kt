@@ -1,9 +1,9 @@
 package worlds.gregs.hestia.core.entity.mob.logic.systems.chunk
 
 import net.mostlyoriginal.api.event.common.EventSystem
-import worlds.gregs.hestia.api.mob.Mob
-import worlds.gregs.hestia.api.movement.systems.ChunkSubscription
-import worlds.gregs.hestia.artemis.events.MobChunkChanged
+import worlds.gregs.hestia.core.entity.mob.api.Mob
+import worlds.gregs.hestia.core.world.movement.api.systems.ChunkSubscription
+import worlds.gregs.hestia.core.entity.mob.model.events.MobChunkChanged
 
 class MobChunkSubscriptionSystem : ChunkSubscription(Mob::class) {
     private lateinit var es: EventSystem

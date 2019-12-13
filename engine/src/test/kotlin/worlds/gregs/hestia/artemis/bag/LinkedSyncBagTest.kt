@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test
 internal class LinkedSyncBagTest : SyncBagTester() {
 
     override fun bag(): EntitySyncBag {
-        return LinkedSyncBag()
+        return LinkedSyncBag(40)
     }
 
     @Test

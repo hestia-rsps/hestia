@@ -3,8 +3,8 @@ package worlds.gregs.hestia.core.entity.player.logic.systems.region
 import com.artemis.annotations.Wire
 import net.mostlyoriginal.api.event.common.Subscribe
 import net.mostlyoriginal.api.system.core.PassiveSystem
-import worlds.gregs.hestia.api.region.RegionPriority
-import worlds.gregs.hestia.artemis.events.PlayerRegionChanged
+import worlds.gregs.hestia.core.world.region.api.RegionPriority
+import worlds.gregs.hestia.core.entity.player.model.events.PlayerRegionChanged
 
 @Wire(failOnNull = false)
 class PlayerRegionSystem : PassiveSystem() {

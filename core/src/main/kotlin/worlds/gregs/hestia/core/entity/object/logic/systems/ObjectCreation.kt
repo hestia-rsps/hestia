@@ -3,13 +3,13 @@ package worlds.gregs.hestia.core.entity.`object`.logic.systems
 import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.event.common.Subscribe
 import net.mostlyoriginal.api.system.core.PassiveSystem
-import worlds.gregs.hestia.api.`object`.GameObject
-import worlds.gregs.hestia.game.archetypes.EntityFactory
+import worlds.gregs.hestia.core.entity.`object`.model.components.GameObject
+import worlds.gregs.hestia.core.entity.entity.logic.EntityFactory
 import worlds.gregs.hestia.core.entity.`object`.logic.ObjectFactory
-import worlds.gregs.hestia.artemis.events.CreateObject
+import worlds.gregs.hestia.core.entity.`object`.model.events.CreateObject
 import worlds.gregs.hestia.core.entity.`object`.model.components.ObjectType
 import worlds.gregs.hestia.core.entity.`object`.model.components.Rotation
-import worlds.gregs.hestia.game.entity.components.Position
+import worlds.gregs.hestia.core.entity.entity.model.components.Position
 
 class ObjectCreation : PassiveSystem() {
 

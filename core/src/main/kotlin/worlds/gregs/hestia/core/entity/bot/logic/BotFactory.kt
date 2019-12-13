@@ -1,17 +1,17 @@
 package worlds.gregs.hestia.core.entity.bot.logic
 
 import com.artemis.ArchetypeBuilder
-import worlds.gregs.hestia.api.client.components.ClientIndex
-import worlds.gregs.hestia.api.client.update.components.AppearanceData
-import worlds.gregs.hestia.api.client.update.components.DisplayName
-import worlds.gregs.hestia.api.client.update.components.Renderable
-import worlds.gregs.hestia.api.movement.Mobile
-import worlds.gregs.hestia.api.player.Player
+import worlds.gregs.hestia.core.display.client.model.components.ClientIndex
+import worlds.gregs.hestia.core.display.update.model.components.AppearanceData
+import worlds.gregs.hestia.core.display.update.model.components.DisplayName
+import worlds.gregs.hestia.core.display.update.model.components.Renderable
+import worlds.gregs.hestia.core.entity.entity.api.ArchetypeFactory
+import worlds.gregs.hestia.core.world.movement.api.Mobile
+import worlds.gregs.hestia.game.entity.Player
 import worlds.gregs.hestia.core.task.model.components.TaskQueue
-import worlds.gregs.hestia.core.world.collision.components.Ghost
-import worlds.gregs.hestia.game.archetypes.ArchetypeFactory
-import worlds.gregs.hestia.game.entity.components.Position
-import worlds.gregs.hestia.services.add
+import worlds.gregs.hestia.core.world.collision.model.components.Ghost
+import worlds.gregs.hestia.core.entity.entity.model.components.Position
+import worlds.gregs.hestia.service.add
 
 class BotFactory : ArchetypeFactory {
 

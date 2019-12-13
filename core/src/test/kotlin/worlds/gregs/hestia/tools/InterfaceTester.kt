@@ -2,10 +2,10 @@ package worlds.gregs.hestia.tools
 
 import com.artemis.WorldConfigurationBuilder
 import com.nhaarman.mockitokotlin2.*
-import worlds.gregs.hestia.api.widget.UserInterface
-import worlds.gregs.hestia.api.widget.Widget
-import worlds.gregs.hestia.api.widget.components.ScreenWidget
-import worlds.gregs.hestia.game.GameTest
+import worlds.gregs.hestia.core.display.widget.api.UserInterface
+import worlds.gregs.hestia.core.display.widget.api.Widget
+import worlds.gregs.hestia.core.display.widget.model.components.ScreenWidget
+import worlds.gregs.hestia.GameTest
 import kotlin.reflect.KClass
 
 abstract class InterfaceTester(config: WorldConfigurationBuilder) : GameTest(config) {

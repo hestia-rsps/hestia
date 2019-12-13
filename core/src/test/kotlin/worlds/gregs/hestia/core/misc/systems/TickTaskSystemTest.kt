@@ -3,8 +3,9 @@ package worlds.gregs.hestia.core.misc.systems
 import com.artemis.WorldConfigurationBuilder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import worlds.gregs.hestia.game.GameTest
-import worlds.gregs.hestia.services.getSystem
+import worlds.gregs.hestia.core.task.tick.logic.TickTaskSystem
+import worlds.gregs.hestia.GameTest
+import worlds.gregs.hestia.service.getSystem
 
 internal class TickTaskSystemTest : GameTest(WorldConfigurationBuilder().with(TickTaskSystem())) {
 

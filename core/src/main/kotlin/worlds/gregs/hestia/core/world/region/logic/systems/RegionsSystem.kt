@@ -1,9 +1,9 @@
 package worlds.gregs.hestia.core.world.region.logic.systems
 
 import com.artemis.ComponentMapper
-import worlds.gregs.hestia.api.region.Regions
-import worlds.gregs.hestia.core.world.region.components.RegionIdentifier
-import worlds.gregs.hestia.services.Aspect
+import worlds.gregs.hestia.core.world.region.api.Regions
+import worlds.gregs.hestia.core.world.region.model.components.RegionIdentifier
+import worlds.gregs.hestia.service.Aspect
 import java.util.*
 
 /**

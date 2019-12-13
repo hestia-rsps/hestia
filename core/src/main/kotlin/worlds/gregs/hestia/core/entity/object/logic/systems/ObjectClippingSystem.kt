@@ -3,18 +3,18 @@ package worlds.gregs.hestia.core.entity.`object`.logic.systems
 import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
 import worlds.gregs.hestia.artemis.SubscriptionSystem
-import worlds.gregs.hestia.api.`object`.GameObject
-import worlds.gregs.hestia.game.entity.components.Position
-import worlds.gregs.hestia.api.map.ClippingMasks
-import worlds.gregs.hestia.api.region.Regions
-import worlds.gregs.hestia.game.map.Flags.FLOOR_DECO_BLOCKS_WALK
-import worlds.gregs.hestia.game.map.MapConstants.isOutOfBounds
+import worlds.gregs.hestia.core.entity.`object`.model.components.GameObject
 import worlds.gregs.hestia.core.entity.`object`.model.components.ObjectType
 import worlds.gregs.hestia.core.entity.`object`.model.components.Rotation
-import worlds.gregs.hestia.core.misc.systems.cache.ObjectDefinitionSystem
-import worlds.gregs.hestia.core.world.map.systems.ClippingMaskSystem.Companion.ADD_MASK
-import worlds.gregs.hestia.core.world.map.systems.ClippingMaskSystem.Companion.REMOVE_MASK
-import worlds.gregs.hestia.services.Aspect
+import worlds.gregs.hestia.core.entity.entity.model.components.Position
+import worlds.gregs.hestia.service.cache.systems.ObjectDefinitionSystem
+import worlds.gregs.hestia.core.world.collision.model.Flags.FLOOR_DECO_BLOCKS_WALK
+import worlds.gregs.hestia.core.world.map.api.ClippingMasks
+import worlds.gregs.hestia.core.world.map.logic.systems.ClippingMaskSystem.Companion.ADD_MASK
+import worlds.gregs.hestia.core.world.map.logic.systems.ClippingMaskSystem.Companion.REMOVE_MASK
+import worlds.gregs.hestia.core.world.map.model.MapConstants.isOutOfBounds
+import worlds.gregs.hestia.core.world.region.api.Regions
+import worlds.gregs.hestia.service.Aspect
 
 @Wire(failOnNull = false)
 class ObjectClippingSystem : SubscriptionSystem(Aspect.all(GameObject::class)) {

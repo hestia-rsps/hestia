@@ -12,8 +12,8 @@ import worlds.gregs.hestia.game.plugin.Plugin.Companion.PRE_SHIFT_PRIORITY
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.RUN_PRIORITY
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.SHIFT_PRIORITY
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.WALK_PRIORITY
-import worlds.gregs.hestia.core.world.movement.systems.*
-import worlds.gregs.hestia.core.world.movement.systems.calc.*
+import worlds.gregs.hestia.core.world.movement.logic.systems.*
+import worlds.gregs.hestia.core.world.movement.logic.systems.calc.*
 
 class MovementPlugin : Plugin {
 

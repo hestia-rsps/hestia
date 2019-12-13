@@ -1,7 +1,7 @@
 package worlds.gregs.hestia.network.update.codec
 
 import world.gregs.hestia.core.network.codec.packet.PacketBuilder
-import worlds.gregs.hestia.api.client.update.block.UpdateBlock
+import worlds.gregs.hestia.game.update.UpdateBlock
 
 /**
  * Encodes data in an [UpdateBlock] into a packet

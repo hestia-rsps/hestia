@@ -1,8 +1,6 @@
 package worlds.gregs.hestia.core.entity.mob
 
 import com.artemis.WorldConfigurationBuilder
-import worlds.gregs.hestia.core.entity.bot.logic.BotFactory
-import worlds.gregs.hestia.core.entity.mob.logic.MobFactory
 import worlds.gregs.hestia.core.entity.mob.logic.systems.MobCreation
 import worlds.gregs.hestia.core.entity.mob.logic.systems.chunk.MobChunkChangeSystem
 import worlds.gregs.hestia.core.entity.mob.logic.systems.chunk.MobChunkSubscriptionSystem
@@ -13,7 +11,6 @@ import worlds.gregs.hestia.core.entity.mob.logic.systems.region.MobRegionChangeS
 import worlds.gregs.hestia.core.entity.mob.logic.systems.region.MobRegionSubscriptionSystem
 import worlds.gregs.hestia.core.entity.mob.logic.systems.sync.MobIndexSystem
 import worlds.gregs.hestia.core.entity.mob.logic.systems.sync.PostMobSyncSystem
-import worlds.gregs.hestia.game.archetypes.EntityFactory
 import worlds.gregs.hestia.game.plugin.Plugin
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.POST_UPDATE_PRIORITY
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.PRE_SHIFT_PRIORITY

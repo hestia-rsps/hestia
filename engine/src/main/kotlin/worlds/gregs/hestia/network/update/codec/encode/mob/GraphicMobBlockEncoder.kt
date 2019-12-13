@@ -3,7 +3,7 @@ package worlds.gregs.hestia.network.update.codec.encode.mob
 import world.gregs.hestia.core.network.codec.packet.Endian
 import world.gregs.hestia.core.network.codec.packet.Modifier
 import world.gregs.hestia.core.network.codec.packet.PacketBuilder
-import worlds.gregs.hestia.game.client.update.block.blocks.GraphicBlock
+import worlds.gregs.hestia.game.update.blocks.GraphicBlock
 import worlds.gregs.hestia.network.update.codec.UpdateBlockEncoder
 
 class GraphicMobBlockEncoder : UpdateBlockEncoder<GraphicBlock> {

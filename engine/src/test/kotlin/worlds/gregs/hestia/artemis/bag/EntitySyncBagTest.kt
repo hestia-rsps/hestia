@@ -10,7 +10,7 @@ internal class EntitySyncBagTest {
 
     @BeforeEach
     fun setup() {
-        bag = object: EntitySyncBag() {
+        bag = object: EntitySyncBag(40) {
             override fun containsIndex(index: Int): Boolean {
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }

@@ -2,15 +2,15 @@ package worlds.gregs.hestia.core.world.region.logic.systems
 
 import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
-import worlds.gregs.hestia.api.region.RegionBuilder
-import worlds.gregs.hestia.api.region.Regions
-import worlds.gregs.hestia.api.region.components.DynamicRegion
-import worlds.gregs.hestia.game.map.Chunk.toChunkPosition
-import worlds.gregs.hestia.game.map.Chunk.toRotatedChunkPosition
-import worlds.gregs.hestia.game.map.MapConstants.PLANE_RANGE
-import worlds.gregs.hestia.core.world.region.components.Loaded
-import worlds.gregs.hestia.core.world.region.components.Loading
-import worlds.gregs.hestia.core.world.region.components.RegionIdentifier
+import worlds.gregs.hestia.core.world.map.model.Chunk.toChunkPosition
+import worlds.gregs.hestia.core.world.map.model.Chunk.toRotatedChunkPosition
+import worlds.gregs.hestia.core.world.map.model.MapConstants.PLANE_RANGE
+import worlds.gregs.hestia.core.world.region.api.RegionBuilder
+import worlds.gregs.hestia.core.world.region.api.Regions
+import worlds.gregs.hestia.core.world.region.model.components.DynamicRegion
+import worlds.gregs.hestia.core.world.region.model.components.Loaded
+import worlds.gregs.hestia.core.world.region.model.components.Loading
+import worlds.gregs.hestia.core.world.region.model.components.RegionIdentifier
 
 /**
  * DynamicRegionBuilder

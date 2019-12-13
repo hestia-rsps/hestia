@@ -1,6 +1,6 @@
 package worlds.gregs.hestia.network.update.codec
 
-import worlds.gregs.hestia.api.client.update.block.UpdateBlock
+import worlds.gregs.hestia.game.update.UpdateBlock
 import kotlin.reflect.KClass
 
 /**

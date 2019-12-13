@@ -19,12 +19,8 @@ import world.gregs.hestia.core.network.codec.message.SimpleMessageHandler
 import world.gregs.hestia.core.network.pipe.SessionPipeline
 import world.gregs.hestia.core.network.protocol.Details
 import world.gregs.hestia.core.network.server.Network
-import world.gregs.hestia.core.services.Loader
-import worlds.gregs.hestia.api.client.ClientPlugin
 import worlds.gregs.hestia.artemis.event.PollingEventDispatcher
 import worlds.gregs.hestia.game.Engine
-import worlds.gregs.hestia.game.archetypes.EntityFactory
-import worlds.gregs.hestia.game.map.MapPlugin
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.EVENT_PROCESS_PRIORITY
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.PACKET_PROCESS_PRIORITY
 import worlds.gregs.hestia.game.plugin.PluginLoader
@@ -34,7 +30,7 @@ import worlds.gregs.hestia.network.world.WorldCodec
 import worlds.gregs.hestia.network.world.WorldConnection
 import worlds.gregs.hestia.network.world.WorldDetails
 import worlds.gregs.hestia.network.world.WorldMessages
-import worlds.gregs.hestia.services.Xteas
+import worlds.gregs.hestia.service.Xteas
 import kotlin.system.measureNanoTime
 
 class GameServer(worldDetails: Details) : Engine(), WorldChangeListener {
@@ -89,26 +85,19 @@ class GameServer(worldDetails: Details) : Engine(), WorldChangeListener {
             //Configure game world
             val builder = WorldConfigurationBuilder().with(EntityLinkManager())
             builder.with(EVENT_PROCESS_PRIORITY, eventSystem)
-            //Load archetypes folder
-            val pluginLoader = Loader(Settings.getString("pluginPath"))
             //Load plugins
             PluginLoader.setup(builder)
 
 //            builder.register(BenchmarkStrategy())
             //Temp
-            builder.dependsOn(MapPlugin::class.java)//TODO move to plugins/core
-            builder.dependsOn(ClientPlugin::class.java)//TODO remove
             builder.with(PACKET_PROCESS_PRIORITY, gameMessages)
             //Build world config
             val config = builder.build()
             //Initialize world
             val server = World(config)
             this.server = server
-            //
+            //Initiate plugins
             PluginLoader.init(server, dispatcher)
-            //Load entity archetypes
-            EntityFactory.init(server)
-            EntityFactory.load(pluginLoader)
 
             //Set delta
             server.setDelta(1F)

@@ -6,9 +6,9 @@ import com.artemis.WorldConfigurationBuilder
 import com.artemis.annotations.Wire
 import com.artemis.systems.DelayedIteratingSystem
 import org.junit.jupiter.api.Test
-import worlds.gregs.hestia.game.GameTest
-import worlds.gregs.hestia.services.Aspect
-import worlds.gregs.hestia.services.getSystem
+import worlds.gregs.hestia.GameTest
+import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.service.getSystem
 
 internal class SystemTest : GameTest(WorldConfigurationBuilder().with(TestSystem())) {
 

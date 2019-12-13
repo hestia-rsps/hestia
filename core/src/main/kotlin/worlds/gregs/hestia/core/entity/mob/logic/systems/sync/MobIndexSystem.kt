@@ -2,9 +2,9 @@ package worlds.gregs.hestia.core.entity.mob.logic.systems.sync
 
 import com.artemis.ComponentMapper
 import worlds.gregs.hestia.artemis.SubscriptionSystem
-import worlds.gregs.hestia.api.mob.Mob
-import worlds.gregs.hestia.api.client.components.ClientIndex
-import worlds.gregs.hestia.services.Aspect
+import worlds.gregs.hestia.core.entity.mob.api.Mob
+import worlds.gregs.hestia.core.display.client.model.components.ClientIndex
+import worlds.gregs.hestia.service.Aspect
 
 class MaximumMobLimitReached : Exception()
 

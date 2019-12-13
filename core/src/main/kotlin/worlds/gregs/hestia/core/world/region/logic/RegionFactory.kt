@@ -1,10 +1,10 @@
 package worlds.gregs.hestia.core.world.region.logic
 
 import com.artemis.ArchetypeBuilder
-import worlds.gregs.hestia.core.world.land.components.LandObjects
-import worlds.gregs.hestia.core.world.region.components.RegionIdentifier
-import worlds.gregs.hestia.game.archetypes.ArchetypeFactory
-import worlds.gregs.hestia.services.add
+import worlds.gregs.hestia.core.entity.entity.api.ArchetypeFactory
+import worlds.gregs.hestia.core.world.land.model.components.LandObjects
+import worlds.gregs.hestia.core.world.region.model.components.RegionIdentifier
+import worlds.gregs.hestia.service.add
 
 class RegionFactory : ArchetypeFactory {
 

@@ -1,11 +1,9 @@
 package worlds.gregs.hestia.artemis.bag
 
-import worlds.gregs.hestia.api.client.update.sync.Synchronize.Companion.MAX_ENTITIES_PER_TICK
-
 /**
  * A bag of live entities with batched [insert] and [remove] actions when [sync] is called
  */
-abstract class EntitySyncBag {
+abstract class EntitySyncBag(private val maxEntitiesPerTick: Int) {
 
     /**
      * Total count of live entities
@@ -82,7 +80,7 @@ abstract class EntitySyncBag {
      * @return if the entity will be added next sync
      */
     fun canInsert(entity: Int): Boolean {
-        var index = Math.min(MAX_ENTITIES_PER_TICK, insertions.size)
+        var index = maxEntitiesPerTick.coerceAtMost(insertions.size)
         for (key in insertions.keys) {
             if (entity == key) {
                 return true
@@ -131,7 +129,7 @@ abstract class EntitySyncBag {
     fun sync(action: ((Int) -> Unit)? = null) {
         //Add a limited number of insertions
         val iterator = insertions.iterator()
-        repeat(Math.min(MAX_ENTITIES_PER_TICK, insertions.size)) {
+        repeat(maxEntitiesPerTick.coerceAtMost(insertions.size)) {
             val next = iterator.next()
             //Additional processing
             action?.invoke(next.key)

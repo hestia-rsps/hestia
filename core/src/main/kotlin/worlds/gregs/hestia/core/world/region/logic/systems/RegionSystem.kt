@@ -3,15 +3,15 @@ package worlds.gregs.hestia.core.world.region.logic.systems
 import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
 import net.mostlyoriginal.api.event.common.EventSystem
-import worlds.gregs.hestia.api.land.Land
-import worlds.gregs.hestia.api.map.Map
-import worlds.gregs.hestia.api.region.Region
-import worlds.gregs.hestia.api.region.Regions
-import worlds.gregs.hestia.artemis.events.CreateRegion
-import worlds.gregs.hestia.core.world.region.components.Loaded
-import worlds.gregs.hestia.core.world.region.components.Loading
-import worlds.gregs.hestia.core.world.region.components.RegionIdentifier
-import worlds.gregs.hestia.services.Aspect
+import worlds.gregs.hestia.core.world.land.api.Land
+import worlds.gregs.hestia.core.world.map.api.Map
+import worlds.gregs.hestia.core.world.region.api.Region
+import worlds.gregs.hestia.core.world.region.api.Regions
+import worlds.gregs.hestia.core.world.region.model.events.CreateRegion
+import worlds.gregs.hestia.core.world.region.model.components.Loaded
+import worlds.gregs.hestia.core.world.region.model.components.Loading
+import worlds.gregs.hestia.core.world.region.model.components.RegionIdentifier
+import worlds.gregs.hestia.service.Aspect
 
 @Wire(failOnNull = false)
 class RegionSystem : Region(Aspect.all(RegionIdentifier::class)) {

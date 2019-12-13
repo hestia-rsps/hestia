@@ -5,16 +5,16 @@ import com.artemis.WorldConfigurationBuilder
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import worlds.gregs.hestia.game.GameTest
-import worlds.gregs.hestia.api.mob.Mob
-import worlds.gregs.hestia.game.archetypes.EntityFactory
+import worlds.gregs.hestia.GameTest
+import worlds.gregs.hestia.core.entity.mob.api.Mob
+import worlds.gregs.hestia.core.entity.entity.logic.EntityFactory
 import worlds.gregs.hestia.core.entity.mob.logic.MobFactory
-import worlds.gregs.hestia.artemis.events.CreateMob
-import worlds.gregs.hestia.api.client.components.ClientIndex
+import worlds.gregs.hestia.core.entity.mob.model.events.CreateMob
+import worlds.gregs.hestia.core.display.client.model.components.ClientIndex
 import worlds.gregs.hestia.core.entity.mob.logic.systems.MobCreation
-import worlds.gregs.hestia.services.Aspect
+import worlds.gregs.hestia.service.Aspect
 import worlds.gregs.hestia.core.getComponent
-import worlds.gregs.hestia.services.getSystem
+import worlds.gregs.hestia.service.getSystem
 
 internal class MobIndexSystemTest : GameTest(WorldConfigurationBuilder().with(MobCreation(), MobIndexSystem())) {
 

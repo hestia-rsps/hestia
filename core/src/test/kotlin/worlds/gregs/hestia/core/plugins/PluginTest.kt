@@ -6,16 +6,16 @@ import com.artemis.WorldConfigurationBuilder
 import net.mostlyoriginal.api.event.common.EventSystem
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import worlds.gregs.hestia.core.client.ClientPlugin
-import worlds.gregs.hestia.core.entity.EntityPlugin
+import worlds.gregs.hestia.GameTest
+import worlds.gregs.hestia.core.display.client.ClientPlugin
+import worlds.gregs.hestia.core.entity.entity.EntityPlugin
 import worlds.gregs.hestia.core.entity.mob.MobPlugin
 import worlds.gregs.hestia.core.entity.player.PlayerPlugin
-import worlds.gregs.hestia.core.misc.CorePlugin
+import worlds.gregs.hestia.core.task.tick.TickPlugin
 import worlds.gregs.hestia.core.world.land.LandPlugin
 import worlds.gregs.hestia.core.world.map.MapPlugin
 import worlds.gregs.hestia.core.world.movement.MovementPlugin
 import worlds.gregs.hestia.core.world.region.RegionPlugin
-import worlds.gregs.hestia.game.GameTest
 
 internal class PluginTest : GameTest(WorldConfigurationBuilder()) {
 
@@ -28,7 +28,7 @@ internal class PluginTest : GameTest(WorldConfigurationBuilder()) {
     fun testClient() {
         build(WorldConfigurationBuilder().with(ClientPlugin()), false)
         build(WorldConfigurationBuilder().with(EntityPlugin()), false)
-        build(WorldConfigurationBuilder().with(CorePlugin()), false)
+        build(WorldConfigurationBuilder().with(TickPlugin()), false)
     }
 
 
@@ -68,7 +68,7 @@ internal class PluginTest : GameTest(WorldConfigurationBuilder()) {
         builder.with(EventSystem())
         //Core plugins
         if(core) {
-            builder.with(CorePlugin(), ClientPlugin())
+            builder.with(TickPlugin(), ClientPlugin())
         }
         World(builder.build())
     }

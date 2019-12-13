@@ -4,7 +4,7 @@ import com.artemis.Entity
 import net.mostlyoriginal.api.event.common.EventSystem
 import world.gregs.hestia.core.network.codec.message.Message
 import worlds.gregs.hestia.artemis.InstantEvent
-import worlds.gregs.hestia.services.getSystem
+import worlds.gregs.hestia.service.getSystem
 
 data class OutBoundMessage(val entity: Int, val message: Message, val close: Boolean = false) : InstantEvent
 

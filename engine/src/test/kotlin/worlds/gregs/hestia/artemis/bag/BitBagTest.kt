@@ -4,7 +4,7 @@ import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import worlds.gregs.hestia.services.toArray
+import worlds.gregs.hestia.service.toArray
 
 internal class BitBagTest {
 

@@ -1,7 +1,9 @@
 package worlds.gregs.hestia.core
 
 import com.artemis.*
-import com.artemis.Aspect
+import com.artemis.utils.IntBag
+import org.apache.commons.text.WordUtils
+import worlds.gregs.hestia.core.entity.mob.api.Mob
 import kotlin.reflect.KClass
 
 /*
@@ -31,9 +33,9 @@ fun Aspect.Builder.exclude(vararg clazz: KClass<out Component>): com.artemis.Asp
     return exclude(*clazz.map { it.java }.toTypedArray())
 }
 
-//fun ArchetypeBuilder.add(vararg clazz: KClass<out Component>): ArchetypeBuilder {
-//    return add(*clazz.map { it.java }.toTypedArray())
-//}
+fun ArchetypeBuilder.add(vararg clazz: KClass<out Component>): ArchetypeBuilder {
+    return add(*clazz.map { it.java }.toTypedArray())
+}
 
 fun <T : Component> Entity.getComponent(type: KClass<T>): T? {
     val tf = world.componentManager.typeFactory
@@ -48,10 +50,14 @@ fun EntityEdit.remove(type: KClass<out Component>): EntityEdit {
     return remove(type.java)
 }
 
+fun World.mobs(): IntBag {
+    return aspectSubscriptionManager.get(worlds.gregs.hestia.service.Aspect.all(Mob::class)).entities
+}
+
 /*
     Generics
  */
 
-//fun String.wrap(maxLength: Int = 45): List<String> {
-//    return WordUtils.wrap(this, maxLength).split(System.lineSeparator())
-//}
+fun String.wrap(maxLength: Int = 45): List<String> {
+    return WordUtils.wrap(this, maxLength).split(System.lineSeparator())
+}

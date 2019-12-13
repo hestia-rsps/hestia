@@ -1,16 +1,16 @@
 package worlds.gregs.hestia.core.display.widget
 
 import com.artemis.WorldConfigurationBuilder
-import worlds.gregs.hestia.core.display.widget.systems.UserInterfaceSystem
-import worlds.gregs.hestia.core.display.widget.systems.frame.GameFrameSystem
-import worlds.gregs.hestia.core.display.widget.systems.frame.chat.*
-import worlds.gregs.hestia.core.display.widget.systems.frame.orbs.EnergyOrbSystem
-import worlds.gregs.hestia.core.display.widget.systems.frame.orbs.HealthOrbSystem
-import worlds.gregs.hestia.core.display.widget.systems.frame.orbs.PrayerOrbSystem
-import worlds.gregs.hestia.core.display.widget.systems.frame.orbs.SummoningOrbSystem
-import worlds.gregs.hestia.core.display.widget.systems.frame.tabs.*
-import worlds.gregs.hestia.core.display.widget.systems.full.WorldMapSystem
-import worlds.gregs.hestia.core.display.widget.systems.screen.*
+import worlds.gregs.hestia.core.display.widget.logic.systems.UserInterfaceSystem
+import worlds.gregs.hestia.core.display.widget.logic.systems.frame.GameFrameSystem
+import worlds.gregs.hestia.core.display.widget.logic.systems.frame.chat.*
+import worlds.gregs.hestia.core.display.widget.logic.systems.frame.orbs.EnergyOrbSystem
+import worlds.gregs.hestia.core.display.widget.logic.systems.frame.orbs.HealthOrbSystem
+import worlds.gregs.hestia.core.display.widget.logic.systems.frame.orbs.PrayerOrbSystem
+import worlds.gregs.hestia.core.display.widget.logic.systems.frame.orbs.SummoningOrbSystem
+import worlds.gregs.hestia.core.display.widget.logic.systems.frame.tabs.*
+import worlds.gregs.hestia.core.display.widget.logic.systems.full.WorldMapSystem
+import worlds.gregs.hestia.core.display.widget.logic.systems.screen.*
 import worlds.gregs.hestia.game.plugin.Plugin
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.INTERFACE_PRIORITY
 

@@ -1,5 +1,5 @@
 package worlds.gregs.hestia.core.display.widget.model.components.frame.orbs
 
-import worlds.gregs.hestia.api.widget.components.Frame
+import worlds.gregs.hestia.core.display.widget.model.components.Frame
 
 class HealthOrb : Frame()

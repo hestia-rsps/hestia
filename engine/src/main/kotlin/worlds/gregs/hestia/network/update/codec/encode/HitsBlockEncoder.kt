@@ -2,8 +2,8 @@ package worlds.gregs.hestia.network.update.codec.encode
 
 import world.gregs.hestia.core.network.codec.packet.Modifier
 import world.gregs.hestia.core.network.codec.packet.PacketBuilder
-import worlds.gregs.hestia.game.client.update.block.blocks.HitsBlock
-import worlds.gregs.hestia.game.client.update.block.Marker
+import worlds.gregs.hestia.game.update.blocks.HitsBlock
+import worlds.gregs.hestia.game.update.blocks.Marker
 import worlds.gregs.hestia.network.update.codec.UpdateBlockEncoder
 
 class HitsBlockEncoder(private val mob: Boolean) : UpdateBlockEncoder<HitsBlock> {
@@ -12,11 +12,11 @@ class HitsBlockEncoder(private val mob: Boolean) : UpdateBlockEncoder<HitsBlock>
         val (_, damage, player, other) = block
         builder.apply {
             if (mob) {
-                writeByte(damage.hits.size, Modifier.INVERSE)
+                writeByte(damage.size, Modifier.INVERSE)
             } else {
-                writeByte(damage.hits.size)
+                writeByte(damage.size)
             }
-            damage.hits.forEach { hit ->
+            damage.forEach { hit ->
                 if (hit.damage == 0 && !interactingWith(player, other, hit.source)) {
                     writeSmart(32766)
                     return@forEach

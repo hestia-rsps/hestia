@@ -1,7 +1,8 @@
 package worlds.gregs.hestia.network.client.encoders.messages
 
-import worlds.gregs.hestia.api.client.update.sync.SyncStage
 import worlds.gregs.hestia.artemis.ConcurrentObjectPool
+import worlds.gregs.hestia.game.update.SyncStage
+import worlds.gregs.hestia.network.update.sync.Update
 import worlds.gregs.hestia.network.update.sync.UpdateBlockStage
 
 class PlayerUpdate : Update {

@@ -7,11 +7,11 @@ import world.gregs.hestia.core.network.Session
 import worlds.gregs.hestia.artemis.events.CreatePlayer
 import worlds.gregs.hestia.core.entity.player.logic.PlayerFactory
 import worlds.gregs.hestia.core.entity.player.logic.systems.PlayerCreation
-import worlds.gregs.hestia.game.GameTest
-import worlds.gregs.hestia.game.archetypes.EntityFactory
-import worlds.gregs.hestia.game.entity.components.Position
+import worlds.gregs.hestia.GameTest
+import worlds.gregs.hestia.core.entity.entity.logic.EntityFactory
+import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.getComponent
-import worlds.gregs.hestia.services.getSystem
+import worlds.gregs.hestia.service.getSystem
 
 abstract class PlayerTester(config: WorldConfigurationBuilder) : GameTest(config.with(PlayerCreation())) {
 

@@ -3,14 +3,14 @@ package worlds.gregs.hestia.core.world.region.logic.systems
 import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
 import worlds.gregs.hestia.artemis.SubscriptionSystem
-import worlds.gregs.hestia.api.region.Region
-import worlds.gregs.hestia.api.region.Regions
-import worlds.gregs.hestia.api.region.components.DynamicRegion
-import worlds.gregs.hestia.core.world.region.components.RegionIdentifier
-import worlds.gregs.hestia.core.world.region.components.RegionPriorities
+import worlds.gregs.hestia.core.world.region.api.Region
+import worlds.gregs.hestia.core.world.region.api.Regions
+import worlds.gregs.hestia.core.world.region.model.components.DynamicRegion
+import worlds.gregs.hestia.core.world.region.model.components.RegionIdentifier
+import worlds.gregs.hestia.core.world.region.model.components.RegionPriorities
 import worlds.gregs.hestia.core.world.region.logic.systems.RegionBuilderSystem.Companion.forChunks
-import worlds.gregs.hestia.services.Aspect
-import worlds.gregs.hestia.services.nearby
+import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.service.nearby
 
 /**
  * Region Clean System

@@ -1,7 +1,7 @@
 package worlds.gregs.hestia.core.entity.player.logic.systems
 
 import com.artemis.Entity
-import worlds.gregs.hestia.api.client.update.components.UpdateClanMember
+import worlds.gregs.hestia.core.display.update.model.components.UpdateClanMember
 
 class PlayerControls
 /**

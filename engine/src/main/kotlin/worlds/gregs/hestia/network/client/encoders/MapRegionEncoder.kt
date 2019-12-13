@@ -7,7 +7,7 @@ import world.gregs.hestia.core.network.codec.packet.Packet
 import world.gregs.hestia.core.network.codec.packet.PacketBuilder
 import world.gregs.hestia.core.network.protocol.ClientOpcodes.REGION
 import worlds.gregs.hestia.network.client.encoders.messages.MapRegion
-import worlds.gregs.hestia.services.Xteas
+import worlds.gregs.hestia.service.Xteas
 
 class MapRegionEncoder : MessageEncoder<MapRegion>() {
 

@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test
 internal class OrderedSyncBagTest : SyncBagTester() {
 
     override fun bag(): EntitySyncBag {
-        return OrderedSyncBag(4)
+        return OrderedSyncBag(4, 40)
     }
 
     @Test

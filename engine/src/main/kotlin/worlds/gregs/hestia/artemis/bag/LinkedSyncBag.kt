@@ -3,7 +3,7 @@ package worlds.gregs.hestia.artemis.bag
 /**
  * A [EntitySyncBag] of live entities with a predictable iteration order
  */
-class LinkedSyncBag : EntitySyncBag() {
+class LinkedSyncBag(maxEntitiesPerTick: Int) : EntitySyncBag(maxEntitiesPerTick) {
 
     /**
      * Map of all active entities <ClientIndex, EntityId>
@@ -34,6 +34,6 @@ class LinkedSyncBag : EntitySyncBag() {
     override fun forEachIndexed(action: (index: Int, Int?) -> Unit) = entities.forEach(action)
 
     override fun toString(): String {
-        return "SortedSyncBag $entities ${super.toString()}"
+        return "LinkedSyncBag $entities ${super.toString()}"
     }
 }

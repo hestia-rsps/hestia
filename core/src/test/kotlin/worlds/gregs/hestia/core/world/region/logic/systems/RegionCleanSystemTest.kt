@@ -5,14 +5,14 @@ import com.artemis.WorldConfigurationBuilder
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import worlds.gregs.hestia.game.GameTest
-import worlds.gregs.hestia.api.region.Region
-import worlds.gregs.hestia.game.archetypes.EntityFactory
+import worlds.gregs.hestia.GameTest
+import worlds.gregs.hestia.core.world.region.api.Region
+import worlds.gregs.hestia.core.entity.entity.logic.EntityFactory
 import worlds.gregs.hestia.core.world.region.logic.RegionFactory
-import worlds.gregs.hestia.artemis.events.CreateRegion
-import worlds.gregs.hestia.game.entity.components.Position.Companion.regionId
-import worlds.gregs.hestia.api.region.components.DynamicRegion
-import worlds.gregs.hestia.core.world.region.components.RegionPriorities
+import worlds.gregs.hestia.core.world.region.model.events.CreateRegion
+import worlds.gregs.hestia.core.entity.entity.model.components.Position.Companion.regionId
+import worlds.gregs.hestia.core.world.region.model.components.DynamicRegion
+import worlds.gregs.hestia.core.world.region.model.components.RegionPriorities
 import worlds.gregs.hestia.core.world.region.logic.systems.load.RegionCreation
 
 internal class RegionCleanSystemTest : GameTest(WorldConfigurationBuilder().with(RegionsSystem(), RegionCreation(), RegionCleanSystem(), RegionMock())) {

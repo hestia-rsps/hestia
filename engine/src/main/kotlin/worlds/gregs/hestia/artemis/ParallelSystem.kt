@@ -4,7 +4,7 @@ import com.artemis.Aspect
 import com.artemis.BaseEntitySystem
 import kotlinx.coroutines.Deferred
 import kotlinx.coroutines.runBlocking
-import worlds.gregs.hestia.services.forEach
+import worlds.gregs.hestia.service.forEach
 import java.util.*
 
 abstract class ParallelSystem(aspect: Aspect.Builder) : BaseEntitySystem(aspect) {

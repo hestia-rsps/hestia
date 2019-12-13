@@ -3,7 +3,7 @@ package worlds.gregs.hestia.network.update.codec.encode
 import world.gregs.hestia.core.network.codec.packet.Endian
 import world.gregs.hestia.core.network.codec.packet.Modifier
 import world.gregs.hestia.core.network.codec.packet.PacketBuilder
-import worlds.gregs.hestia.game.client.update.block.blocks.BatchAnimationBlock
+import worlds.gregs.hestia.game.update.blocks.BatchAnimationBlock
 import worlds.gregs.hestia.network.update.codec.UpdateBlockEncoder
 
 class BatchAnimationBlockEncoder(private val mob: Boolean) : UpdateBlockEncoder<BatchAnimationBlock> {

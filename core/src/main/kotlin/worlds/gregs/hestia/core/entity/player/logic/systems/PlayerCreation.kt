@@ -4,13 +4,13 @@ import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
 import net.mostlyoriginal.api.event.common.Subscribe
 import net.mostlyoriginal.api.system.core.PassiveSystem
-import worlds.gregs.hestia.api.client.ClientNetwork
-import worlds.gregs.hestia.api.client.update.components.DisplayName
-import worlds.gregs.hestia.api.widget.GameFrame
+import worlds.gregs.hestia.core.display.client.api.ClientNetwork
+import worlds.gregs.hestia.core.display.update.model.components.DisplayName
+import worlds.gregs.hestia.core.display.widget.api.GameFrame
 import worlds.gregs.hestia.artemis.events.CreatePlayer
 import worlds.gregs.hestia.core.entity.player.logic.PlayerFactory
-import worlds.gregs.hestia.game.archetypes.EntityFactory
-import worlds.gregs.hestia.game.entity.components.Position
+import worlds.gregs.hestia.core.entity.entity.logic.EntityFactory
+import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import java.util.concurrent.atomic.AtomicInteger
 
 @Wire(failOnNull = false)

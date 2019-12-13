@@ -1,7 +1,7 @@
 package worlds.gregs.hestia.core.world.region
 
 import com.artemis.WorldConfigurationBuilder
-import worlds.gregs.hestia.core.world.map.systems.ClippingMaskSystem
+import worlds.gregs.hestia.core.world.map.logic.systems.ClippingMaskSystem
 import worlds.gregs.hestia.core.world.region.logic.systems.*
 import worlds.gregs.hestia.core.world.region.logic.systems.load.ChunkRotationSystem
 import worlds.gregs.hestia.core.world.region.logic.systems.load.RegionCreation

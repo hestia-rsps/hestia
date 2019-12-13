@@ -1,9 +1,9 @@
 package worlds.gregs.hestia.network.update.sync
 
 import world.gregs.hestia.core.network.codec.packet.PacketBuilder
-import worlds.gregs.hestia.api.client.update.block.UpdateBlock
-import worlds.gregs.hestia.api.client.update.sync.SyncStage
 import worlds.gregs.hestia.artemis.ConcurrentObjectPool
+import worlds.gregs.hestia.game.update.SyncStage
+import worlds.gregs.hestia.game.update.UpdateBlock
 import worlds.gregs.hestia.network.update.codec.MobEncoders
 import worlds.gregs.hestia.network.update.codec.PlayerEncoders
 import worlds.gregs.hestia.network.update.codec.UpdateBlockEncoder
