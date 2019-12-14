@@ -6,7 +6,4 @@ import com.artemis.annotations.PooledWeaver
 
 @PooledWeaver
 @DelayedComponentRemoval
-class ClientIndex : Component() {
-    var index = 0
-    var remove = false
-}
+data class ClientIndex(var index: Int = 0, var remove: Boolean = false) : Component()

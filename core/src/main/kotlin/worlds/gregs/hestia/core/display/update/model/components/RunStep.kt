@@ -5,6 +5,4 @@ import com.artemis.annotations.PooledWeaver
 import worlds.gregs.hestia.core.display.update.model.Direction
 
 @PooledWeaver
-class RunStep : Component() {
-    var direction = Direction.NONE
-}
+data class RunStep(var direction: Direction = Direction.NONE) : Component()

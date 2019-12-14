@@ -4,6 +4,4 @@ import com.artemis.Component
 import com.artemis.annotations.PooledWeaver
 
 @PooledWeaver
-class Watching : Component() {
-    var clientIndex = 0//Entity index
-}
+data class Watching(var clientIndex: Int = -1) : Component()

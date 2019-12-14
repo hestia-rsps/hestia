@@ -4,6 +4,4 @@ import com.artemis.Component
 import com.artemis.annotations.PooledWeaver
 
 @PooledWeaver
-class GameObject : Component() {
-    var id = -1
-}
+data class GameObject(var id: Int = -1) : Component()

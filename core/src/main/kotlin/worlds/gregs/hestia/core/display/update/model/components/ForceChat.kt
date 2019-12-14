@@ -4,11 +4,4 @@ import com.artemis.Component
 import com.artemis.annotations.PooledWeaver
 
 @PooledWeaver
-class ForceChat() : Component() {
-
-    constructor(message: String) : this() {
-        this.message = message
-    }
-
-    var message: String? = null
-}
+data class ForceChat(var message: String? = null) : Component()

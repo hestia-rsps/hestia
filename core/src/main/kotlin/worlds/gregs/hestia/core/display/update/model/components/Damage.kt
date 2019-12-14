@@ -6,6 +6,4 @@ import worlds.gregs.hestia.game.update.blocks.Marker
 import java.util.concurrent.ConcurrentLinkedQueue
 
 @PooledWeaver
-class Damage : Component() {
-    val hits = ConcurrentLinkedQueue<Marker>()
-}
+data class Damage(var hits: ConcurrentLinkedQueue<Marker> = ConcurrentLinkedQueue()) : Component()

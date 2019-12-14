@@ -4,11 +4,4 @@ import com.artemis.Component
 import com.artemis.annotations.PooledWeaver
 
 @PooledWeaver
-class Follow() : Component() {
-
-    constructor(entityId: Int) : this() {
-        this.entity = entityId
-    }
-
-    var entity = 0
-}
+data class Follow(var entity: Int = 0) : Component()

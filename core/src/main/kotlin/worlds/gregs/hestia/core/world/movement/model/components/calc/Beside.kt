@@ -4,25 +4,4 @@ import com.artemis.Component
 import com.artemis.annotations.PooledWeaver
 
 @PooledWeaver
-class Beside() : Component() {
-
-    constructor(x: Int, y: Int, max: Int = -1, width: Int = 1, height: Int = 1, check: Boolean = true, calculate: Boolean = false, beside: Boolean = false) : this() {
-        this.x = x
-        this.y = y
-        this.max = max
-        this.sizeX = width
-        this.sizeY = height
-        this.check = check
-        this.calculate = calculate
-        this.beside = beside
-    }
-
-    var x = -1
-    var y = -1
-    var max = -1
-    var sizeX = 1
-    var sizeY = 1
-    var check = true
-    var calculate = false
-    var beside = false
-}
+data class Beside(var x: Int = -1, var y: Int = -1, var max: Int = -1, var sizeX: Int = 1, var sizeY: Int = 1, var check: Boolean = true, var calculate: Boolean = false, var beside: Boolean = false) : Component()

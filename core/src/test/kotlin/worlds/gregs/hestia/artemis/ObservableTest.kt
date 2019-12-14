@@ -11,9 +11,7 @@ import worlds.gregs.hestia.core.remove
 class ObservableTest : GameTest(WorldConfigurationBuilder()) {
 
     @PooledWeaver
-    class Observer : Component() {
-        var value = -1
-    }
+    data class Observer(var value: Int = -1) : Component()
 
     @Test
     fun test() {

@@ -4,6 +4,4 @@ import com.artemis.Component
 import com.artemis.annotations.PooledWeaver
 
 @PooledWeaver
-class ObjectType : Component() {
-    var type = -1
-}
+data class ObjectType(var type: Int = -1) : Component()

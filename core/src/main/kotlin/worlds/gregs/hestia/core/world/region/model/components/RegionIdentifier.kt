@@ -4,8 +4,7 @@ import com.artemis.Component
 import com.artemis.annotations.PooledWeaver
 
 @PooledWeaver
-class RegionIdentifier : Component() {
-    var id: Int = -1
+data class RegionIdentifier(var id: Int = -1) : Component() {
 
     val x: Int
         get() = regionX * 64

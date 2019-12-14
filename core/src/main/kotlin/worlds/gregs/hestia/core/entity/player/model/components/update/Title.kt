@@ -4,11 +4,4 @@ import com.artemis.Component
 import com.artemis.annotations.PooledWeaver
 
 @PooledWeaver
-class Title() : Component() {
-
-    constructor(title: Int) : this() {
-        this.title = title
-    }
-
-    var title = -1
-}
+data class Title(var title: Int = -1) : Component()

@@ -4,6 +4,4 @@ import com.artemis.Component
 import com.artemis.annotations.PooledWeaver
 
 @PooledWeaver
-class RegionPriorities : Component() {
-    var priority = 0
-}
+data class RegionPriorities(var priority: Int = 0) : Component()

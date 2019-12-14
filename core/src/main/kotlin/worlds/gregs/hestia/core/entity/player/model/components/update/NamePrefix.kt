@@ -4,11 +4,4 @@ import com.artemis.Component
 import com.artemis.annotations.PooledWeaver
 
 @PooledWeaver
-class NamePrefix() : Component() {
-
-    constructor(prefix: String) : this() {
-        this.prefix = prefix
-    }
-
-    var prefix: String? = ""
-}
+data class NamePrefix(var prefix: String? = "") : Component()

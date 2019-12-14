@@ -5,14 +5,10 @@ import com.artemis.annotations.PooledWeaver
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 
 @PooledWeaver
-class ForceMovement() : Component() {
+data class ForceMovement(var firstDelay: Int = 0, var secondPosition: Position? = null, var secondDelay: Int = 0, var direction: Int = 0) : Component() {
 
-    constructor(first: Position, delay: Int, second: Position?, secondDelay: Int, direction: Int) : this() {
+    constructor(first: Position, delay: Int, second: Position?, secondDelay: Int, direction: Int) : this(delay, second, secondDelay, direction) {
         this.firstPosition = first
-        this.firstDelay = delay
-        this.secondPosition = second
-        this.secondDelay = secondDelay
-        this.direction = direction
     }
     /*
         Two uses
@@ -21,10 +17,6 @@ class ForceMovement() : Component() {
         Delayed/Double movement (all in use)
      */
     lateinit var firstPosition: Position
-    var firstDelay: Int = 0
-    var secondPosition: Position? = null
-    var secondDelay: Int = 0
-    var direction: Int = 0
 
     companion object {
         const val NORTH = 0

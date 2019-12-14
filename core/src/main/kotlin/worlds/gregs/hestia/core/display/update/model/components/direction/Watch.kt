@@ -4,11 +4,4 @@ import com.artemis.Component
 import com.artemis.annotations.PooledWeaver
 
 @PooledWeaver
-class Watch() : Component() {
-
-    constructor(entityId: Int) : this() {
-        this.entity = entityId
-    }
-
-    var entity = 0//Entity id
-}
+data class Watch(var entity: Int = -1) : Component()

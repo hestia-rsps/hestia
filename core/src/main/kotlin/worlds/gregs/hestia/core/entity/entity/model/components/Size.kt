@@ -5,16 +5,7 @@ import com.artemis.ComponentMapper
 import com.artemis.annotations.PooledWeaver
 
 @PooledWeaver
-class Size() : Component() {
-
-    constructor(sizeX: Int, sizeY: Int) : this() {
-        this.sizeX = sizeX
-        this.sizeY = sizeY
-    }
-
-    var sizeX = 1
-    var sizeY = 1
-}
+data class Size(var sizeX: Int = 1, var sizeY: Int = 1) : Component()
 
 fun ComponentMapper<Size>.width(entityId: Int): Int {
     return if(has(entityId)) {

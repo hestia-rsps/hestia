@@ -5,15 +5,7 @@ import com.artemis.annotations.PooledWeaver
 import worlds.gregs.hestia.core.world.movement.api.RouteStrategy
 
 @PooledWeaver
-class Path() : Component() {
 
-    constructor(strategy: RouteStrategy, collide: Boolean = true, alternative: Boolean = true) : this() {
-        this.strategy = strategy
-        this.collide = collide
-        this.alternative = alternative
-    }
-
-    var collide = true
-    var alternative = true
+data class Path(var collide: Boolean = true, var alternative: Boolean = true) : Component() {
     lateinit var strategy: RouteStrategy
 }

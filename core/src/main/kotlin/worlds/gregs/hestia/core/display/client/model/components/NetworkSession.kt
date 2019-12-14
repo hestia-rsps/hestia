@@ -6,9 +6,6 @@ import com.artemis.annotations.PooledWeaver
 import io.netty.channel.Channel
 
 @PooledWeaver
-class NetworkSession : Component() {
-    @EntityId
-    @JvmField
-    var entity: Int = -1
+data class NetworkSession(@EntityId @JvmField var entity: Int = -1) : Component() {
     lateinit var channel: Channel
 }

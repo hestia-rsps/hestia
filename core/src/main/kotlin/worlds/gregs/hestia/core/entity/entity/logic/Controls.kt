@@ -3,7 +3,6 @@ package worlds.gregs.hestia.core.entity.entity.logic
 import com.artemis.Entity
 import net.mostlyoriginal.api.event.common.EventSystem
 import worlds.gregs.hestia.core.display.client.model.events.UpdateMapRegion
-import worlds.gregs.hestia.core.display.update.components.*
 import worlds.gregs.hestia.core.display.update.model.components.*
 import worlds.gregs.hestia.core.display.update.model.components.direction.Face
 import worlds.gregs.hestia.core.display.update.model.components.direction.Facing

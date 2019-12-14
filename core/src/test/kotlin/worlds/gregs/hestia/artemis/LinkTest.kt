@@ -43,7 +43,6 @@ class LinkTest : PlayerTester(WorldConfigurationBuilder().with(EntityLinkManager
             }
         })
         player.edit().add(RunToggled())
-        player.getComponent(RunToggled::class)?.entity = player.id
 
         tick()
         var bag = world.componentManager.getComponentsFor(player.id, Bag<Component>())
