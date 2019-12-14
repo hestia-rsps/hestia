@@ -2,6 +2,8 @@ package worlds.gregs.hestia.artemis.bag
 
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.Test
+import worlds.gregs.hestia.artemis.bag.map.EntitySyncBag
+import worlds.gregs.hestia.artemis.bag.map.OrderedSyncBag
 
 internal class OrderedSyncBagTest : SyncBagTester() {
 

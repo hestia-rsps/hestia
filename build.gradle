@@ -30,6 +30,7 @@ test {
 
 allprojects {
     apply plugin: "kotlin"
+    apply plugin: 'kotlin-kapt'
     apply plugin: "artemis"
 
     group 'worlds.gregs.hestia'
@@ -45,6 +46,7 @@ allprojects {
         compile utilityDependencies.values()
         compile mainDependencies.values()
         compile logDependencies.values()
+        kapt "io.arrow-kt:arrow-meta:$arrow_version"
         testCompile testDependencies.values()
     }
 

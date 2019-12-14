@@ -2,33 +2,46 @@ package worlds.gregs.hestia.core.display.dialogue.logic.systems.type
 
 import io.mockk.coVerifySequence
 import io.mockk.confirmVerified
+import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.junit5.MockKExtension
+import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
+import worlds.gregs.hestia.core.display.dialogue.logic.systems.LinesDialogueTest
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.MobDialogue
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.mob
-import worlds.gregs.hestia.game.task.TaskScope
+import worlds.gregs.hestia.core.task.api.Task
+import kotlin.coroutines.resume
 
 @ExtendWith(MockKExtension::class)
-internal class MobDialogueTest {
+internal class MobDialogueTest : LinesDialogueTest {
 
     @RelaxedMockK
-    private lateinit var scope: TaskScope
+    private lateinit var task: Task
+    private lateinit var continuation: CancellableContinuation<Unit>
+
+    @BeforeEach
+    fun setup() {
+        every { task.suspension = any() } propertyType MobDialogue::class answers {
+            continuation = arg<MobDialogue>(0).continuation
+            continuation.resume(Unit)
+        }
+    }
 
     @Test
     fun `Mob dialogue sets data and suspends`() = runBlocking {
         //When
-        scope.mob("Text", 5, 10, "Title")
+        task.mob("Text", 5, 10, "Title")
         //Then
         coVerifySequence {
-            scope.deferral = MobDialogue(listOf("Text"), "Title", 5, 10)
-            scope.defer()
+            task.suspension = MobDialogue(listOf("Text"), "Title", 5, 10, continuation)
         }
-        confirmVerified(scope)
+        confirmVerified(task)
     }
 
     @Test
@@ -36,7 +49,7 @@ internal class MobDialogueTest {
         //Then
         assertThrows<IllegalStateException> {
             runBlocking {
-                scope.mob(lines(5))
+                task.mob(lines(5))
             }
         }
     }
@@ -46,10 +59,9 @@ internal class MobDialogueTest {
         //Then
         assertDoesNotThrow {
             runBlocking {
-                scope.mob(lines(4))
+                task.mob(lines(4))
             }
         }
     }
 
-    private fun lines(count: Int) = (0..45 * count).mapIndexed { index, _ -> if(index % 2 == 0) "a" else " "}.joinToString(separator = "")
 }

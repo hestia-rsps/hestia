@@ -7,9 +7,9 @@ import com.nhaarman.mockitokotlin2.*
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import worlds.gregs.hestia.GameTest
 import worlds.gregs.hestia.core.display.widget.api.Widget
 import worlds.gregs.hestia.core.display.widget.model.components.ScreenWidget
-import worlds.gregs.hestia.GameTest
 
 internal class UserInterfaceSystemTest : GameTest(WorldConfigurationBuilder()) {
 
@@ -226,11 +226,11 @@ internal class UserInterfaceSystemTest : GameTest(WorldConfigurationBuilder()) {
     }
 
     private fun click(entity: Int = 0, widget: Int = 11, component: Int = 0, option: Int = 0) {
-        ui.click(entity, 0, widget, component, option)
+        ui.click(entity, 0, widget, component, 0, 0, option)
     }
 
     private fun assertClick(times: Int, entity: Int = 0, component: Int = 0, option: Int = 0) {
-        verify(widget, times(times)).click(entity, 0, component, option)
+        verify(widget, times(times)).click(entity, 0, component, 0, 0, option)
     }
 
 }

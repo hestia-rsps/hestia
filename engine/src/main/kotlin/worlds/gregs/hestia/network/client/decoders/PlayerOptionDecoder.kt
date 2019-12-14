@@ -13,13 +13,13 @@ import world.gregs.hestia.core.network.protocol.ClientOpcodes.PLAYER_OPTION_6
 import world.gregs.hestia.core.network.protocol.ClientOpcodes.PLAYER_OPTION_7
 import world.gregs.hestia.core.network.protocol.ClientOpcodes.PLAYER_OPTION_8
 import world.gregs.hestia.core.network.protocol.ClientOpcodes.PLAYER_OPTION_9
-import worlds.gregs.hestia.network.client.decoders.messages.PlayerOption
+import worlds.gregs.hestia.network.client.decoders.messages.PlayerOptionMessage
 
-class PlayerOptionDecoder : MessageDecoder<PlayerOption>(3, PLAYER_OPTION_1, PLAYER_OPTION_2, PLAYER_OPTION_3, PLAYER_OPTION_4, PLAYER_OPTION_5, PLAYER_OPTION_6, PLAYER_OPTION_7, PLAYER_OPTION_8, PLAYER_OPTION_9, PLAYER_OPTION_10) {
+class PlayerOptionDecoder : MessageDecoder<PlayerOptionMessage>(3, PLAYER_OPTION_1, PLAYER_OPTION_2, PLAYER_OPTION_3, PLAYER_OPTION_4, PLAYER_OPTION_5, PLAYER_OPTION_6, PLAYER_OPTION_7, PLAYER_OPTION_8, PLAYER_OPTION_9, PLAYER_OPTION_10) {
 
-    override fun decode(ctx: ChannelHandlerContext, packet: Packet): PlayerOption? {
+    override fun decode(ctx: ChannelHandlerContext, packet: Packet): PlayerOptionMessage? {
         packet.readByte()//0
-        return PlayerOption(packet.readShort(), opcodes.indexOf(packet.opcode) + 1)
+        return PlayerOptionMessage(packet.readShort(), opcodes.indexOf(packet.opcode) + 1)
     }
 
 }

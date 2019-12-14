@@ -9,7 +9,7 @@ import worlds.gregs.hestia.network.client.decoders.messages.RegionLoading
 class RegionLoadingDecoder : MessageDecoder<RegionLoading>(4, REGION_LOADING) {
 
     override fun decode(ctx: ChannelHandlerContext, packet: Packet): RegionLoading? {
-        packet.readInt()//1057001181
+        //1057001181
         return null//Unknown5()
     }
 

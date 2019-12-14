@@ -16,8 +16,7 @@ class WidgetItemsEncoder : MessageEncoder<WidgetItems>() {
             writeShort(if (negativeKey) key else key)
             writeByte(negativeKey)
             writeShort(items.size)
-            for (item in items) {
-                val amount = 1//TODO item interface
+            for ((item, amount) in items) {
                 writeByte(if (amount >= 255) 255 else amount)
                 if (amount >= 255) {
                     writeInt(amount)

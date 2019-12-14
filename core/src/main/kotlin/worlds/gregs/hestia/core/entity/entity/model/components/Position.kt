@@ -3,6 +3,7 @@ package worlds.gregs.hestia.core.entity.entity.model.components
 import com.artemis.Component
 import com.artemis.annotations.DelayedComponentRemoval
 import worlds.gregs.hestia.core.display.update.logic.sync.ViewportSystem.Companion.DEFAULT_VIEW_DISTANCE
+import worlds.gregs.hestia.core.world.map.model.MapConstants.MAP_SIZES
 import kotlin.math.abs
 import kotlin.math.ceil
 import kotlin.math.sqrt
@@ -85,13 +86,16 @@ open class Position() : Component() {
     }
 
     val locationHash18Bit: Int
-        get() = regionY + (regionX shl 8) + (plane shl 16)
+        get() = hash18Bit(regionX, regionY, plane)
 
     val locationHash30Bit: Int
-        get() = y + (x shl 14) + (plane shl 28)
+        get() = hash24Bit(x, y, plane)
 
     companion object {
         val EMPTY = Position()
+
+        fun localPosition(coordinate: Int, chunk: Int, mapSize: Int = 0) =
+                coordinate - 8 * (chunk - (MAP_SIZES[mapSize] shr 4))
 
         fun withinRange(x: Int, y: Int, x2: Int, y2: Int, radius: Int = DEFAULT_VIEW_DISTANCE): Boolean {
             return abs(x - x2) <= radius && abs(y - y2) <= radius
@@ -125,7 +129,11 @@ open class Position() : Component() {
             return create(position.x, position.y, position.plane)
         }
 
-        fun hash(x: Int, y: Int, plane: Int = 0): Int {
+        fun hash18Bit(x: Int, y: Int, plane: Int): Int {
+            return y + (x shl 8) + (plane shl 16)
+        }
+
+        fun hash24Bit(x: Int, y: Int, plane: Int = 0): Int {
             return y + (x shl 14) + (plane shl 28)
         }
 

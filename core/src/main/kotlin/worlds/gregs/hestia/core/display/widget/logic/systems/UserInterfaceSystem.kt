@@ -9,6 +9,8 @@ import worlds.gregs.hestia.artemis.events.send
 import worlds.gregs.hestia.core.display.widget.api.GameFrame
 import worlds.gregs.hestia.core.display.widget.api.UserInterface
 import worlds.gregs.hestia.core.display.widget.api.Widget
+import worlds.gregs.hestia.core.display.widget.logic.systems.frame.GameFrameSystem
+import worlds.gregs.hestia.core.display.widget.logic.systems.frame.chat.DialogueBoxSystem
 import worlds.gregs.hestia.core.display.widget.model.components.Frame
 import worlds.gregs.hestia.core.display.widget.model.components.FullScreenWidget
 import worlds.gregs.hestia.core.display.widget.model.components.ScreenWidget
@@ -16,8 +18,6 @@ import worlds.gregs.hestia.core.display.widget.model.components.frame.chat.Dialo
 import worlds.gregs.hestia.core.display.widget.model.events.ButtonClick
 import worlds.gregs.hestia.core.display.widget.model.events.CloseDialogue
 import worlds.gregs.hestia.core.display.widget.model.events.ScreenClosed
-import worlds.gregs.hestia.core.display.widget.logic.systems.frame.GameFrameSystem
-import worlds.gregs.hestia.core.display.widget.logic.systems.frame.chat.DialogueBoxSystem
 import kotlin.reflect.KClass
 
 class UserInterfaceSystem : UserInterface() {
@@ -35,7 +35,7 @@ class UserInterfaceSystem : UserInterface() {
 
     @Subscribe
     private fun click(event: ButtonClick) {
-        click(event.entityId, event.interfaceHash, event.widgetId, event.componentId, event.option)
+        click(event.entityId, event.interfaceHash, event.widgetId, event.componentId, event.fromSlot, event.toSlot, event.option)
     }
 
     /**
@@ -49,10 +49,15 @@ class UserInterfaceSystem : UserInterface() {
         }
     }
 
-    override fun click(entityId: Int, interfaceHash: Int, widgetId: Int, componentId: Int, option: Int) {
+    override fun click(entityId: Int, interfaceHash: Int, widgetId: Int, componentId: Int, fromSlot: Int, toSlot: Int, option: Int) {
         widgets.filter { it.getId(entityId) == widgetId }.forEach {
-            it.click(entityId, interfaceHash, componentId, option)
+            it.click(entityId, interfaceHash, componentId, fromSlot, toSlot, option)
         }
+    }
+
+    override fun validate(entityId: Int, interfaceHash: Int): Boolean {
+        val widgetId = interfaceHash shr 16
+        return widgets.any { it.getId(entityId) == widgetId }
     }
 
     override fun open(entityId: Int, widget: ScreenWidget) {
@@ -90,7 +95,7 @@ class UserInterfaceSystem : UserInterface() {
     }
 
     override fun contains(entityId: Int, clazz: KClass<out Widget>): Boolean {
-        return widgets.any { clazz.isInstance(it) && it.subscription.activeEntityIds.get(entityId) }//Couldn't we just do ContentMap<>.has(entityId)
+        return widgets.any { clazz.isInstance(it) && it.subscription.activeEntityIds.get(entityId) }//Couldn't we just do ContentMap<>.has(entityId)?
     }
 
     override fun close(entityId: Int, clazz: KClass<out Frame>) {

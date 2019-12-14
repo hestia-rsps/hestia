@@ -2,17 +2,17 @@ package worlds.gregs.hestia.core.task.tick.logic
 
 import com.artemis.BaseSystem
 import net.mostlyoriginal.api.event.common.Subscribe
-import worlds.gregs.hestia.core.task.tick.logic.TickTaskSystem.Task
+import worlds.gregs.hestia.core.task.tick.logic.TickTaskSystem.TaskWrapper
 import worlds.gregs.hestia.core.task.tick.model.TickTask
 import worlds.gregs.hestia.core.task.tick.model.TickTaskEvent
 import java.util.*
 
 /**
- * Technically a separate system from [Task] but it's the most relevant location
+ * Technically a separate system from [TaskWrapper] but it's the most relevant location
  */
 class TickTaskSystem : BaseSystem() {
 
-    private val tasks = Collections.synchronizedList(LinkedList<Task>())
+    private val tasks = Collections.synchronizedList(LinkedList<TaskWrapper>())
 
     val tasksCount: Int
         get() = tasks.size
@@ -57,8 +57,8 @@ class TickTaskSystem : BaseSystem() {
         if(delay < 0 || period < 0) {
             return
         }
-        tasks.add(Task(TickTask(period != 0, task), delay, period))
+        tasks.add(TaskWrapper(TickTask(period != 0, task), delay, period))
     }
 
-    private data class Task(val task: TickTask, var delay: Int, val period: Int)
+    private data class TaskWrapper(val task: TickTask, var delay: Int, val period: Int)
 }

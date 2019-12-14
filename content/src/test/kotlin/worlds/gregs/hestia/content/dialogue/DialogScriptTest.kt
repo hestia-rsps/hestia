@@ -32,7 +32,7 @@ internal class DialogScriptTest : ScriptTesterMock<ScriptBase>() {
         //When
         script.listeners.forEach {
             if(it.event == Command::class) {
-                it.action.invoke(Command(0, "test"))
+//                it.action.invoke(Command(0, "test"))
             }
         }
         //Then

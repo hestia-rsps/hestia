@@ -3,6 +3,7 @@ package worlds.gregs.hestia.artemis.bag
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import worlds.gregs.hestia.artemis.bag.map.EntitySyncBag
 
 internal class EntitySyncBagTest {
 
@@ -12,6 +13,10 @@ internal class EntitySyncBagTest {
     fun setup() {
         bag = object: EntitySyncBag(40) {
             override fun containsIndex(index: Int): Boolean {
+                TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+            }
+
+            override fun getEntity(index: Int): Int {
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
 

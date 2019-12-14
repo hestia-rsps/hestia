@@ -10,6 +10,8 @@ class Steps : Component() {
     var lastX: Int? = null
     var lastY: Int? = null
 
+    var path = -1
+
     private val directions = ConcurrentLinkedQueue<Direction>()
 
     val hasNext: Boolean

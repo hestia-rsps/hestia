@@ -73,7 +73,11 @@ class ObjectCollisionSystem : ObjectCollision() {
         private fun print(array: Array<IntArray>) {
             for (y in array[0].indices.reversed()) {
                 for (x in array.indices) {
-                    print(if (array[x][y] != 0) 1 else " ")
+                    if(x in 66..68 && y in 65..67) {
+                        print(array[x][y])
+                    } else {
+                        print(if (array[x][y] != 0) 1 else " ")
+                    }
                     print(" ")
                 }
                 println()

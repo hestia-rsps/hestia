@@ -1,15 +1,15 @@
 package worlds.gregs.hestia.core.display.update.logic.sync.mob
 
 import com.artemis.ComponentMapper
-import worlds.gregs.hestia.artemis.bag.EntitySyncBag
+import worlds.gregs.hestia.artemis.bag.map.EntitySyncBag
 import worlds.gregs.hestia.core.display.client.model.components.Viewport
 import worlds.gregs.hestia.core.display.update.logic.sync.SynchronizeSystem
 import worlds.gregs.hestia.core.display.update.logic.sync.mob.factories.local.RemoveMobSyncFactory
 import worlds.gregs.hestia.core.display.update.logic.sync.mob.stages.IdleMobSync
 import worlds.gregs.hestia.core.display.update.logic.sync.mob.stages.MobFinishStage
 import worlds.gregs.hestia.core.display.update.logic.sync.mob.stages.MobSizeStage
-import worlds.gregs.hestia.network.client.encoders.messages.MobUpdate
 import worlds.gregs.hestia.core.display.update.model.sync.AccessStage
+import worlds.gregs.hestia.network.client.encoders.messages.MobUpdate
 
 /**
  * Graphical Mob (NPC) information (GNI) update packet creation

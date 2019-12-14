@@ -10,7 +10,7 @@ import org.mockito.AdditionalMatchers.geq
 import org.mockito.Matchers.anyBoolean
 import org.mockito.Matchers.anyInt
 import worlds.gregs.hestia.artemis.add
-import worlds.gregs.hestia.artemis.bag.EntitySyncBag
+import worlds.gregs.hestia.artemis.bag.map.EntitySyncBag
 import worlds.gregs.hestia.core.display.client.model.components.ClientIndex
 import worlds.gregs.hestia.core.display.client.model.components.NetworkSession
 import worlds.gregs.hestia.core.display.client.model.components.Viewport

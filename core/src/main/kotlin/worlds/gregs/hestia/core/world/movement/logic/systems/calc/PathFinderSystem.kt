@@ -3,6 +3,7 @@ package worlds.gregs.hestia.core.world.movement.logic.systems.calc
 import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
 import net.mostlyoriginal.api.system.core.PassiveSystem
+import worlds.gregs.hestia.artemis.nearby
 import worlds.gregs.hestia.core.display.update.model.Direction
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.entity.model.components.Size
@@ -11,7 +12,6 @@ import worlds.gregs.hestia.core.world.movement.api.RouteStrategy
 import worlds.gregs.hestia.core.world.movement.logic.navigation.PrimaryNavigation
 import worlds.gregs.hestia.core.world.movement.logic.navigation.SecondaryNavigation
 import worlds.gregs.hestia.core.world.movement.logic.navigation.TertiaryNavigation
-import worlds.gregs.hestia.artemis.nearby
 
 @Wire(failOnNull = false)
 class PathFinderSystem : PassiveSystem() {
@@ -140,7 +140,7 @@ class PathFinderSystem : PassiveSystem() {
         }
 
         if (endX == position.x && endY == position.y) {
-            return 0//Path found but no movement
+            return 0//Alternative path found
         }
 
         //Trace path in reverse for best route
@@ -148,7 +148,7 @@ class PathFinderSystem : PassiveSystem() {
         var traceX = endX
         var traceY = endY
         var direction = directions[traceX - graphBaseX][traceY - graphBaseY]
-        var lastwritten = direction
+        var lastWritten = direction
         val bufferX = lastPathBufferX
         val bufferY = lastPathBufferY
         //Queue destination position and start tracing from it
@@ -156,10 +156,10 @@ class PathFinderSystem : PassiveSystem() {
         bufferY[steps++] = traceY
         while (traceX != position.x || traceY != position.y) {
             //Direction changed
-            if (lastwritten != direction) {
+            if (lastWritten != direction) {
                 bufferX[steps] = traceX
                 bufferY[steps++] = traceY
-                lastwritten = direction
+                lastWritten = direction
             }
 
             if (direction and DIR_WEST != 0) {
@@ -225,7 +225,7 @@ class PathFinderSystem : PassiveSystem() {
             currentGraphY = currentY - graphBaseY
 
             //Check if path is complete
-            if (strategy.exit(currentX, currentY, sizeX, sizeY, currentGraphX, currentGraphY, collision)) {
+            if (strategy.exit(currentX, currentY, sizeX, sizeY, graphBaseX, graphBaseY, collision)) {
                 exitX = currentX
                 exitY = currentY
                 return true

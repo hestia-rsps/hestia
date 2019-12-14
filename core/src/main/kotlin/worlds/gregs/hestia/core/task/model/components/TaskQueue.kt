@@ -1,31 +1,14 @@
 package worlds.gregs.hestia.core.task.model.components
 
 import com.artemis.Component
-import com.artemis.ComponentMapper
-import com.artemis.annotations.PooledWeaver
-import kotlinx.coroutines.runBlocking
-import worlds.gregs.hestia.game.task.TaskScope
+import worlds.gregs.hestia.core.task.api.Task
+import worlds.gregs.hestia.core.task.model.InactiveTask
+import worlds.gregs.hestia.core.task.model.context.EntityContext
 import java.util.*
 
-/**
- * A queue of active tasks
- */
-@PooledWeaver
 class TaskQueue : Component() {
-    val queue = LinkedList<TaskScope>()
+    val inactiveTasks: Deque<InactiveTask<*>> = LinkedList()
+    val active: Deque<Task> = LinkedList()
 
-    fun peek() = queue.peek()
-
-    fun poll() = queue.poll()
-
-    fun addFirst(scope: TaskScope) = queue.addFirst(scope)
-
-    fun clear() {
-        runBlocking {
-            queue.forEach { it.stop(false) }
-        }
-        queue.clear()
-    }
+    lateinit var context: EntityContext
 }
-
-fun ComponentMapper<TaskQueue>.getDeferral(entityId: Int) = get(entityId)?.peek()?.deferral

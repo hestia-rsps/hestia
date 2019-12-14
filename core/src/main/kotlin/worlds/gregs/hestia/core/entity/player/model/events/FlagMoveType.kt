@@ -1,5 +1,5 @@
 package worlds.gregs.hestia.core.entity.player.model.events
 
-import net.mostlyoriginal.api.event.common.Event
+import worlds.gregs.hestia.artemis.InstantEvent
 
-class FlagMoveType(val entityId: Int) : Event
+class FlagMoveType(val entityId: Int) : InstantEvent

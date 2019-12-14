@@ -19,7 +19,7 @@ import worlds.gregs.hestia.game.plugin.Plugin.Companion.UPDATE_FINISH_PRIORITY
 class MobPlugin : Plugin {
 
     override fun setup(b: WorldConfigurationBuilder) {
-        b.with(MobChunkMap(), MobCreation())
+        b.with(MobChunkMap(), MobCreation(true))
         b.with(MobChunkSubscriptionSystem(), MobRegionSubscriptionSystem(), MobChunkSystem())
         b.with(PRE_SHIFT_PRIORITY, MobChunkChangeSystem(), MobRegionChangeSystem())
         b.with(POST_UPDATE_PRIORITY, MobChunkMapSystem())

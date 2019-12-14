@@ -12,17 +12,17 @@ import world.gregs.hestia.core.network.protocol.ClientOpcodes.OBJECT_OPTION_3
 import world.gregs.hestia.core.network.protocol.ClientOpcodes.OBJECT_OPTION_4
 import world.gregs.hestia.core.network.protocol.ClientOpcodes.OBJECT_OPTION_5
 import world.gregs.hestia.core.network.protocol.ClientOpcodes.OBJECT_OPTION_6
-import worlds.gregs.hestia.network.client.decoders.messages.ObjectOption
+import worlds.gregs.hestia.network.client.decoders.messages.ObjectOptionMessage
 
-class ObjectOptionDecoder : MessageDecoder<ObjectOption>(7, OBJECT_OPTION_1, OBJECT_OPTION_2, OBJECT_OPTION_3, OBJECT_OPTION_4, OBJECT_OPTION_5, OBJECT_OPTION_6) {
+class ObjectOptionDecoder : MessageDecoder<ObjectOptionMessage>(7, OBJECT_OPTION_1, OBJECT_OPTION_2, OBJECT_OPTION_3, OBJECT_OPTION_4, OBJECT_OPTION_5, OBJECT_OPTION_6) {
 
-    override fun decode(ctx: ChannelHandlerContext, packet: Packet): ObjectOption? {
+    override fun decode(ctx: ChannelHandlerContext, packet: Packet): ObjectOptionMessage? {
         val run = packet.readBoolean(Modifier.ADD)
         val x = packet.readShort(Modifier.ADD)
         val id = packet.readUnsigned(DataType.SHORT, Modifier.ADD, Endian.LITTLE).toInt()
         val y = packet.readShort(order = Endian.LITTLE)
         val option = opcodes.indexOf(packet.opcode) + 1
-        return ObjectOption(id, x, y, run, option)
+        return ObjectOptionMessage(id, x, y, run, option)
     }
 
 }

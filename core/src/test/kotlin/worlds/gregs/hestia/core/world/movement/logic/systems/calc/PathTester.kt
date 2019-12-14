@@ -3,13 +3,13 @@ package worlds.gregs.hestia.core.world.movement.logic.systems.calc
 import com.artemis.BaseSystem
 import com.artemis.Entity
 import org.assertj.core.api.Assertions.assertThat
+import worlds.gregs.hestia.artemis.getComponent
+import worlds.gregs.hestia.artemis.getSystem
+import worlds.gregs.hestia.core.display.update.model.Direction
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.entity.model.components.Size
 import worlds.gregs.hestia.core.world.movement.api.Mobile
 import worlds.gregs.hestia.core.world.movement.model.components.Steps
-import worlds.gregs.hestia.core.display.update.model.Direction
-import worlds.gregs.hestia.artemis.getComponent
-import worlds.gregs.hestia.artemis.getSystem
 
 internal abstract class PathTester(offset: Boolean, vararg systems: BaseSystem) : MovementTester(offset, *systems) {
 
@@ -35,7 +35,7 @@ internal abstract class PathTester(offset: Boolean, vararg systems: BaseSystem) 
     private fun check(startX: Int, startY: Int, width: Int, height: Int, expected: List<IntArray>? = null, display: Boolean = false, action: (Entity) -> Unit) {
         //Create
         val entity = mockEntity(startX, startY, width, height)
-        val clipping = world.getSystem(MovementTester.ClippingBuilderTester::class)
+        val clipping = world.getSystem(ClippingBuilderTester::class)
 
         clip?.load(Position.create(startX, startY, 0), false)
 
@@ -77,6 +77,7 @@ internal abstract class PathTester(offset: Boolean, vararg systems: BaseSystem) 
     }
 
     private fun assertPath(startX: Int, startY: Int, dirs: List<Direction>, expected: List<IntArray>) {
+//        println("Expected path ${expected.map { it.toList() }.joinToString()} actual: ${dirs.toList()}")
         assertThat(dirs.size).isEqualTo(expected.size)
         path(startX, startY, dirs) { x, y, index, _ ->
             assertThat(index < expected.size).isTrue()

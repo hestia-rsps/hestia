@@ -12,7 +12,7 @@ class SkillMenuSystem : BaseScreen(SkillMenu::class) {
         return ID
     }
 
-    override fun click(entityId: Int, interfaceHash: Int, componentId: Int, option: Int) {
+    override fun click(entityId: Int, interfaceHash: Int, componentId: Int, fromSlot: Int, toSlot: Int, option: Int) {
         when(componentId) {
             in 10..25 -> {
                 val index = 0

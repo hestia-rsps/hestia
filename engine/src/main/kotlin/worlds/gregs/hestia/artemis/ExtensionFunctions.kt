@@ -47,8 +47,8 @@ fun EventSystem.send(entity: Int, packet: Packet) {
     dispatch(OutBoundPacket(entity, packet))
 }
 
-fun String.wrap(maxLength: Int = 45): List<String> {
-    return WordUtils.wrap(this, maxLength).split(System.lineSeparator())
+fun String.wrap(maxLength: Int = 50): String {
+    return WordUtils.wrap(this, maxLength)
 }
 
 fun Int.nearby(size: Int): IntRange {
@@ -105,4 +105,8 @@ fun <T : BaseSystem>World.getSystem(type: KClass<T>) : T {
 
 fun World.players(): IntBag {
     return aspectSubscriptionManager.get(Aspect.all(Player::class)).entities
+}
+
+operator fun <T : Component> ComponentMapper<T>.invoke(entityId: Int) : T? {
+    return get(entityId)
 }

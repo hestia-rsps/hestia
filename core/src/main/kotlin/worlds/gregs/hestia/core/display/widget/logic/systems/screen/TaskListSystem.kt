@@ -9,7 +9,7 @@ class TaskListSystem : BaseScreen(TaskList::class) {
         return ID
     }
 
-    override fun click(entityId: Int, interfaceHash: Int, componentId: Int, option: Int) {
+    override fun click(entityId: Int, interfaceHash: Int, componentId: Int, fromSlot: Int, toSlot: Int, option: Int) {
         when (componentId) {
             165 -> {//Toggle tutorial
             }

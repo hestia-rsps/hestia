@@ -29,7 +29,7 @@ class PrayerListTabSystem : BaseFrame(PrayerListTab::class) {
 //        es.send(entityId, ConfigGlobal(182, 0))//Using quick prayers
     }
 
-    override fun click(entityId: Int, interfaceHash: Int, componentId: Int, option: Int) {
+    override fun click(entityId: Int, interfaceHash: Int, componentId: Int, fromSlot: Int, toSlot: Int, option: Int) {
         when(componentId) {
             12 -> {//Show/Hide stat adjustments
             }

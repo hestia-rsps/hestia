@@ -2,33 +2,46 @@ package worlds.gregs.hestia.core.display.dialogue.logic.systems.type
 
 import io.mockk.coVerifySequence
 import io.mockk.confirmVerified
+import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.junit5.MockKExtension
+import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.runBlocking
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertDoesNotThrow
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
+import worlds.gregs.hestia.core.display.dialogue.logic.systems.LinesDialogueTest
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.ItemDialogue
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.item
-import worlds.gregs.hestia.game.task.TaskScope
+import worlds.gregs.hestia.core.task.api.Task
+import kotlin.coroutines.resume
 
 @ExtendWith(MockKExtension::class)
-internal class ItemDialogueTest {
+internal class ItemDialogueTest : LinesDialogueTest {
 
     @RelaxedMockK
-    private lateinit var scope: TaskScope
+    private lateinit var task: Task
+    private lateinit var continuation: CancellableContinuation<Unit>
+
+    @BeforeEach
+    fun setup() {
+        every { task.suspension = any() } propertyType ItemDialogue::class answers {
+            continuation = arg<ItemDialogue>(0).continuation
+            continuation.resume(Unit)
+        }
+    }
 
     @Test
     fun `Item dialogue sets data and suspends`() = runBlocking {
         //When
-        scope.item("Text", 5, "Title")
+        task.item("Text", 5, "Title")
         //Then
         coVerifySequence {
-            scope.deferral = ItemDialogue(listOf("Text"), "Title", 5)
-            scope.defer()
+            task.suspension = ItemDialogue(listOf("Text"), "Title", 5, continuation)
         }
-        confirmVerified(scope)
+        confirmVerified(task)
     }
 
     @Test
@@ -36,7 +49,7 @@ internal class ItemDialogueTest {
         //Then
         assertThrows<IllegalStateException> {
             runBlocking {
-                scope.item(lines(5))
+                task.item(lines(5))
             }
         }
     }
@@ -46,10 +59,9 @@ internal class ItemDialogueTest {
         //Then
         assertDoesNotThrow {
             runBlocking {
-                scope.item(lines(4))
+                task.item(lines(4))
             }
         }
     }
 
-    private fun lines(count: Int) = (0..45 * count).mapIndexed { index, _ -> if(index % 2 == 0) "a" else " "}.joinToString(separator = "")
 }

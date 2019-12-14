@@ -2,15 +2,17 @@ package worlds.gregs.hestia.core.display.widget.logic.systems.frame
 
 import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
+import worlds.gregs.hestia.artemis.send
 import worlds.gregs.hestia.core.display.widget.api.GameFrame
 import worlds.gregs.hestia.core.display.widget.api.UserInterface
-import worlds.gregs.hestia.core.display.widget.model.components.frame.tabs.LogoutTab
-import worlds.gregs.hestia.core.display.widget.model.components.full.WorldMap
 import worlds.gregs.hestia.core.display.widget.logic.systems.BaseFullScreen
 import worlds.gregs.hestia.core.display.widget.logic.systems.frame.GameFrameSystem.Companion.FIXED_ID
 import worlds.gregs.hestia.core.display.widget.logic.systems.frame.GameFrameSystem.Companion.RESIZABLE_ID
+import worlds.gregs.hestia.core.display.widget.model.components.frame.tabs.LogoutTab
+import worlds.gregs.hestia.core.display.widget.model.components.full.WorldMap
+import worlds.gregs.hestia.core.script.dsl.task.PlayerOptions
+import worlds.gregs.hestia.network.client.encoders.messages.PlayerContextMenuOption
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetWindowsPane
-import worlds.gregs.hestia.artemis.send
 
 @Wire(failOnNull = false, injectInherited = true)
 class GameFrameSystem : BaseFullScreen(GameFrame::class) {
@@ -31,13 +33,16 @@ class GameFrameSystem : BaseFullScreen(GameFrame::class) {
         val window = getId(entityId)
         if(window != -1) {
             es.send(entityId, WidgetWindowsPane(window, 0))
+            listOf(PlayerOptions.FOLLOW, PlayerOptions.TRADE, PlayerOptions.ASSIST).forEach {
+                es.send(entityId, PlayerContextMenuOption(it.string, it.slot, it.top))
+            }
         }
     }
 
     override fun close(entityId: Int) {
     }
 
-    override fun click(entityId: Int, interfaceHash: Int, componentId: Int, option: Int) {
+    override fun click(entityId: Int, interfaceHash: Int, componentId: Int, fromSlot: Int, toSlot: Int, option: Int) {
         if(!gameFrameMapper.has(entityId)) {
             return
         }

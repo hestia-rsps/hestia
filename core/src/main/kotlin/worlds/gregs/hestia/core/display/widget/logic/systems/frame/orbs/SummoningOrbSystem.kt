@@ -19,7 +19,7 @@ class SummoningOrbSystem : BaseFrame(SummoningOrb::class) {
         super.open(entityId)
     }
 
-    override fun click(entityId: Int, interfaceHash: Int, componentId: Int, option: Int) {
+    override fun click(entityId: Int, interfaceHash: Int, componentId: Int, fromSlot: Int, toSlot: Int, option: Int) {
     }
 
     companion object {

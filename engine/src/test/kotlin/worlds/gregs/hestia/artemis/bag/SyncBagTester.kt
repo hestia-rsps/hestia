@@ -3,6 +3,7 @@ package worlds.gregs.hestia.artemis.bag
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import worlds.gregs.hestia.artemis.bag.map.EntitySyncBag
 
 internal abstract class SyncBagTester {
 

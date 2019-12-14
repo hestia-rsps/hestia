@@ -12,7 +12,7 @@ class PrivateChatSystem : BaseFrame(PrivateChat::class) {
         return if(resizable) RESIZABLE_INDEX else FIXED_INDEX
     }
 
-    override fun click(entityId: Int, interfaceHash: Int, componentId: Int, option: Int) {
+    override fun click(entityId: Int, interfaceHash: Int, componentId: Int, fromSlot: Int, toSlot: Int, option: Int) {
     }
 
     companion object {

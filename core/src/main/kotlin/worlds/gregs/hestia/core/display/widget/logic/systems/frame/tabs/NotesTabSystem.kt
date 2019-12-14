@@ -20,7 +20,7 @@ class NotesTabSystem : BaseFrame(NotesTab::class) {
         es.send(entityId, WidgetComponentSettings(getId(entityId), 9, 0, 30, 2621470))
     }
 
-    override fun click(entityId: Int, interfaceHash: Int, componentId: Int, option: Int) {
+    override fun click(entityId: Int, interfaceHash: Int, componentId: Int, fromSlot: Int, toSlot: Int, option: Int) {
     }
 
     companion object {

@@ -3,9 +3,9 @@ package worlds.gregs.hestia.core.world.movement.logic.systems.calc.step
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import worlds.gregs.hestia.core.entity.entity.logic.step
 import worlds.gregs.hestia.core.world.movement.logic.systems.calc.DirectStepSystem
 import worlds.gregs.hestia.core.world.movement.logic.systems.calc.PathTester
+import worlds.gregs.hestia.core.world.movement.model.components.calc.Step
 
 internal class LargeEntityDirectStepSystemTest : PathTester(false, DirectStepSystem()) {
 
@@ -134,7 +134,7 @@ internal class LargeEntityDirectStepSystemTest : PathTester(false, DirectStepSys
 
     private fun assertPath(targetX: Int, targetY: Int, expected: List<IntArray>? = null, display: Boolean = false) {
         assertPath(expected, display) {
-            it.step(targetX, targetY)
+            it.edit().add(Step(targetX, targetY, check = true))
         }
     }
 }

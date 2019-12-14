@@ -3,7 +3,6 @@ package worlds.gregs.hestia.core.task.tick.model
 import com.artemis.World
 import net.mostlyoriginal.api.event.common.Event
 import net.mostlyoriginal.api.event.common.EventSystem
-import worlds.gregs.hestia.core.task.model.Task
 import worlds.gregs.hestia.artemis.getSystem
 
 /**

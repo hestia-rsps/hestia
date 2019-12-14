@@ -1,7 +1,7 @@
 package worlds.gregs.hestia.core.display.update.logic.sync.player.factories.local
 
 import com.artemis.ComponentMapper
-import worlds.gregs.hestia.artemis.bag.EntitySyncBag
+import worlds.gregs.hestia.artemis.bag.map.EntitySyncBag
 import worlds.gregs.hestia.core.display.update.model.components.Moving
 import worlds.gregs.hestia.core.display.update.api.SyncFactory
 import worlds.gregs.hestia.core.display.update.logic.sync.SynchronizeSystem

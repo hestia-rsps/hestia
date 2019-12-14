@@ -32,7 +32,7 @@ class FriendsChatSetupSystem : BaseScreen(FriendsChatSetup::class) {
         }
     }
 
-    override fun click(entityId: Int, interfaceHash: Int, componentId: Int, option: Int) {
+    override fun click(entityId: Int, interfaceHash: Int, componentId: Int, fromSlot: Int, toSlot: Int, option: Int) {
         when(componentId) {
             22 -> {//Chat name
                 when(option) {

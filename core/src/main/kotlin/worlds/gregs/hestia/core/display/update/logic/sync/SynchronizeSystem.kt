@@ -6,19 +6,19 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import net.mostlyoriginal.api.event.common.EventSystem
 import world.gregs.hestia.core.network.codec.message.Message
-import worlds.gregs.hestia.artemis.bag.EntitySyncBag
+import worlds.gregs.hestia.artemis.bag.map.EntitySyncBag
+import worlds.gregs.hestia.artemis.forEach
+import worlds.gregs.hestia.artemis.players
+import worlds.gregs.hestia.artemis.send
+import worlds.gregs.hestia.core.display.update.api.BlockFactory
 import worlds.gregs.hestia.core.display.update.api.SyncFactory
 import worlds.gregs.hestia.core.display.update.api.Synchronize
-import worlds.gregs.hestia.core.display.update.api.BlockFactory
 import worlds.gregs.hestia.core.display.update.logic.sync.mob.factories.global.AddMobSyncFactory
 import worlds.gregs.hestia.core.display.update.logic.sync.player.factories.global.AddPlayerSyncFactory
 import worlds.gregs.hestia.core.entity.entity.model.components.Created
 import worlds.gregs.hestia.core.mobs
 import worlds.gregs.hestia.network.update.sync.Update
 import worlds.gregs.hestia.network.update.sync.UpdateBlockStage
-import worlds.gregs.hestia.artemis.forEach
-import worlds.gregs.hestia.artemis.players
-import worlds.gregs.hestia.artemis.send
 
 abstract class SynchronizeSystem<T : Message>(private val mob: Boolean) : Synchronize<T>() {
 
@@ -132,7 +132,7 @@ abstract class SynchronizeSystem<T : Message>(private val mob: Boolean) : Synchr
         //Create the stage
         val stage = UpdateBlockStage.create(mob)
         //Add block updates
-        applyBlocks(stage, updates, entity, local, added)
+        applyBlocks(stage, updates, entity, local, created)
         //Add to update
         update.addBlock(stage)
         //Remove created component

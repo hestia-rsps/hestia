@@ -19,6 +19,7 @@ ext {
     artemis_eventbus_version = '2.4.0'
     artemis_core_version = '2.4.0'
     artemis_eeel_version = '1.2.1'
+    arrow_version = '0.10.4'
 
     junit_version = "5.5.2"
     assertj_version = "3.14.0"
@@ -43,7 +44,11 @@ ext {
             artemisSerializer   : "net.onedaybeard.artemis:artemis-odb-serializer:$artemis_version",
             artemisEventBus     : "net.mostlyoriginal.artemis-odb:contrib-eventbus:$artemis_eventbus_version",
             artemisCore         : "net.mostlyoriginal.artemis-odb:contrib-core:$artemis_core_version",
-            artemisEeel         : "net.fbridault.eeel:artemis-odb-eeel:$artemis_eeel_version"
+            artemisEeel         : "net.fbridault.eeel:artemis-odb-eeel:$artemis_eeel_version",
+            arrowFx             : "io.arrow-kt:arrow-fx:$arrow_version",
+            arrowOptics         : "io.arrow-kt:arrow-optics:$arrow_version",
+            arrowSyntax         : "io.arrow-kt:arrow-syntax:$arrow_version",
+            arrowMTL            : "io.arrow-kt:arrow-mtl:$arrow_version"
     ]
 
     logDependencies = [

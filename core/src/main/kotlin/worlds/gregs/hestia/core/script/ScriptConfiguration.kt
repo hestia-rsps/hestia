@@ -1,37 +1,35 @@
 package worlds.gregs.hestia.core.script
 
-import kotlin.script.experimental.api.ScriptCompilationConfiguration
-import kotlin.script.experimental.api.defaultImports
+import kotlin.script.experimental.api.*
+import kotlin.script.experimental.jvm.dependenciesFromClassloader
+import kotlin.script.experimental.jvm.jvm
 
 object ScriptConfiguration : ScriptCompilationConfiguration({
-    defaultImports("worlds.gregs.hestia.api.*",
-            "worlds.gregs.hestia.core.plugins.bot.*",
-            "worlds.gregs.hestia.core.client.*",
-            "worlds.gregs.hestia.core.world.collision.*",
-            "worlds.gregs.hestia.core.display.dialogue.*",
-            "worlds.gregs.hestia.core.plugins.queue.*",
-            "worlds.gregs.hestia.core.entity.*",
-            "worlds.gregs.hestia.core.world.land.*",
-            "worlds.gregs.hestia.core.world.map.*",
-            "worlds.gregs.hestia.core.plugins.mob.*",
-            "worlds.gregs.hestia.core.world.movement.*",
-            "worlds.gregs.hestia.core.entity.object.*",
-            "worlds.gregs.hestia.core.entity.player.*",
-            "worlds.gregs.hestia.core.world.region.*",
-            "worlds.gregs.hestia.core.display.widget.*",
+    defaultImports("worlds.gregs.hestia.*",
 
-            "worlds.gregs.hestia.api.*",
-            "worlds.gregs.hestia.artemis.events.*",
-            "worlds.gregs.hestia.game.*",
-            "worlds.gregs.hestia.game.archetypes.*",
-            "worlds.gregs.hestia.game.client.*",
-            "worlds.gregs.hestia.game.entity.*",
-            "worlds.gregs.hestia.game.map.*",
-            "worlds.gregs.hestia.game.queue.*",
-            "worlds.gregs.hestia.services.*",
+            "worlds.gregs.hestia.core.display.dialogue.logic.systems.types.*",
+            "worlds.gregs.hestia.core.script.dsl.*",
+            "worlds.gregs.hestia.core.script.*",
 
+            "worlds.gregs.hestia.core.task.api.*",
+            "worlds.gregs.hestia.core.task.model.*",
+            "worlds.gregs.hestia.core.task.model.events.*",
+            "worlds.gregs.hestia.core.task.api.event.target.*",
+            "worlds.gregs.hestia.core.entity.item.container.model.*",
+            "worlds.gregs.hestia.core.task.model.context.*",
+            "worlds.gregs.hestia.core.entity.item.container.logic.*",
+
+            "kotlinx.coroutines.*",
             "kotlin.*",
             "kotlinx.*",
-            "import kotlinx.coroutines.*",
-            "net.mostlyoriginal.api.*")
+
+            "net.mostlyoriginal.api.event.common.*",
+            "net.mostlyoriginal.api.*"
+    )
+    jvm {
+        dependenciesFromClassloader(wholeClasspath = true)
+    }
+    ide {
+        acceptedLocations(ScriptAcceptedLocation.Everywhere)
+    }
 })

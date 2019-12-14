@@ -19,7 +19,7 @@ class WidgetOptionHandler : MessageHandlerSystem<WidgetOption>() {
         val (hash, fromSlot, toSlot, option) = message
         val interfaceId = hash shr 16
         val componentId = hash - (interfaceId shl 16)
-        es.dispatch(ButtonClick(entityId, hash, option))
+        es.dispatch(ButtonClick(entityId, hash, fromSlot, toSlot, option))
     }
 
 }

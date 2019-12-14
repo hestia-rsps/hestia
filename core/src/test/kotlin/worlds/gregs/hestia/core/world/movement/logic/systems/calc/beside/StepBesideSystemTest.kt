@@ -3,9 +3,9 @@ package worlds.gregs.hestia.core.world.movement.logic.systems.calc.beside
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import worlds.gregs.hestia.core.entity.entity.logic.beside
 import worlds.gregs.hestia.core.world.movement.logic.systems.calc.PathTester
 import worlds.gregs.hestia.core.world.movement.logic.systems.calc.StepBesideSystem
+import worlds.gregs.hestia.core.world.movement.model.components.calc.Beside
 
 internal class StepBesideSystemTest : PathTester(false, StepBesideSystem()) {
 
@@ -290,7 +290,7 @@ internal class StepBesideSystemTest : PathTester(false, StepBesideSystem()) {
 
     private fun assertPath(targetX: Int, targetY: Int, expected: List<IntArray>? = null, display: Boolean = false, max: Int = -1, width: Int = 1, height: Int = 1, check: Boolean = true, calculate: Boolean = false, beside: Boolean = false) {
         assertPath(expected, display) {
-            it.beside(targetX, targetY, max, width, height, check, calculate, beside)
+            it.edit().add(Beside(targetX, targetY, max, width, height, check, calculate, beside))
         }
     }
 }

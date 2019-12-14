@@ -2,13 +2,13 @@ package worlds.gregs.hestia.core.display.client.logic.systems.region
 
 import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.event.common.Subscribe
+import worlds.gregs.hestia.artemis.Aspect
 import worlds.gregs.hestia.artemis.SubscriptionSystem
 import worlds.gregs.hestia.core.display.client.model.components.LastLoadedRegion
 import worlds.gregs.hestia.core.display.client.model.components.NetworkSession
 import worlds.gregs.hestia.core.display.client.model.components.Viewport
 import worlds.gregs.hestia.core.display.client.model.events.UpdateMapRegion
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
-import worlds.gregs.hestia.artemis.Aspect
 
 /**
  * ClientRegionChangeSystem

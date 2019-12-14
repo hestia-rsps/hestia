@@ -3,21 +3,26 @@ package worlds.gregs.hestia.core.world.movement.logic.systems.calc
 import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
-import net.mostlyoriginal.api.event.common.EventSystem
+import worlds.gregs.hestia.artemis.Aspect
 import worlds.gregs.hestia.core.entity.`object`.model.components.GameObject
+import worlds.gregs.hestia.core.entity.`object`.model.components.ObjectType
+import worlds.gregs.hestia.core.entity.`object`.model.components.Rotation
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.entity.model.components.Size
 import worlds.gregs.hestia.core.entity.entity.model.components.height
 import worlds.gregs.hestia.core.entity.entity.model.components.width
+import worlds.gregs.hestia.core.entity.item.floor.model.components.Private
+import worlds.gregs.hestia.core.entity.item.floor.model.components.Public
 import worlds.gregs.hestia.core.entity.mob.api.Mob
 import worlds.gregs.hestia.core.world.movement.api.RouteStrategy
 import worlds.gregs.hestia.core.world.movement.logic.strategies.EntityStrategy
 import worlds.gregs.hestia.core.world.movement.logic.strategies.FixedTileStrategy
+import worlds.gregs.hestia.core.world.movement.logic.strategies.FloorItemStrategy
 import worlds.gregs.hestia.core.world.movement.logic.strategies.ObjectStrategy
 import worlds.gregs.hestia.core.world.movement.model.components.calc.Path
 import worlds.gregs.hestia.core.world.movement.model.components.calc.Route
 import worlds.gregs.hestia.game.entity.Player
-import worlds.gregs.hestia.artemis.Aspect
+import worlds.gregs.hestia.service.cache.definition.systems.ObjectDefinitionSystem
 
 /**
  * StrategySystem
@@ -28,18 +33,16 @@ class StrategySystem : IteratingSystem(Aspect.all(Position::class, Route::class)
 
     private lateinit var routeMapper: ComponentMapper<Route>
     private lateinit var objectMapper: ComponentMapper<GameObject>
+    private lateinit var objectTypeMapper: ComponentMapper<ObjectType>
+    private lateinit var rotationMapper: ComponentMapper<Rotation>
     private lateinit var playerMapper: ComponentMapper<Player>
     private lateinit var mobMapper: ComponentMapper<Mob>
     private lateinit var positionMapper: ComponentMapper<Position>
     private lateinit var pathMapper: ComponentMapper<Path>
     private lateinit var sizeMapper: ComponentMapper<Size>
-    private lateinit var es: EventSystem
-
-    private val reach: (Int) -> Unit = {
-        println("You can't reach that.")
-//        messageMapper.create(it).message = "You can't reach that."
-//        es.send(it, ResetMinimapFlag())
-    }
+    private lateinit var objectDefinitions: ObjectDefinitionSystem
+    private lateinit var publicMapper: ComponentMapper<Public>
+    private lateinit var privateMapper: ComponentMapper<Private>
 
     override fun process(entityId: Int) {
         val route = routeMapper.get(entityId)
@@ -47,28 +50,19 @@ class StrategySystem : IteratingSystem(Aspect.all(Position::class, Route::class)
 
         val targetId = route.entityId
 
-        //Check target entity exists
-        if(!world.entityManager.isActive(targetId) || !positionMapper.has(targetId)) {
-            route.failure?.invoke() ?: reach.invoke(entityId)
-            return
-        }
-
-        val position = positionMapper.get(entityId)
         val targetPosition = positionMapper.get(targetId)
-
-        //Check target is on same plane
-        if(position.plane != targetPosition.plane) {
-            route.failure?.invoke() ?: reach.invoke(entityId)
-            return
-        }
 
         //Choose strategy
         val strategy = when {
-            playerMapper.has(targetId) || mobMapper.has(targetId) -> {
+            playerMapper.has(targetId) || mobMapper.has(targetId) ->
                 EntityStrategy(targetPosition.x, targetPosition.y, sizeMapper.width(targetId), sizeMapper.height(targetId), 0)
+            objectMapper.has(targetId) -> {
+                val id = objectMapper.get(targetId)
+                val type = objectTypeMapper.get(targetId)
+                val def = objectDefinitions.get(id.id)
+                ObjectStrategy(type.type, targetPosition, rotationMapper.get(targetId).rotation, def.sizeX, def.sizeY, def.plane)
             }
-            objectMapper.has(targetId) -> ObjectStrategy(targetPosition.x, targetPosition.y)
-            //TODO ground item
+            publicMapper.has(targetId) || privateMapper.has(targetId) -> FloorItemStrategy(targetPosition.x, targetPosition.y)
             else -> FixedTileStrategy(targetPosition.x, targetPosition.y)
         }
 

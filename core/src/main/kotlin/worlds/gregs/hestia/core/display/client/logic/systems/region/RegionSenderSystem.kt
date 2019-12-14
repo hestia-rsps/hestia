@@ -4,9 +4,7 @@ import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
 import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.event.common.Subscribe
-import world.gregs.hestia.core.network.codec.packet.PacketBuilder
-import worlds.gregs.hestia.GameConstants
-import worlds.gregs.hestia.artemis.SubscriptionSystem
+import worlds.gregs.hestia.artemis.*
 import worlds.gregs.hestia.core.display.client.model.components.Viewport
 import worlds.gregs.hestia.core.display.client.model.events.UpdateMapRegion
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
@@ -15,12 +13,9 @@ import worlds.gregs.hestia.core.world.map.model.MapConstants.MAP_SIZES
 import worlds.gregs.hestia.core.world.map.model.MapConstants.PLANE_RANGE
 import worlds.gregs.hestia.core.world.region.api.Dynamic
 import worlds.gregs.hestia.core.world.region.api.Regions
+import worlds.gregs.hestia.core.world.region.logic.systems.RegionBuilderSystem.Companion.forChunks
 import worlds.gregs.hestia.network.client.encoders.messages.MapRegion
 import worlds.gregs.hestia.network.client.encoders.messages.MapRegionDynamic
-import worlds.gregs.hestia.artemis.Aspect
-import worlds.gregs.hestia.artemis.nearby
-import worlds.gregs.hestia.artemis.send
-import worlds.gregs.hestia.artemis.toArray
 
 @Wire(failOnNull = false)
 class RegionSenderSystem : SubscriptionSystem(Aspect.all(Position::class, Viewport::class)) {
@@ -36,30 +31,6 @@ class RegionSenderSystem : SubscriptionSystem(Aspect.all(Position::class, Viewpo
         send(entityId, local = true, forceRefresh = false)
     }
 
-    private val login: PacketBuilder.(Int) -> Unit = { entityId ->
-        val position = positionMapper.get(entityId)
-        val viewport = viewportMapper.get(entityId)
-
-        startBitAccess()
-        //Send current player position
-        writeBits(30, position.locationHash30Bit)
-
-        //Update player locations
-        entityIds.toArray().filterNot { it == entityId }.forEach { player ->
-            val pos = positionMapper.get(player)
-            val hash = pos.locationHash18Bit
-            viewport.updatePosition(player, pos)
-            writeBits(18, hash)
-        }
-
-        //Iterate up to max number of players
-        for(i in (entityIds.size() + 1) until GameConstants.PLAYERS_LIMIT) {
-            writeBits(18, 0)
-        }
-
-        finishBitAccess()
-    }
-
     @Subscribe
     fun send(event: UpdateMapRegion) {
         send(event.entityId, event.local, event.forceRefresh)
@@ -68,13 +39,27 @@ class RegionSenderSystem : SubscriptionSystem(Aspect.all(Position::class, Viewpo
     fun send(entityId: Int, local: Boolean, forceRefresh: Boolean) {
         val position = positionMapper.get(entityId)
         val regionEntityId = regions?.getEntityId(position.regionId)
+        val positions = if(local) updateAllPositions(entityId) else null
+        val location = if(local) position.locationHash30Bit else null
         if(regionEntityId != null && dynamic?.isDynamic(regionEntityId) == true) {
             val mapHash = MAP_SIZES[0] shr 4
             val data = encodeDynamicData(position, mapHash)
-            es.send(entityId, MapRegionDynamic(entityId, position.chunkX, position.chunkY, forceRefresh, 0, mapHash, if (local) login else null, data.first, data.second))
+            es.send(entityId, MapRegionDynamic(position.chunkX, position.chunkY, forceRefresh, 0, mapHash, positions, location, data.first, data.second))
         } else {
-            es.send(entityId, MapRegion(entityId, position.chunkX, position.chunkY, forceRefresh, 0, MAP_SIZES[0] shr 4, if (local) login else null))
+            es.send(entityId, MapRegion(position.chunkX, position.chunkY, forceRefresh, 0, MAP_SIZES[0] shr 4, positions, location))
         }
+    }
+
+    private fun updateAllPositions(entityId: Int): IntArray {
+        val list = mutableListOf<Int>()
+        val viewport = viewportMapper.get(entityId)
+        entityIds.toArray().filterNot { it == entityId }.forEach { player ->
+            val pos = positionMapper.get(player)
+            val hash = pos.locationHash18Bit
+            viewport.updatePosition(player, pos)
+            list.add(hash)
+        }
+        return list.toTypedArray().toIntArray()
     }
 
     private fun encodeDynamicData(position: Position, mapHash: Int): Pair<List<Int?>, Int> {
@@ -103,16 +88,5 @@ class RegionSenderSystem : SubscriptionSystem(Aspect.all(Position::class, Viewpo
             }
         }
         return Pair(list, chunkCount)
-    }
-
-    //FIXME RegionBuilderSystem.kt
-    private inline fun forChunks(rangeX: IntRange, rangeY: IntRange, rangeZ: IntRange, action: (Int, Int, Int) -> Unit) {
-        for (plane in rangeZ) {
-            for (chunkX in rangeX) {
-                for (chunkY in rangeY) {
-                    action.invoke(chunkX, chunkY, plane)
-                }
-            }
-        }
     }
 }

@@ -1,14 +1,19 @@
 package worlds.gregs.hestia.core.world.movement.logic.systems.calc.path
 
+import io.mockk.junit5.MockKExtension
+import io.mockk.mockk
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
+import org.junit.jupiter.api.extension.ExtendWith
+import worlds.gregs.hestia.core.task.api.Tasks
 import worlds.gregs.hestia.core.world.movement.logic.strategies.FixedTileStrategy
 import worlds.gregs.hestia.core.world.movement.logic.systems.calc.PathFinderSystem
 import worlds.gregs.hestia.core.world.movement.logic.systems.calc.PathSystem
 import worlds.gregs.hestia.core.world.movement.logic.systems.calc.PathTester
 import worlds.gregs.hestia.core.world.movement.model.components.calc.Path
 
-internal class LargeEntityRouteSystemTest : PathTester(true, PathSystem(), PathFinderSystem()) {
+@ExtendWith(MockKExtension::class)
+internal class LargeEntityRouteSystemTest : PathTester(true, PathSystem(), PathFinderSystem(), mockk<Tasks>(relaxed = true)) {
 
     @BeforeEach
     override fun setup() {

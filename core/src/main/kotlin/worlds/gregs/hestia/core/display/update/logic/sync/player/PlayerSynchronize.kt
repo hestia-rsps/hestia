@@ -7,10 +7,10 @@ import worlds.gregs.hestia.core.display.update.api.IndexSystem
 import worlds.gregs.hestia.core.display.update.logic.sync.SynchronizeSystem
 import worlds.gregs.hestia.core.display.update.logic.sync.player.stages.AddPlayerSync
 import worlds.gregs.hestia.core.display.update.logic.sync.player.stages.RemovePlayerSync
-import worlds.gregs.hestia.game.entity.Player
-import worlds.gregs.hestia.network.client.encoders.messages.PlayerUpdate
 import worlds.gregs.hestia.core.display.update.model.sync.AccessStage
 import worlds.gregs.hestia.core.display.update.model.sync.SkipStage
+import worlds.gregs.hestia.game.entity.Player
+import worlds.gregs.hestia.network.client.encoders.messages.PlayerUpdate
 
 /**
  * Graphical player information (GPI) update packet creation
@@ -127,7 +127,7 @@ open class PlayerSynchronize : SynchronizeSystem<PlayerUpdate>(false) {
                 }
 
                 //Add sync stage to be encoded
-                val stage = change.create(entity, global, false)//TODO shouldn't this be true?
+                val stage = change.create(entity, global, false)
                 update.addStage(stage)
 
                 if (stage is AddPlayerSync) {

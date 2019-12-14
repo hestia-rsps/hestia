@@ -4,13 +4,13 @@ import com.artemis.Entity
 import com.artemis.WorldConfigurationBuilder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import worlds.gregs.hestia.core.display.update.model.components.direction.Watch
-import worlds.gregs.hestia.core.entity.entity.logic.follow
-import worlds.gregs.hestia.core.entity.entity.logic.step
-import worlds.gregs.hestia.artemis.getComponent
-import worlds.gregs.hestia.core.world.movement.MovementPlugin
-import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.artemis.dependsOn
+import worlds.gregs.hestia.artemis.getComponent
+import worlds.gregs.hestia.core.display.update.model.components.direction.Watch
+import worlds.gregs.hestia.core.entity.entity.model.components.Position
+import worlds.gregs.hestia.core.world.movement.MovementPlugin
+import worlds.gregs.hestia.core.world.movement.model.components.calc.Follow
+import worlds.gregs.hestia.core.world.movement.model.components.calc.Step
 import worlds.gregs.hestia.tools.PlayerTester
 
 class FollowSystemTest : PlayerTester(WorldConfigurationBuilder().dependsOn(MovementPlugin::class)) {
@@ -20,7 +20,7 @@ class FollowSystemTest : PlayerTester(WorldConfigurationBuilder().dependsOn(Move
         val player = fakePlayer(0, 0)
         val partner = fakePlayer(0, 1)
         tick()
-        partner.follow(player)
+        partner.edit().add(Follow(player.id))
         tick()
 
         val watch = partner.getComponent(Watch::class)
@@ -33,12 +33,12 @@ class FollowSystemTest : PlayerTester(WorldConfigurationBuilder().dependsOn(Move
         val player = fakePlayer(0, 0)
         val partner = fakePlayer(0, 1)
         tick()
-        partner.follow(player)
+        partner.edit().add(Follow(player.id))
 
         tick()
 
         println("Player steps east")
-        player.step(1, 0)
+        player.edit().add(Step(1, 0))
         tick()
         //Check player has moved
         assertPosition(player, 1, 0)
@@ -74,7 +74,7 @@ class FollowSystemTest : PlayerTester(WorldConfigurationBuilder().dependsOn(Move
 
         println("Partner follows player")
         //Partner is following player
-        partner.follow(player)
+        partner.edit().add(Follow(player.id))
         assertPosition(player, 0, 0)
         assertPosition(partner, 0, 1)
 
@@ -84,9 +84,9 @@ class FollowSystemTest : PlayerTester(WorldConfigurationBuilder().dependsOn(Move
         //[]->
         println("Player steps east")
         //Player steps to the right
-        player.step(1, 0)
+        player.edit().add(Step(1, 0))
         //Player begins to follow partner
-        player.follow(partner)
+        player.edit().add(Follow(partner.id))
 
         tick()
 

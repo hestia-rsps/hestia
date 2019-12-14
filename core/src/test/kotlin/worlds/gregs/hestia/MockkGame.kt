@@ -5,10 +5,10 @@ import com.artemis.WorldConfigurationBuilder
 import io.mockk.spyk
 import net.mostlyoriginal.api.event.common.EventSystem
 import org.junit.jupiter.api.BeforeEach
-import worlds.gregs.hestia.core.entity.entity.logic.EntityFactory
 
 abstract class MockkGame(private val config: WorldConfigurationBuilder = WorldConfigurationBuilder()) {
 
+    lateinit var actualWorld: World
     lateinit var world: World
     lateinit var es: EventSystem
 
@@ -18,8 +18,8 @@ abstract class MockkGame(private val config: WorldConfigurationBuilder = WorldCo
         config.with(es)
         config(config)
         val config = config.build()
-        world = spyk(World(config))
-        EntityFactory.init(world)
+        actualWorld = World(config)
+        world = spyk(actualWorld)
         start()
     }
 
