@@ -1,9 +1,9 @@
 dependencies {
-    compile project(':server')
-    testCompile project(":server")
-    runtimeClasspath project(":server")
+    compile project(':engine')
+    testCompile project(":engine")
+    runtimeClasspath project(":engine")
 
-    compile project(':plugins')
-    testCompile project(":plugins")
-    runtimeClasspath project(":plugins")
+    compile project(':core')
+    testCompile project(":core")
+    runtimeClasspath project(":core")
 }

@@ -18,9 +18,9 @@ plugins {
 apply from: 'dependencies.gradle'
 
 dependencies {
-    //Plugins compiles :server so root depends on both
+    //Core compiles :engine so root depends on both
     compile project(":content")
-    compile project(":plugins")
+    compile project(":core")
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk8:$kotlin_version"
 }
 

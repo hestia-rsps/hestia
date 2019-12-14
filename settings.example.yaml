@@ -3,8 +3,10 @@ rsaPrivate: "85c9db96fb8001ddc6a638c11db76a9d3a92ed1ebed8ef0c29354347b9092cd7cab
 rsaPublic: "10001"
 xteaPath: "./data/xteas.dat"
 cachePath: "./data/cache/"
-sourcePath: "./server/src/main/kotlin/"
-pluginPath: "./plugins/src/main/kotlin/"
+sourcePath: "./engine/src/main/kotlin/"
+pluginPath: "./core/src/main/kotlin/"
 connectionLimit: 2
 serverName: "Hestia"
-pluginRootPackage: "worlds.gregs.hestia.content.Root_plugin"
+pluginRootPackage:
+  - "worlds.gregs.hestia.core.Root_plugin"
+  - "worlds.gregs.hestia.content.Scripts_plugin"
