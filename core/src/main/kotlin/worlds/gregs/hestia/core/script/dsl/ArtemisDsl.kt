@@ -1,9 +1,6 @@
 package worlds.gregs.hestia.core.script.dsl
 
-import com.artemis.Aspect
-import com.artemis.BaseSystem
-import com.artemis.EntitySubscription
-import com.artemis.WorldConfigurationBuilder
+import com.artemis.*
 import com.artemis.systems.IteratingSystem
 import com.artemis.utils.IntBag
 import net.mostlyoriginal.api.event.common.Event

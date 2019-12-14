@@ -6,7 +6,7 @@ import java.io.FileReader
 import java.io.FileWriter
 import java.util.*
 
-object ClassPackagePrepender {
+object ClassPackagePrepend {
     @JvmStatic
     fun main(args: Array<String>) {
         File("C:\\Users\\Greg\\IdeaProjects\\hestia-client\\client\\src\\world\\gregs\\hestia\\client\\").listFiles().filter { it.isFile }.forEach {

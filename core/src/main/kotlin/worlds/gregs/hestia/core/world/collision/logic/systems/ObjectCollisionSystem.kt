@@ -28,10 +28,10 @@ class ObjectCollisionSystem : ObjectCollision() {
         }
         for (transmitRegionX in (graphBaseX shr 6)..(graphBaseX + (GRAPH_SIZE - 1) shr 6)) {
             for (transmitRegionY in (graphBaseY shr 6)..(graphBaseY + (GRAPH_SIZE - 1) shr 6)) {
-                val startX = Math.max(graphBaseX, transmitRegionX shl 6)
-                val startY = Math.max(graphBaseY, transmitRegionY shl 6)
-                val endX = Math.min(graphBaseX + GRAPH_SIZE, (transmitRegionX shl 6) + 64)
-                val endY = Math.min(graphBaseY + GRAPH_SIZE, (transmitRegionY shl 6) + 64)
+                val startX = graphBaseX.coerceAtLeast(transmitRegionX shl 6)
+                val startY = graphBaseY.coerceAtLeast(transmitRegionY shl 6)
+                val endX = (graphBaseX + GRAPH_SIZE).coerceAtMost((transmitRegionX shl 6) + 64)
+                val endY = (graphBaseY + GRAPH_SIZE).coerceAtMost((transmitRegionY shl 6) + 64)
                 val regionId = transmitRegionX shl 8 or transmitRegionY
                 val clipping = map?.getClipping(regions?.getEntityId(regionId))
                 if (clipping != null) {

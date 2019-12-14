@@ -10,12 +10,13 @@ import worlds.gregs.hestia.core.entity.entity.model.components.Size
 import worlds.gregs.hestia.core.entity.entity.model.components.height
 import worlds.gregs.hestia.core.entity.entity.model.components.width
 import worlds.gregs.hestia.core.entity.mob.api.Mob
-import worlds.gregs.hestia.game.entity.Player
-import worlds.gregs.hestia.core.world.movement.model.components.calc.Path
-import worlds.gregs.hestia.core.world.movement.model.components.calc.Route
+import worlds.gregs.hestia.core.world.movement.api.RouteStrategy
 import worlds.gregs.hestia.core.world.movement.logic.strategies.EntityStrategy
 import worlds.gregs.hestia.core.world.movement.logic.strategies.FixedTileStrategy
 import worlds.gregs.hestia.core.world.movement.logic.strategies.ObjectStrategy
+import worlds.gregs.hestia.core.world.movement.model.components.calc.Path
+import worlds.gregs.hestia.core.world.movement.model.components.calc.Route
+import worlds.gregs.hestia.game.entity.Player
 import worlds.gregs.hestia.service.Aspect
 
 /**

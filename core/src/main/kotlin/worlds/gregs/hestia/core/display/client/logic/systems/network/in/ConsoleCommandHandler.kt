@@ -138,7 +138,7 @@ class ConsoleCommandHandler : MessageHandlerSystem<ConsoleCommand>() {
 //                    regionSystem.changeRegion(position.regionId, position.regionId, 3)
 //                }
                 if(builder.build(position.regionId)) {
-                    entity.updateMapRegion(false, true)
+                    entity.updateMapRegion(local = false, forceRefresh = true)
                 } else {
                     println("Failed to load region ${position.regionId}")
                 }

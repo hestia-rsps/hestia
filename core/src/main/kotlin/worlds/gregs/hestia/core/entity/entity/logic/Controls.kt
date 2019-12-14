@@ -23,7 +23,6 @@ import worlds.gregs.hestia.core.world.movement.model.components.types.MoveStep
 import worlds.gregs.hestia.game.update.blocks.Marker
 import worlds.gregs.hestia.service.getSystem
 
-class Controls
 /**
  * Entity controls
  * Extensions of [Entity]
@@ -70,7 +69,7 @@ fun Entity.force(position: Position, delay: Int, direction: Int, secondPosition:
 
     //Moves player to finishing position after force is complete
     if (move) {
-        world.schedule(Math.max(delay, secondDelay) - 1, 0) {
+        world.schedule(delay.coerceAtLeast(secondDelay) - 1, 0) {
             move(secondPosition ?: position)
         }
     }

@@ -17,7 +17,7 @@ object CreateChecksumFile {
         val buffer = ByteBuffer.allocate(1 + count * 4)
         //Write index count
         buffer.put(count.toByte())
-        //Write index crc's
+        //Write index crcs
         repeat(count) {
             buffer.putInt(cache.getIndex(it).crc)
         }

@@ -1,12 +1,12 @@
 package worlds.gregs.hestia.core.world.map.api
 
 import net.mostlyoriginal.api.system.core.PassiveSystem
-import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.display.update.model.Direction
+import worlds.gregs.hestia.core.entity.entity.model.components.Position
 
 /**
  * TileClipping
- * Checks whether the next tile to step on is free (unclipped)
+ * Checks whether the next tile to step on is free
  */
 abstract class TileClipping : PassiveSystem() {
 

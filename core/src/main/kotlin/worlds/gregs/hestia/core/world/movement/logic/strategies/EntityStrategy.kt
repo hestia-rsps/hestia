@@ -50,8 +50,8 @@ class EntityStrategy(override val destinationX: Int, override val destinationY: 
             }
 
             if (type < 2) {
-                var maxY = Math.max(currentY, targetY)
-                val minY = Math.min(srcEndY, destEndY)
+                var maxY = currentY.coerceAtLeast(targetY)
+                val minY = srcEndY.coerceAtMost(destEndY)
 //                val data = clip[if(type == 0) targetX else destEndX - 1]
                 val flag = if (type == 0) 0x8 else 0x80
                 while (maxY < minY) {
@@ -61,8 +61,8 @@ class EntityStrategy(override val destinationX: Int, override val destinationY: 
                     }
                 }
             } else {
-                var maxX = Math.max(currentX, targetX)
-                val minX = Math.min(srcEndX, destEndX)
+                var maxX = currentX.coerceAtLeast(targetX)
+                val minX = srcEndX.coerceAtMost(destEndX)
                 val clipY = if (type == 2) destEndY - 1 else targetY
                 val flag = if (type == 2) 0x2 else 0x20
                 while (maxX < minX) {

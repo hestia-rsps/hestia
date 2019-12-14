@@ -2,21 +2,22 @@ package worlds.gregs.hestia.core.world.map.logic.systems
 
 import com.artemis.annotations.Wire
 import io.netty.buffer.Unpooled
-import worlds.gregs.hestia.core.world.map.api.ClippingMasks
-import worlds.gregs.hestia.core.world.map.api.MapSettings
 import worlds.gregs.hestia.core.world.collision.model.Flags
 import worlds.gregs.hestia.core.world.collision.model.Flags.BLOCKED_TILE
 import worlds.gregs.hestia.core.world.collision.model.Flags.BRIDGE_TILE
+import worlds.gregs.hestia.core.world.map.api.ClippingMasks
+import worlds.gregs.hestia.core.world.map.api.MapSettings
 import worlds.gregs.hestia.core.world.map.model.MapConstants.PLANE_RANGE
 import worlds.gregs.hestia.core.world.map.model.MapConstants.REGION_PLANES
 import worlds.gregs.hestia.core.world.map.model.MapConstants.REGION_RANGE
 import worlds.gregs.hestia.core.world.map.model.MapConstants.REGION_SIZE
 import worlds.gregs.hestia.core.world.region.logic.systems.RegionBuilderSystem.Companion.forChunks
 import worlds.gregs.hestia.core.world.region.logic.systems.load.ChunkRotationSystem
+import worlds.gregs.hestia.core.world.region.logic.systems.load.RegionFileSystem
 
 /**
  * MapSettingsSystem
- * Adds clipping masks using [ClippingMaskSystem] from the [worlds.gregs.hestia.game.plugins.region.systems.load.RegionFileSystem] data
+ * Adds clipping masks using [ClippingMaskSystem] from the [RegionFileSystem] data
  */
 @Wire(failOnNull = false)
 class MapSettingsSystem : MapSettings() {

@@ -45,7 +45,7 @@ class ConcurrentObjectPool<T>(private val type: Class<T>?, private val initialPo
         return totalObjectsCount.get()
     }
 
-    protected fun initialize() {
+    private fun initialize() {
         val itemList = LinkedList<T>()
         for (i in 0 until initialPoolSize) {
             try {
@@ -59,7 +59,7 @@ class ConcurrentObjectPool<T>(private val type: Class<T>?, private val initialPo
         }
     }
 
-    protected fun create(): T {
+    private fun create(): T {
         return if (type != null) {
             try {
                 type.getConstructor().newInstance()

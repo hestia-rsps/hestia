@@ -21,7 +21,6 @@ class AppearanceSystem : SubscriptionSystem(Aspect.all(Player::class)) {
     private lateinit var playerMapper: ComponentMapper<Player>
     private lateinit var coloursMapper: ComponentMapper<Colours>
     private lateinit var bodyMapper: ComponentMapper<Body>
-    private lateinit var namePrefixMapper: ComponentMapper<NamePrefix>
     private lateinit var titleMapper: ComponentMapper<Title>
     private lateinit var skullMapper: ComponentMapper<Skull>
     private lateinit var headIconMapper: ComponentMapper<HeadIcon>
@@ -89,8 +88,7 @@ class AppearanceSystem : SubscriptionSystem(Aspect.all(Player::class)) {
 
                 //Inventory
                 val stream = Unpooled.buffer()
-                for (slotId in 0..14) {
-                }
+                repeat(14) { slotId -> }
                 buffer.writeShort(0)
                 buffer.writeBytes(stream)//TODO remove?
             }

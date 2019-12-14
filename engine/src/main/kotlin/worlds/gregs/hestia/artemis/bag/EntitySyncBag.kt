@@ -75,7 +75,7 @@ abstract class EntitySyncBag(private val maxEntitiesPerTick: Int) {
 
     /**
      * Checks if an entity will be inserted next sync
-     * Inserted entities will be in the front [MAX_ENTITIES_PER_TICK]
+     * Inserted entities will be in the front [maxEntitiesPerTick]
      * @param entity The entity id to check
      * @return if the entity will be added next sync
      */
@@ -123,7 +123,7 @@ abstract class EntitySyncBag(private val maxEntitiesPerTick: Int) {
     }
 
     /**
-     * Performs a bag sync, adding up to [MAX_ENTITIES_PER_TICK] entities from [insertions]
+     * Performs a bag sync, adding up to [maxEntitiesPerTick] entities from [insertions]
      * and removing all entities listed in [removals]
      */
     fun sync(action: ((Int) -> Unit)? = null) {

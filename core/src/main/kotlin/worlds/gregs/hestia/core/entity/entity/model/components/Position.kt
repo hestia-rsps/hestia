@@ -3,6 +3,9 @@ package worlds.gregs.hestia.core.entity.entity.model.components
 import com.artemis.Component
 import com.artemis.annotations.DelayedComponentRemoval
 import worlds.gregs.hestia.core.display.update.logic.sync.ViewportSystem.Companion.DEFAULT_VIEW_DISTANCE
+import kotlin.math.abs
+import kotlin.math.ceil
+import kotlin.math.sqrt
 
 @DelayedComponentRemoval
 open class Position() : Component() {
@@ -62,13 +65,13 @@ open class Position() : Component() {
     }
 
     fun getDistance(from: Position): Int {
-        return Math.max(Math.abs(x - from.x), Math.abs(y - from.y))
+        return abs(x - from.x).coerceAtLeast(abs(y - from.y))
     }
 
     fun getDirectDistance(other: Position): Int {
         val deltaX = x - other.x
         val deltaY = y - other.y
-        return Math.ceil(Math.sqrt((deltaX * deltaX + deltaY * deltaY).toDouble())).toInt()
+        return ceil(sqrt((deltaX * deltaX + deltaY * deltaY).toDouble())).toInt()
     }
 
     fun set(position: Position) {
@@ -91,11 +94,11 @@ open class Position() : Component() {
         val EMPTY = Position()
 
         fun withinRange(x: Int, y: Int, x2: Int, y2: Int, radius: Int = DEFAULT_VIEW_DISTANCE): Boolean {
-            return Math.abs(x - x2) <= radius && Math.abs(y - y2) <= radius
+            return abs(x - x2) <= radius && abs(y - y2) <= radius
         }
 
         fun distance(x: Int, y: Int, x2: Int, y2: Int): Int {
-            return Math.max(Math.abs(x - x2), Math.abs(y - y2))
+            return abs(x - x2).coerceAtLeast(abs(y - y2))
         }
 
         fun create(x: Int, y: Int, z: Int): Position {

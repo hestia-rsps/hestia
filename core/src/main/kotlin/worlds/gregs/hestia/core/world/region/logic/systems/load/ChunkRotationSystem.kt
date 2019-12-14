@@ -1,10 +1,12 @@
 package worlds.gregs.hestia.core.world.region.logic.systems.load
 
 import net.mostlyoriginal.api.system.core.PassiveSystem
+import worlds.gregs.hestia.core.world.land.logic.systems.LandObjectSystem
+import worlds.gregs.hestia.core.world.map.logic.systems.MapSettingsSystem
 
 /**
  * ChunkRotationSystem
- * Rotation algorithms used by [MapSettingsSystem] & [MapObjectSystem]
+ * Rotation algorithms used by [MapSettingsSystem] & [LandObjectSystem]
  */
 class ChunkRotationSystem : PassiveSystem() {
 

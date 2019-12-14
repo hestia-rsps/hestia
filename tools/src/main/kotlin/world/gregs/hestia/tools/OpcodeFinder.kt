@@ -2,6 +2,7 @@ package world.gregs.hestia.tools
 
 import java.io.*
 import java.util.regex.Pattern
+import kotlin.system.exitProcess
 import kotlin.system.measureTimeMillis
 
 /**
@@ -103,7 +104,7 @@ class OpcodeFinder(private vararg val processors: OpcodeExtractor) {
             System.err.println("Out commands:")
             System.err.println("    write       -   w <write directory> <Class name> ... <Class name>")
             System.err.println("    print       -   p <Class name> ... <Class name>")
-            System.exit(0)
+            exitProcess(0)
         }
 
         @JvmStatic
@@ -121,9 +122,7 @@ class OpcodeFinder(private vararg val processors: OpcodeExtractor) {
 
             val inCommand = args[0]
             val inDirectory = args[1]
-
-            val outCommand = args[2]
-            val write = when (outCommand) {
+            val write = when (args[2]) {
                 "w", "write" -> true
                 "p", "print" -> false
                 else -> {
@@ -137,7 +136,7 @@ class OpcodeFinder(private vararg val processors: OpcodeExtractor) {
                 return
             }
 
-            val extractors = args.copyOfRange(if (write) 4 else 3, args.size).map { OpcodeFinder.OpcodeExtractor(it) }.toTypedArray()
+            val extractors = args.copyOfRange(if (write) 4 else 3, args.size).map { OpcodeExtractor(it) }.toTypedArray()
 
             val finder = OpcodeFinder(*extractors)
 

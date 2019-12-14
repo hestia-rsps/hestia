@@ -8,7 +8,7 @@ abstract class Engine : Thread("Game Engine") {
     var sleepTime = 0L
 
     init {
-        priority = Thread.MAX_PRIORITY
+        priority = MAX_PRIORITY
     }
 
     override fun start() {

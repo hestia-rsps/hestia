@@ -11,7 +11,7 @@ class DamageSystem : PassiveSystem() {
     private lateinit var damageMapper: ComponentMapper<Damage>
 
     @Subscribe
-    fun hit(event: Hit) {
+    private fun hit(event: Hit) {
         val entityId = event.entityId
         val damage = damageMapper.create(entityId)
         //TODO soak damage change

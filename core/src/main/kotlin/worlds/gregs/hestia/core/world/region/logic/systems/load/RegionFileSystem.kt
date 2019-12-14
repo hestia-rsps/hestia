@@ -6,7 +6,6 @@ import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.event.common.Subscribe
 import org.slf4j.LoggerFactory
 import worlds.gregs.hestia.artemis.SubscriptionSystem
-import worlds.gregs.hestia.service.cache.systems.CacheSystem
 import worlds.gregs.hestia.core.world.land.api.LandObjects
 import worlds.gregs.hestia.core.world.map.api.Map
 import worlds.gregs.hestia.core.world.map.api.MapSettings
@@ -23,6 +22,7 @@ import worlds.gregs.hestia.core.world.region.model.components.RegionIdentifier
 import worlds.gregs.hestia.core.world.region.model.events.LoadRegion
 import worlds.gregs.hestia.service.Aspect
 import worlds.gregs.hestia.service.Xteas
+import worlds.gregs.hestia.service.cache.systems.CacheSystem
 
 /**
  * RegionFileSystem
@@ -78,7 +78,7 @@ class RegionFileSystem : SubscriptionSystem(Aspect.all(RegionIdentifier::class, 
             //Load dynamic region
             val dynamic = dynamic?.get(entityId)!!
             //For each chunk which need reloading
-            dynamic.regionData.filter { dynamic.reloads.contains(it.key) }.forEach { chunk, shift ->
+            dynamic.regionData.filter { dynamic.reloads.contains(it.key) }.forEach { (chunk, shift) ->
                 //Doesn't need reloading anymore
                 dynamic.reloads.remove(chunk)
                 //Get the data of the chunk we are copying

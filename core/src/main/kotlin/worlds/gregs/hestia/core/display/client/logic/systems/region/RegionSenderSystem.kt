@@ -33,7 +33,7 @@ class RegionSenderSystem : SubscriptionSystem(Aspect.all(Position::class, Viewpo
 
     override fun inserted(entityId: Int) {
         //Not recommended for dynamic region on login as if too many chunks it'll go over the packet size limit
-        send(entityId, true, false)
+        send(entityId, local = true, forceRefresh = false)
     }
 
     private val login: PacketBuilder.(Int) -> Unit = { entityId ->

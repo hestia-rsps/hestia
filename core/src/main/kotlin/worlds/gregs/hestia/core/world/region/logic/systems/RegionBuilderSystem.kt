@@ -184,7 +184,7 @@ class RegionBuilderSystem : RegionBuilder() {
         val entityId = regions?.getEntityId(regionId) ?: return
         val dynamic = dynamicMapper.get(entityId) ?: return
 
-        dynamic.regionData.forEach { position, chunk ->
+        dynamic.regionData.forEach { (position, chunk) ->
             set[position] = chunk
         }
     }

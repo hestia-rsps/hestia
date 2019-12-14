@@ -1,7 +1,7 @@
 package worlds.gregs.hestia.core.display.widget.logic.systems.frame.tabs
 
 import worlds.gregs.hestia.core.display.client.model.Configs.EVENT_EMOTES
-import worlds.gregs.hestia.core.display.client.model.Configs.GOLBIN_QUEST_EMOTES
+import worlds.gregs.hestia.core.display.client.model.Configs.GOBLIN_QUEST_EMOTES
 import worlds.gregs.hestia.core.display.client.model.Configs.HALLOWEEN_EMOTES
 import worlds.gregs.hestia.core.display.client.model.Configs.STRONGHOLD_SECURITY_EMOTES
 import worlds.gregs.hestia.core.display.widget.model.components.frame.tabs.EmotesTab
@@ -27,7 +27,7 @@ class EmotesTabSystem : BaseFrame(EmotesTab::class) {
             es.send(entityId, WidgetComponentSettings(getId(entityId), i, 0, 190, 2150))
         }
 
-        es.send(entityId, Config(GOLBIN_QUEST_EMOTES, 7))
+        es.send(entityId, Config(GOBLIN_QUEST_EMOTES, 7))
         es.send(entityId, Config(STRONGHOLD_SECURITY_EMOTES, 7))
         es.send(entityId, Config(HALLOWEEN_EMOTES, 249852))
         es.send(entityId, Config(EVENT_EMOTES, 65535))

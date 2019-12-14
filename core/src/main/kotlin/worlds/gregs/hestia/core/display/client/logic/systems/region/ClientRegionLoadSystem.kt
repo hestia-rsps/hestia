@@ -31,7 +31,7 @@ class ClientRegionLoadSystem : IteratingSystem(Aspect.all(NetworkSession::class,
             lastRegion.set(position)
 
             //Send client map update
-            es.dispatch(UpdateMapRegion(entityId, false, false))
+            es.dispatch(UpdateMapRegion(entityId, local = false, forceRefresh = false))
         }
     }
 }

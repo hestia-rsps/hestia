@@ -1,6 +1,5 @@
 package worlds.gregs.hestia.core.display.update.model
 
-import worlds.gregs.hestia.core.world.collision.model.Flags
 import worlds.gregs.hestia.core.world.collision.model.Flags.BLOCKED
 import worlds.gregs.hestia.core.world.collision.model.Flags.BLOCKED_NORTH_EAST
 import worlds.gregs.hestia.core.world.collision.model.Flags.BLOCKED_NORTH_WEST
@@ -99,16 +98,16 @@ enum class Direction(val deltaX: Int, val deltaY: Int, val value: Int, val mask:
 
     fun getHorizontalClear(): Int {
         return when (deltaX) {
-            1 -> Flags.CLEAR_EAST
-            -1 -> Flags.CLEAR_WEST
+            1 -> CLEAR_EAST
+            -1 -> CLEAR_WEST
             else -> 0
         }
     }
 
     fun getVerticalClear(): Int {
         return when (deltaY) {
-            1 -> Flags.CLEAR_NORTH
-            -1 -> Flags.CLEAR_SOUTH
+            1 -> CLEAR_NORTH
+            -1 -> CLEAR_SOUTH
             else -> 0
         }
     }

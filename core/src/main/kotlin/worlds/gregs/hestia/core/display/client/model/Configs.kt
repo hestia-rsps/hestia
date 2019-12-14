@@ -14,7 +14,7 @@ object Configs {
     const val PRAYER_POINTS = 2382
     const val CURSES = 1584
     /* Emotes */
-    const val GOLBIN_QUEST_EMOTES = 465
+    const val GOBLIN_QUEST_EMOTES = 465
     const val STRONGHOLD_SECURITY_EMOTES = 802
     const val HALLOWEEN_EMOTES = 1085
     const val EVENT_EMOTES = 313
