@@ -3,7 +3,7 @@ package worlds.gregs.hestia.core.display.widget.logic.systems.frame.tabs
 import worlds.gregs.hestia.core.display.widget.model.components.frame.tabs.NotesTab
 import worlds.gregs.hestia.core.display.widget.logic.systems.BaseFrame
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetComponentSettings
-import worlds.gregs.hestia.service.send
+import worlds.gregs.hestia.artemis.send
 
 class NotesTabSystem : BaseFrame(NotesTab::class) {
 

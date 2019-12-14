@@ -5,7 +5,7 @@ import worlds.gregs.hestia.core.display.update.api.BlockFactory
 import worlds.gregs.hestia.core.display.update.model.components.Renderable
 import worlds.gregs.hestia.core.display.update.model.components.direction.Watching
 import worlds.gregs.hestia.game.update.blocks.WatchEntityBlock
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 
 open class WatchEntityBlockFactory(flag: Int, mob: Boolean = false) : BlockFactory<WatchEntityBlock>(Aspect.all(Renderable::class, Watching::class), flag = flag, mob = mob) {
 

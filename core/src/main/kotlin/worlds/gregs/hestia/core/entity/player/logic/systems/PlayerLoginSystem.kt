@@ -10,7 +10,7 @@ import worlds.gregs.hestia.core.display.client.model.components.ClientIndex
 import worlds.gregs.hestia.game.entity.Player
 import worlds.gregs.hestia.artemis.events.SocialLogin
 import worlds.gregs.hestia.core.display.update.model.components.DisplayName
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 
 class PlayerLoginSystem : SubscriptionSystem(Aspect.all(ClientIndex::class, Player::class, DisplayName::class)) {
 

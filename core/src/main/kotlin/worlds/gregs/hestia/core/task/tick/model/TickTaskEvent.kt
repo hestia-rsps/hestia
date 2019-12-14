@@ -4,7 +4,7 @@ import com.artemis.World
 import net.mostlyoriginal.api.event.common.Event
 import net.mostlyoriginal.api.event.common.EventSystem
 import worlds.gregs.hestia.core.task.model.Task
-import worlds.gregs.hestia.service.getSystem
+import worlds.gregs.hestia.artemis.getSystem
 
 /**
  * This is technically a separate system from [Task] but it's the most relevant location

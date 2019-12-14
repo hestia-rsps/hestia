@@ -68,7 +68,7 @@ internal class PluginTest : GameTest(WorldConfigurationBuilder()) {
         builder.with(EventSystem())
         //Core plugins
         if(core) {
-            builder.with(TickPlugin(), ClientPlugin())
+            builder.with(ClientPlugin())
         }
         World(builder.build())
     }

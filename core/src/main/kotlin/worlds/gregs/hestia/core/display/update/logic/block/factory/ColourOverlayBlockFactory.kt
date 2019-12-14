@@ -5,7 +5,7 @@ import worlds.gregs.hestia.game.update.blocks.ColourOverlayBlock
 import worlds.gregs.hestia.core.display.update.api.BlockFactory
 import worlds.gregs.hestia.core.display.update.model.components.ColourOverlay
 import worlds.gregs.hestia.core.display.update.model.components.Renderable
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 
 open class ColourOverlayBlockFactory(flag: Int, mob: Boolean = false) : BlockFactory<ColourOverlayBlock>(Aspect.all(Renderable::class, ColourOverlay::class), flag = flag, mob = mob) {
 

@@ -3,11 +3,11 @@ package worlds.gregs.hestia.core.world.movement.logic.systems.calc.path
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import worlds.gregs.hestia.core.world.movement.model.components.calc.Path
 import worlds.gregs.hestia.core.world.movement.logic.strategies.FixedTileStrategy
 import worlds.gregs.hestia.core.world.movement.logic.systems.calc.PathFinderSystem
 import worlds.gregs.hestia.core.world.movement.logic.systems.calc.PathSystem
 import worlds.gregs.hestia.core.world.movement.logic.systems.calc.PathTester
+import worlds.gregs.hestia.core.world.movement.model.components.calc.Path
 
 internal class RouteSystemTest : PathTester(true, PathSystem(), PathFinderSystem()) {
 
@@ -149,7 +149,7 @@ internal class RouteSystemTest : PathTester(true, PathSystem(), PathFinderSystem
         block(2, 0)
 
         assertThrows<NoPath> {
-            assertPath(3, 0, null, true, false)
+            assertPath(3, 0, null, display = true, alternative = false)
         }
     }
 

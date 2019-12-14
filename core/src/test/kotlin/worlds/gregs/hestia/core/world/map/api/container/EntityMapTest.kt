@@ -7,9 +7,9 @@ import org.junit.jupiter.api.Test
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.world.map.logic.Spiral
 import worlds.gregs.hestia.core.world.movement.model.components.Shift
-import worlds.gregs.hestia.service.Aspect
-import worlds.gregs.hestia.service.forEach
-import worlds.gregs.hestia.service.toArray
+import worlds.gregs.hestia.artemis.Aspect
+import worlds.gregs.hestia.artemis.forEach
+import worlds.gregs.hestia.artemis.toArray
 import java.util.function.BiPredicate
 
 internal class EntityMapTest {

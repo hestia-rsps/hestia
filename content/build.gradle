@@ -1,8 +1,4 @@
 dependencies {
-    compile project(':engine')
-    testCompile project(":engine")
-    runtimeClasspath project(":engine")
-
     compile project(':core')
     testCompile project(":core")
     runtimeClasspath project(":core")

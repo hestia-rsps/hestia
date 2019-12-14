@@ -11,10 +11,11 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import worlds.gregs.hestia.MockkGame
+import worlds.gregs.hestia.artemis.send
+import worlds.gregs.hestia.core.display.dialogue.api.Dialogue
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.StringEntryDialogue
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.StringEntryDialogueSystem
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.stringEntry
-import worlds.gregs.hestia.core.display.dialogue.api.Dialogue
 import worlds.gregs.hestia.core.display.dialogue.model.events.StringEntered
 import worlds.gregs.hestia.core.display.widget.logic.systems.frame.chat.DialogueBoxSystem
 import worlds.gregs.hestia.core.task.api.Tasks
@@ -22,7 +23,6 @@ import worlds.gregs.hestia.core.task.model.events.ProcessDeferral
 import worlds.gregs.hestia.game.task.DeferralType
 import worlds.gregs.hestia.game.task.TaskScope
 import worlds.gregs.hestia.network.client.encoders.messages.Script
-import worlds.gregs.hestia.service.send
 
 @ExtendWith(MockKExtension::class)
 internal class StringEntryDialogueTest : MockkGame() {
@@ -72,7 +72,7 @@ internal class StringEntryDialogueTest : MockkGame() {
         //Given
         val deferral: DeferralType = mockk()
         val entityId = 0
-        mockkStatic("worlds.gregs.hestia.service.GameExtensionsKt")
+        mockkStatic("worlds.gregs.hestia.artemis.ExtensionFunctionsKt")
         //When
         es.dispatch(ProcessDeferral(entityId, deferral))
         //Then
@@ -84,7 +84,7 @@ internal class StringEntryDialogueTest : MockkGame() {
         //Given
         val deferral = StringEntryDialogue("Title")
         val entityId = 0
-        mockkStatic("worlds.gregs.hestia.service.GameExtensionsKt")
+        mockkStatic("worlds.gregs.hestia.artemis.ExtensionFunctionsKt")
         //When
         es.dispatch(ProcessDeferral(entityId, deferral))
         //Then

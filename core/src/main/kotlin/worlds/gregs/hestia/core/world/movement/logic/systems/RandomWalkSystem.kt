@@ -10,8 +10,8 @@ import worlds.gregs.hestia.core.world.movement.model.components.Steps
 import worlds.gregs.hestia.core.world.movement.model.components.calc.Follow
 import worlds.gregs.hestia.core.world.movement.model.components.calc.Path
 import worlds.gregs.hestia.core.world.movement.logic.strategies.FixedTileStrategy
-import worlds.gregs.hestia.service.Aspect
-import worlds.gregs.hestia.service.nearby
+import worlds.gregs.hestia.artemis.Aspect
+import worlds.gregs.hestia.artemis.nearby
 
 class RandomWalkSystem : IntervalIteratingSystem(Aspect.all(Position::class, Mobile::class, RandomWalk::class), 2.0F) {//3 seconds
 

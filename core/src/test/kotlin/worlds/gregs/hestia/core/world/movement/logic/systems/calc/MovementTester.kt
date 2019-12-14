@@ -9,7 +9,7 @@ import worlds.gregs.hestia.core.world.collision.model.Flags
 import worlds.gregs.hestia.core.world.collision.logic.systems.CollisionSystem
 import worlds.gregs.hestia.core.world.map.logic.systems.CollisionTestInterface
 import worlds.gregs.hestia.core.world.map.logic.systems.MapCollisionSystem
-import worlds.gregs.hestia.service.getSystem
+import worlds.gregs.hestia.artemis.getSystem
 
 abstract class MovementTester(offset: Boolean, vararg systems: BaseSystem) : GameTest(WorldConfigurationBuilder().with(ClippingBuilderTester(offset), CollisionSystem(), MapCollisionSystem(), *systems)), CollisionTestInterface {
 

@@ -8,7 +8,7 @@ import worlds.gregs.hestia.core.display.dialogue.logic.systems.DialogueBaseSyste
 import worlds.gregs.hestia.core.task.model.events.ProcessDeferral
 import worlds.gregs.hestia.game.task.TaskScope
 import worlds.gregs.hestia.network.client.encoders.messages.Script
-import worlds.gregs.hestia.service.send
+import worlds.gregs.hestia.artemis.send
 
 data class StringEntryDialogue(val title: String) : Dialogue {
     var entry: String? = null

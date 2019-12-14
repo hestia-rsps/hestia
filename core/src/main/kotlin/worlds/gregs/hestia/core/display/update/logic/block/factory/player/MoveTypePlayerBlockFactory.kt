@@ -7,7 +7,7 @@ import worlds.gregs.hestia.core.world.movement.api.types.Move
 import worlds.gregs.hestia.core.world.movement.api.types.Run
 import worlds.gregs.hestia.core.world.movement.api.types.Walk
 import worlds.gregs.hestia.game.update.blocks.player.MoveTypeBlock
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 
 class MoveTypePlayerBlockFactory(flag: Int) : BlockFactory<MoveTypeBlock>(Aspect.all(Renderable::class, UpdateMoveType::class), true, flag = flag) {
 

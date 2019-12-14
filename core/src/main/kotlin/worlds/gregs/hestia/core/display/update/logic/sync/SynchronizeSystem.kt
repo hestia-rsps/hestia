@@ -16,9 +16,9 @@ import worlds.gregs.hestia.core.entity.entity.model.components.Created
 import worlds.gregs.hestia.core.mobs
 import worlds.gregs.hestia.network.update.sync.Update
 import worlds.gregs.hestia.network.update.sync.UpdateBlockStage
-import worlds.gregs.hestia.service.forEach
-import worlds.gregs.hestia.service.players
-import worlds.gregs.hestia.service.send
+import worlds.gregs.hestia.artemis.forEach
+import worlds.gregs.hestia.artemis.players
+import worlds.gregs.hestia.artemis.send
 
 abstract class SynchronizeSystem<T : Message>(private val mob: Boolean) : Synchronize<T>() {
 

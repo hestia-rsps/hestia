@@ -5,7 +5,7 @@ import worlds.gregs.hestia.core.display.update.api.BlockFactory
 import worlds.gregs.hestia.core.display.update.model.components.PlayerMiniMapDot
 import worlds.gregs.hestia.core.display.update.model.components.Renderable
 import worlds.gregs.hestia.game.update.blocks.player.MiniMapPlayerBlock
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 
 class MiniMapPlayerBlockFactory(flag: Int) : BlockFactory<MiniMapPlayerBlock>(Aspect.all(Renderable::class, PlayerMiniMapDot::class), flag = flag) {
 

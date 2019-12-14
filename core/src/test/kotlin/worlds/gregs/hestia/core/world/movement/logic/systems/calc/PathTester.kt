@@ -8,8 +8,8 @@ import worlds.gregs.hestia.core.entity.entity.model.components.Size
 import worlds.gregs.hestia.core.world.movement.api.Mobile
 import worlds.gregs.hestia.core.world.movement.model.components.Steps
 import worlds.gregs.hestia.core.display.update.model.Direction
-import worlds.gregs.hestia.core.getComponent
-import worlds.gregs.hestia.service.getSystem
+import worlds.gregs.hestia.artemis.getComponent
+import worlds.gregs.hestia.artemis.getSystem
 
 internal abstract class PathTester(offset: Boolean, vararg systems: BaseSystem) : MovementTester(offset, *systems) {
 

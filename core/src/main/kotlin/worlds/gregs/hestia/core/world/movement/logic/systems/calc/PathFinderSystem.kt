@@ -11,7 +11,7 @@ import worlds.gregs.hestia.core.world.movement.api.RouteStrategy
 import worlds.gregs.hestia.core.world.movement.logic.navigation.PrimaryNavigation
 import worlds.gregs.hestia.core.world.movement.logic.navigation.SecondaryNavigation
 import worlds.gregs.hestia.core.world.movement.logic.navigation.TertiaryNavigation
-import worlds.gregs.hestia.service.nearby
+import worlds.gregs.hestia.artemis.nearby
 
 @Wire(failOnNull = false)
 class PathFinderSystem : PassiveSystem() {

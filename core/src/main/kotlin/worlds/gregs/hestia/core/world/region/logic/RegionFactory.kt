@@ -4,7 +4,7 @@ import com.artemis.ArchetypeBuilder
 import worlds.gregs.hestia.core.entity.entity.api.ArchetypeFactory
 import worlds.gregs.hestia.core.world.land.model.components.LandObjects
 import worlds.gregs.hestia.core.world.region.model.components.RegionIdentifier
-import worlds.gregs.hestia.service.add
+import worlds.gregs.hestia.artemis.add
 
 class RegionFactory : ArchetypeFactory {
 

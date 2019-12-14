@@ -4,7 +4,7 @@ import worlds.gregs.hestia.core.display.client.model.Configs.SKILL_MENU
 import worlds.gregs.hestia.core.display.widget.model.components.screen.SkillMenu
 import worlds.gregs.hestia.core.display.widget.logic.systems.BaseScreen
 import worlds.gregs.hestia.network.client.encoders.messages.Config
-import worlds.gregs.hestia.service.send
+import worlds.gregs.hestia.artemis.send
 
 class SkillMenuSystem : BaseScreen(SkillMenu::class) {
 

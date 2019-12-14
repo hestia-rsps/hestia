@@ -8,8 +8,8 @@ import worlds.gregs.hestia.core.display.client.model.components.NetworkSession
 import worlds.gregs.hestia.core.display.update.model.components.DisplayName
 import worlds.gregs.hestia.network.client.encoders.messages.LoginDetails
 import worlds.gregs.hestia.network.world.handlers.PlayerLoginSuccessHandler
-import worlds.gregs.hestia.service.Aspect
-import worlds.gregs.hestia.service.send
+import worlds.gregs.hestia.artemis.Aspect
+import worlds.gregs.hestia.artemis.send
 
 class ClientConnectSystem : SubscriptionSystem(Aspect.all(NetworkSession::class, ClientIndex::class, DisplayName::class)) {
 

@@ -6,7 +6,7 @@ import worlds.gregs.hestia.core.display.update.api.BlockFactory
 import worlds.gregs.hestia.core.display.update.model.components.Appearance
 import worlds.gregs.hestia.core.display.update.model.components.AppearanceData
 import worlds.gregs.hestia.core.display.update.model.components.Renderable
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 
 class AppearancePlayerBlockFactory(flag: Int, mob: Boolean = false) : BlockFactory<AppearanceBlock>(Aspect.all(Renderable::class, Appearance::class), true, flag = flag, mob = mob) {
 

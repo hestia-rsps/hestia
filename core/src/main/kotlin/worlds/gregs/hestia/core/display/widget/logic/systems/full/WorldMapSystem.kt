@@ -8,7 +8,7 @@ import worlds.gregs.hestia.core.display.widget.logic.systems.BaseFullScreen
 import worlds.gregs.hestia.core.display.widget.logic.systems.frame.getId
 import worlds.gregs.hestia.network.client.encoders.messages.ConfigGlobal
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetWindowsPane
-import worlds.gregs.hestia.service.send
+import worlds.gregs.hestia.artemis.send
 
 class WorldMapSystem : BaseFullScreen(WorldMap::class) {
 

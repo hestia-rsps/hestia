@@ -7,7 +7,7 @@ import worlds.gregs.hestia.core.display.widget.logic.systems.BaseFrame
 import worlds.gregs.hestia.network.client.encoders.messages.Config
 import worlds.gregs.hestia.network.client.encoders.messages.ConfigGlobal
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetComponentSettings
-import worlds.gregs.hestia.service.send
+import worlds.gregs.hestia.artemis.send
 
 class PrayerListTabSystem : BaseFrame(PrayerListTab::class) {
 

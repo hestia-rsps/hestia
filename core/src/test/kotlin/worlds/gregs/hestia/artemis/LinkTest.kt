@@ -8,9 +8,7 @@ import com.artemis.link.EntityLinkManager
 import com.artemis.link.LinkAdapter
 import com.artemis.utils.Bag
 import org.junit.jupiter.api.Test
-import worlds.gregs.hestia.core.getComponent
 import worlds.gregs.hestia.core.world.movement.model.components.RunToggled
-import worlds.gregs.hestia.service.getSystem
 import worlds.gregs.hestia.tools.PlayerTester
 
 @PreserveProcessVisiblity

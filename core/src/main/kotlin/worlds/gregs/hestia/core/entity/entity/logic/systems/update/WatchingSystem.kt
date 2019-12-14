@@ -6,7 +6,7 @@ import worlds.gregs.hestia.core.display.client.model.components.ClientIndex
 import worlds.gregs.hestia.core.display.update.model.components.direction.Watch
 import worlds.gregs.hestia.core.display.update.model.components.direction.Watching
 import worlds.gregs.hestia.game.entity.Player
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 
 /**
  * WatchingSystem

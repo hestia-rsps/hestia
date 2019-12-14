@@ -6,7 +6,7 @@ import worlds.gregs.hestia.core.display.update.model.components.CombatLevel
 import worlds.gregs.hestia.core.display.update.model.components.Renderable
 import worlds.gregs.hestia.core.display.update.model.components.UpdateCombatLevel
 import worlds.gregs.hestia.game.update.blocks.mob.CombatLevelBlock
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 
 class CombatLevelMobBlockFactory(flag: Int) : BlockFactory<CombatLevelBlock>(Aspect.all(Renderable::class, UpdateCombatLevel::class), true, flag = flag, mob = true) {
 

@@ -3,7 +3,7 @@ package worlds.gregs.hestia.core.display.widget.logic.systems.frame.orbs
 import worlds.gregs.hestia.core.display.widget.model.components.frame.orbs.HealthOrb
 import worlds.gregs.hestia.core.display.widget.logic.systems.BaseFrame
 import worlds.gregs.hestia.network.client.encoders.messages.ConfigFile
-import worlds.gregs.hestia.service.send
+import worlds.gregs.hestia.artemis.send
 
 class HealthOrbSystem : BaseFrame(HealthOrb::class) {
     override fun getId(entityId: Int): Int {

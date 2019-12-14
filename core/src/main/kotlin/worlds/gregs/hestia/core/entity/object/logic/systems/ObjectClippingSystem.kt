@@ -14,7 +14,7 @@ import worlds.gregs.hestia.core.world.map.logic.systems.ClippingMaskSystem.Compa
 import worlds.gregs.hestia.core.world.map.logic.systems.ClippingMaskSystem.Companion.REMOVE_MASK
 import worlds.gregs.hestia.core.world.map.model.MapConstants.isOutOfBounds
 import worlds.gregs.hestia.core.world.region.api.Regions
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 
 @Wire(failOnNull = false)
 class ObjectClippingSystem : SubscriptionSystem(Aspect.all(GameObject::class)) {

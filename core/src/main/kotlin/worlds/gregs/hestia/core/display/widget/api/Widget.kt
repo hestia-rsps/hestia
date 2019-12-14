@@ -2,7 +2,7 @@ package worlds.gregs.hestia.core.display.widget.api
 
 import com.artemis.Component
 import worlds.gregs.hestia.artemis.SubscriptionSystem
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 import kotlin.reflect.KClass
 
 abstract class Widget(component: KClass<out Component>) : SubscriptionSystem(Aspect.all(component)) {

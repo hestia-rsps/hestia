@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test
 import worlds.gregs.hestia.core.world.movement.model.components.Shift
 import worlds.gregs.hestia.GameTest
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
-import worlds.gregs.hestia.core.getComponent
+import worlds.gregs.hestia.artemis.getComponent
 
 internal class PositionShiftSystemTest : GameTest(WorldConfigurationBuilder().with(PositionShiftSystem())) {
 

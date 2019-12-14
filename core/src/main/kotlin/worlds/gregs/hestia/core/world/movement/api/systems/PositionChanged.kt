@@ -5,7 +5,7 @@ import com.artemis.ComponentMapper
 import com.artemis.systems.IteratingSystem
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.world.movement.model.components.Shift
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 import kotlin.reflect.KClass
 
 /**

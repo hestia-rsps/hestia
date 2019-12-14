@@ -5,21 +5,19 @@ import com.artemis.utils.IntBag
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import worlds.gregs.hestia.service.Aspect
-import worlds.gregs.hestia.service.add
 
 internal class EntityTest {
 
     lateinit var world: World
     private lateinit var test: Archetype
 
-    private data class TestComponent(val x: Int, val y: Int, val plane: Int) : Component()
+    internal data class TestComponent(val x: Int = 0, val y: Int = 0, val plane: Int = 0) : Component()
 
     @BeforeEach
     fun setUp() {
         val config = WorldConfigurationBuilder().build()
         world = World(config)
-        test = ArchetypeBuilder().add(TestComponent::class).build(world)
+        test = ArchetypeBuilder().add(TestComponent::class.java).build(world)
     }
 
     @Test

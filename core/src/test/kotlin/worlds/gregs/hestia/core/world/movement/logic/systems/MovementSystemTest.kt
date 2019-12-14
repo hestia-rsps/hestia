@@ -10,7 +10,7 @@ import worlds.gregs.hestia.core.world.region.logic.RegionFactory
 import worlds.gregs.hestia.GameTest
 import worlds.gregs.hestia.core.entity.entity.logic.EntityFactory
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
-import worlds.gregs.hestia.service.dependsOn
+import worlds.gregs.hestia.artemis.dependsOn
 
 internal class MovementSystemTest : GameTest(WorldConfigurationBuilder().dependsOn(RegionPlugin::class)) {
 

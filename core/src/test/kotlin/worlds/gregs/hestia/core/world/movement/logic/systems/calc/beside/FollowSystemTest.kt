@@ -7,10 +7,10 @@ import org.junit.jupiter.api.Test
 import worlds.gregs.hestia.core.display.update.model.components.direction.Watch
 import worlds.gregs.hestia.core.entity.entity.logic.follow
 import worlds.gregs.hestia.core.entity.entity.logic.step
-import worlds.gregs.hestia.core.getComponent
+import worlds.gregs.hestia.artemis.getComponent
 import worlds.gregs.hestia.core.world.movement.MovementPlugin
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
-import worlds.gregs.hestia.service.dependsOn
+import worlds.gregs.hestia.artemis.dependsOn
 import worlds.gregs.hestia.tools.PlayerTester
 
 class FollowSystemTest : PlayerTester(WorldConfigurationBuilder().dependsOn(MovementPlugin::class)) {

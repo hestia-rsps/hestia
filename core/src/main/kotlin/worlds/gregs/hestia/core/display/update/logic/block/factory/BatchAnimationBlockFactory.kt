@@ -4,7 +4,7 @@ import worlds.gregs.hestia.core.display.update.api.BlockFactory
 import worlds.gregs.hestia.core.display.update.model.components.BatchAnimations
 import worlds.gregs.hestia.core.display.update.model.components.Renderable
 import worlds.gregs.hestia.game.update.blocks.BatchAnimationBlock
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 
 open class BatchAnimationBlockFactory(flag: Int, mob: Boolean = false) : BlockFactory<BatchAnimationBlock>(Aspect.all(Renderable::class, BatchAnimations::class), flag = flag, mob = mob) {
 

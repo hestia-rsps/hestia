@@ -23,7 +23,7 @@ import worlds.gregs.hestia.MockkGame
 import worlds.gregs.hestia.game.task.DeferralType
 import worlds.gregs.hestia.game.task.TaskScope
 import worlds.gregs.hestia.network.client.encoders.messages.Script
-import worlds.gregs.hestia.service.send
+import worlds.gregs.hestia.artemis.send
 
 @ExtendWith(MockKExtension::class)
 internal class IntegerEntryDialogueTest : MockkGame() {
@@ -73,7 +73,7 @@ internal class IntegerEntryDialogueTest : MockkGame() {
         //Given
         val deferral: DeferralType = mockk()
         val entityId = 0
-        mockkStatic("worlds.gregs.hestia.service.GameExtensionsKt")
+        mockkStatic("worlds.gregs.hestia.artemis.ExtensionFunctionsKt")
         //When
         es.dispatch(ProcessDeferral(entityId, deferral))
         //Then
@@ -85,7 +85,7 @@ internal class IntegerEntryDialogueTest : MockkGame() {
         //Given
         val deferral = StringEntryDialogue("Title")
         val entityId = 0
-        mockkStatic("worlds.gregs.hestia.service.GameExtensionsKt")
+        mockkStatic("worlds.gregs.hestia.artemis.ExtensionFunctionsKt")
         //When
         es.dispatch(ProcessDeferral(entityId, deferral))
         //Then

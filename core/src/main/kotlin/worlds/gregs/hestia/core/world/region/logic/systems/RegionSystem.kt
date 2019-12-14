@@ -11,7 +11,7 @@ import worlds.gregs.hestia.core.world.region.model.events.CreateRegion
 import worlds.gregs.hestia.core.world.region.model.components.Loaded
 import worlds.gregs.hestia.core.world.region.model.components.Loading
 import worlds.gregs.hestia.core.world.region.model.components.RegionIdentifier
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 
 @Wire(failOnNull = false)
 class RegionSystem : Region(Aspect.all(RegionIdentifier::class)) {

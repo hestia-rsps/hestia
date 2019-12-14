@@ -17,7 +17,7 @@ import worlds.gregs.hestia.core.world.region.logic.RegionFactory
 import worlds.gregs.hestia.core.world.region.model.events.CreateRegion
 import worlds.gregs.hestia.GameTest
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.PRE_SHIFT_PRIORITY
-import worlds.gregs.hestia.service.dependsOn
+import worlds.gregs.hestia.artemis.dependsOn
 
 internal class ChunkChangedTest : GameTest(WorldConfigurationBuilder().dependsOn(RegionPlugin::class, MovementPlugin::class).with(PRE_SHIFT_PRIORITY, ChunkChange())) {
 

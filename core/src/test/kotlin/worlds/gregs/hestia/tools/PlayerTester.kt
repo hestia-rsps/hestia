@@ -10,8 +10,8 @@ import worlds.gregs.hestia.core.entity.player.logic.systems.PlayerCreation
 import worlds.gregs.hestia.GameTest
 import worlds.gregs.hestia.core.entity.entity.logic.EntityFactory
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
-import worlds.gregs.hestia.core.getComponent
-import worlds.gregs.hestia.service.getSystem
+import worlds.gregs.hestia.artemis.getComponent
+import worlds.gregs.hestia.artemis.getSystem
 
 abstract class PlayerTester(config: WorldConfigurationBuilder) : GameTest(config.with(PlayerCreation())) {
 

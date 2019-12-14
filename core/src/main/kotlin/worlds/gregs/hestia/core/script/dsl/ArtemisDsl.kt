@@ -7,7 +7,7 @@ import net.mostlyoriginal.api.event.common.Event
 import net.mostlyoriginal.api.system.core.PassiveSystem
 import worlds.gregs.hestia.artemis.dsl.ArtemisEventListener
 import worlds.gregs.hestia.core.script.dsl.SystemBuilder.Companion.EMPTY_ASPECT
-import worlds.gregs.hestia.service.forEach
+import worlds.gregs.hestia.artemis.forEach
 import kotlin.reflect.KClass
 
 /**

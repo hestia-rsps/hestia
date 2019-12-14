@@ -2,7 +2,7 @@ package worlds.gregs.hestia.core.display.dialogue.logic.systems.types
 
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.EntityDialogue
 import worlds.gregs.hestia.game.task.TaskScope
-import worlds.gregs.hestia.service.wrap
+import worlds.gregs.hestia.artemis.wrap
 
 data class MobDialogue(override val lines: List<String>, override val title: String?, val mob: Int, val animation: Int) : EntityDialogue() {
     init {

@@ -16,7 +16,7 @@ import worlds.gregs.hestia.GameTest
 import worlds.gregs.hestia.core.entity.entity.logic.EntityFactory
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.game.plugin.Plugin
-import worlds.gregs.hestia.service.dependsOn
+import worlds.gregs.hestia.artemis.dependsOn
 
 internal class RegionChangedTest : GameTest(WorldConfigurationBuilder().dependsOn(RegionPlugin::class, MovementPlugin::class).with(Plugin.PRE_SHIFT_PRIORITY, RegionChange())) {
 

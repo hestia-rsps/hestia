@@ -10,7 +10,7 @@ import worlds.gregs.hestia.core.display.update.model.components.*
 import worlds.gregs.hestia.core.entity.player.model.components.update.*
 import worlds.gregs.hestia.core.entity.player.model.events.UpdateAppearance
 import worlds.gregs.hestia.game.entity.Player
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 
 class AppearanceSystem : SubscriptionSystem(Aspect.all(Player::class)) {
 

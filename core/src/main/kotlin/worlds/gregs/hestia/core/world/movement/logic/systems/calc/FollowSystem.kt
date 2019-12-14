@@ -12,9 +12,9 @@ import worlds.gregs.hestia.core.world.movement.model.components.Shift
 import worlds.gregs.hestia.core.world.movement.model.components.calc.Follow
 import worlds.gregs.hestia.core.world.movement.model.components.calc.Step
 import worlds.gregs.hestia.core.display.update.logic.DirectionUtils.Companion.getOffset
-import worlds.gregs.hestia.service.Aspect
-import worlds.gregs.hestia.service.players
-import worlds.gregs.hestia.service.toArray
+import worlds.gregs.hestia.artemis.Aspect
+import worlds.gregs.hestia.artemis.players
+import worlds.gregs.hestia.artemis.toArray
 
 @Wire(failOnNull = false)
 class FollowSystem : IteratingSystem(Aspect.all(Position::class, Shift::class)) {

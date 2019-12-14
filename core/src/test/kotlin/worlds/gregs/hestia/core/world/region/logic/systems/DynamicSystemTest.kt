@@ -4,7 +4,7 @@ import com.artemis.WorldConfigurationBuilder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import worlds.gregs.hestia.GameTest
-import worlds.gregs.hestia.service.getSystem
+import worlds.gregs.hestia.artemis.getSystem
 
 internal class DynamicSystemTest : GameTest(WorldConfigurationBuilder().with(DynamicSystem())) {
 

@@ -10,7 +10,7 @@ import worlds.gregs.hestia.core.display.client.model.components.NetworkSession
 import worlds.gregs.hestia.artemis.ParallelSystem
 import worlds.gregs.hestia.artemis.events.OutBoundMessage
 import worlds.gregs.hestia.artemis.events.OutBoundPacket
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 
 class PacketSender : ParallelSystem(Aspect.all(NetworkSession::class)) {
 

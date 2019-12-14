@@ -3,7 +3,7 @@ package worlds.gregs.hestia.core.display.update.api
 import com.artemis.Component
 import worlds.gregs.hestia.artemis.SubscriptionSystem
 import worlds.gregs.hestia.core.display.client.model.components.ClientIndex
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 import kotlin.reflect.KClass
 
 /**

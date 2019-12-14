@@ -14,7 +14,7 @@ import worlds.gregs.hestia.core.world.movement.model.components.Steps
 import worlds.gregs.hestia.core.display.update.model.Direction
 import worlds.gregs.hestia.core.display.update.logic.DirectionUtils
 import worlds.gregs.hestia.core.display.update.logic.DirectionUtils.Companion.getMoveDirection
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 import kotlin.reflect.KClass
 
 /**

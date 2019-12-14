@@ -7,8 +7,8 @@ import worlds.gregs.hestia.core.display.client.model.components.ClientIndex
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.world.map.model.Chunk
 import worlds.gregs.hestia.core.world.map.model.MapConstants
-import worlds.gregs.hestia.service.Aspect
-import worlds.gregs.hestia.service.nearby
+import worlds.gregs.hestia.artemis.Aspect
+import worlds.gregs.hestia.artemis.nearby
 import kotlin.reflect.KClass
 
 abstract class EntityChunk(type: KClass<out Component>) : SubscriptionSystem(Aspect.all(ClientIndex::class, type)) {

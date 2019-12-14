@@ -7,7 +7,7 @@ import worlds.gregs.hestia.core.entity.entity.model.components.height
 import worlds.gregs.hestia.core.entity.entity.model.components.width
 import worlds.gregs.hestia.core.entity.mob.api.Mob
 import worlds.gregs.hestia.core.world.movement.model.components.Shift
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 
 /**
  * Contains position of all mobs

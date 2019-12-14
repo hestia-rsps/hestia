@@ -3,7 +3,6 @@ package worlds.gregs.hestia.artemis
 import com.artemis.utils.IntBag
 import net.mostlyoriginal.api.utils.QuadTree
 import org.junit.jupiter.api.Test
-import worlds.gregs.hestia.service.forEach
 import java.util.*
 import kotlin.math.abs
 import kotlin.system.measureNanoTime

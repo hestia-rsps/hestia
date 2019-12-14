@@ -21,7 +21,7 @@ import worlds.gregs.hestia.core.display.widget.logic.systems.frame.chat.Dialogue
 import worlds.gregs.hestia.MockkGame
 import worlds.gregs.hestia.game.task.DeferralType
 import worlds.gregs.hestia.game.task.TaskScope
-import worlds.gregs.hestia.service.send
+import worlds.gregs.hestia.artemis.send
 
 @ExtendWith(MockKExtension::class)
 internal class DialogueBaseSystemTest : MockkGame() {
@@ -86,7 +86,7 @@ internal class DialogueBaseSystemTest : MockkGame() {
         val componentStart = 3
         val title = "Title"
         val lines = listOf("Line one", "Line two")
-        mockkStatic("worlds.gregs.hestia.service.GameExtensionsKt")
+        mockkStatic("worlds.gregs.hestia.artemis.ExtensionFunctionsKt")
         every { boxSystem.openChatInterface(entityId, interfaceId) } answers {}
         //When
         system.send(entityId, interfaceId, componentStart, title, lines)

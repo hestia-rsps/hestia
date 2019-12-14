@@ -2,11 +2,11 @@ package worlds.gregs.hestia.core.world.movement.logic.systems.calc.path
 
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import worlds.gregs.hestia.core.world.movement.model.components.calc.Path
 import worlds.gregs.hestia.core.world.movement.logic.strategies.FixedTileStrategy
 import worlds.gregs.hestia.core.world.movement.logic.systems.calc.PathFinderSystem
 import worlds.gregs.hestia.core.world.movement.logic.systems.calc.PathSystem
 import worlds.gregs.hestia.core.world.movement.logic.systems.calc.PathTester
+import worlds.gregs.hestia.core.world.movement.model.components.calc.Path
 
 internal class LargeEntityRouteSystemTest : PathTester(true, PathSystem(), PathFinderSystem()) {
 
@@ -129,7 +129,7 @@ internal class LargeEntityRouteSystemTest : PathTester(true, PathSystem(), PathF
 
     private fun assertPath(targetX: Int, targetY: Int, expected: List<IntArray>? = null, display: Boolean = false) {
         assertPath(expected, display) {
-            it.edit().add(Path(FixedTileStrategy(targetX, targetY), false, true))
+            it.edit().add(Path(FixedTileStrategy(targetX, targetY), collide = false, alternative = true))
         }
     }
 }

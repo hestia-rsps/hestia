@@ -3,13 +3,14 @@ package worlds.gregs.hestia.core.display.client.logic.systems.network.`in`
 import net.mostlyoriginal.api.event.common.EventSystem
 import world.gregs.hestia.core.network.protocol.encoders.messages.WidgetComponentText
 import worlds.gregs.hestia.GameServer
+import worlds.gregs.hestia.artemis.*
+import worlds.gregs.hestia.artemis.events.Disconnect
 import worlds.gregs.hestia.artemis.events.send
 import worlds.gregs.hestia.core.display.client.model.events.Command
-import worlds.gregs.hestia.artemis.events.Disconnect
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.DialogueSystem
 import worlds.gregs.hestia.core.display.update.model.components.*
-import worlds.gregs.hestia.core.display.widget.model.components.screen.CustomScreenWidget
 import worlds.gregs.hestia.core.display.widget.logic.systems.screen.CustomScreenWidgetSystem
+import worlds.gregs.hestia.core.display.widget.model.components.screen.CustomScreenWidget
 import worlds.gregs.hestia.core.entity.bot.model.events.CreateBot
 import worlds.gregs.hestia.core.entity.entity.logic.*
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
@@ -17,11 +18,8 @@ import worlds.gregs.hestia.core.entity.mob.logic.systems.change
 import worlds.gregs.hestia.core.entity.mob.model.events.CreateMob
 import worlds.gregs.hestia.core.entity.player.logic.systems.updateClanChat
 import worlds.gregs.hestia.core.entity.player.model.components.update.Hidden
-import worlds.gregs.hestia.core.getComponent
-import worlds.gregs.hestia.core.task.tick.model.schedule
 import worlds.gregs.hestia.core.mobs
-import worlds.gregs.hestia.core.remove
-import worlds.gregs.hestia.core.toggle
+import worlds.gregs.hestia.core.task.tick.model.schedule
 import worlds.gregs.hestia.core.world.movement.model.components.RandomWalk
 import worlds.gregs.hestia.core.world.movement.model.components.RunToggled
 import worlds.gregs.hestia.core.world.movement.model.components.Shift
@@ -34,7 +32,6 @@ import worlds.gregs.hestia.game.update.blocks.Marker
 import worlds.gregs.hestia.network.client.decoders.messages.ConsoleCommand
 import worlds.gregs.hestia.network.client.encoders.messages.Config
 import worlds.gregs.hestia.network.client.encoders.messages.ConfigFile
-import worlds.gregs.hestia.service.*
 
 class ConsoleCommandHandler : MessageHandlerSystem<ConsoleCommand>() {
 

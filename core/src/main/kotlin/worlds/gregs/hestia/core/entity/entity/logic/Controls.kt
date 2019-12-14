@@ -2,6 +2,8 @@ package worlds.gregs.hestia.core.entity.entity.logic
 
 import com.artemis.Entity
 import net.mostlyoriginal.api.event.common.EventSystem
+import worlds.gregs.hestia.artemis.getComponent
+import worlds.gregs.hestia.artemis.getSystem
 import worlds.gregs.hestia.core.display.client.model.events.UpdateMapRegion
 import worlds.gregs.hestia.core.display.update.model.components.*
 import worlds.gregs.hestia.core.display.update.model.components.direction.Face
@@ -13,7 +15,6 @@ import worlds.gregs.hestia.core.entity.entity.model.events.Animate
 import worlds.gregs.hestia.core.entity.entity.model.events.Graphic
 import worlds.gregs.hestia.core.entity.entity.model.events.Hit
 import worlds.gregs.hestia.core.entity.player.model.events.UpdateAppearance
-import worlds.gregs.hestia.core.getComponent
 import worlds.gregs.hestia.core.task.tick.model.schedule
 import worlds.gregs.hestia.core.world.movement.model.components.calc.Beside
 import worlds.gregs.hestia.core.world.movement.model.components.calc.Follow
@@ -21,7 +22,6 @@ import worlds.gregs.hestia.core.world.movement.model.components.calc.Route
 import worlds.gregs.hestia.core.world.movement.model.components.calc.Step
 import worlds.gregs.hestia.core.world.movement.model.components.types.MoveStep
 import worlds.gregs.hestia.game.update.blocks.Marker
-import worlds.gregs.hestia.service.getSystem
 
 /**
  * Entity controls

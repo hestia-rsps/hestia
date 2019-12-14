@@ -10,7 +10,7 @@ import worlds.gregs.hestia.core.display.widget.logic.systems.frame.chat.Dialogue
 import worlds.gregs.hestia.core.task.api.Tasks
 import worlds.gregs.hestia.core.task.model.components.TaskQueue
 import worlds.gregs.hestia.core.task.model.components.getDeferral
-import worlds.gregs.hestia.service.send
+import worlds.gregs.hestia.artemis.send
 
 abstract class DialogueBaseSystem : PassiveSystem() {
     private val logger = LoggerFactory.getLogger(DialogueBaseSystem::class.java)!!

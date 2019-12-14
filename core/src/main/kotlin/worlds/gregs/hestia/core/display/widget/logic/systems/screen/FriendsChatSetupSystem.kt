@@ -9,7 +9,7 @@ import worlds.gregs.hestia.core.display.dialogue.model.events.StringEntered
 import worlds.gregs.hestia.core.display.widget.model.components.screen.FriendsChatSetup
 import worlds.gregs.hestia.core.display.widget.logic.systems.BaseScreen
 import worlds.gregs.hestia.network.client.encoders.messages.Script
-import worlds.gregs.hestia.service.send
+import worlds.gregs.hestia.artemis.send
 
 class FriendsChatSetupSystem : BaseScreen(FriendsChatSetup::class) {
 

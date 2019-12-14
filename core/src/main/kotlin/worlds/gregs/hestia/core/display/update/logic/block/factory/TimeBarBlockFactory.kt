@@ -6,7 +6,7 @@ import worlds.gregs.hestia.core.display.update.api.BlockFactory
 import worlds.gregs.hestia.core.display.update.model.components.Renderable
 import worlds.gregs.hestia.core.display.update.model.components.TimeBar
 import worlds.gregs.hestia.game.update.blocks.TimeBarBlock
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 
 open class TimeBarBlockFactory(flag: Int, mob: Boolean = false) : BlockFactory<TimeBarBlock>(Aspect.all(Renderable::class, TimeBar::class), flag = flag, mob = mob) {
 

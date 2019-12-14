@@ -8,7 +8,7 @@ import worlds.gregs.hestia.core.task.model.events.ProcessDeferral
 import worlds.gregs.hestia.game.task.DeferralType
 import worlds.gregs.hestia.game.task.DeferringCoroutine
 import worlds.gregs.hestia.game.task.TaskScope
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 
 data class TickDeferral(var ticks: Int) : DeferralType
 

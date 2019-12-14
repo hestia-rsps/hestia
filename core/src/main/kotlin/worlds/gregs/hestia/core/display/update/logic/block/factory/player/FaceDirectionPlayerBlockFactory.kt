@@ -7,7 +7,7 @@ import worlds.gregs.hestia.core.display.update.model.components.direction.Face
 import worlds.gregs.hestia.core.display.update.model.components.direction.Facing
 import worlds.gregs.hestia.core.display.update.logic.DirectionUtils
 import worlds.gregs.hestia.game.update.blocks.player.FaceDirectionPlayerBlock
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 
 class FaceDirectionPlayerBlockFactory(flag: Int) : BlockFactory<FaceDirectionPlayerBlock>(Aspect.all(Renderable::class, Facing::class), true, flag = flag) {
 

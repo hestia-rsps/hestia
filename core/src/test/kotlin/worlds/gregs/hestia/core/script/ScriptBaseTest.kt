@@ -18,7 +18,7 @@ import worlds.gregs.hestia.core.display.dialogue.api.DialogueBase
 import worlds.gregs.hestia.game.task.DeferQueue
 import worlds.gregs.hestia.game.task.TaskPriority
 import worlds.gregs.hestia.game.task.TaskScope
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 
 internal class ScriptBaseTest {
 

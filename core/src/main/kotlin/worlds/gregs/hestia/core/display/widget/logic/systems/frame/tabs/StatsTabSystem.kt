@@ -15,7 +15,7 @@ import worlds.gregs.hestia.core.display.widget.logic.systems.screen.SkillMenuSys
 import worlds.gregs.hestia.network.client.encoders.messages.Config
 import worlds.gregs.hestia.network.client.encoders.messages.ConfigFile
 import worlds.gregs.hestia.network.client.encoders.messages.SkillLevel
-import worlds.gregs.hestia.service.send
+import worlds.gregs.hestia.artemis.send
 import kotlin.math.pow
 
 @Wire(failOnNull = false, injectInherited = true)

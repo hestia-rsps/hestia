@@ -10,7 +10,7 @@ import worlds.gregs.hestia.core.display.widget.logic.systems.BaseFullScreen
 import worlds.gregs.hestia.core.display.widget.logic.systems.frame.GameFrameSystem.Companion.FIXED_ID
 import worlds.gregs.hestia.core.display.widget.logic.systems.frame.GameFrameSystem.Companion.RESIZABLE_ID
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetWindowsPane
-import worlds.gregs.hestia.service.send
+import worlds.gregs.hestia.artemis.send
 
 @Wire(failOnNull = false, injectInherited = true)
 class GameFrameSystem : BaseFullScreen(GameFrame::class) {

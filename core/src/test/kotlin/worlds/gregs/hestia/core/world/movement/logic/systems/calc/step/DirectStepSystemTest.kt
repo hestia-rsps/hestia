@@ -4,17 +4,17 @@ import com.artemis.Entity
 import com.artemis.WorldConfigurationBuilder
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
-import worlds.gregs.hestia.core.entity.entity.logic.step
-import worlds.gregs.hestia.core.getComponent
-import worlds.gregs.hestia.core.remove
-import worlds.gregs.hestia.core.world.movement.MovementPlugin
-import worlds.gregs.hestia.core.world.movement.model.components.RunToggled
-import worlds.gregs.hestia.core.world.movement.model.components.Steps
+import worlds.gregs.hestia.artemis.dependsOn
+import worlds.gregs.hestia.artemis.getComponent
+import worlds.gregs.hestia.artemis.remove
 import worlds.gregs.hestia.core.display.update.model.Direction
 import worlds.gregs.hestia.core.display.update.model.Direction.Companion.deltaX
 import worlds.gregs.hestia.core.display.update.model.Direction.Companion.deltaY
+import worlds.gregs.hestia.core.entity.entity.logic.step
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
-import worlds.gregs.hestia.service.dependsOn
+import worlds.gregs.hestia.core.world.movement.MovementPlugin
+import worlds.gregs.hestia.core.world.movement.model.components.RunToggled
+import worlds.gregs.hestia.core.world.movement.model.components.Steps
 import worlds.gregs.hestia.tools.PlayerTester
 
 internal class DirectStepSystemTest : PlayerTester(WorldConfigurationBuilder().dependsOn(MovementPlugin::class)) {

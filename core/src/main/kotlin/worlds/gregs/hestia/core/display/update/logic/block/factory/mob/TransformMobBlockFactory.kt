@@ -6,7 +6,7 @@ import worlds.gregs.hestia.core.display.update.model.components.Renderable
 import worlds.gregs.hestia.core.display.update.model.components.Transform
 import worlds.gregs.hestia.core.entity.entity.model.components.Type
 import worlds.gregs.hestia.game.update.blocks.mob.TransformBlock
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 
 class TransformMobBlockFactory(flag: Int) : BlockFactory<TransformBlock>(Aspect.all(Renderable::class, Transform::class), flag = flag, mob = true) {
 

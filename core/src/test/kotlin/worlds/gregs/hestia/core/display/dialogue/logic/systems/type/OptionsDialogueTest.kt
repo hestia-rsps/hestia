@@ -23,7 +23,7 @@ import worlds.gregs.hestia.game.task.DeferQueue
 import worlds.gregs.hestia.game.task.DeferralType
 import worlds.gregs.hestia.game.task.TaskScope
 import worlds.gregs.hestia.network.client.encoders.messages.Script
-import worlds.gregs.hestia.service.send
+import worlds.gregs.hestia.artemis.send
 
 @ExtendWith(MockKExtension::class)
 internal class OptionsDialogueTest : MockkGame() {
@@ -80,7 +80,7 @@ internal class OptionsDialogueTest : MockkGame() {
         //Given
         val deferral: DeferralType = mockk()
         val entityId = 0
-        mockkStatic("worlds.gregs.hestia.service.GameExtensionsKt")
+        mockkStatic("worlds.gregs.hestia.artemis.ExtensionFunctionsKt")
         //When
         es.dispatch(ProcessDeferral(entityId, deferral))
         //Then
@@ -92,7 +92,7 @@ internal class OptionsDialogueTest : MockkGame() {
         //Given
         val deferral = OptionsDialogue(listOf("Option 1", "Option 2"), null)
         val entityId = 0
-        mockkStatic("worlds.gregs.hestia.service.GameExtensionsKt")
+        mockkStatic("worlds.gregs.hestia.artemis.ExtensionFunctionsKt")
         //When
         es.dispatch(ProcessDeferral(entityId, deferral))
         //Then
@@ -104,7 +104,7 @@ internal class OptionsDialogueTest : MockkGame() {
         //Given
         val deferral = OptionsDialogue(listOf("Option 1", "Option 2"), "Title")
         val entityId = 0
-        mockkStatic("worlds.gregs.hestia.service.GameExtensionsKt")
+        mockkStatic("worlds.gregs.hestia.artemis.ExtensionFunctionsKt")
         //When
         es.dispatch(ProcessDeferral(entityId, deferral))
         //Then

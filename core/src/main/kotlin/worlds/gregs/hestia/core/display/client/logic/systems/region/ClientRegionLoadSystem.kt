@@ -8,7 +8,7 @@ import worlds.gregs.hestia.core.display.client.model.components.NetworkSession
 import worlds.gregs.hestia.core.display.client.model.events.UpdateMapRegion
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.world.map.model.MapConstants.MAP_SIZES
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 import kotlin.math.abs
 
 /**

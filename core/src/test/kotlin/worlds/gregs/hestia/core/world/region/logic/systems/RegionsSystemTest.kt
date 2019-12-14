@@ -10,7 +10,7 @@ import worlds.gregs.hestia.core.world.region.logic.systems.load.RegionCreation
 import worlds.gregs.hestia.GameTest
 import worlds.gregs.hestia.core.entity.entity.logic.EntityFactory
 import worlds.gregs.hestia.core.entity.entity.model.components.Position.Companion.regionId
-import worlds.gregs.hestia.service.getSystem
+import worlds.gregs.hestia.artemis.getSystem
 
 internal class RegionsSystemTest : GameTest(WorldConfigurationBuilder().with(RegionsSystem(), RegionCreation())) {
 

@@ -8,8 +8,8 @@ import worlds.gregs.hestia.core.display.update.model.components.anim.FourthAnima
 import worlds.gregs.hestia.core.display.update.model.components.anim.SecondAnimation
 import worlds.gregs.hestia.core.display.update.model.components.anim.ThirdAnimation
 import worlds.gregs.hestia.game.update.blocks.AnimationBlock
-import worlds.gregs.hestia.service.Aspect
-import worlds.gregs.hestia.service.one
+import worlds.gregs.hestia.artemis.Aspect
+import worlds.gregs.hestia.artemis.one
 
 open class AnimationBlockFactory(flag: Int, mob: Boolean = false) : BlockFactory<AnimationBlock>(Aspect.all(Renderable::class).one(FirstAnimation::class, SecondAnimation::class, ThirdAnimation::class, FourthAnimation::class), flag = flag, mob = mob) {
 

@@ -5,7 +5,7 @@ import worlds.gregs.hestia.core.display.update.api.BlockFactory
 import worlds.gregs.hestia.core.display.update.model.components.Damage
 import worlds.gregs.hestia.core.display.update.model.components.Renderable
 import worlds.gregs.hestia.game.update.blocks.HitsBlock
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 
 open class HitsBlockFactory(flag: Int, mob: Boolean = false) : BlockFactory<HitsBlock>(Aspect.all(Renderable::class, Damage::class), flag = flag, mob = mob) {
 

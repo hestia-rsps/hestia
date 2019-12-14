@@ -9,7 +9,7 @@ import worlds.gregs.hestia.core.world.movement.model.components.Steps
 import worlds.gregs.hestia.core.world.movement.model.components.types.Walking
 import worlds.gregs.hestia.core.display.update.model.components.RunStep
 import worlds.gregs.hestia.core.display.update.model.components.WalkStep
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 
 /**
  * WalkSystem

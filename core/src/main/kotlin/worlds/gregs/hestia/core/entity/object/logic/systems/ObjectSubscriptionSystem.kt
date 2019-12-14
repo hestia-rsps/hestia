@@ -5,7 +5,7 @@ import worlds.gregs.hestia.artemis.SubscriptionSystem
 import worlds.gregs.hestia.core.entity.`object`.model.components.GameObject
 import worlds.gregs.hestia.core.world.land.api.Land
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 
 class ObjectSubscriptionSystem : SubscriptionSystem(Aspect.all(GameObject::class)) {
 

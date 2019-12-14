@@ -2,7 +2,7 @@ package worlds.gregs.hestia.core.display.dialogue.logic.systems.types
 
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.EntityDialogue
 import worlds.gregs.hestia.game.task.TaskScope
-import worlds.gregs.hestia.service.wrap
+import worlds.gregs.hestia.artemis.wrap
 
 data class ItemDialogue(override val lines: List<String>, override val title: String?, val item: Int) : EntityDialogue() {
     init {

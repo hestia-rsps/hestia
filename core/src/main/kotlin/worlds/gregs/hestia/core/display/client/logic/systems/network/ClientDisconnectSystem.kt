@@ -8,8 +8,8 @@ import worlds.gregs.hestia.artemis.SubscriptionSystem
 import worlds.gregs.hestia.core.display.client.model.components.ExitLobby
 import worlds.gregs.hestia.core.display.client.model.components.NetworkSession
 import worlds.gregs.hestia.network.client.encoders.messages.Logout
-import worlds.gregs.hestia.service.Aspect
-import worlds.gregs.hestia.service.send
+import worlds.gregs.hestia.artemis.Aspect
+import worlds.gregs.hestia.artemis.send
 
 class ClientDisconnectSystem : SubscriptionSystem(Aspect.all(NetworkSession::class)) {
 

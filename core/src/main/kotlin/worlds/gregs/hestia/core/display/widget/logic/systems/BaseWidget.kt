@@ -8,7 +8,7 @@ import worlds.gregs.hestia.core.display.widget.api.Widget
 import worlds.gregs.hestia.core.display.widget.logic.systems.frame.getId
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetClose
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetOpen
-import worlds.gregs.hestia.service.send
+import worlds.gregs.hestia.artemis.send
 import kotlin.reflect.KClass
 
 abstract class BaseWidget(component: KClass<out Component>) : Widget(component) {

@@ -11,7 +11,7 @@ import worlds.gregs.hestia.core.entity.player.logic.systems.chunk.PlayerChunkSub
 import worlds.gregs.hestia.core.entity.player.logic.systems.chunk.PlayerChunkSystem
 import worlds.gregs.hestia.core.entity.player.logic.systems.chunk.map.PlayerChunkMap
 import worlds.gregs.hestia.core.entity.player.logic.systems.chunk.map.PlayerChunkMapSystem
-import worlds.gregs.hestia.service.getSystem
+import worlds.gregs.hestia.artemis.getSystem
 
 internal class EntityCollisionSystemTest : PlayerTester(WorldConfigurationBuilder().with(EntityCollisionSystem(), PlayerChunkMapSystem(), PlayerChunkMap(), PlayerChunkSystem(), PlayerChunkSubscriptionSystem())) {
 

@@ -6,7 +6,7 @@ import worlds.gregs.hestia.artemis.bag.EntitySyncBag
 import worlds.gregs.hestia.core.display.client.model.components.NetworkSession
 import worlds.gregs.hestia.core.display.client.model.components.Viewport
 import worlds.gregs.hestia.network.update.sync.Update
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 
 abstract class Synchronize<T : Message> : ParallelSystem(Aspect.all(NetworkSession::class, Viewport::class)) {
 

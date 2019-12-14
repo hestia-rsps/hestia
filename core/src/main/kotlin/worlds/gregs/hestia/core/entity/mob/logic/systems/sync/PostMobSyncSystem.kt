@@ -6,7 +6,7 @@ import worlds.gregs.hestia.core.display.update.model.components.Renderable
 import worlds.gregs.hestia.core.display.update.model.components.ModelChange
 import worlds.gregs.hestia.core.display.update.model.components.UpdateCombatLevel
 import worlds.gregs.hestia.core.display.update.model.components.UpdateDisplayName
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 
 class PostMobSyncSystem : IteratingSystem(Aspect.all(Renderable::class)) {
 

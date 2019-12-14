@@ -10,7 +10,7 @@ import world.gregs.hestia.core.network.codec.packet.PacketWriter
 import worlds.gregs.hestia.core.display.widget.api.GameFrame
 import worlds.gregs.hestia.core.display.widget.logic.systems.screen.GraphicsOptionsSystem
 import worlds.gregs.hestia.network.client.decoders.messages.ScreenChange
-import worlds.gregs.hestia.service.getSystem
+import worlds.gregs.hestia.artemis.getSystem
 import worlds.gregs.hestia.tools.InterfaceTester
 
 internal class ScreenChangeHandlerTest : InterfaceTester(WorldConfigurationBuilder().with(ScreenChangeHandler())) {

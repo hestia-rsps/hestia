@@ -13,7 +13,7 @@ import worlds.gregs.hestia.network.client.encoders.messages.WidgetComponentAnima
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetHeadMob
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetHeadPlayer
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetItem
-import worlds.gregs.hestia.service.send
+import worlds.gregs.hestia.artemis.send
 
 /**
  * For quickly identifying entity dialogues

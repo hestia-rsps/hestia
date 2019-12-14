@@ -9,8 +9,8 @@ import world.gregs.hestia.core.network.protocol.messages.WorldInfo
 import worlds.gregs.hestia.GameServer
 import worlds.gregs.hestia.artemis.events.send
 import worlds.gregs.hestia.network.client.encoders.messages.FriendListDisconnect
-import worlds.gregs.hestia.service.forEach
-import worlds.gregs.hestia.service.players
+import worlds.gregs.hestia.artemis.forEach
+import worlds.gregs.hestia.artemis.players
 
 @ChannelHandler.Sharable
 class WorldConnection(private val details: Details) : ConnectionSessionListener() {

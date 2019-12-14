@@ -8,7 +8,7 @@ import worlds.gregs.hestia.core.display.widget.model.components.screen.ItemsKept
 import worlds.gregs.hestia.core.display.widget.model.components.screen.PriceChecker
 import worlds.gregs.hestia.core.display.widget.logic.systems.BaseFrame
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetItems
-import worlds.gregs.hestia.service.send
+import worlds.gregs.hestia.artemis.send
 
 @Wire(failOnNull = false, injectInherited = true)
 class WornEquipmentTabSystem : BaseFrame(WornEquipmentTab::class) {

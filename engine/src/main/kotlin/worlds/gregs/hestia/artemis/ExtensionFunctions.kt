@@ -1,4 +1,4 @@
-package worlds.gregs.hestia.service
+package worlds.gregs.hestia.artemis
 
 import com.artemis.*
 import com.artemis.utils.IntBag
@@ -28,6 +28,19 @@ fun EventSystem.send(entity: Int, message: Message) {
 
 fun ArchetypeBuilder.add(vararg clazz: KClass<out Component>): ArchetypeBuilder {
     return add(*clazz.map { it.java }.toTypedArray())
+}
+
+fun <T : Component> EntityEdit.toggle(component: T): EntityEdit {
+    return if(entity.getComponent(component::class) == null) add(component) else remove(component)
+}
+
+fun EntityEdit.remove(type: KClass<out Component>): EntityEdit {
+    return remove(type.java)
+}
+
+fun <T : Component> Entity.getComponent(type: KClass<T>): T? {
+    val tf = world.componentManager.typeFactory
+    return getComponent(tf.getTypeFor(type.java)) as? T
 }
 
 fun EventSystem.send(entity: Int, packet: Packet) {

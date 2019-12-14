@@ -17,7 +17,7 @@ import worlds.gregs.hestia.core.world.movement.logic.strategies.ObjectStrategy
 import worlds.gregs.hestia.core.world.movement.model.components.calc.Path
 import worlds.gregs.hestia.core.world.movement.model.components.calc.Route
 import worlds.gregs.hestia.game.entity.Player
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 
 /**
  * StrategySystem

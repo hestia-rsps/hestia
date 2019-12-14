@@ -16,7 +16,7 @@ import worlds.gregs.hestia.core.world.map.api.container.EntityMap
 import worlds.gregs.hestia.core.world.map.api.container.MobMap
 import worlds.gregs.hestia.core.world.map.api.container.PlayerMap
 import worlds.gregs.hestia.core.world.map.logic.Spiral
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 
 /**
  * ViewportSystem

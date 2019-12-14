@@ -7,7 +7,7 @@ import worlds.gregs.hestia.core.world.map.api.TileClipping
 import worlds.gregs.hestia.core.world.movement.logic.systems.calc.MovementTester
 import worlds.gregs.hestia.core.display.update.model.Direction
 import worlds.gregs.hestia.core.display.update.model.Direction.*
-import worlds.gregs.hestia.service.getSystem
+import worlds.gregs.hestia.artemis.getSystem
 
 internal class MapCollisionSystemTest : MovementTester(false) {
 

@@ -4,7 +4,7 @@ import com.artemis.Component
 import com.artemis.ComponentMapper
 import worlds.gregs.hestia.artemis.SubscriptionSystem
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 import kotlin.reflect.KClass
 
 abstract class RegionSubscription(vararg classes: KClass<out Component>) : SubscriptionSystem(Aspect.all(Position::class, *classes)) {

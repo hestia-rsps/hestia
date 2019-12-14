@@ -4,8 +4,8 @@ import com.artemis.Component
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import worlds.gregs.hestia.service.Aspect
-import worlds.gregs.hestia.service.all
+import worlds.gregs.hestia.artemis.Aspect
+import worlds.gregs.hestia.artemis.all
 
 internal class SystemBuilderTest {
 

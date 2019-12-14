@@ -7,7 +7,7 @@ import net.mostlyoriginal.api.event.common.Subscribe
 import net.mostlyoriginal.api.system.core.PassiveSystem
 import worlds.gregs.hestia.core.display.widget.model.components.ScreenWidget
 import worlds.gregs.hestia.core.display.widget.model.events.ScreenClosed
-import worlds.gregs.hestia.core.getComponent
+import worlds.gregs.hestia.artemis.getComponent
 import worlds.gregs.hestia.core.task.api.Tasks
 import worlds.gregs.hestia.core.task.model.components.TaskQueue
 import worlds.gregs.hestia.core.task.model.components.getDeferral

@@ -11,7 +11,7 @@ import worlds.gregs.hestia.core.world.movement.api.Mobile
 import worlds.gregs.hestia.core.world.movement.model.components.Shift
 import worlds.gregs.hestia.game.task.DeferralType
 import worlds.gregs.hestia.game.task.TaskScope
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 
 data class MovementDeferral(val position: Position) : DeferralType
 

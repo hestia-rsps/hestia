@@ -9,8 +9,8 @@ import worlds.gregs.hestia.core.world.region.model.components.DynamicRegion
 import worlds.gregs.hestia.core.world.region.model.components.RegionIdentifier
 import worlds.gregs.hestia.core.world.region.model.components.RegionPriorities
 import worlds.gregs.hestia.core.world.region.logic.systems.RegionBuilderSystem.Companion.forChunks
-import worlds.gregs.hestia.service.Aspect
-import worlds.gregs.hestia.service.nearby
+import worlds.gregs.hestia.artemis.Aspect
+import worlds.gregs.hestia.artemis.nearby
 
 /**
  * Region Clean System

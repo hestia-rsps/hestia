@@ -25,7 +25,7 @@ import worlds.gregs.hestia.core.entity.entity.api.ArchetypeFactory
 import worlds.gregs.hestia.core.task.model.components.TaskQueue
 import worlds.gregs.hestia.core.world.collision.model.components.Ghost
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
-import worlds.gregs.hestia.service.add
+import worlds.gregs.hestia.artemis.add
 
 class PlayerFactory : ArchetypeFactory {
 

@@ -17,10 +17,10 @@ import worlds.gregs.hestia.core.world.region.api.Dynamic
 import worlds.gregs.hestia.core.world.region.api.Regions
 import worlds.gregs.hestia.network.client.encoders.messages.MapRegion
 import worlds.gregs.hestia.network.client.encoders.messages.MapRegionDynamic
-import worlds.gregs.hestia.service.Aspect
-import worlds.gregs.hestia.service.nearby
-import worlds.gregs.hestia.service.send
-import worlds.gregs.hestia.service.toArray
+import worlds.gregs.hestia.artemis.Aspect
+import worlds.gregs.hestia.artemis.nearby
+import worlds.gregs.hestia.artemis.send
+import worlds.gregs.hestia.artemis.toArray
 
 @Wire(failOnNull = false)
 class RegionSenderSystem : SubscriptionSystem(Aspect.all(Position::class, Viewport::class)) {

@@ -8,7 +8,7 @@ import worlds.gregs.hestia.core.display.dialogue.api.LinesDialogue
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.DialogueBaseSystem
 import worlds.gregs.hestia.core.task.model.events.ProcessDeferral
 import worlds.gregs.hestia.game.task.TaskScope
-import worlds.gregs.hestia.service.wrap
+import worlds.gregs.hestia.artemis.wrap
 
 data class StatementDialogue(override val lines: List<String>, override val title: String?) : LinesDialogue() {
     init {

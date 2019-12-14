@@ -22,7 +22,7 @@ import worlds.gregs.hestia.network.client.encoders.messages.WidgetComponentAnima
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetHeadMob
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetHeadPlayer
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetItem
-import worlds.gregs.hestia.service.send
+import worlds.gregs.hestia.artemis.send
 
 @ExtendWith(MockKExtension::class)
 internal class EntityDialogueTest : MockkGame() {
@@ -80,7 +80,7 @@ internal class EntityDialogueTest : MockkGame() {
         val entityId = 0
         every { system.getTitle(deferral) } returns "Title"
         every { system.send(entityId, any(), any(), any(), any()) } answers {}
-        mockkStatic("worlds.gregs.hestia.service.GameExtensionsKt")
+        mockkStatic("worlds.gregs.hestia.artemis.ExtensionFunctionsKt")
         //When
         es.dispatch(ProcessDeferral(entityId, deferral))
         //Then
@@ -100,7 +100,7 @@ internal class EntityDialogueTest : MockkGame() {
         val entityId = 0
         every { system.getTitle(deferral) } returns "Title"
         every { system.send(entityId, any(), any(), any(), any()) } answers {}
-        mockkStatic("worlds.gregs.hestia.service.GameExtensionsKt")
+        mockkStatic("worlds.gregs.hestia.artemis.ExtensionFunctionsKt")
         //When
         es.dispatch(ProcessDeferral(entityId, deferral))
         //Then
@@ -120,7 +120,7 @@ internal class EntityDialogueTest : MockkGame() {
         val entityId = 0
         every { system.getTitle(deferral) } returns "Title"
         every { system.send(entityId, any(), any(), any(), any()) } answers {}
-        mockkStatic("worlds.gregs.hestia.service.GameExtensionsKt")
+        mockkStatic("worlds.gregs.hestia.artemis.ExtensionFunctionsKt")
         //When
         es.dispatch(ProcessDeferral(entityId, deferral))
         //Then

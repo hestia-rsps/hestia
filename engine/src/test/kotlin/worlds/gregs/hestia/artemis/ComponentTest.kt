@@ -8,7 +8,6 @@ import com.artemis.annotations.DelayedComponentRemoval
 import com.artemis.systems.IteratingSystem
 import org.junit.jupiter.api.Test
 import worlds.gregs.hestia.GameTest
-import worlds.gregs.hestia.service.Aspect
 
 internal class ComponentTest : GameTest(WorldConfigurationBuilder().with(LOWEST, CompSystem(), Loop())) {
     internal class Comp : Component()

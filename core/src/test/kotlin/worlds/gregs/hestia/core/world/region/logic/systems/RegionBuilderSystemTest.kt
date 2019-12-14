@@ -9,7 +9,7 @@ import worlds.gregs.hestia.core.world.map.model.Chunk.getRotatedChunkPlane
 import worlds.gregs.hestia.core.world.map.model.Chunk.getRotatedChunkRotation
 import worlds.gregs.hestia.core.world.map.model.Chunk.getRotatedChunkX
 import worlds.gregs.hestia.core.world.map.model.Chunk.getRotatedChunkY
-import worlds.gregs.hestia.service.getSystem
+import worlds.gregs.hestia.artemis.getSystem
 
 internal class RegionBuilderSystemTest : GameTest(WorldConfigurationBuilder().with(RegionBuilderSystem())) {
 

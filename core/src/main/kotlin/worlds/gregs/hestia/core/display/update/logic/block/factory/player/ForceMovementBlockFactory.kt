@@ -7,7 +7,7 @@ import worlds.gregs.hestia.core.display.update.model.components.Renderable
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.game.update.blocks.DelayedTile
 import worlds.gregs.hestia.game.update.blocks.ForceMovementBlock
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 
 open class ForceMovementBlockFactory(flag: Int, mob: Boolean = false) : BlockFactory<ForceMovementBlock>(Aspect.all(Renderable::class, Position::class, ForceMovement::class), flag = flag, mob = mob) {
 

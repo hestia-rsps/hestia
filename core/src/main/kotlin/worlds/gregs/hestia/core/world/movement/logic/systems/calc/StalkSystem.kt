@@ -10,7 +10,7 @@ import worlds.gregs.hestia.core.entity.entity.model.components.width
 import worlds.gregs.hestia.core.world.movement.api.Mobile
 import worlds.gregs.hestia.core.world.movement.model.components.calc.Beside
 import worlds.gregs.hestia.core.world.movement.model.components.calc.Stalk
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 
 @Wire(failOnNull = false)
 class StalkSystem : IteratingSystem(Aspect.all(Mobile::class, Position::class, Stalk::class)) {

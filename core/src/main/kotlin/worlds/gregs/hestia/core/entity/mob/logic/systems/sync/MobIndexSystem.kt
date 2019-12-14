@@ -4,7 +4,7 @@ import com.artemis.ComponentMapper
 import worlds.gregs.hestia.artemis.SubscriptionSystem
 import worlds.gregs.hestia.core.entity.mob.api.Mob
 import worlds.gregs.hestia.core.display.client.model.components.ClientIndex
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 
 class MaximumMobLimitReached : Exception()
 

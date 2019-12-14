@@ -5,7 +5,7 @@ import com.artemis.systems.IteratingSystem
 import net.mostlyoriginal.api.event.common.Subscribe
 import worlds.gregs.hestia.core.display.update.model.components.*
 import worlds.gregs.hestia.core.entity.player.model.events.FlagMoveType
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 
 class PostPlayerSyncSystem : IteratingSystem(Aspect.all(Renderable::class)) {
 

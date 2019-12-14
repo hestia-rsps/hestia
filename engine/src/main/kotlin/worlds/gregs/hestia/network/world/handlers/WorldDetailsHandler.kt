@@ -8,8 +8,8 @@ import world.gregs.hestia.core.network.protocol.Details
 import world.gregs.hestia.core.network.protocol.messages.SocialDetails
 import worlds.gregs.hestia.GameServer
 import worlds.gregs.hestia.artemis.events.SocialLogin
-import worlds.gregs.hestia.service.forEach
-import worlds.gregs.hestia.service.players
+import worlds.gregs.hestia.artemis.forEach
+import worlds.gregs.hestia.artemis.players
 
 class WorldDetailsHandler(private val details: Details) : MessageHandler<SocialDetails> {
 

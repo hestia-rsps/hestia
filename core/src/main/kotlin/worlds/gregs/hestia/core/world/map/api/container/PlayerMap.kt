@@ -4,7 +4,7 @@ import com.artemis.ComponentMapper
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.game.entity.Player
 import worlds.gregs.hestia.core.world.movement.model.components.Shift
-import worlds.gregs.hestia.service.Aspect
+import worlds.gregs.hestia.artemis.Aspect
 
 /**
  * Contains position of all players
