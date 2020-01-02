@@ -30,7 +30,7 @@ open class MobMap : EntityMap(Aspect.all(Mob::class)) {
         val size = sizeMapper.get(entityId)
         update(entityId, position.x, position.y, position.plane, size.sizeX, size.sizeY)
         setTile(entityId, position.locationHash30Bit)
-        removeFromTile(entityId, Position.hash(position.x - shift.x, position.y - shift.y, position.plane - shift.plane))
+        removeFromTile(entityId, Position.hash24Bit(position.x - shift.x, position.y - shift.y, position.plane - shift.plane))
     }
 
     override fun removed(entityId: Int) {

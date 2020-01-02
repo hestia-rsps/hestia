@@ -5,35 +5,30 @@ import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.impl.annotations.SpyK
 import io.mockk.junit5.MockKExtension
-import io.mockk.mockk
 import io.mockk.mockkStatic
 import io.mockk.verifyOrder
-import org.junit.jupiter.api.Assertions.assertNotNull
-import org.junit.jupiter.api.Assertions.assertNull
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import org.slf4j.LoggerFactory
 import world.gregs.hestia.core.network.protocol.encoders.messages.WidgetComponentText
-import worlds.gregs.hestia.core.task.api.Tasks
-import worlds.gregs.hestia.core.display.dialogue.api.Dialogue
-import worlds.gregs.hestia.core.task.model.components.TaskQueue
-import worlds.gregs.hestia.core.display.widget.logic.systems.frame.chat.DialogueBoxSystem
 import worlds.gregs.hestia.MockkGame
-import worlds.gregs.hestia.game.task.DeferralType
-import worlds.gregs.hestia.game.task.TaskScope
 import worlds.gregs.hestia.artemis.send
+import worlds.gregs.hestia.core.display.widget.logic.systems.frame.chat.DialogueBoxSystem
+import worlds.gregs.hestia.core.task.api.Task
+import worlds.gregs.hestia.core.task.api.Tasks
+import worlds.gregs.hestia.core.task.model.components.TaskQueue
 
 @ExtendWith(MockKExtension::class)
 internal class DialogueBaseSystemTest : MockkGame() {
 
     @SpyK
-    var system = object : DialogueBaseSystem() {}
+    var system = object : DialogueBaseSystem() {
+        override val logger = LoggerFactory.getLogger(DialogueBaseSystemTest::class.java)!!
+    }
 
     @RelaxedMockK
-    private lateinit var scope: TaskScope
-
-    @RelaxedMockK
-    private lateinit var queue: Tasks
+    private lateinit var tasks: Tasks
 
     @SpyK
     var boxSystem = DialogueBoxSystem()
@@ -42,7 +37,7 @@ internal class DialogueBaseSystemTest : MockkGame() {
     var component = TaskQueue()
 
     override fun config(config: WorldConfigurationBuilder) {
-        config.with(system, queue, boxSystem)
+        config.with(system, tasks, boxSystem)
     }
 
     @BeforeEach
@@ -50,32 +45,6 @@ internal class DialogueBaseSystemTest : MockkGame() {
         super.setup()
         world.createEntity().edit().add(component)
         tick()
-    }
-
-    @Test
-    fun `Get deferral doesn't return non-dialogues`() {
-        //Given
-        val deferral: DeferralType = mockk()
-        val entityId = 0
-        component.queue.add(scope)
-        every { scope.deferral } returns deferral
-        //When
-        val result = system.getDeferral(entityId)
-        //Then
-        assertNull(result)
-    }
-
-    @Test
-    fun `Get deferral returns dialogues`() {
-        //Given
-        val deferral: Dialogue = mockk()
-        val entityId = 0
-        component.queue.add(scope)
-        every { scope.deferral } returns deferral
-        //When
-        val result = system.getDeferral(entityId)
-        //Then
-        assertNotNull(result)
     }
 
     @Test

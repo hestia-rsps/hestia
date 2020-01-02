@@ -5,24 +5,27 @@ import io.mockk.*
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.impl.annotations.SpyK
 import io.mockk.junit5.MockKExtension
+import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import worlds.gregs.hestia.core.display.dialogue.model.events.ContinueDialogue
-import worlds.gregs.hestia.core.display.dialogue.api.Dialogue
-import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.ItemDialogue
-import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.MobDialogue
-import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.PlayerDialogue
-import worlds.gregs.hestia.core.display.widget.logic.systems.frame.chat.DialogueBoxSystem
-import worlds.gregs.hestia.core.task.api.Tasks
-import worlds.gregs.hestia.core.task.model.events.ProcessDeferral
 import worlds.gregs.hestia.MockkGame
-import worlds.gregs.hestia.game.task.DeferralType
-import worlds.gregs.hestia.game.task.TaskScope
+import worlds.gregs.hestia.artemis.send
+import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.*
+import worlds.gregs.hestia.core.display.dialogue.model.events.ContinueDialogue
+import worlds.gregs.hestia.core.display.widget.logic.systems.frame.chat.DialogueBoxSystem
+import worlds.gregs.hestia.core.task.api.TaskType
+import worlds.gregs.hestia.core.task.api.Tasks
+import worlds.gregs.hestia.core.task.model.events.ProcessTaskSuspension
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetComponentAnimation
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetHeadMob
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetHeadPlayer
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetItem
-import worlds.gregs.hestia.artemis.send
+import worlds.gregs.hestia.service.cache.definition.definitions.ItemDefinition
+import worlds.gregs.hestia.service.cache.definition.definitions.MobDefinition
+import worlds.gregs.hestia.service.cache.definition.readers.ItemDefinitionReader
+import worlds.gregs.hestia.service.cache.definition.readers.MobDefinitionReader
+import worlds.gregs.hestia.service.cache.definition.systems.ItemDefinitionSystem
+import worlds.gregs.hestia.service.cache.definition.systems.MobDefinitionSystem
 
 @ExtendWith(MockKExtension::class)
 internal class EntityDialogueTest : MockkGame() {
@@ -34,78 +37,80 @@ internal class EntityDialogueTest : MockkGame() {
     var boxSystem = DialogueBoxSystem()
 
     @RelaxedMockK
-    private lateinit var scope: TaskScope
+    private lateinit var tasks: Tasks
 
     @RelaxedMockK
-    private lateinit var queue: Tasks
+    private lateinit var itemReader: ItemDefinitionReader
+    @RelaxedMockK
+    private lateinit var mobReader: MobDefinitionReader
 
     override fun config(config: WorldConfigurationBuilder) {
-        config.with(system, queue, boxSystem)
+        config.with(system, tasks, boxSystem, ItemDefinitionSystem(itemReader), MobDefinitionSystem(mobReader))
     }
 
     @Test
-    fun `Deferral process ignores other types`() {
+    fun `Suspension process ignores other types`() {
         //Given
-        val deferral: DeferralType = mockk()
+        val suspension: TaskType<*> = mockk()
         val entityId = 0
         every { system.send(entityId, any(), any(), any(), any()) } answers {}
         //When
-        es.dispatch(ProcessDeferral(entityId, deferral))
+        es.dispatch(ProcessTaskSuspension(entityId, suspension))
         //Then
         verify(exactly = 0) { system.send(entityId, any(), 3, any(), any()) }
     }
 
     @Test
-    fun `Deferral process`() {
+    fun `Suspension process`() {
         //Given
-        val deferral: EntityDialogue = mockk()
+        val suspension: EntityDialogue = mockk()
         val entityId = 0
-        every { deferral.lines } returns emptyList()
-        every { system.getTitle(deferral) } returns null
+        every { suspension.lines } returns emptyList()
+        every { system.getTitle(entityId, suspension) } returns null
         every { system.send(entityId, any(), any(), any(), any()) } answers {}
         //When
-        es.dispatch(ProcessDeferral(entityId, deferral))
+        es.dispatch(ProcessTaskSuspension(entityId, suspension))
         //Then
         verifyOrder {
-            system.getTitle(deferral)
+            system.getTitle(entityId, suspension)
             system.send(entityId, any(), 3, any(), any())
         }
     }
 
     @Test
-    fun `Item deferral`() {
+    fun `Item suspension`() {
         //Given
         val item = 4
-        val deferral = ItemDialogue(listOf("Lines"), null, item)
+        val suspension = ItemDialogue(listOf("Lines"), null, item, mockk(relaxed = true))
         val entityId = 0
-        every { system.getTitle(deferral) } returns "Title"
+        every { system.getTitle(entityId, suspension) } returns "Title"
         every { system.send(entityId, any(), any(), any(), any()) } answers {}
         mockkStatic("worlds.gregs.hestia.artemis.ExtensionFunctionsKt")
         //When
-        es.dispatch(ProcessDeferral(entityId, deferral))
+        es.dispatch(ProcessTaskSuspension(entityId, suspension))
         //Then
         verifyOrder {
-            system.getTitle(deferral)
+            system.getTitle(entityId, suspension)
             system.send(entityId,241, 3, "Title", listOf("Lines"))
             es.send(entityId, WidgetItem(241, 2, item, -1))
         }
     }
 
     @Test
-    fun `Mob deferral`() {
+    fun `Mob suspension`() {
         //Given
         val mob = 5
         val animation = 6
-        val deferral = MobDialogue(listOf("Line one", "Line two"), null, mob, animation)
+        val suspension = MobDialogue(listOf("Line one", "Line two"), null, mob, animation, mockk(relaxed = true))
         val entityId = 0
-        every { system.getTitle(deferral) } returns "Title"
+        every { system.getTitle(entityId, suspension) } returns "Title"
         every { system.send(entityId, any(), any(), any(), any()) } answers {}
         mockkStatic("worlds.gregs.hestia.artemis.ExtensionFunctionsKt")
         //When
-        es.dispatch(ProcessDeferral(entityId, deferral))
+        es.dispatch(ProcessTaskSuspension(entityId, suspension))
         //Then
         verifyOrder {
-            system.getTitle(deferral)
+            system.getTitle(entityId, suspension)
             system.send(entityId,242, 3, "Title", listOf("Line one", "Line two"))
             es.send(entityId, WidgetHeadMob(242, 2, mob))
             es.send(entityId, WidgetComponentAnimation(242, 2, animation))
@@ -113,19 +118,19 @@ internal class EntityDialogueTest : MockkGame() {
     }
 
     @Test
-    fun `Player deferral`() {
+    fun `Player suspension`() {
         //Given
         val animation = 7
-        val deferral = PlayerDialogue(listOf("Line one", "Line two", "Line three"), null, animation)
+        val suspension = PlayerDialogue(listOf("Line one", "Line two", "Line three"), null, animation, mockk(relaxed = true))
         val entityId = 0
-        every { system.getTitle(deferral) } returns "Title"
+        every { system.getTitle(entityId, suspension) } returns "Title"
         every { system.send(entityId, any(), any(), any(), any()) } answers {}
         mockkStatic("worlds.gregs.hestia.artemis.ExtensionFunctionsKt")
         //When
-        es.dispatch(ProcessDeferral(entityId, deferral))
+        es.dispatch(ProcessTaskSuspension(entityId, suspension))
         //Then
         verifyOrder {
-            system.getTitle(deferral)
+            system.getTitle(entityId, suspension)
             system.send(entityId,243, 3, "Title", listOf("Line one", "Line two", "Line three"))
             es.send(entityId, WidgetHeadPlayer(243, 2))
             es.send(entityId, WidgetComponentAnimation(243, 2, animation))
@@ -136,36 +141,36 @@ internal class EntityDialogueTest : MockkGame() {
     fun `Item title`() {
         //Given
         val item = 995
-        val dialogue = ItemDialogue(listOf("Lines"), null, item)
+        val dialogue = ItemDialogue(listOf("Lines"), null, item, mockk(relaxed = true))
+        every { itemReader.get(item) } returns ItemDefinition().apply { name = "Coins" }
         //When
-        val title = system.getTitle(dialogue)//TODO implement ItemDefinitions
+        val title = system.getTitle(0, dialogue)
         //Then
-//        verify { cache.getItemDefinitions(mob).name }
-//        assertEquals("Coins", title)
+        assertEquals("Coins", title)
     }
 
     @Test
     fun `Mob title`() {
         //Given
         val mob = 1
-        val dialogue = MobDialogue(listOf("Lines"), null, mob, -1)
+        val dialogue = MobDialogue(listOf("Lines"), null, mob, -1, mockk(relaxed = true))
+        every { mobReader.get(mob) } returns MobDefinition().apply { name = "Man" }
         //When
-        val title = system.getTitle(dialogue)//TODO implement MobDefinitions
+        val title = system.getTitle(0, dialogue)
         //Then
-//        verify { cache.getMobDefinitions(mob).name }
-//        assertEquals("Man", title)
+        assertEquals("Man", title)
     }
 
     @Test
     fun `Continue ignored if not entity dialogue`() {
         //Given
-        val dialogue: Dialogue = mockk()
+        val dialogue: TaskType<*> = mockk()
         val entityId = 0
-        every { system.getDeferral(entityId) } returns dialogue
+        every { tasks.getSuspension(entityId) } returns dialogue
         //When
         es.dispatch(ContinueDialogue(entityId, 0, 0, 0))
         //Then
-        verify(exactly = 0) { queue.resume(entityId) }
+        verify(exactly = 0) { tasks.resume(entityId, dialogue, any()) }
     }
 
     @Test
@@ -174,11 +179,11 @@ internal class EntityDialogueTest : MockkGame() {
         val dialogue: EntityDialogue = mockk()
         val entityId = 0
         every { dialogue.lines } returns listOf("One line")
-        every { system.getDeferral(entityId) } returns dialogue
+        every { tasks.getSuspension(entityId) } returns dialogue
         //When
         es.dispatch(ContinueDialogue(entityId, 0, 25, 0))
         //Then
-        verify(exactly = 0) { queue.resume(entityId) }
+        verify(exactly = 0) { tasks.resume(entityId, dialogue, Unit) }
     }
 
     @Test
@@ -187,11 +192,11 @@ internal class EntityDialogueTest : MockkGame() {
         val dialogue: EntityDialogue = mockk()
         val entityId = 0
         every { dialogue.lines } returns listOf("One line")
-        every { system.getDeferral(entityId) } returns dialogue
+        every { tasks.getSuspension(entityId) } returns dialogue
         every { boxSystem.handleContinue(any()) } answers {}
         //When
         es.dispatch(ContinueDialogue(entityId, 0, 5, 0))
         //Then
-        verify { queue.resume(entityId) }
+        verify { tasks.resume(entityId, dialogue, Unit) }
     }
 }

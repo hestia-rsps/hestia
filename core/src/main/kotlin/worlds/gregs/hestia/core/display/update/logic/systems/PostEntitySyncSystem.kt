@@ -2,6 +2,7 @@ package worlds.gregs.hestia.core.display.update.logic.systems
 
 import com.artemis.ComponentMapper
 import com.artemis.systems.IteratingSystem
+import worlds.gregs.hestia.artemis.Aspect
 import worlds.gregs.hestia.core.display.update.model.components.*
 import worlds.gregs.hestia.core.display.update.model.components.anim.FirstAnimation
 import worlds.gregs.hestia.core.display.update.model.components.anim.FourthAnimation
@@ -13,7 +14,6 @@ import worlds.gregs.hestia.core.display.update.model.components.gfx.FirstGraphic
 import worlds.gregs.hestia.core.display.update.model.components.gfx.FourthGraphic
 import worlds.gregs.hestia.core.display.update.model.components.gfx.SecondGraphic
 import worlds.gregs.hestia.core.display.update.model.components.gfx.ThirdGraphic
-import worlds.gregs.hestia.artemis.Aspect
 
 class PostEntitySyncSystem : IteratingSystem(Aspect.all(Renderable::class)) {
 

@@ -1,7 +1,7 @@
 package worlds.gregs.hestia.core.display.update.api
 
 import net.mostlyoriginal.api.system.core.PassiveSystem
-import worlds.gregs.hestia.artemis.bag.EntitySyncBag
+import worlds.gregs.hestia.artemis.bag.map.EntitySyncBag
 import worlds.gregs.hestia.core.display.update.logic.sync.SynchronizeSystem
 import worlds.gregs.hestia.core.display.update.logic.sync.player.stages.HeightPlayerSync
 import worlds.gregs.hestia.core.display.update.logic.sync.player.stages.MoveGlobalPlayerSync

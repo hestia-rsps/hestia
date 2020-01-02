@@ -2,13 +2,13 @@ package worlds.gregs.hestia.content
 
 import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.event.common.Event
-import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.display.widget.model.events.ButtonClick
+import worlds.gregs.hestia.core.entity.entity.model.components.Position
 
 data class FakeEvent(val option: String, val name: String) : Event
 
 fun option(option: String, name: String): (FakeEvent) -> Boolean {
-    return { it.option == option && it.name == name}
+    return { option == option && name == name}
 }
 
 fun test(string: String, block: () -> Unit) {
@@ -25,14 +25,14 @@ system {
     aspect all Position::class all Position::class one Position::class exclude Position::class
 
     on<FakeEvent> {
-        conditional = { it.option == "Bank" && it.name == "Banker" }
+        conditional = { option == "Bank" && name == "Banker" }
         action = {
             println("Do something")
         }
     }
 
     on<FakeEvent> {
-        where { it.option == "Talk-to" && it.name == "Banker" }
+        where { option == "Talk-to" && name == "Banker" }
         then {
             println("Do something")
         }

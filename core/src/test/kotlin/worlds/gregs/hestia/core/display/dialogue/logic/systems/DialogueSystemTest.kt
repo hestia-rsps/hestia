@@ -10,16 +10,17 @@ import org.junit.jupiter.api.Assertions.assertTrue
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import worlds.gregs.hestia.core.display.widget.api.UserInterface
+import worlds.gregs.hestia.MockkGame
 import worlds.gregs.hestia.core.display.dialogue.api.Dialogue
+import worlds.gregs.hestia.core.display.widget.api.UserInterface
 import worlds.gregs.hestia.core.display.widget.logic.systems.frame.chat.DialogueBoxSystem
+import worlds.gregs.hestia.core.task.api.SuspendableQueue
+import worlds.gregs.hestia.core.task.api.Task
+import worlds.gregs.hestia.core.task.api.TaskPriority
 import worlds.gregs.hestia.core.task.api.Tasks
-import worlds.gregs.hestia.core.task.model.Task
+import worlds.gregs.hestia.core.task.model.ReusableTask
 import worlds.gregs.hestia.core.task.model.components.TaskQueue
 import worlds.gregs.hestia.core.task.model.events.StartTask
-import worlds.gregs.hestia.MockkGame
-import worlds.gregs.hestia.game.task.TaskPriority
-import worlds.gregs.hestia.game.task.TaskScope
 
 @ExtendWith(MockKExtension::class)
 internal class DialogueSystemTest : MockkGame() {
@@ -28,13 +29,13 @@ internal class DialogueSystemTest : MockkGame() {
     var system = DialogueSystem()
 
     @RelaxedMockK
-    lateinit var taskQueue: Tasks
+    lateinit var tasks: Tasks
 
     @SpyK
     var component = TaskQueue()
 
     @SpyK
-    var task: Task = Task(TaskPriority.Weak) {}
+    var queue: SuspendableQueue = {}
 
     @SpyK
     var boxSystem = DialogueBoxSystem()
@@ -43,7 +44,7 @@ internal class DialogueSystemTest : MockkGame() {
     lateinit var ui: UserInterface
 
     @RelaxedMockK
-    lateinit var scope: TaskScope
+    lateinit var task: Task
 
     @RelaxedMockK
     lateinit var dialogue: Dialogue
@@ -55,7 +56,7 @@ internal class DialogueSystemTest : MockkGame() {
     }
 
     override fun config(config: WorldConfigurationBuilder) {
-        config.with(ui, system, boxSystem, taskQueue)
+        config.with(ui, system, boxSystem, tasks)
     }
 
     @Test
@@ -63,11 +64,12 @@ internal class DialogueSystemTest : MockkGame() {
         //Given
         val id = "script"
         //When
-        system.addDialogue(id, task)
+        system.addDialogue(id, ReusableTask(TaskPriority.Low, queue))
         //Then
         assertEquals(1, system.scripts.size)
         assertTrue(system.scripts.containsKey(id))
-        assertEquals(task, system.scripts[id])
+        assertEquals(queue, system.scripts[id]!!.block)
+        assertEquals(TaskPriority.Low, system.scripts[id]!!.priority)
     }
 
     @Test
@@ -75,11 +77,11 @@ internal class DialogueSystemTest : MockkGame() {
         //Given
         val entityId = 0
         val name = "name"
-        system.scripts[name] = task
+        system.scripts[name] = ReusableTask(TaskPriority.Low, queue)
         //When
         system.startDialogue(entityId, name)
         //Then
-        verify { es.dispatch(StartTask(entityId, task)) }
+        verify { es.dispatch(any()) }
     }
 
     @Test

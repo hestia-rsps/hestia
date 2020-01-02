@@ -10,11 +10,9 @@ class FixedTileStrategy(override val destinationX: Int, override val destination
         return currentX == destinationX && currentY == destinationY
     }
 
-    override val sizeX: Int
-        get() = 1
+    override val sizeX = 1
 
-    override val sizeY: Int
-        get() = 1
+    override val sizeY = 1
 
     override fun equals(other: Any?): Boolean {
         val strategy = other as? FixedTileStrategy ?: return false

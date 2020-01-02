@@ -44,12 +44,23 @@ internal class ComponentTest : GameTest(WorldConfigurationBuilder().with(LOWEST,
     }
 
     @Test
-    fun test() {
+    fun `Test deleting entity`() {
         world.createEntity()
         val entity = world.createEntity()
         entity.edit().add(Comp()).add(LateComp())
         tick()
         world.delete(1)
+        tick()
+        tick()
+    }
+
+    @Test
+    fun `Test removing component`() {
+        world.createEntity()
+        val entity = world.createEntity()
+        entity.edit().add(Comp()).add(LateComp())
+        tick()
+        entity.edit().remove(Comp::class)
         tick()
         tick()
     }

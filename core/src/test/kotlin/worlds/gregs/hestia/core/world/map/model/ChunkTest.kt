@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import world.gregs.hestia.core.services.Loader
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
-import worlds.gregs.hestia.core.entity.entity.logic.EntityFactory
 import kotlin.system.measureNanoTime
 
 class ChunkTest {
@@ -13,7 +12,6 @@ class ChunkTest {
     @BeforeEach
     fun setUp() {
         w = World()
-        EntityFactory.init(w)
     }
 
     @Test

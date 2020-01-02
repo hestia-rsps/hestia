@@ -5,88 +5,91 @@ import io.mockk.*
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.impl.annotations.SpyK
 import io.mockk.junit5.MockKExtension
+import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.runBlocking
 import org.junit.jupiter.api.Assertions.assertEquals
+import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import worlds.gregs.hestia.MockkGame
 import worlds.gregs.hestia.artemis.send
-import worlds.gregs.hestia.core.display.dialogue.api.Dialogue
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.StringEntryDialogue
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.StringEntryDialogueSystem
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.stringEntry
 import worlds.gregs.hestia.core.display.dialogue.model.events.StringEntered
 import worlds.gregs.hestia.core.display.widget.logic.systems.frame.chat.DialogueBoxSystem
+import worlds.gregs.hestia.core.task.api.Task
+import worlds.gregs.hestia.core.task.api.TaskType
 import worlds.gregs.hestia.core.task.api.Tasks
-import worlds.gregs.hestia.core.task.model.events.ProcessDeferral
-import worlds.gregs.hestia.game.task.DeferralType
-import worlds.gregs.hestia.game.task.TaskScope
+import worlds.gregs.hestia.core.task.model.components.TaskQueue
+import worlds.gregs.hestia.core.task.model.events.ProcessTaskSuspension
 import worlds.gregs.hestia.network.client.encoders.messages.Script
+import kotlin.coroutines.resume
 
 @ExtendWith(MockKExtension::class)
 internal class StringEntryDialogueTest : MockkGame() {
 
     @SpyK
     var system = StringEntryDialogueSystem()
+    @SpyK
+    var component = TaskQueue()
 
     @RelaxedMockK
-    private lateinit var scope: TaskScope
+    private lateinit var task: Task
 
     @RelaxedMockK
-    private lateinit var queue: Tasks
+    private lateinit var tasks: Tasks
+    private lateinit var continuation: CancellableContinuation<String>
+
+    @BeforeEach
+    override fun setup() {
+        super.setup()
+        every { task.suspension = any() } propertyType StringEntryDialogue::class answers {
+            continuation = arg<StringEntryDialogue>(0).continuation
+            continuation.resume("A string")
+        }
+    }
 
     override fun config(config: WorldConfigurationBuilder) {
-        config.with(system, queue, DialogueBoxSystem())
+        config.with(system, tasks, DialogueBoxSystem())
     }
 
     @Test
     fun `String entry sets dialogue, suspends and returns value`() = runBlocking {
         //Given
-        every { scope.deferral = any() } propertyType StringEntryDialogue::class answers {
-            value.entry = "A string"
-        }
+        val entity = world.createEntity()
+        entity.edit().add(component)
+        mockkStatic("worlds.gregs.hestia.core.display.dialogue.logic.systems.types.StringEntryDialogueKt")
         //When
-        val result = scope.stringEntry("Title")
+        val result = task.stringEntry("Title")
         //Then
         assertEquals("A string", result)
-        coVerifySequence {
-            scope.deferral = StringEntryDialogue("Title")
-            scope.defer()
+        verify {
+            task.suspension = StringEntryDialogue("Title", continuation!!)
         }
-        confirmVerified(scope)
+        confirmVerified(task)
     }
 
     @Test
-    fun `Null pointer if value not set`() {
-        //Then
-        assertThrows<KotlinNullPointerException> {
-            runBlocking {
-                scope.stringEntry("Title")
-            }
-        }
-    }
-
-    @Test
-    fun `Deferral process ignores other types`() {
+    fun `Suspend process ignores other types`() {
         //Given
-        val deferral: DeferralType = mockk()
+        val suspension: TaskType<*> = mockk(relaxed = true)
         val entityId = 0
         mockkStatic("worlds.gregs.hestia.artemis.ExtensionFunctionsKt")
         //When
-        es.dispatch(ProcessDeferral(entityId, deferral))
+        es.dispatch(ProcessTaskSuspension(entityId, suspension))
         //Then
         verify(exactly = 0) { es.send(entityId, any<Script>()) }
     }
 
     @Test
-    fun `Deferral process sends script 108`() {
+    fun `Suspend process sends script 108`() {
         //Given
-        val deferral = StringEntryDialogue("Title")
+        val suspension = StringEntryDialogue("Title", mockk(relaxed = true))
         val entityId = 0
         mockkStatic("worlds.gregs.hestia.artemis.ExtensionFunctionsKt")
         //When
-        es.dispatch(ProcessDeferral(entityId, deferral))
+        es.dispatch(ProcessTaskSuspension(entityId, suspension))
         //Then
         verify { es.send(entityId, Script(108, "Title")) }
     }
@@ -95,26 +98,25 @@ internal class StringEntryDialogueTest : MockkGame() {
     fun `String entered ignored if wrong type`() {
         //Given
         val entityId = 0
-        val deferral: Dialogue = mockk()
-        every { system.getDeferral(entityId) } returns deferral
+        val suspension: TaskType<String> = mockk()
+        every { tasks.getSuspension(entityId) } returns suspension
         //When
         es.dispatch(StringEntered(entityId, "text"))
         //Then
-        verify(exactly = 0) { queue.resume(entityId) }
+        verify(exactly = 0) { tasks.resume(entityId, suspension, "text") }
     }
 
     @Test
     fun `String entered`() {
         //Given
         val entityId = 0
-        val deferral = spyk(StringEntryDialogue("Title"))
-        every { system.getDeferral(entityId) } returns deferral
+        val suspension = spyk(StringEntryDialogue("Title", mockk(relaxed = true)))
+        every { tasks.getSuspension(entityId) } returns suspension
         //When
         es.dispatch(StringEntered(entityId, "text"))
         //Then
         verifyOrder {
-            deferral.entry = "text"
-            queue.resume(entityId)
+            tasks.resume(entityId, suspension, "text")
         }
     }
 }

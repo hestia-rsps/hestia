@@ -11,7 +11,7 @@ internal class BasicScriptTest : ScriptTesterMock<ScriptBase>() {
     fun `first test`() {
         script.listeners.forEach {
             if(it.event == ButtonClick::class) {
-                it.action.invoke(ButtonClick(0, 0, 0))
+//                it.action.invoke(ButtonClick(0, 0, 0, ))
             }
         }
     }

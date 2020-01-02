@@ -5,20 +5,18 @@ import com.nhaarman.mockitokotlin2.*
 import net.mostlyoriginal.api.event.common.Event
 import net.mostlyoriginal.api.system.core.PassiveSystem
 import org.assertj.core.api.Assertions.assertThat
+import org.assertj.core.api.Assertions.fail
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotEquals
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
-import org.junit.jupiter.api.fail
 import org.mockito.Matchers.anyInt
-import worlds.gregs.hestia.core.task.model.Task
+import worlds.gregs.hestia.artemis.Aspect
 import worlds.gregs.hestia.artemis.event.ExtendedEventDispatchStrategy
 import worlds.gregs.hestia.core.display.dialogue.api.DialogueBase
-import worlds.gregs.hestia.game.task.DeferQueue
-import worlds.gregs.hestia.game.task.TaskPriority
-import worlds.gregs.hestia.game.task.TaskScope
-import worlds.gregs.hestia.artemis.Aspect
+import worlds.gregs.hestia.core.task.api.SuspendableQueue
+import worlds.gregs.hestia.core.task.api.TaskPriority
 
 internal class ScriptBaseTest {
 
@@ -87,22 +85,24 @@ internal class ScriptBaseTest {
     fun `Add named dialogue`() {
         //Given
         val name = "name"
-        val action = mock<DeferQueue>()
+        val action = mock<SuspendableQueue>()
         //When
         script.dialogue(name, TaskPriority.Normal, action)
         //Then
-        assertThat(script.dialogues).containsEntry(name, Task(TaskPriority.Normal, action))
+        assertThat(script.dialogues).containsKey(name)
+        val pair = script.dialogues[name]!!
+//        assertEquals(TaskPriority.Normal, pair.first)
     }
 
     @Test
     fun `Duplicate dialogue name throws exception`() {
         //Given
         val name = "name"
-        val action = mock<DeferQueue>()
-        script.dialogue(name, TaskPriority.Weak, action)
+        val action = mock<SuspendableQueue>()
+        script.dialogue(name, TaskPriority.Low, action)
         //Then
         assertThrows<IllegalStateException> {
-            script.dialogue(name, TaskPriority.Weak, action)
+            script.dialogue(name, TaskPriority.Low, action)
         }
     }
 
@@ -141,9 +141,9 @@ internal class ScriptBaseTest {
     fun `Registers dialogues`() {
         //Given
         val dialogueSystem = mock<DialogueBase>()
-        val dialogue = Task(TaskPriority.Weak) {}
+        val dialogue: SuspendableQueue = {}
         val name = "name"
-        script.dialogues[name] = dialogue
+//        script.dialogues[name] = Pair(TaskPriority.Low, dialogue)
         script.dialogueBase = dialogueSystem
 
         val world = mock<World>()
@@ -152,33 +152,33 @@ internal class ScriptBaseTest {
         //When
         script.build(world, dispatcher)
         //Then
-        verify(dialogueSystem).addDialogue(eq(name), eq(dialogue))
+//        verify(dialogueSystem).addDialogue(eq(name), eq(TaskPriority.Low), eq(dialogue))
     }
 
     @Test
     fun `Queue returns self if priority is normal or strong`() {
         //Given
-        val action: suspend TaskScope.() -> Unit = {
+        val action: SuspendableQueue = {
             fail("Action shouldn't have been called.")
         }
         //When
         val task1 = script.queue(TaskPriority.Normal, action)
-        val task2 = script.queue(TaskPriority.Strong, action)
+        val task2 = script.queue(TaskPriority.High, action)
         //Then
-        assertEquals(action, task1.queue)
-        assertEquals(action, task2.queue)
+        assertEquals(action, task1)
+        assertEquals(action, task2)
     }
 
     @Test
     fun `Queue appends screen suspension if weak`() {
         //Given
-        val action: suspend TaskScope.() -> Unit = {
+        val action: SuspendableQueue = {
             fail("Action shouldn't have been called.")
         }
         //When
-        val task = script.queue(TaskPriority.Weak, action)
+        val task = script.queue(TaskPriority.Low, action)
         //Then
-        assertNotEquals(action, task.queue)
+        assertNotEquals(action, task)
     }
 
 }

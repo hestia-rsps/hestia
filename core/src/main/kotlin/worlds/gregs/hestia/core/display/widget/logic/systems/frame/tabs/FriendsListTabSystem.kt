@@ -19,7 +19,7 @@ class FriendsListTabSystem : BaseFrame(FriendsListTab::class) {
 //        es.send(entityId, Friend("Bob", "Bob", 1, true, true))
     }
 
-    override fun click(entityId: Int, interfaceHash: Int, componentId: Int, option: Int) {
+    override fun click(entityId: Int, interfaceHash: Int, componentId: Int, fromSlot: Int, toSlot: Int, option: Int) {
     }
 
     companion object {

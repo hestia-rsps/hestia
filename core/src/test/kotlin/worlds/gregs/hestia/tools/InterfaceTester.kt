@@ -2,10 +2,10 @@ package worlds.gregs.hestia.tools
 
 import com.artemis.WorldConfigurationBuilder
 import com.nhaarman.mockitokotlin2.*
+import worlds.gregs.hestia.GameTest
 import worlds.gregs.hestia.core.display.widget.api.UserInterface
 import worlds.gregs.hestia.core.display.widget.api.Widget
 import worlds.gregs.hestia.core.display.widget.model.components.ScreenWidget
-import worlds.gregs.hestia.GameTest
 import kotlin.reflect.KClass
 
 abstract class InterfaceTester(config: WorldConfigurationBuilder) : GameTest(config) {
@@ -46,7 +46,7 @@ abstract class InterfaceTester(config: WorldConfigurationBuilder) : GameTest(con
     }
 
     internal fun assertClicked(times: Int, entity: Int, widget: Int, component: Int, option: Int) {
-        verify(ui, times(times)).click(entity, 0, widget, component, option)
+        verify(ui, times(times)).click(entity, 0, widget, component, 0, 0, option)
     }
 
 }

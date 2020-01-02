@@ -1,6 +1,7 @@
 package worlds.gregs.hestia.core.world.movement.logic.systems.calc
 
 import com.artemis.ComponentMapper
+import worlds.gregs.hestia.artemis.Aspect
 import worlds.gregs.hestia.artemis.SubscriptionSystem
 import worlds.gregs.hestia.core.display.update.model.components.direction.Watch
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
@@ -10,7 +11,6 @@ import worlds.gregs.hestia.core.entity.entity.model.components.width
 import worlds.gregs.hestia.core.world.movement.logic.systems.calc.StepBesideSystem.Companion.withinContact
 import worlds.gregs.hestia.core.world.movement.model.components.calc.Beside
 import worlds.gregs.hestia.core.world.movement.model.components.calc.Follow
-import worlds.gregs.hestia.artemis.Aspect
 
 /**
  * FollowSubscriptionSystem

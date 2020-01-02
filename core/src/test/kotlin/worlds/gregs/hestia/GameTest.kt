@@ -4,7 +4,6 @@ import com.artemis.World
 import com.artemis.WorldConfigurationBuilder
 import net.mostlyoriginal.api.event.common.EventSystem
 import org.junit.jupiter.api.BeforeEach
-import worlds.gregs.hestia.core.entity.entity.logic.EntityFactory
 
 abstract class GameTest(private val config: WorldConfigurationBuilder) {
 
@@ -18,7 +17,6 @@ abstract class GameTest(private val config: WorldConfigurationBuilder) {
         config(config)
         val config = config.build()
         world = World(config)
-        EntityFactory.init(world)
         start()
     }
 

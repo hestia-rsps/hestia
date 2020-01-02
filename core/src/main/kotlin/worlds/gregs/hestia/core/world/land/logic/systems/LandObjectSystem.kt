@@ -11,7 +11,7 @@ import worlds.gregs.hestia.core.world.map.model.MapConstants.PLANE_RANGE
 import worlds.gregs.hestia.core.world.map.model.MapConstants.isOutOfBounds
 import worlds.gregs.hestia.core.world.region.logic.systems.load.ChunkRotationSystem
 import worlds.gregs.hestia.core.world.region.logic.systems.load.RegionFileSystem
-import worlds.gregs.hestia.service.cache.systems.ObjectDefinitionSystem
+import worlds.gregs.hestia.service.cache.definition.systems.ObjectDefinitionSystem
 
 /**
  * MapObjectSystem
@@ -76,8 +76,8 @@ class LandObjectSystem : LandObjects() {
                     //Get the object definition
                     val definition = objectDefinitions.get(objectId)
                     //Calculate new position after rotation
-                    val newX = chunk.translateX(localX and 0x7, localY and 0x7, rotation, definition.sizeX, definition.sizeY, objectRotation)
-                    val newY = chunk.translateY(localX and 0x7, localY and 0x7, rotation, definition.sizeX, definition.sizeY, objectRotation)
+                    val newX = chunk.translateX(localX and 0x7, localY and 0x7, rotation, definition.sizeX.toShort(), definition.sizeY.toShort(), objectRotation)
+                    val newY = chunk.translateY(localX and 0x7, localY and 0x7, rotation, definition.sizeX.toShort(), definition.sizeY.toShort(), objectRotation)
                     //Add the new local (chunk) offset and remove the old local offset
                     localX += newX - (localX % 8)
                     localY += newY - (localY % 8)

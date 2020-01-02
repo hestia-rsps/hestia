@@ -2,9 +2,9 @@ package worlds.gregs.hestia.core.display.client.model.components
 
 import com.artemis.Component
 import worlds.gregs.hestia.GameConstants.PLAYERS_LIMIT
-import worlds.gregs.hestia.artemis.bag.EntitySyncBag
-import worlds.gregs.hestia.artemis.bag.LinkedSyncBag
-import worlds.gregs.hestia.artemis.bag.OrderedSyncBag
+import worlds.gregs.hestia.artemis.bag.map.EntitySyncBag
+import worlds.gregs.hestia.artemis.bag.map.LinkedSyncBag
+import worlds.gregs.hestia.artemis.bag.map.OrderedSyncBag
 import worlds.gregs.hestia.core.display.update.api.Synchronize.Companion.MAX_ENTITIES_PER_TICK
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 

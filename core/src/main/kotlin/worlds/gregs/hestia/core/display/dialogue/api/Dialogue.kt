@@ -1,9 +1,8 @@
 package worlds.gregs.hestia.core.display.dialogue.api
 
-import worlds.gregs.hestia.core.task.model.components.TaskQueue
-import worlds.gregs.hestia.game.task.DeferralType
+import worlds.gregs.hestia.core.task.api.SuspendableQueue
 
 /**
- * Dialogue stores data to be sent & retrieved from the client during a [TaskQueue]
+ * Dialogue stores data to be sent & retrieved from the client during a [SuspendableQueue]
  */
-interface Dialogue : DeferralType
+interface Dialogue

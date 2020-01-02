@@ -11,7 +11,7 @@ import worlds.gregs.hestia.network.client.decoders.messages.WidgetSwitchComponen
 class WidgetSwitchComponentDecoder : MessageDecoder<WidgetSwitchComponent>(16, SWITCH_WIDGET_COMPONENTS) {
 
     override fun decode(ctx: ChannelHandlerContext, packet: Packet): WidgetSwitchComponent? {
-        return WidgetSwitchComponent(packet.readUnsignedShort(), packet.readShort(order = Endian.LITTLE), packet.readShort(Modifier.ADD), packet.readInt(order = Endian.MIDDLE), packet.readShort(order = Endian.LITTLE), packet.readInt(Modifier.INVERSE, Endian.MIDDLE))
+        return WidgetSwitchComponent(packet.readShort(), packet.readShort(order = Endian.LITTLE), packet.readShort(Modifier.ADD), packet.readInt(order = Endian.MIDDLE), packet.readShort(order = Endian.LITTLE), packet.readInt(Modifier.INVERSE, Endian.MIDDLE))
     }
 
 }

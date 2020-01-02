@@ -3,6 +3,10 @@ package worlds.gregs.hestia.core.world.movement.logic.systems.calc
 import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
+import worlds.gregs.hestia.artemis.Aspect
+import worlds.gregs.hestia.artemis.players
+import worlds.gregs.hestia.artemis.toArray
+import worlds.gregs.hestia.core.display.update.logic.DirectionUtils.Companion.getOffset
 import worlds.gregs.hestia.core.display.update.model.components.Moving
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.mob.api.MobChunk
@@ -11,10 +15,6 @@ import worlds.gregs.hestia.core.mobs
 import worlds.gregs.hestia.core.world.movement.model.components.Shift
 import worlds.gregs.hestia.core.world.movement.model.components.calc.Follow
 import worlds.gregs.hestia.core.world.movement.model.components.calc.Step
-import worlds.gregs.hestia.core.display.update.logic.DirectionUtils.Companion.getOffset
-import worlds.gregs.hestia.artemis.Aspect
-import worlds.gregs.hestia.artemis.players
-import worlds.gregs.hestia.artemis.toArray
 
 @Wire(failOnNull = false)
 class FollowSystem : IteratingSystem(Aspect.all(Position::class, Shift::class)) {
@@ -54,6 +54,7 @@ class FollowSystem : IteratingSystem(Aspect.all(Position::class, Shift::class)) 
             stepMapper.create(it).apply {
                 x = targetX
                 y = targetY
+                //We're assuming that their last position was a valid one. So no check.
             }
         }
     }

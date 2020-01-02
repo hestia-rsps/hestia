@@ -1,14 +1,14 @@
 package worlds.gregs.hestia.core.display.widget.logic.systems.frame.tabs
 
 import com.artemis.annotations.Wire
+import worlds.gregs.hestia.artemis.send
 import worlds.gregs.hestia.core.display.widget.api.UserInterface
+import worlds.gregs.hestia.core.display.widget.logic.systems.BaseFrame
 import worlds.gregs.hestia.core.display.widget.model.components.frame.tabs.WornEquipmentTab
 import worlds.gregs.hestia.core.display.widget.model.components.screen.EquipmentBonuses
 import worlds.gregs.hestia.core.display.widget.model.components.screen.ItemsKeptOnDeath
 import worlds.gregs.hestia.core.display.widget.model.components.screen.PriceChecker
-import worlds.gregs.hestia.core.display.widget.logic.systems.BaseFrame
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetItems
-import worlds.gregs.hestia.artemis.send
 
 @Wire(failOnNull = false, injectInherited = true)
 class WornEquipmentTabSystem : BaseFrame(WornEquipmentTab::class) {
@@ -25,10 +25,10 @@ class WornEquipmentTabSystem : BaseFrame(WornEquipmentTab::class) {
 
     override fun open(entityId: Int) {
         super.open(entityId)
-        es.send(entityId, WidgetItems(94, (0 until 15).toList()))
+        es.send(entityId, WidgetItems(94, (0 until 15).map { Pair(it, 1) }))
     }
 
-    override fun click(entityId: Int, interfaceHash: Int, componentId: Int, option: Int) {
+    override fun click(entityId: Int, interfaceHash: Int, componentId: Int, fromSlot: Int, toSlot: Int, option: Int) {
         when(componentId) {
             8, 11, 14, 17, 20, 23, 26, 29, 32, 35, 38, 50 -> {
                 val index = if(componentId == 50) 11 else (componentId - 8) / 3

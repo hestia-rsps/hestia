@@ -7,8 +7,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.assertThrows
 import worlds.gregs.hestia.GameTest
 import worlds.gregs.hestia.core.world.region.api.Region
-import worlds.gregs.hestia.core.entity.entity.logic.EntityFactory
-import worlds.gregs.hestia.core.world.region.logic.RegionFactory
 import worlds.gregs.hestia.core.world.region.model.events.CreateRegion
 import worlds.gregs.hestia.core.entity.entity.model.components.Position.Companion.regionId
 import worlds.gregs.hestia.core.world.region.model.components.DynamicRegion
@@ -31,7 +29,6 @@ internal class RegionCleanSystemTest : GameTest(WorldConfigurationBuilder().with
     @BeforeEach
     override fun setup() {
         super.setup()
-        EntityFactory.add(RegionFactory())
         es.dispatch(CreateRegion(regionId(0, 0)))
         tick()
     }

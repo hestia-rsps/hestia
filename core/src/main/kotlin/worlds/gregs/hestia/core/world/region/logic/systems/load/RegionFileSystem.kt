@@ -22,7 +22,7 @@ import worlds.gregs.hestia.core.world.region.model.components.RegionIdentifier
 import worlds.gregs.hestia.core.world.region.model.events.LoadRegion
 import worlds.gregs.hestia.artemis.Aspect
 import worlds.gregs.hestia.service.Xteas
-import worlds.gregs.hestia.service.cache.systems.CacheSystem
+import worlds.gregs.hestia.service.cache.CacheSystem
 
 /**
  * RegionFileSystem

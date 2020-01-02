@@ -9,7 +9,6 @@ import worlds.gregs.hestia.core.world.region.logic.RegionFactory
 import worlds.gregs.hestia.core.world.region.model.components.RegionPriorities
 import worlds.gregs.hestia.core.world.region.logic.systems.load.RegionCreation
 import worlds.gregs.hestia.GameTest
-import worlds.gregs.hestia.core.entity.entity.logic.EntityFactory
 import worlds.gregs.hestia.core.entity.entity.model.components.Position.Companion.regionId
 import worlds.gregs.hestia.artemis.getComponent
 import worlds.gregs.hestia.artemis.getSystem
@@ -20,7 +19,6 @@ internal class RegionPrioritySystemTest : GameTest(WorldConfigurationBuilder().w
     @BeforeEach
     override fun setup() {
         super.setup()
-        EntityFactory.add(RegionFactory())
         es.dispatch(CreateRegion(regionId(0, 0)))
         tick()
     }

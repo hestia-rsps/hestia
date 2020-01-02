@@ -1,15 +1,15 @@
 package worlds.gregs.hestia.core.world.movement.logic.systems
 
 import com.artemis.ComponentMapper
-import worlds.gregs.hestia.core.entity.entity.model.components.Position
-import worlds.gregs.hestia.core.world.movement.api.Mobile
-import worlds.gregs.hestia.core.world.movement.model.components.Shift
-import worlds.gregs.hestia.core.world.movement.api.types.Walk
-import worlds.gregs.hestia.core.world.movement.model.components.Steps
-import worlds.gregs.hestia.core.world.movement.model.components.types.Walking
+import worlds.gregs.hestia.artemis.Aspect
 import worlds.gregs.hestia.core.display.update.model.components.RunStep
 import worlds.gregs.hestia.core.display.update.model.components.WalkStep
-import worlds.gregs.hestia.artemis.Aspect
+import worlds.gregs.hestia.core.entity.entity.model.components.Position
+import worlds.gregs.hestia.core.world.movement.api.Mobile
+import worlds.gregs.hestia.core.world.movement.api.types.Walk
+import worlds.gregs.hestia.core.world.movement.model.components.Shift
+import worlds.gregs.hestia.core.world.movement.model.components.Steps
+import worlds.gregs.hestia.core.world.movement.model.components.types.Walking
 
 /**
  * WalkSystem
@@ -22,6 +22,7 @@ class WalkSystem : Walk(Aspect.all(Position::class, Mobile::class, Steps::class)
     private lateinit var walkMapper: ComponentMapper<WalkStep>
     private lateinit var runMapper: ComponentMapper<RunStep>
     private lateinit var shiftMapper: ComponentMapper<Shift>
+
     override fun process(entityId: Int) {
         val steps = stepsMapper.get(entityId)
 

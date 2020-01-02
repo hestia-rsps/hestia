@@ -5,7 +5,7 @@ import net.mostlyoriginal.api.event.common.Cancellable
 import net.mostlyoriginal.api.event.common.Event
 import worlds.gregs.hestia.artemis.dsl.ArtemisEventListener
 
-class ExtendedEventListener(private val priority: Int, private val skipCancelledEvents: Boolean, private val conditional: ((Event) -> Boolean)?, private val action: (Event) -> Unit) : Comparable<ExtendedEventListener> {
+class ExtendedEventListener(private val priority: Int, private val skipCancelledEvents: Boolean, private val conditional: (Event.(Event) -> Boolean)?, private val action: Event.(Event) -> Unit) : Comparable<ExtendedEventListener> {
 
     constructor(listener: ArtemisEventListener) : this(listener.priority, listener.skipCancelledEvents, listener.conditional, listener.action)
 
@@ -20,8 +20,8 @@ class ExtendedEventListener(private val priority: Int, private val skipCancelled
         }
 
         try {
-            if(conditional == null || conditional.invoke(event)) {
-                action.invoke(event)
+            if(conditional == null || conditional.invoke(event, event)) {
+                action.invoke(event, event)
             }
         } catch (e: Exception) {
             throw RuntimeException("Could not call event.", e)

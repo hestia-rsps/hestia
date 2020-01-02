@@ -30,10 +30,11 @@ test {
 
 allprojects {
     apply plugin: "kotlin"
+    apply plugin: 'kotlin-kapt'
     apply plugin: "artemis"
 
     group 'worlds.gregs.hestia'
-    version '0.3.3'
+    version '0.3.4'
 
     repositories {
         mavenCentral()
@@ -45,6 +46,7 @@ allprojects {
         compile utilityDependencies.values()
         compile mainDependencies.values()
         compile logDependencies.values()
+        kapt "io.arrow-kt:arrow-meta:$arrow_version"
         testCompile testDependencies.values()
     }
 

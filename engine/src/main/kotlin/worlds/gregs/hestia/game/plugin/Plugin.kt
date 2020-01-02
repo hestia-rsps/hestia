@@ -19,6 +19,7 @@ interface Plugin : ArtemisPlugin {
 
         const val PACKET_PROCESS_PRIORITY = WorldConfigurationBuilder.Priority.HIGHEST
         const val EVENT_PROCESS_PRIORITY = WorldConfigurationBuilder.Priority.HIGHEST - 1
+        const val TASK_PROCESS_PRIORITY = WorldConfigurationBuilder.Priority.HIGHEST - 2
 
         const val MOBILE_PRIORITY = 12000
         const val MOVE_PRIORITY = 11000

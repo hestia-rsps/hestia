@@ -10,12 +10,14 @@ import worlds.gregs.hestia.artemis.remove
 import worlds.gregs.hestia.core.display.update.model.Direction
 import worlds.gregs.hestia.core.display.update.model.Direction.Companion.deltaX
 import worlds.gregs.hestia.core.display.update.model.Direction.Companion.deltaY
-import worlds.gregs.hestia.core.entity.entity.logic.step
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.world.movement.MovementPlugin
 import worlds.gregs.hestia.core.world.movement.model.components.RunToggled
 import worlds.gregs.hestia.core.world.movement.model.components.Steps
+import worlds.gregs.hestia.core.world.movement.model.components.calc.Step
 import worlds.gregs.hestia.tools.PlayerTester
+import kotlin.math.abs
+import kotlin.math.max
 
 internal class DirectStepSystemTest : PlayerTester(WorldConfigurationBuilder().dependsOn(MovementPlugin::class)) {
 
@@ -52,10 +54,10 @@ internal class DirectStepSystemTest : PlayerTester(WorldConfigurationBuilder().d
         position.y = startY
 
         //Navigate to position
-        entity.step(position.x + xOffset, position.y + yOffset, check = check)
+        entity.edit().add(Step(position.x + xOffset, position.y + yOffset, check = check))
 
         //Process i = max offset ticks
-        for(i in 0 until Math.max(Math.abs(xOffset), Math.abs(yOffset))) {
+        for(i in 0 until max(abs(xOffset), abs(yOffset))) {
             tick()
         }
 

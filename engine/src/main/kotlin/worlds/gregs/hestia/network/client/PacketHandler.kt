@@ -51,6 +51,7 @@ open class PacketHandler : BaseSystem(), Dispatcher, HandshakeDispatcher {
     override fun dispatch(ctx: ChannelHandlerContext, message: Message) {
         val handler = get(message::class)
 
+//        logger.info("Message dispatch: $message")
         if (handler != null) {
             try {
                 (handler as? MessageHandler<Message>)?.handle(ctx, message)

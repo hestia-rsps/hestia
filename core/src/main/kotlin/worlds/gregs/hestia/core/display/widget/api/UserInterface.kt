@@ -16,7 +16,12 @@ abstract class UserInterface : PassiveSystem() {
      * @param componentId The id of the component that was pressed
      * @param option The right click option that was pressed
      */
-    abstract fun click(entityId: Int, interfaceHash: Int, widgetId: Int, componentId: Int, option: Int)
+    abstract fun click(entityId: Int, interfaceHash: Int, widgetId: Int, componentId: Int, fromSlot: Int, toSlot: Int, option: Int)
+
+    /**
+     * Checks if an entity has an interface open
+     */
+    abstract fun validate(entityId: Int, interfaceHash: Int): Boolean
 
     /**
      * Opens a screen interface if one is not already open

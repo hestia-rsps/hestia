@@ -5,12 +5,12 @@ import io.netty.buffer.Unpooled
 import net.mostlyoriginal.api.event.common.Subscribe
 import world.gregs.hestia.core.cache.crypto.Encryption
 import world.gregs.hestia.core.network.codec.packet.PacketWriter
+import worlds.gregs.hestia.artemis.Aspect
 import worlds.gregs.hestia.artemis.SubscriptionSystem
 import worlds.gregs.hestia.core.display.update.model.components.*
 import worlds.gregs.hestia.core.entity.player.model.components.update.*
 import worlds.gregs.hestia.core.entity.player.model.events.UpdateAppearance
 import worlds.gregs.hestia.game.entity.Player
-import worlds.gregs.hestia.artemis.Aspect
 
 class AppearanceSystem : SubscriptionSystem(Aspect.all(Player::class)) {
 

@@ -1,8 +1,8 @@
 package worlds.gregs.hestia.core.display.widget.api
 
 import com.artemis.Component
-import worlds.gregs.hestia.artemis.SubscriptionSystem
 import worlds.gregs.hestia.artemis.Aspect
+import worlds.gregs.hestia.artemis.SubscriptionSystem
 import kotlin.reflect.KClass
 
 abstract class Widget(component: KClass<out Component>) : SubscriptionSystem(Aspect.all(component)) {
@@ -18,7 +18,7 @@ abstract class Widget(component: KClass<out Component>) : SubscriptionSystem(Asp
         return 0
     }
 
-    abstract fun click(entityId: Int, interfaceHash: Int, componentId: Int, option: Int)
+    abstract fun click(entityId: Int, interfaceHash: Int, componentId: Int, fromSlot: Int, toSlot: Int, option: Int)
 
     abstract fun open(entityId: Int)
 

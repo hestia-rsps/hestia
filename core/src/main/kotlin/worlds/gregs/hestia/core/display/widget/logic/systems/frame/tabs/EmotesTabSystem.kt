@@ -33,7 +33,7 @@ class EmotesTabSystem : BaseFrame(EmotesTab::class) {
         es.send(entityId, Config(EVENT_EMOTES, 65535))
     }
 
-    override fun click(entityId: Int, interfaceHash: Int, componentId: Int, option: Int) {
+    override fun click(entityId: Int, interfaceHash: Int, componentId: Int, fromSlot: Int, toSlot: Int, option: Int) {
     }
 
     companion object {

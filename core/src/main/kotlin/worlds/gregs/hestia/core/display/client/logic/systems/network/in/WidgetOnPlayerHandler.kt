@@ -1,0 +1,51 @@
+package worlds.gregs.hestia.core.display.client.logic.systems.network.`in`
+
+import com.artemis.ComponentMapper
+import net.mostlyoriginal.api.event.common.EventSystem
+import org.slf4j.LoggerFactory
+import worlds.gregs.hestia.GameServer
+import worlds.gregs.hestia.core.display.client.model.components.Viewport
+import worlds.gregs.hestia.core.display.widget.api.UserInterface
+import worlds.gregs.hestia.core.entity.item.container.model.Inventory
+import worlds.gregs.hestia.core.entity.item.floor.model.events.ItemOnPlayer
+import worlds.gregs.hestia.game.entity.MessageHandlerSystem
+import worlds.gregs.hestia.network.client.decoders.messages.WidgetOnPlayer
+
+class WidgetOnPlayerHandler : MessageHandlerSystem<WidgetOnPlayer>() {
+
+    private lateinit var es: EventSystem
+
+    private lateinit var inventoryMapper: ComponentMapper<Inventory>
+    private val logger = LoggerFactory.getLogger(WidgetOnPlayerHandler::class.java)!!
+    private lateinit var viewportMapper: ComponentMapper<Viewport>
+    private lateinit var ui: UserInterface
+
+    override fun initialize() {
+        super.initialize()
+        GameServer.gameMessages.bind(this)
+    }
+
+    override fun handle(entityId: Int, message: WidgetOnPlayer) {
+        val (playerIndex, hash, type, _, slot) = message
+        val inventory = inventoryMapper.get(entityId) ?: return logger.warn("Unhandled widget on player $message")
+
+        if(!ui.validate(entityId, hash)) {
+            return logger.warn("Invalid widget on player hash $message")
+        }
+
+        val inventoryItem = inventory.items.getOrNull(slot)
+
+        if(inventoryItem == null || inventoryItem.type != type) {
+            return logger.warn("Invalid widget on player item $message")
+        }
+
+        //Find player
+        val viewport = viewportMapper.get(entityId)
+        val playerId = viewport.localPlayers().getEntity(playerIndex)
+        if(playerId == -1) {
+            return logger.warn("Invalid widget on player index $message")
+        }
+
+        es.dispatch(ItemOnPlayer(entityId, playerId, hash, slot, type))
+    }
+}

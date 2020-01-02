@@ -11,7 +11,6 @@ abstract class ParallelSystem(aspect: Aspect.Builder) : BaseEntitySystem(aspect)
     private val processed = LinkedList<Deferred<*>>()
 
     override fun processSystem() = runBlocking {
-
         val actives = subscription.entities
 
         actives.forEach {

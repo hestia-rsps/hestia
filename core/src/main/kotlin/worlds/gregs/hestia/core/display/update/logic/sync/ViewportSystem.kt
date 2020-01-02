@@ -4,9 +4,10 @@ import com.artemis.ComponentMapper
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.async
 import worlds.gregs.hestia.GameConstants.PLAYERS_LIMIT
+import worlds.gregs.hestia.artemis.Aspect
 import worlds.gregs.hestia.artemis.ParallelSystem
 import worlds.gregs.hestia.artemis.bag.BitBag
-import worlds.gregs.hestia.artemis.bag.EntitySyncBag
+import worlds.gregs.hestia.artemis.bag.map.EntitySyncBag
 import worlds.gregs.hestia.core.display.client.model.components.ClientIndex
 import worlds.gregs.hestia.core.display.client.model.components.Viewport
 import worlds.gregs.hestia.core.display.update.logic.sync.ViewportSystem.Companion.MAXIMUM_LOCAL_ENTITIES
@@ -16,7 +17,6 @@ import worlds.gregs.hestia.core.world.map.api.container.EntityMap
 import worlds.gregs.hestia.core.world.map.api.container.MobMap
 import worlds.gregs.hestia.core.world.map.api.container.PlayerMap
 import worlds.gregs.hestia.core.world.map.logic.Spiral
-import worlds.gregs.hestia.artemis.Aspect
 
 /**
  * ViewportSystem
@@ -121,7 +121,7 @@ class ViewportSystem : ParallelSystem(Aspect.all(Viewport::class, Position::clas
         //Spiral clockwise outwards
         Spiral.spiral(DEFAULT_VIEW_DISTANCE).forEach { point ->
             //For each position
-            val hash = Position.hash(position.x + point.first, position.y + point.second, position.plane)
+            val hash = Position.hash24Bit(position.x + point.first, position.y + point.second, position.plane)
             //For all entities
             map.getTile(hash)?.forEach { entity ->
                 //Add

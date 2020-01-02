@@ -3,10 +3,10 @@ package worlds.gregs.hestia.core.display.update.logic.sync.player.stages
 import world.gregs.hestia.core.network.codec.packet.PacketBuilder
 import world.gregs.hestia.core.services.int
 import worlds.gregs.hestia.artemis.ConcurrentObjectPool
-import worlds.gregs.hestia.game.update.SyncStage
-import worlds.gregs.hestia.core.display.update.model.Direction
 import worlds.gregs.hestia.core.display.update.logic.DirectionUtils.Companion.getPlayerRunningDirection
 import worlds.gregs.hestia.core.display.update.logic.DirectionUtils.Companion.getPlayerWalkingDirection
+import worlds.gregs.hestia.core.display.update.model.Direction
+import worlds.gregs.hestia.game.update.SyncStage
 
 class MovementPlayerSync : SyncStage {
     lateinit var nextWalkDirection: Direction

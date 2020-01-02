@@ -1,33 +1,18 @@
 package worlds.gregs.hestia.core.display.dialogue.logic.systems
 
-import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.system.core.PassiveSystem
-import org.slf4j.LoggerFactory
+import org.slf4j.Logger
 import world.gregs.hestia.core.network.protocol.encoders.messages.WidgetComponentText
-import worlds.gregs.hestia.core.display.dialogue.api.Dialogue
+import worlds.gregs.hestia.artemis.send
 import worlds.gregs.hestia.core.display.widget.logic.systems.frame.chat.DialogueBoxSystem
 import worlds.gregs.hestia.core.task.api.Tasks
-import worlds.gregs.hestia.core.task.model.components.TaskQueue
-import worlds.gregs.hestia.core.task.model.components.getDeferral
-import worlds.gregs.hestia.artemis.send
 
 abstract class DialogueBaseSystem : PassiveSystem() {
-    private val logger = LoggerFactory.getLogger(DialogueBaseSystem::class.java)!!
-    private lateinit var taskQueueMapper: ComponentMapper<TaskQueue>
+    abstract val logger: Logger
     internal lateinit var es: EventSystem
-    internal lateinit var taskQueue: Tasks
+    internal lateinit var tasks: Tasks
     private lateinit var dialogueBoxSystem: DialogueBoxSystem
-
-    internal fun getDeferral(entityId: Int): Dialogue? {
-        val defer = taskQueueMapper.getDeferral(entityId)
-        return if(defer !is Dialogue) {
-            logger.debug("Queue not expected dialogue $defer")
-            null
-        } else {
-            defer
-        }
-    }
 
     internal fun send(entityId: Int, interfaceId: Int, componentStart: Int, title: String?, lines: List<String>) {
         //Open
@@ -41,6 +26,7 @@ abstract class DialogueBaseSystem : PassiveSystem() {
     }
 
     companion object {
+        internal const val PLAYER_ID = 64
         internal const val ENTITY_ID = 241
         internal const val STATEMENT_ID = 210
         internal const val TWO_OPTIONS_ID = 236

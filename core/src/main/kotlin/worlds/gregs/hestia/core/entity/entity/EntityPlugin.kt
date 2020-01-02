@@ -10,7 +10,7 @@ import worlds.gregs.hestia.game.plugin.Plugin.Companion.PRE_SYNC_PRIORITY
 class EntityPlugin : Plugin {
 
     override fun setup(b: WorldConfigurationBuilder) {
-        b.with(DamageSystem(), AnimationSystem(), GraphicsSystem(), AppearanceSystem())
+        b.with( DamageSystem(), AnimationSystem(), GraphicsSystem(), AppearanceSystem())
         b.with(PRE_SYNC_PRIORITY, WatchingSystem())
         b.with(PRE_SHIFT_PRIORITY, DirectionSystem())
     }

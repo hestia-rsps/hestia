@@ -5,7 +5,7 @@ import com.artemis.WorldConfigurationBuilder
 import net.mostlyoriginal.api.event.common.EventSystem
 import org.junit.jupiter.api.BeforeEach
 
-abstract class GameTest(private val config: WorldConfigurationBuilder) {
+abstract class GameTest(private val config: WorldConfigurationBuilder = WorldConfigurationBuilder()) {
 
     lateinit var world: World
     lateinit var es: EventSystem
