@@ -16,7 +16,7 @@ import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.IntegerEntr
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.IntegerEntryDialogueSystem
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.intEntry
 import worlds.gregs.hestia.core.display.dialogue.model.events.IntegerEntered
-import worlds.gregs.hestia.core.display.widget.logic.systems.frame.chat.DialogueBoxSystem
+import worlds.gregs.hestia.core.display.dialogue.logic.systems.DialogueBoxSystem
 import worlds.gregs.hestia.core.task.api.TaskType
 import worlds.gregs.hestia.core.task.api.Tasks
 import worlds.gregs.hestia.core.task.model.TaskContinuation

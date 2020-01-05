@@ -1,27 +1,18 @@
 package worlds.gregs.hestia.content.command
 
-import com.artemis.ComponentMapper
 import worlds.gregs.hestia.core.display.client.model.events.Command
-import worlds.gregs.hestia.core.display.widget.logic.systems.screen.CustomScreenWidgetSystem
-import worlds.gregs.hestia.core.display.widget.model.components.screen.CustomScreenWidget
+import worlds.gregs.hestia.core.display.window.api.Windows
+import worlds.gregs.hestia.core.display.window.model.WindowPane.MAIN_SCREEN
 
-lateinit var customScreenWidgetMapper: ComponentMapper<CustomScreenWidget>
-lateinit var customScreenWidgetSystem: CustomScreenWidgetSystem
+lateinit var windows: Windows
 
 on<Command> {
     where { prefix == "inter" }
     then { (entityId, _, content) ->
         val id = content.toInt()
-        val component = customScreenWidgetMapper.get(entityId)
-        if(component == null) {
-            customScreenWidgetMapper.create(entityId).id = id
-        } else {
-            if(id == -1) {
-                customScreenWidgetMapper.remove(entityId)
-            } else {
-                component.id = id
-                customScreenWidgetSystem.open(entityId)
-            }
+        windows.closeWindows(entityId, MAIN_SCREEN)
+        if(id != -1) {
+            windows.openWindow(entityId, id)
         }
         isCancelled = true
     }

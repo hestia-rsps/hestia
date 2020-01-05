@@ -2,7 +2,7 @@ package worlds.gregs.hestia.content
 
 import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.event.common.Event
-import worlds.gregs.hestia.core.display.widget.model.events.ButtonClick
+import worlds.gregs.hestia.core.display.window.model.events.ButtonClick
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 
 data class FakeEvent(val option: String, val name: String) : Event

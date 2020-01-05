@@ -4,7 +4,7 @@ import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.event.common.EventSystem
 import org.slf4j.LoggerFactory
 import worlds.gregs.hestia.GameServer
-import worlds.gregs.hestia.core.display.widget.api.UserInterface
+import worlds.gregs.hestia.core.display.window.api.Windows
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.entity.model.components.Type
 import worlds.gregs.hestia.core.entity.item.container.model.Inventory
@@ -22,7 +22,7 @@ class WidgetOnFloorItemHandler : MessageHandlerSystem<WidgetOnFloorItem>() {
     private lateinit var positionMapper: ComponentMapper<Position>
     private lateinit var typeMapper: ComponentMapper<Type>
     private lateinit var floorItems: FloorItems
-    private lateinit var ui: UserInterface
+    private lateinit var windows: Windows
     private val logger = LoggerFactory.getLogger(WidgetOnFloorItemHandler::class.java)!!
 
     override fun initialize() {
@@ -34,7 +34,7 @@ class WidgetOnFloorItemHandler : MessageHandlerSystem<WidgetOnFloorItem>() {
         val (x, y, floorType, hash, slot, _, type) = message
         val inventory = inventoryMapper.get(entityId) ?: return logger.warn("Unhandled widget on floor item $message")
 
-        if(!ui.validate(entityId, hash)) {
+        if(!windows.hasWindow(entityId, hash)) {
             return logger.warn("Invalid widget on floor item hash $message")
         }
 

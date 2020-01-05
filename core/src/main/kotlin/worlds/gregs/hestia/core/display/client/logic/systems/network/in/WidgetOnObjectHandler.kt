@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory
 import worlds.gregs.hestia.GameServer
 import worlds.gregs.hestia.artemis.Aspect
 import worlds.gregs.hestia.artemis.toArray
-import worlds.gregs.hestia.core.display.widget.api.UserInterface
+import worlds.gregs.hestia.core.display.window.api.Windows
 import worlds.gregs.hestia.core.entity.`object`.model.components.GameObject
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.item.container.model.Inventory
@@ -28,7 +28,7 @@ class WidgetOnObjectHandler : MessageHandlerSystem<WidgetOnObject>() {
     private lateinit var gameObjectMapper: ComponentMapper<GameObject>
     private lateinit var positionMapper: ComponentMapper<Position>
     private lateinit var regions: EntitySubscription
-    private lateinit var ui: UserInterface
+    private lateinit var windows: Windows
 
     override fun initialize() {
         super.initialize()
@@ -40,7 +40,7 @@ class WidgetOnObjectHandler : MessageHandlerSystem<WidgetOnObject>() {
         val (_, y, slot, hash, type, x, id) = message
         val inventory = inventoryMapper.get(entityId) ?: return logger.warn("Unhandled widget on object $message")
 
-        if(!ui.validate(entityId, hash)) {
+        if(!windows.hasWindow(entityId, hash)) {
             return logger.warn("Invalid widget on object hash $message")
         }
 

@@ -12,15 +12,13 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import worlds.gregs.hestia.MockkGame
-import worlds.gregs.hestia.core.display.widget.model.components.ScreenWidget
-import worlds.gregs.hestia.core.display.widget.model.events.ScreenClosed
+import worlds.gregs.hestia.core.display.window.model.events.WindowClosed
 import worlds.gregs.hestia.core.task.api.Task
 import worlds.gregs.hestia.core.task.api.TaskType
 import worlds.gregs.hestia.core.task.api.Tasks
 import worlds.gregs.hestia.core.task.model.components.TaskQueue
 import worlds.gregs.hestia.core.task.model.events.ProcessTaskSuspension
 import kotlin.coroutines.resume
-import kotlin.reflect.KClass
 
 @ExtendWith(MockKExtension::class)
 internal class ScreenCloseSuspensionSystemTest : MockkGame(WorldConfigurationBuilder()) {
@@ -37,11 +35,9 @@ internal class ScreenCloseSuspensionSystemTest : MockkGame(WorldConfigurationBui
     @RelaxedMockK
     lateinit var tasks: Tasks
 
-    @RelaxedMockK
-    lateinit var screen: KClass<ScreenWidget>
+    var screen = 10
 
-    @RelaxedMockK
-    lateinit var widget: ScreenWidget
+    var widget = screen
 
     lateinit var entity: Entity
     private lateinit var continuation: CancellableContinuation<Unit>
@@ -92,7 +88,7 @@ internal class ScreenCloseSuspensionSystemTest : MockkGame(WorldConfigurationBui
         val suspension = ScreenCloseSuspension(null, mockk(relaxed = true))
         every { tasks.getSuspension(entityId) } returns suspension
         //When
-        es.dispatch(ScreenClosed(entityId, widget))
+        es.dispatch(WindowClosed(entityId, widget, false))
         //Then
         verify { tasks.resume(entityId, suspension, Unit) }
     }
@@ -103,10 +99,10 @@ internal class ScreenCloseSuspensionSystemTest : MockkGame(WorldConfigurationBui
         val entityId = 0
         val suspension = ScreenCloseSuspension(screen, mockk(relaxed = true))
         every { tasks.getSuspension(entityId) } returns suspension
-        every { screen.isInstance(widget) } returns true
+        every { screen == widget } returns true
         println(suspension)
         //When
-        es.dispatch(ScreenClosed(entityId, widget))
+        es.dispatch(WindowClosed(entityId, widget, false))
         //Then
         verify { tasks.resume(entityId, suspension, Unit) }
     }
@@ -117,9 +113,9 @@ internal class ScreenCloseSuspensionSystemTest : MockkGame(WorldConfigurationBui
         val entityId = 0
         val suspension = ScreenCloseSuspension(screen, mockk(relaxed = true))
         every { tasks.getSuspension(entityId) } returns suspension
-        every { screen.isInstance(widget) } returns false
+        every { screen == widget } returns false
         //When
-        es.dispatch(ScreenClosed(entityId, widget))
+        es.dispatch(WindowClosed(entityId, widget, false))
         //Then
         verify(exactly = 0) { tasks.resume(entityId, suspension, any()) }
     }
@@ -152,7 +148,7 @@ internal class ScreenCloseSuspensionSystemTest : MockkGame(WorldConfigurationBui
     fun `Suspend skipped if screen set but not open`() {
         //Given
         val entityId = 0
-        val suspension = ScreenCloseSuspension(widget::class, mockk(relaxed = true))
+        val suspension = ScreenCloseSuspension(widget, mockk(relaxed = true))
         every { tasks.getSuspension(entityId) } returns suspension
         //When
         es.dispatch(ProcessTaskSuspension(entityId, suspension))
@@ -163,9 +159,8 @@ internal class ScreenCloseSuspensionSystemTest : MockkGame(WorldConfigurationBui
     @Test
     fun `Suspend not skipped if screen set and open`() {
         //Given
-        entity.edit().add(widget)
         val entityId = 0
-        val suspension = ScreenCloseSuspension(widget::class, mockk(relaxed = true))
+        val suspension = ScreenCloseSuspension(widget, mockk(relaxed = true))
         every { tasks.getSuspension(entityId) } returns suspension
         //When
         es.dispatch(ProcessTaskSuspension(entityId, suspension))
@@ -176,7 +171,6 @@ internal class ScreenCloseSuspensionSystemTest : MockkGame(WorldConfigurationBui
     @Test
     fun `Suspend not skipped if screen null and any screen is open`() {
         //Given
-        entity.edit().add(widget)
         val entityId = 0
         val suspension = ScreenCloseSuspension(null, mockk(relaxed = true))
         every { tasks.getSuspension(entityId) } returns suspension

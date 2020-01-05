@@ -1,5 +1,5 @@
 package worlds.gregs.hestia.core.display.dialogue.model.events
 
-import net.mostlyoriginal.api.event.common.Event
+import worlds.gregs.hestia.core.task.api.event.EntityEvent
 
-data class StringEntered(val entityId: Int, val string: String): Event
+data class StringEntered(override val entity: Int, val string: String): EntityEvent

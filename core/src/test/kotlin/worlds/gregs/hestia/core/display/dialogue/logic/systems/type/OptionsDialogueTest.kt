@@ -18,7 +18,7 @@ import worlds.gregs.hestia.artemis.send
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.OptionsDialogue
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.OptionsDialogueSystem
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.option
-import worlds.gregs.hestia.core.display.widget.logic.systems.frame.chat.DialogueBoxSystem
+import worlds.gregs.hestia.core.display.dialogue.logic.systems.DialogueBoxSystem
 import worlds.gregs.hestia.core.task.api.Task
 import worlds.gregs.hestia.core.task.api.TaskType
 import worlds.gregs.hestia.core.task.api.Tasks

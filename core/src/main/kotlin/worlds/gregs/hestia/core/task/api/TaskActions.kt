@@ -7,7 +7,7 @@ import worlds.gregs.hestia.core.display.dialogue.logic.systems.DialogueSystem
 import worlds.gregs.hestia.core.display.update.model.components.direction.Face
 import worlds.gregs.hestia.core.display.update.model.components.direction.Facing
 import worlds.gregs.hestia.core.display.update.model.components.direction.Watch
-import worlds.gregs.hestia.core.display.widget.model.events.CloseDialogue
+import worlds.gregs.hestia.core.display.dialogue.model.events.CloseDialogue
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.entity.model.components.Size
 

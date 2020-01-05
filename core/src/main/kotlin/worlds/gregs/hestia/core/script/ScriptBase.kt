@@ -11,12 +11,17 @@ import worlds.gregs.hestia.artemis.event.ExtendedEventDispatchStrategy
 import worlds.gregs.hestia.core.display.dialogue.api.DialogueBase
 import worlds.gregs.hestia.core.script.dsl.artemis.*
 import worlds.gregs.hestia.core.task.api.SuspendableQueue
+import worlds.gregs.hestia.core.task.api.Task
 import worlds.gregs.hestia.core.task.api.TaskPriority
 import worlds.gregs.hestia.core.task.api.closeDialogue
 import worlds.gregs.hestia.core.task.api.event.EntityEvent
+import worlds.gregs.hestia.core.task.api.event.TargetEvent
 import worlds.gregs.hestia.core.task.logic.systems.awaitScreen
 import worlds.gregs.hestia.core.task.model.InactiveTask
 import worlds.gregs.hestia.core.task.model.ReusableTask
+import worlds.gregs.hestia.core.task.model.TaskContinuation
+import worlds.gregs.hestia.core.task.model.context.EntityContext
+import worlds.gregs.hestia.core.task.model.context.ParamContext
 import worlds.gregs.hestia.core.task.model.events.StartTask
 import kotlin.script.experimental.annotations.KotlinScript
 
@@ -140,6 +145,14 @@ abstract class ScriptBase : ScriptBuilder() {
     fun <E : EntityEvent> EventListenerBuilder<E>.task(priority: TaskPriority = TaskPriority.Normal, action: SuspendableQueue) : EventListenerBuilder<E> {
         then {
             task(it.entity, priority, it, action)
+        }
+        return this
+    }
+
+    fun <E : EntityEvent> EventListenerBuilder<E>.whereTask(action: Task.(E) -> Boolean) : EventListenerBuilder<E> {
+        where {
+            //LOL HAx
+            action(TaskContinuation(if(this is TargetEvent) ParamContext(EntityContext(game, it.entity), this.target) else EntityContext(game, it.entity)), this)
         }
         return this
     }

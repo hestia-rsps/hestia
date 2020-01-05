@@ -12,8 +12,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import worlds.gregs.hestia.MockkGame
 import worlds.gregs.hestia.core.display.dialogue.api.Dialogue
-import worlds.gregs.hestia.core.display.widget.api.UserInterface
-import worlds.gregs.hestia.core.display.widget.logic.systems.frame.chat.DialogueBoxSystem
+import worlds.gregs.hestia.core.display.window.api.Windows
 import worlds.gregs.hestia.core.task.api.SuspendableQueue
 import worlds.gregs.hestia.core.task.api.Task
 import worlds.gregs.hestia.core.task.api.TaskPriority
@@ -41,7 +40,7 @@ internal class DialogueSystemTest : MockkGame() {
     var boxSystem = DialogueBoxSystem()
 
     @RelaxedMockK
-    lateinit var ui: UserInterface
+    lateinit var windows: Windows
 
     @RelaxedMockK
     lateinit var task: Task
@@ -56,7 +55,7 @@ internal class DialogueSystemTest : MockkGame() {
     }
 
     override fun config(config: WorldConfigurationBuilder) {
-        config.with(ui, system, boxSystem, tasks)
+        config.with(windows, system, boxSystem, tasks)
     }
 
     @Test

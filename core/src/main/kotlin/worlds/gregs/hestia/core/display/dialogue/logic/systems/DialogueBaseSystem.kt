@@ -5,18 +5,17 @@ import net.mostlyoriginal.api.system.core.PassiveSystem
 import org.slf4j.Logger
 import world.gregs.hestia.core.network.protocol.encoders.messages.WidgetComponentText
 import worlds.gregs.hestia.artemis.send
-import worlds.gregs.hestia.core.display.widget.logic.systems.frame.chat.DialogueBoxSystem
 import worlds.gregs.hestia.core.task.api.Tasks
 
 abstract class DialogueBaseSystem : PassiveSystem() {
     abstract val logger: Logger
     internal lateinit var es: EventSystem
     internal lateinit var tasks: Tasks
-    private lateinit var dialogueBoxSystem: DialogueBoxSystem
+//    private lateinit var dialogueBoxSystem: DialogueBoxSystem FIXME
 
     internal fun send(entityId: Int, interfaceId: Int, componentStart: Int, title: String?, lines: List<String>) {
         //Open
-        dialogueBoxSystem.openChatInterface(entityId, interfaceId)
+//        dialogueBoxSystem.openChatInterface(entityId, interfaceId)
         //Title
         es.send(entityId, WidgetComponentText(interfaceId, componentStart, title ?: ""))
         //Lines

@@ -4,7 +4,7 @@ import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.event.common.EventSystem
 import org.slf4j.LoggerFactory
 import worlds.gregs.hestia.GameServer
-import worlds.gregs.hestia.core.display.widget.api.UserInterface
+import worlds.gregs.hestia.core.display.window.api.Windows
 import worlds.gregs.hestia.core.entity.item.container.model.Inventory
 import worlds.gregs.hestia.core.entity.item.container.model.events.ItemOnItem
 import worlds.gregs.hestia.game.entity.MessageHandlerSystem
@@ -16,7 +16,7 @@ class WidgetOnWidgetHandler : MessageHandlerSystem<WidgetOnWidget>() {
 
     private lateinit var inventoryMapper: ComponentMapper<Inventory>
     private val logger = LoggerFactory.getLogger(WidgetOnWidgetHandler::class.java)!!
-    private lateinit var ui: UserInterface
+    private lateinit var windows: Windows
 
     override fun initialize() {
         super.initialize()
@@ -27,7 +27,7 @@ class WidgetOnWidgetHandler : MessageHandlerSystem<WidgetOnWidget>() {
         val (fromHash, fromType, fromSlot, toHash, toType, toSlot) = message
         val inventory = inventoryMapper.get(entityId) ?: return logger.warn("Unhandled widget on widget $message")
 
-        if(!ui.validate(entityId, fromHash) || !ui.validate(entityId, toHash)) {
+        if(!windows.hasWindow(entityId, fromHash) || !windows.hasWindow(entityId, toHash)) {
             return logger.warn("Invalid widget on widget hash $message")
         }
 
