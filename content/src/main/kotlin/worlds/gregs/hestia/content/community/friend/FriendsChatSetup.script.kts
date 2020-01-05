@@ -2,7 +2,6 @@ package worlds.gregs.hestia.content.community.friend
 
 import world.gregs.hestia.core.network.protocol.messages.FriendsChatName
 import world.gregs.hestia.core.network.protocol.messages.FriendsChatSettings
-import worlds.gregs.hestia.GameServer
 import worlds.gregs.hestia.core.display.dialogue.model.events.StringEntered
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.FriendsChatSetup
 import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
@@ -28,8 +27,8 @@ on<StringEntered> {
 on<WindowInteraction> {
     where { target == FriendsChatSetup }
     task {
-        val (_, _, component, _, _, option) = event(this)
-        when(component) {
+        val (_, _, widget, _, _, option) = event(this)
+        when(widget) {
             22 -> {//Chat name
                 when(option) {
                     1 -> {//Set prefix
@@ -41,7 +40,7 @@ on<WindowInteraction> {
                 }
             }
             23, 24, 25, 26, 33 -> {
-                GameServer.worldSession?.write(FriendsChatSettings(entity, FriendsChatSetup shl 16 or component, option))
+                GameServer.worldSession?.write(FriendsChatSettings(entity, FriendsChatSetup shl 16 or widget, option))
             }
 //            3 -> {}//Close
         }

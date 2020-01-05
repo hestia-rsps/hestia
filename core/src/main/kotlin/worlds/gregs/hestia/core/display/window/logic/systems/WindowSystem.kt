@@ -13,8 +13,8 @@ import worlds.gregs.hestia.core.display.window.model.components.GameFrame
 import worlds.gregs.hestia.core.display.window.model.components.WindowRelationships
 import worlds.gregs.hestia.core.display.window.model.events.*
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetClose
-import worlds.gregs.hestia.network.client.encoders.messages.WidgetOpen
-import worlds.gregs.hestia.network.client.encoders.messages.WidgetWindowsPane
+import worlds.gregs.hestia.network.client.encoders.messages.WindowOpen
+import worlds.gregs.hestia.network.client.encoders.messages.WindowPaneUpdate
 
 class WindowSystem : Windows() {
 
@@ -88,9 +88,9 @@ class WindowSystem : Windows() {
     private fun send(entityId: Int, parent: Int, index: Int, id: Int) {
         val pane = getPane(id)
         if (pane == WindowPane.FULL_SCREEN) {
-            es.send(entityId, WidgetWindowsPane(id, 0))
+            es.send(entityId, WindowPaneUpdate(id, 0))
         } else {
-            es.send(entityId, WidgetOpen(isPermanent(pane), parent, index, id))
+            es.send(entityId, WindowOpen(isPermanent(pane), parent, index, id))
         }
         es.dispatch(WindowOpened(entityId, id))
     }
@@ -136,8 +136,8 @@ class WindowSystem : Windows() {
     }
 
     override fun getWindow(entityId: Int, pane: WindowPane): Int? {
-        val relationshipsMapper = windowRelationshipsMapper.get(entityId)
-        val relationships = relationshipsMapper.relationships
+        val windowRelationships = windowRelationshipsMapper.get(entityId)
+        val relationships = windowRelationships.relationships
         val gameFrame = gameFrameMapper.get(entityId)
 
         val gameframe = if (gameFrame.resizable) ResizableGameframe else FixedGameframe
@@ -153,8 +153,8 @@ class WindowSystem : Windows() {
     }
 
     override fun hasWindow(entityId: Int, window: Int): Boolean {
-        val relationshipsMapper = windowRelationshipsMapper.get(entityId)
-        val relationships = relationshipsMapper.relationships
+        val windowRelationships = windowRelationshipsMapper.get(entityId)
+        val relationships = windowRelationships.relationships
         return relationships.containsKey(window)
     }
 
@@ -184,9 +184,9 @@ class WindowSystem : Windows() {
     private fun click(event: ButtonClick) {
         val (entityId, hash, from, to, option) = event
         if (verifyWindow(entityId, hash)) {
-            val widgetId = hash shr 16
-            val componentId = hash - (widgetId shl 16)
-            es.dispatch(WindowInteraction(entityId, widgetId, componentId, from, to, option))
+            val windowId = hash shr 16
+            val widgetId = hash - (windowId shl 16)
+            es.dispatch(WindowInteraction(entityId, windowId, widgetId, from, to, option))
         }
     }
 

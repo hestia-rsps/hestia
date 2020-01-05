@@ -17,10 +17,10 @@ import worlds.gregs.hestia.core.task.api.TaskType
 import worlds.gregs.hestia.core.task.api.entity
 import worlds.gregs.hestia.core.task.api.world
 import worlds.gregs.hestia.core.task.model.events.ProcessTaskSuspension
-import worlds.gregs.hestia.network.client.encoders.messages.WidgetComponentAnimation
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetHeadMob
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetHeadPlayer
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetItem
+import worlds.gregs.hestia.network.client.encoders.messages.WindowWidgetAnimation
 import worlds.gregs.hestia.service.cache.definition.systems.ItemDefinitionSystem
 import worlds.gregs.hestia.service.cache.definition.systems.MobDefinitionSystem
 
@@ -41,18 +41,18 @@ class EntityDialogueSystem : DialogueBaseSystem() {
     private fun handleSuspension(event: ProcessTaskSuspension) {
         val (entityId, dialogue) = event
         if (dialogue is EntityDialogue) {
-            val interfaceId = ENTITY_ID + dialogue.lines.size - 1
+            val window = ENTITY_ID + dialogue.lines.size - 1
             val title = getTitle(entityId, dialogue)
-            send(entityId, interfaceId, 3, title, dialogue.lines)
+            send(entityId, window, 3, title, dialogue.lines)
             when (dialogue) {
-                is ItemDialogue -> es.send(entityId, WidgetItem(interfaceId, 2, dialogue.item, -1))
+                is ItemDialogue -> es.send(entityId, WidgetItem(window, 2, dialogue.item, -1))
                 is MobDialogue -> {
-                    es.send(entityId, WidgetHeadMob(interfaceId, 2, dialogue.mob))
-                    es.send(entityId, WidgetComponentAnimation(interfaceId, 2, dialogue.animation))
+                    es.send(entityId, WidgetHeadMob(window, 2, dialogue.mob))
+                    es.send(entityId, WindowWidgetAnimation(window, 2, dialogue.animation))
                 }
                 is PlayerDialogue -> {
-                    es.send(entityId, WidgetHeadPlayer(interfaceId, 2))
-                    es.send(entityId, WidgetComponentAnimation(interfaceId, 2, dialogue.animation))
+                    es.send(entityId, WidgetHeadPlayer(window, 2))
+                    es.send(entityId, WindowWidgetAnimation(window, 2, dialogue.animation))
                 }
             }
             event.isCancelled = true
@@ -70,12 +70,12 @@ class EntityDialogueSystem : DialogueBaseSystem() {
 
     @Subscribe(ignoreCancelledEvents = true)
     private fun handleContinue(event: ContinueDialogue) {
-        val (entityId, _, buttonId, _) = event
+        val (entityId, _, option, _) = event
         val suspension = tasks.getSuspension(entityId)
         if (suspension is EntityDialogue) {
             //Verify button
             val continueButton = 3 + suspension.lines.size + 1
-            if (continueButton != -1 && buttonId != continueButton) {
+            if (continueButton != -1 && option != continueButton) {
                 return logger.debug("Unexpected button press: $event")
             }
             //Continue

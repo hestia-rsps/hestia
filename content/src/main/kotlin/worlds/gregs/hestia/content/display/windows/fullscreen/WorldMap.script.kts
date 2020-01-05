@@ -23,8 +23,8 @@ on<WindowOpened> {
 
 on<WindowInteraction> {
     where { target == WorldMap }
-    then { (_, _, component) ->
-        if(component == 44) {
+    then { (_, _, widget) ->
+        if(widget == 44) {
             //Close button
         }
     }

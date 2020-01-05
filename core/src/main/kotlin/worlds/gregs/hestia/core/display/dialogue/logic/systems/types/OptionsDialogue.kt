@@ -28,25 +28,25 @@ class OptionsDialogueSystem : DialogueBaseSystem() {
     private fun handleSuspend(event: ProcessTaskSuspension) {
         val (entityId, dialogue) = event
         if(dialogue is OptionsDialogue) {
-            val interfaceId = when (dialogue.lines.size) {
+            val window = when (dialogue.lines.size) {
                 2 -> TWO_OPTIONS_ID
                 3 -> THREE_OPTIONS_ID
                 4 -> FOUR_OPTIONS_ID
                 else -> FIVE_OPTIONS_ID
             }
-            val componentStart = if (dialogue.lines.size == 3) 1 else 0
+            val widgetStart = if (dialogue.lines.size == 3) 1 else 0
             val title = dialogue.title ?: "Select an Option"
-            send(entityId, interfaceId, componentStart, title, dialogue.lines)
+            send(entityId, window, widgetStart, title, dialogue.lines)
             event.isCancelled = true
         }
     }
 
     @Subscribe(ignoreCancelledEvents = true)
     private fun handleContinue(event: ContinueDialogue) {
-        val (entityId, _, buttonId, _) = event
+        val (entityId, _, option, _) = event
         val suspension = tasks.getSuspension(entityId)
         if (suspension is OptionsDialogue) {
-            val choice = buttonId - if(suspension.lines.size == 3) 2 else 1
+            val choice = option - if(suspension.lines.size == 3) 2 else 1
             //Continue
             if(tasks.resume(entityId, suspension, choice)) {
                 event.isCancelled = true

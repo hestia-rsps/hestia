@@ -6,11 +6,11 @@ import worlds.gregs.hestia.GameServer
 import worlds.gregs.hestia.core.display.window.api.Windows
 import worlds.gregs.hestia.core.display.window.model.events.WindowSwitch
 import worlds.gregs.hestia.game.entity.MessageHandlerSystem
-import worlds.gregs.hestia.network.client.decoders.messages.WidgetSwitchComponent
+import worlds.gregs.hestia.network.client.decoders.messages.WindowSwitchWidgets
 
-class WidgetSwitchComponentHandler : MessageHandlerSystem<WidgetSwitchComponent>() {
+class WindowSwitchWidgetsHandler : MessageHandlerSystem<WindowSwitchWidgets>() {
 
-    private val logger = LoggerFactory.getLogger(WidgetSwitchComponentHandler::class.java)!!
+    private val logger = LoggerFactory.getLogger(WindowSwitchWidgetsHandler::class.java)!!
     private lateinit var windows: Windows
     private lateinit var es: EventSystem
 
@@ -19,7 +19,7 @@ class WidgetSwitchComponentHandler : MessageHandlerSystem<WidgetSwitchComponent>
         GameServer.gameMessages.bind(this)
     }
 
-    override fun handle(entityId: Int, message: WidgetSwitchComponent) {
+    override fun handle(entityId: Int, message: WindowSwitchWidgets) {
         val (fromType, fromIndex, toType, fromHash, toIndex, toHash) = message
         if(windows.verifyWindow(entityId, fromHash) && windows.verifyWindow(entityId, toHash)) {
             es.dispatch(WindowSwitch(entityId, fromHash shr 16, fromIndex, fromType, toHash shr 16, toIndex, toType))

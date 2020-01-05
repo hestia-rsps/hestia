@@ -9,10 +9,10 @@ import worlds.gregs.hestia.network.client.encoders.messages.WidgetClose
 class WidgetCloseEncoder : MessageEncoder<WidgetClose>() {
 
     override fun encode(builder: PacketBuilder, message: WidgetClose) {
-        val (id, component) = message
+        val (id, widget) = message
         builder.apply {
             writeOpcode(WIDGET_CLOSE)
-            writeInt(id shl 16 or component, order = Endian.LITTLE)
+            writeInt(id shl 16 or widget, order = Endian.LITTLE)
         }
     }
 

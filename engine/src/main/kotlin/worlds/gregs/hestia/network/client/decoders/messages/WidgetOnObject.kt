@@ -7,7 +7,7 @@ import world.gregs.hestia.core.network.codec.message.Message
  * @param run Force run
  * @param y The objects y coordinate
  * @param slot The widget item slot
- * @param hash The widget & component id
+ * @param hash The window and widget id
  * @param type The item id
  * @param y The objects y coordinate
  * @param id The objects id

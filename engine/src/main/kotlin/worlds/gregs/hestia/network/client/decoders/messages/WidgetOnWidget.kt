@@ -4,10 +4,10 @@ import world.gregs.hestia.core.network.codec.message.Message
 
 /**
  * Widget action applied to another widget
- * @param fromHash The first widget id and component id combined
+ * @param fromHash The first window and widget id combined
  * @param fromItem Item id of the first slot
  * @param from The slot being used
- * @param toHash The second widget id and component id combined
+ * @param toHash The second window and widget id combined
  * @param toItem Item id of the second slot
  * @param to The slot being applied too
  */

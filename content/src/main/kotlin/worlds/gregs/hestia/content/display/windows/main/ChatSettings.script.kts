@@ -6,8 +6,8 @@ import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
 on<WindowInteraction> {
     where { target == ChatSettings }
     task {
-        val (_, _, component, _, _, option) = event(this)
-        when(component) {
+        val (_, _, widget, _, _, option) = event(this)
+        when(widget) {
             31 -> {//Regular chat
             when(option) {
                 1 -> {//View

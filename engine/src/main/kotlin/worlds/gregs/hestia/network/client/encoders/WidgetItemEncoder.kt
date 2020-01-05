@@ -10,12 +10,12 @@ import worlds.gregs.hestia.network.client.encoders.messages.WidgetItem
 class WidgetItemEncoder : MessageEncoder<WidgetItem>() {
 
     override fun encode(builder: PacketBuilder, message: WidgetItem) {
-        val (id, component, item, amount) = message
+        val (id, widget, item, amount) = message
         builder.apply {
             writeOpcode(WIDGET_ITEM)
             writeShort(item, order = Endian.LITTLE)
             writeInt(amount)
-            writeInt(id shl 16 or component, Modifier.INVERSE, Endian.MIDDLE)
+            writeInt(id shl 16 or widget, Modifier.INVERSE, Endian.MIDDLE)
         }
     }
 

@@ -139,10 +139,7 @@ interface Task : Continuation<Any> {
         }
     }
 
-    infix fun Int.hasWindowOpen(window: Int): Boolean {
-        val system = world system WindowSystem::class
-        return system.hasWindow(this, window)
-    }
+    infix fun Int.hasWindowOpen(window: Int) = getSystem(WindowSystem::class).hasWindow(this, window)
 
     infix fun Int.windowNotOpen(window: Int): Boolean = !(this hasWindowOpen window)
 

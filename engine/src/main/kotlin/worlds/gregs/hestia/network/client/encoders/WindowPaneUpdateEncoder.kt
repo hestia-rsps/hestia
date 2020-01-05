@@ -5,11 +5,11 @@ import world.gregs.hestia.core.network.codec.packet.Endian
 import world.gregs.hestia.core.network.codec.packet.Modifier
 import world.gregs.hestia.core.network.codec.packet.PacketBuilder
 import world.gregs.hestia.core.network.protocol.ClientOpcodes.WIDGET_WINDOW
-import worlds.gregs.hestia.network.client.encoders.messages.WidgetWindowsPane
+import worlds.gregs.hestia.network.client.encoders.messages.WindowPaneUpdate
 
-class WidgetWindowsPaneEncoder : MessageEncoder<WidgetWindowsPane>() {
+class WindowPaneUpdateEncoder : MessageEncoder<WindowPaneUpdate>() {
 
-    override fun encode(builder: PacketBuilder, message: WidgetWindowsPane) {
+    override fun encode(builder: PacketBuilder, message: WindowPaneUpdate) {
         val (id, type) = message
         builder.apply {
             writeOpcode(WIDGET_WINDOW)

@@ -16,13 +16,13 @@ class DialogueBoxSystem : PassiveSystem() {
 
     private lateinit var windows: Windows
 
-    fun openChatInterface(entityId: Int, widgetId: Int) {
+    fun openChat(entityId: Int, windowId: Int) {
         val existed = dialogueBoxMapper.has(entityId)
         val dialogueBox = dialogueBoxMapper.create(entityId)
-        dialogueBox.id = widgetId
+        dialogueBox.id = windowId
         if(existed) {
             //Refresh
-            windows.refreshWindow(entityId, widgetId)
+            windows.refreshWindow(entityId, windowId)
         }
     }
 
@@ -32,7 +32,7 @@ class DialogueBoxSystem : PassiveSystem() {
      */
     @Subscribe(priority = Int.MAX_VALUE)
     internal fun handleContinue(event: ContinueDialogue) {
-        val (entityId, interfaceId, _, _) = event
+        val (entityId, window, _, _) = event
         if (!dialogueBoxMapper.has(entityId)) {
             event.isCancelled = true
             return
@@ -40,8 +40,8 @@ class DialogueBoxSystem : PassiveSystem() {
 
         //Check interfaces match
         val box = dialogueBoxMapper.get(entityId)
-        if (box.id != interfaceId) {
-            logger.debug("Invalid dialogue id: ${box.id} $interfaceId $entityId")
+        if (box.id != window) {
+            logger.debug("Invalid dialogue id: ${box.id} $window $entityId")
             dialogueBoxMapper.remove(entityId)
             event.isCancelled = true
             return

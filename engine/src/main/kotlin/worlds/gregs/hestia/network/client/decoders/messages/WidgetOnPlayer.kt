@@ -5,7 +5,7 @@ import world.gregs.hestia.core.network.codec.message.Message
 /**
  * Widget action applied to a player
  * @param player The player index to apply on
- * @param hash The widget & component id
+ * @param hash The window and widget id
  * @param type The widget item type
  * @param run Force run
  * @param slot The widget item slot

@@ -9,10 +9,10 @@ import worlds.gregs.hestia.network.client.encoders.messages.WidgetHeadPlayer
 class WidgetHeadPlayerEncoder : MessageEncoder<WidgetHeadPlayer>() {
 
     override fun encode(builder: PacketBuilder, message: WidgetHeadPlayer) {
-        val (id, component) = message
+        val (id, widget) = message
         builder.apply {
             writeOpcode(WIDGET_PLAYER_HEAD)
-            writeInt(id shl 16 or component, order = Endian.LITTLE)
+            writeInt(id shl 16 or widget, order = Endian.LITTLE)
         }
     }
 

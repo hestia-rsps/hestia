@@ -5,16 +5,16 @@ import world.gregs.hestia.core.network.codec.packet.Endian
 import world.gregs.hestia.core.network.codec.packet.Modifier
 import world.gregs.hestia.core.network.codec.packet.PacketBuilder
 import world.gregs.hestia.core.network.protocol.ClientOpcodes.WIDGET_OPEN
-import worlds.gregs.hestia.network.client.encoders.messages.WidgetOpen
+import worlds.gregs.hestia.network.client.encoders.messages.WindowOpen
 
-class WidgetOpenEncoder : MessageEncoder<WidgetOpen>() {
+class WindowOpenEncoder : MessageEncoder<WindowOpen>() {
 
-    override fun encode(builder: PacketBuilder, message: WidgetOpen) {
-        val (permanent, window, component, id) = message
+    override fun encode(builder: PacketBuilder, message: WindowOpen) {
+        val (permanent, window, widget, id) = message
         builder.apply {
             writeOpcode(WIDGET_OPEN)
             writeShort(id, Modifier.ADD, Endian.LITTLE)
-            writeInt(window shl 16 or component, order = Endian.LITTLE)
+            writeInt(window shl 16 or widget, order = Endian.LITTLE)
             writeByte(permanent)
         }
     }

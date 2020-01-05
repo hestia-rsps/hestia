@@ -23,31 +23,31 @@ on<WindowOpened> {
 on<WindowInteraction> {
     where { target == FixedGameframe }
     task {
-        val (_, _, component, _, _, option) = event(this)
+        val (_, _, widget, _, _, option) = event(this)
         val resizable = target == ResizableGameframe
         when {
-            resizable && component == 176 || !resizable && component == 182 ->//Logout
+            resizable && widget == 176 || !resizable && widget == 182 ->//Logout
                 entity openWindow Logout
-            resizable && component == 175 || !resizable && component == 184 -> {//Adviser button
+            resizable && widget == 175 || !resizable && widget == 184 -> {//Adviser button
             }
-            resizable && component == 174 || !resizable && component == 178 -> {//Compass
+            resizable && widget == 174 || !resizable && widget == 178 -> {//Compass
             }
-            resizable && component == 182 || !resizable && component == 180 ->//World map
+            resizable && widget == 182 || !resizable && widget == 180 ->//World map
                 entity openWindow WorldMap
-            resizable && component == 229 || !resizable && component == 0 -> {//XP orb
+            resizable && widget == 229 || !resizable && widget == 0 -> {//XP orb
                 when(option) {
                     1 -> {}//Toggle
                     7 -> {}//Reset
                 }
             }
-            resizable && component in 39..54 -> {//All tabs
-                println("Open Tab ${component - 39}")
+            resizable && widget in 39..54 -> {//All tabs
+                println("Open Tab ${widget - 39}")
             }
-            !resizable && component in 129..136 -> {//Top row tabs
-                println("Open Tab ${component - 129}")
+            !resizable && widget in 129..136 -> {//Top row tabs
+                println("Open Tab ${widget - 129}")
             }
-            !resizable && component in 99..106 -> {//Bottom row tabs
-                println("Open Tab ${component - 91}")//99 - 8
+            !resizable && widget in 99..106 -> {//Bottom row tabs
+                println("Open Tab ${widget - 91}")//99 - 8
             }
         }
     }

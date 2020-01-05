@@ -31,20 +31,20 @@ class StatementDialogueSystem : DialogueBaseSystem() {
     private fun handleSuspend(event: ProcessTaskSuspension) {
         val (entityId, dialogue) = event
         if (dialogue is StatementDialogue) {
-            val interfaceId = STATEMENT_ID + dialogue.lines.size - 1
-            send(entityId, interfaceId, 0, dialogue.title, dialogue.lines)
+            val window = STATEMENT_ID + dialogue.lines.size - 1
+            send(entityId, window, 0, dialogue.title, dialogue.lines)
             event.isCancelled = true
         }
     }
 
     @Subscribe(ignoreCancelledEvents = true)
     private fun handleContinue(event: ContinueDialogue) {
-        val (entityId, _, buttonId, _) = event
+        val (entityId, _, option, _) = event
         val suspension = tasks.getSuspension(entityId)
         if (suspension is StatementDialogue) {
             //Verify button
             val continueButton = suspension.lines.size + 1
-            if (continueButton != -1 && buttonId != continueButton) {
+            if (continueButton != -1 && option != continueButton) {
                 return logger.debug("Unexpected button press: $event")
             }
 

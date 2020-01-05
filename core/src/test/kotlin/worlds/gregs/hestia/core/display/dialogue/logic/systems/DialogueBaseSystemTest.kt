@@ -49,20 +49,20 @@ internal class DialogueBaseSystemTest : MockkGame() {
     fun `Send opens chat and dispatches packets`() {
         //Given
         val entityId = 0
-        val interfaceId = 250
-        val componentStart = 3
+        val window = 250
+        val widgetStart = 3
         val title = "Title"
         val lines = listOf("Line one", "Line two")
         mockkStatic("worlds.gregs.hestia.artemis.ExtensionFunctionsKt")
-        every { boxSystem.openChatInterface(entityId, interfaceId) } answers {}
+        every { boxSystem.openChat(entityId, window) } answers {}
         //When
-        system.send(entityId, interfaceId, componentStart, title, lines)
+        system.send(entityId, window, widgetStart, title, lines)
         //Then
         verifyOrder {
-            boxSystem.openChatInterface(entityId, interfaceId)
-            es.send(entityId, WidgetComponentText(interfaceId, componentStart, title))
-            es.send(entityId, WidgetComponentText(interfaceId, componentStart + 1, "Line one"))
-            es.send(entityId, WidgetComponentText(interfaceId, componentStart + 2, "Line two"))
+            boxSystem.openChat(entityId, window)
+            es.send(entityId, WidgetComponentText(window, widgetStart, title))
+            es.send(entityId, WidgetComponentText(window, widgetStart + 1, "Line one"))
+            es.send(entityId, WidgetComponentText(window, widgetStart + 2, "Line two"))
         }
     }
 }

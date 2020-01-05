@@ -42,8 +42,8 @@ abstract class InterfaceTester(config: WorldConfigurationBuilder) : GameTest(con
         verify(ui, times(times)).closeWindow(entity, any())
     }
 
-    internal fun assertClicked(times: Int, entity: Int, widget: Int, component: Int, option: Int) {
-//        verify(ui, times(times)).click(entity, 0, widget, component, 0, 0, option)
+    internal fun assertClicked(times: Int, entity: Int, window: Int, widget: Int, option: Int) {
+//        verify(ui, times(times)).click(entity, 0, window, widget, 0, 0, option)
     }
 
 }

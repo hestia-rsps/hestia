@@ -11,16 +11,16 @@ abstract class DialogueBaseSystem : PassiveSystem() {
     abstract val logger: Logger
     internal lateinit var es: EventSystem
     internal lateinit var tasks: Tasks
-//    private lateinit var dialogueBoxSystem: DialogueBoxSystem FIXME
+    private lateinit var dialogueBoxSystem: DialogueBoxSystem
 
-    internal fun send(entityId: Int, interfaceId: Int, componentStart: Int, title: String?, lines: List<String>) {
+    internal fun send(entityId: Int, window: Int, widgetStart: Int, title: String?, lines: List<String>) {
         //Open
-//        dialogueBoxSystem.openChatInterface(entityId, interfaceId)
+        dialogueBoxSystem.openChat(entityId, window)
         //Title
-        es.send(entityId, WidgetComponentText(interfaceId, componentStart, title ?: ""))
+        es.send(entityId, WidgetComponentText(window, widgetStart, title ?: ""))
         //Lines
         lines.forEachIndexed { index, text ->
-            es.send(entityId, WidgetComponentText(interfaceId, componentStart + index + 1, text))
+            es.send(entityId, WidgetComponentText(window, widgetStart + index + 1, text))
         }
     }
 

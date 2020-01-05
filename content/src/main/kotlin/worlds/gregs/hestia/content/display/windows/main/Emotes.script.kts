@@ -5,15 +5,15 @@ import worlds.gregs.hestia.core.display.client.model.Configs
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.Emotes
 import worlds.gregs.hestia.core.display.window.model.events.WindowOpened
 import worlds.gregs.hestia.network.client.encoders.messages.Config
-import worlds.gregs.hestia.network.client.encoders.messages.WidgetComponentSettings
+import worlds.gregs.hestia.network.client.encoders.messages.WindowWidgetSettings
 
 lateinit var es: EventSystem
 
 on<WindowOpened> {
     where { target == Emotes }
     then { (entityId, _) ->
-        for (componentId in 11..14) {
-            es.send(entityId, WidgetComponentSettings(Emotes, componentId, -1, 190, 2150))
+        for (widget in 11..14) {
+            es.send(entityId, WindowWidgetSettings(Emotes, widget, -1, 190, 2150))
         }
 
         es.send(entityId, Config(Configs.GOBLIN_QUEST_EMOTES, 7))

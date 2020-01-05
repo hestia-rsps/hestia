@@ -8,8 +8,8 @@ import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
 on<WindowInteraction> {
     where { target == Logout }
     task {
-        val (_, _, component) = event(this)
-        when (component) {
+        val (_, _, widget) = event(this)
+        when (widget) {
             6 -> {//Lobby
                 entity create ExitLobby::class
                 world dispatch Disconnect(entity)

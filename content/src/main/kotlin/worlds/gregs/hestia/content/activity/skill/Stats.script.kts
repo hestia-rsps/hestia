@@ -38,16 +38,16 @@ on<WindowOpened> {
 on<WindowInteraction> {
     where { target == Stats }
     task {
-        val (_, _, component, _, _, _) = event(this)
-        when(component) {
+        val (_, _, widget, _, _, _) = event(this)
+        when(widget) {
             11, 19, 28, 36, 44, 52, 60, 68, 76, 84, 93, 101, 110, 118, 126, 134, 142, 150, 158, 165, 172, 179, 186, 193, 200 -> {
                 val index = when {
-                    component >= 165 -> 19 + (component - 165) / 7
-                    component >= 110 -> 12 + (component - 110) / 8
-                    component == 101 -> 11
-                    component == 93 -> 10
-                    component >= 28 -> 2 + (component - 28) / 8
-                    component == 19 -> 1
+                    widget >= 165 -> 19 + (widget - 165) / 7
+                    widget >= 110 -> 12 + (widget - 110) / 8
+                    widget == 101 -> 11
+                    widget == 93 -> 10
+                    widget >= 28 -> 2 + (widget - 28) / 8
+                    widget == 19 -> 1
                     else -> 0
                 }
                 val skill = stats[index]

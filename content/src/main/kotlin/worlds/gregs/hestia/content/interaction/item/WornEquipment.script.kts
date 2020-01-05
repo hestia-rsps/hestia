@@ -30,10 +30,10 @@ fun Task.sendItems() {
 on<WindowInteraction> {
     where { target == WornEquipment }
     task {
-        val (_, _, component, _, _, option) = event(this)
-        when(component) {
+        val (_, _, widget, _, _, option) = event(this)
+        when(widget) {
             8, 11, 14, 17, 20, 23, 26, 29, 32, 35, 38, 50 -> {
-                val index = if(component == 50) 11 else (component - 8) / 3
+                val index = if(widget == 50) 11 else (widget - 8) / 3
                 when(option) {
                     1 -> {}//Remove
                     8 -> {}//Examine
