@@ -3,16 +3,6 @@ package worlds.gregs.hestia.core.script.dsl.task
 import world.gregs.hestia.core.network.protocol.encoders.messages.Chat
 import worlds.gregs.hestia.core.task.api.Task
 
-enum class PlayerOptions(val string: String, val slot: Int, val top: Boolean = false, val response: Int = -1) {
-    ATTACK("Attack", 1, true),
-    FOLLOW("Follow", 2),
-    TRADE("Trade with", 4, response = 4),
-    ASSIST("Req Assist", 7, response = 7),
-    DUEL("Challenge", 1, response = 14),
-    CLAN_WAR("Challenge", 1, response = 14),
-    ALLIANCE("Alliance", 8, response = 50)
-}
-
 object ChatType {
     const val Game = 0
     const val GameFilter = 109

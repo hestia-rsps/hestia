@@ -5,8 +5,10 @@ import net.mostlyoriginal.api.event.common.EventSystem
 import org.slf4j.LoggerFactory
 import worlds.gregs.hestia.GameServer
 import worlds.gregs.hestia.core.display.client.model.components.Viewport
-import worlds.gregs.hestia.core.entity.player.model.events.PlayerOption
-import worlds.gregs.hestia.core.script.dsl.task.PlayerOptions
+import worlds.gregs.hestia.core.display.window.api.Requests
+import worlds.gregs.hestia.core.display.window.model.PlayerOptions
+import worlds.gregs.hestia.core.display.window.model.Request
+import worlds.gregs.hestia.core.display.window.model.events.PlayerOption
 import worlds.gregs.hestia.game.entity.MessageHandlerSystem
 import worlds.gregs.hestia.network.client.decoders.messages.PlayerOptionMessage
 
@@ -16,6 +18,7 @@ class PlayerOptionMessageHandler : MessageHandlerSystem<PlayerOptionMessage>() {
 
     private val logger = LoggerFactory.getLogger(PlayerOptionMessageHandler::class.java)!!
     private lateinit var viewportMapper: ComponentMapper<Viewport>
+    private lateinit var requests: Requests
 
     override fun initialize() {
         super.initialize()
@@ -33,9 +36,16 @@ class PlayerOptionMessageHandler : MessageHandlerSystem<PlayerOptionMessage>() {
         }
 
         //Find option
-        val choice = PlayerOptions.values().firstOrNull { it.slot == option } ?: PlayerOptions.values().firstOrNull { it.response != -1 && it.response == option }
-        ?: return logger.warn("Cannot find player option $message")
+        val choice = PlayerOptions.getOption(option)
+        val request = Request.getRequest(option)
+        if(choice == null && request == null) {
+            return logger.warn("Cannot find player option $message")
+        }
 
-        es.dispatch(PlayerOption(entityId, playerId, choice))
+        if(request != null && requests.hasRequest(playerId, entityId, request)) {
+            requests.respond(playerId, entityId, request)
+        } else if(choice != null) {
+            es.dispatch(PlayerOption(entityId, playerId, choice))
+        }
     }
 }

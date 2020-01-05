@@ -1,6 +1,6 @@
-package worlds.gregs.hestia.core.entity.player.model.events
+package worlds.gregs.hestia.core.display.window.model.events
 
-import worlds.gregs.hestia.core.script.dsl.task.PlayerOptions
+import worlds.gregs.hestia.core.display.window.model.PlayerOptions
 import worlds.gregs.hestia.core.task.api.event.TargetEvent
 
 /**

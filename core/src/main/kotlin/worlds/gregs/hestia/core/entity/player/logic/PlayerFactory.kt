@@ -9,7 +9,9 @@ import worlds.gregs.hestia.core.display.update.model.components.AppearanceData
 import worlds.gregs.hestia.core.display.update.model.components.DisplayName
 import worlds.gregs.hestia.core.display.update.model.components.Renderable
 import worlds.gregs.hestia.core.display.update.model.components.direction.Face
+import worlds.gregs.hestia.core.display.window.model.components.ContextMenu
 import worlds.gregs.hestia.core.display.window.model.components.GameFrame
+import worlds.gregs.hestia.core.display.window.model.components.RequestList
 import worlds.gregs.hestia.core.display.window.model.components.WindowRelationships
 import worlds.gregs.hestia.core.entity.entity.api.ArchetypeFactory
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
@@ -25,7 +27,6 @@ class PlayerFactory : ArchetypeFactory {
 
     override fun getBuilder(): ArchetypeBuilder {
         return ArchetypeBuilder().add(Player::class, ClientIndex::class, Renderable::class, Position::class, AppearanceData::class, DisplayName::class, Viewport::class, Mobile::class, LastLoadedRegion::class, Shift::class, Face::class, Ghost::class, GameFrame::class,
-//                ClanChatTab::class, CombatStylesTab::class, EmotesTab::class, FriendsChatTab::class, FriendsListTab::class, InventoryTab::class, MagicSpellBookTab::class, MusicPlayerTab::class, NotesTab::class, OptionsTab::class, PrayerListTab::class, StatsTab::class, TaskSystemTab::class, WornEquipmentTab::class, QuestJournalsTab::class, LogoutTab::class, ChatSettings::class, PrivateChat::class,
-                TaskQueue::class, Inventory::class, Member::class, WindowRelationships::class)
+                TaskQueue::class, Inventory::class, Member::class, WindowRelationships::class, ContextMenu::class, RequestList::class)
     }
 }

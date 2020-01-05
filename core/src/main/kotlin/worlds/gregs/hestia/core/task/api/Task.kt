@@ -106,7 +106,6 @@ interface Task : Continuation<Any> {
     }
 
 
-
     /*
         Interact
      */
@@ -134,7 +133,7 @@ interface Task : Continuation<Any> {
 
     infix fun Int.closeWindow(pane: WindowPane) {
         val window = getSystem(WindowSystem::class).getWindow(this, pane)
-        if(window != null) {
+        if (window != null) {
             this closeWindow window
         }
     }
@@ -185,7 +184,7 @@ interface Task : Continuation<Any> {
      */
     suspend fun ItemContainer.validateSlot(slot: Int): Item {
         val item = items.getOrNull(slot)
-        if(item == null) {
+        if (item == null) {
             cancel("Invalid item container slot $slot")
             return item!!
         }
@@ -197,7 +196,7 @@ interface Task : Continuation<Any> {
      */
     suspend fun ItemContainer.validateItem(slot: Int, type: Int): Item? {
         val item = items.getOrNull(slot)
-        if(item == null && type != -1 || item != null && item.type != type) {
+        if (item == null && type != -1 || item != null && item.type != type) {
             cancel("Invalid item container item $slot $type - $item")
             return null
         }
@@ -260,6 +259,10 @@ interface Task : Continuation<Any> {
 
     infix fun Int.message(message: String) = ChatBuilder(this).message(message)
 
+    fun Int.getName(): String {
+        return (this get DisplayName::class).name ?: "null"//Could be expanded to using definitions too
+    }
+
     infix fun ChatBuilder.message(message: String) = chat(apply { this.message = message })
 
     infix fun Int.type(type: Int) = ChatBuilder(this, type = type)
@@ -269,7 +272,6 @@ interface Task : Continuation<Any> {
     infix fun ChatBuilder.tile(tile: Int) = apply { this.tile = tile }
 
     infix fun ChatBuilder.name(name: String) = apply { this.name = name }
-
 
 
     infix fun Int.face(target: Int) {

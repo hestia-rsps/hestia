@@ -6,22 +6,12 @@ import worlds.gregs.hestia.core.display.window.api.Windows.Companion.ResizableGa
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.WorldMap
 import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
 import worlds.gregs.hestia.core.display.window.model.events.WindowOpened
-import worlds.gregs.hestia.core.script.dsl.task.PlayerOptions
+import worlds.gregs.hestia.core.display.window.model.PlayerOptions
 import worlds.gregs.hestia.core.task.api.event.target
 import worlds.gregs.hestia.network.client.encoders.messages.PlayerContextMenuOption
 
-on<WindowOpened> {
-    where { target == FixedGameframe || target == ResizableGameframe }
-    task {
-        val (_, window) = event(this)
-        listOf(PlayerOptions.FOLLOW, PlayerOptions.TRADE, PlayerOptions.ASSIST).forEach {
-            entity send PlayerContextMenuOption(it.string, it.slot, it.top)
-        }
-    }
-}
-
 on<WindowInteraction> {
-    where { target == FixedGameframe }
+    where { target == FixedGameframe || target == ResizableGameframe }
     task {
         val (_, _, widget, _, _, option) = event(this)
         val resizable = target == ResizableGameframe
