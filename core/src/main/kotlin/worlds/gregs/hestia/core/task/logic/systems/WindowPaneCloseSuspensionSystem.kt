@@ -12,28 +12,26 @@ import worlds.gregs.hestia.core.task.api.TaskType
 import worlds.gregs.hestia.core.task.api.Tasks
 import worlds.gregs.hestia.core.task.model.events.ProcessTaskSuspension
 
-data class ScreenCloseSuspension(val screen: Int?, override val continuation: CancellableContinuation<Unit>) : TaskType<Unit>
+data class WindowPaneCloseSuspension(val pane: WindowPane, override val continuation: CancellableContinuation<Unit>) : TaskType<Unit>
 
-suspend fun Task.awaitScreen(screen: Int? = null) = suspendCancellableCoroutine<Unit> {
-    suspension = ScreenCloseSuspension(screen, it)
+suspend fun Task.awaitWindow(pane: WindowPane = WindowPane.MAIN_SCREEN) = suspendCancellableCoroutine<Unit> {
+    suspension = WindowPaneCloseSuspension(pane, it)
 }
 
 /**
- * A [Task] suspension which waits for a screen to close before resuming
- * Note: If screen is null they it waits for any screen to close
- *       If no screen is open when called the suspension is skipped.
+ * A [Task] suspension which waits for any window in a given [WindowPane] to close before resuming
  */
-class ScreenCloseSuspensionSystem : PassiveSystem() {
+class WindowPaneCloseSuspensionSystem : PassiveSystem() {
 
     private lateinit var tasks: Tasks
     private lateinit var windows: Windows
 
     @Subscribe
     private fun handle(event: WindowClosed) {
-        val (entityId, screen) = event
+        val (entityId, window) = event
         val suspension = tasks.getSuspension(entityId)
-        if(suspension is ScreenCloseSuspension) {
-            if(suspension.screen == null || suspension.screen == screen) {
+        if(suspension is WindowPaneCloseSuspension) {
+            if(suspension.pane == windows.getPane(window)) {
                 tasks.resume(entityId, suspension, Unit)
             }
         }
@@ -42,10 +40,9 @@ class ScreenCloseSuspensionSystem : PassiveSystem() {
     @Subscribe(ignoreCancelledEvents = true)
     private fun handleSuspend(event: ProcessTaskSuspension) {
         val (entityId, suspension) = event
-        if(suspension is ScreenCloseSuspension) {
-            val screen = suspension.screen
-            //If no screen open skip
-            if(screen == null && !windows.hasWindow(entityId, WindowPane.MAIN_SCREEN) || screen != null && !windows.hasWindow(entityId, screen)) {
+        if(suspension is WindowPaneCloseSuspension) {
+            //If no pane open skip
+            if(!windows.hasWindow(entityId, suspension.pane)) {
                 tasks.resume(entityId, suspension, Unit)
             }
             event.isCancelled = true

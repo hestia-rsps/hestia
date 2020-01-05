@@ -4,6 +4,7 @@ import world.gregs.hestia.core.network.codec.message.Message
 
 /**
  * Calls a client config by exact file id
+ * Known in client as "varpbit"
  * @param id The file id
  * @param value The value to pass to the config file
  * @param large Whether to encode value with integer rather than short (optional - calculated automatically)

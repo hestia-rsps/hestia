@@ -6,13 +6,13 @@ import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
 import worlds.gregs.hestia.core.display.window.model.events.WindowOpened
 import worlds.gregs.hestia.network.client.encoders.messages.Config
 import worlds.gregs.hestia.network.client.encoders.messages.ConfigGlobal
-import worlds.gregs.hestia.network.client.encoders.messages.WindowWidgetSettings
+import worlds.gregs.hestia.network.client.encoders.messages.WidgetSettings
 
 on<WindowOpened> {
     where { target == PrayerList }
     task {
         val quickPrayers = false
-        entity send WindowWidgetSettings(PrayerList, if (quickPrayers) 42 else 8, 0, 29, options = *intArrayOf(0))
+        entity send WidgetSettings(PrayerList, if (quickPrayers) 42 else 8, 0, 29, options = *intArrayOf(0))
         entity send Config(Configs.PRAYER_POINTS, 990)
         entity send Config(Configs.CURSES, 0)
         entity send ConfigGlobal(181, 0)//Setting quick prayers

@@ -16,7 +16,7 @@ import worlds.gregs.hestia.core.task.api.TaskPriority
 import worlds.gregs.hestia.core.task.api.closeDialogue
 import worlds.gregs.hestia.core.task.api.event.EntityEvent
 import worlds.gregs.hestia.core.task.api.event.TargetEvent
-import worlds.gregs.hestia.core.task.logic.systems.awaitScreen
+import worlds.gregs.hestia.core.task.logic.systems.awaitWindow
 import worlds.gregs.hestia.core.task.model.InactiveTask
 import worlds.gregs.hestia.core.task.model.ReusableTask
 import worlds.gregs.hestia.core.task.model.TaskContinuation
@@ -118,7 +118,7 @@ abstract class ScriptBase : ScriptBuilder() {
             }
 
             if(priority == TaskPriority.Low) {
-                awaitScreen()
+                awaitWindow()
             }
             action()
             closeDialogue()
@@ -133,7 +133,7 @@ abstract class ScriptBase : ScriptBuilder() {
      * @param priority The rule to start the task
      * @param action The suspendable queue to process
      */
-    fun queue(priority: TaskPriority = TaskPriority.Normal, action: SuspendableQueue): SuspendableQueue = if (priority == TaskPriority.Low) extension { awaitScreen(); action() } else action
+    fun queue(priority: TaskPriority = TaskPriority.Normal, action: SuspendableQueue): SuspendableQueue = if (priority == TaskPriority.Low) extension { awaitWindow(); action() } else action
 
     fun task(entityId: Int, priority: TaskPriority = TaskPriority.Normal, action: SuspendableQueue) =
             task(entityId, priority, Unit, action)

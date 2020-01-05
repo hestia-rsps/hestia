@@ -9,9 +9,7 @@ abstract class Requests : SubscriptionSystem(Aspect.all(RequestList::class)) {
 
     abstract fun sendRequest(entityId: Int, target: Int, request: Request)
 
-    abstract fun respond(entityId: Int, target: Int, request: Request)
-
-    abstract fun accept(entityId: Int, target: Int, request: Request)
+    abstract fun acceptRequest(entityId: Int, target: Int, request: Request)
 
     abstract fun hasRequest(entityId: Int, target: Int, request: Request): Boolean
 

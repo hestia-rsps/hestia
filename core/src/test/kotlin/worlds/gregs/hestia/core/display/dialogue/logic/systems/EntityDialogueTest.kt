@@ -15,7 +15,7 @@ import worlds.gregs.hestia.core.display.dialogue.model.events.ContinueDialogue
 import worlds.gregs.hestia.core.task.api.TaskType
 import worlds.gregs.hestia.core.task.api.Tasks
 import worlds.gregs.hestia.core.task.model.events.ProcessTaskSuspension
-import worlds.gregs.hestia.network.client.encoders.messages.WindowWidgetAnimation
+import worlds.gregs.hestia.network.client.encoders.messages.WidgetAnimation
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetHeadMob
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetHeadPlayer
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetItem
@@ -112,7 +112,7 @@ internal class EntityDialogueTest : MockkGame() {
             system.getTitle(entityId, suspension)
             system.send(entityId,242, 3, "Title", listOf("Line one", "Line two"))
             es.send(entityId, WidgetHeadMob(242, 2, mob))
-            es.send(entityId, WindowWidgetAnimation(242, 2, animation))
+            es.send(entityId, WidgetAnimation(242, 2, animation))
         }
     }
 
@@ -132,7 +132,7 @@ internal class EntityDialogueTest : MockkGame() {
             system.getTitle(entityId, suspension)
             system.send(entityId,243, 3, "Title", listOf("Line one", "Line two", "Line three"))
             es.send(entityId, WidgetHeadPlayer(243, 2))
-            es.send(entityId, WindowWidgetAnimation(243, 2, animation))
+            es.send(entityId, WidgetAnimation(243, 2, animation))
         }
     }
 

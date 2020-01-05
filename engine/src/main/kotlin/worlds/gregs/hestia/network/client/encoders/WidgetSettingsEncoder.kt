@@ -5,11 +5,11 @@ import world.gregs.hestia.core.network.codec.packet.Endian
 import world.gregs.hestia.core.network.codec.packet.Modifier
 import world.gregs.hestia.core.network.codec.packet.PacketBuilder
 import world.gregs.hestia.core.network.protocol.ClientOpcodes.WIDGET_COMPONENT_SETTINGS
-import worlds.gregs.hestia.network.client.encoders.messages.WindowWidgetSettings
+import worlds.gregs.hestia.network.client.encoders.messages.WidgetSettings
 
-class WindowWidgetSettingsEncoder : MessageEncoder<WindowWidgetSettings>() {
+class WidgetSettingsEncoder : MessageEncoder<WidgetSettings>() {
 
-    override fun encode(builder: PacketBuilder, message: WindowWidgetSettings) {
+    override fun encode(builder: PacketBuilder, message: WidgetSettings) {
         val (id, widget, fromSlot, toSlot, settings) = message
         builder.apply {
             writeOpcode(WIDGET_COMPONENT_SETTINGS)

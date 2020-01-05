@@ -1,14 +1,15 @@
 package worlds.gregs.hestia.core.display.window.model
 
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.AncientSpellbook
+import worlds.gregs.hestia.core.display.window.api.Windows.Companion.AreaStatusIcon
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.ChatBackground
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.ChatBox
-import worlds.gregs.hestia.core.display.window.api.Windows.Companion.ChatSettings
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.ClanChat
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.CombatStyles
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.DungeoneeringSpellbook
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.Emotes
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.EnergyOrb
+import worlds.gregs.hestia.core.display.window.api.Windows.Companion.FilterButtons
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.FixedGameframe
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.FriendsChat
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.FriendsList
@@ -28,6 +29,7 @@ import worlds.gregs.hestia.core.display.window.api.Windows.Companion.ResizableGa
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.Stats
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.SummoningOrb
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.TaskSystem
+import worlds.gregs.hestia.core.display.window.api.Windows.Companion.TradeSide
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.WorldMap
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.WornEquipment
 
@@ -39,7 +41,7 @@ enum class WindowPane(val fixed: Int = 0, val resizable: Int, vararg val windows
     //Chat box
     CHAT_BACKGROUND(9, 9, ChatBackground),
     CHAT_BOX(192, 73, ChatBox),
-    CHAT_SETTINGS(68, 19, ChatSettings),
+    CHAT_SETTINGS(68, 19, FilterButtons),
     PRIVATE_CHAT(17, 72, PrivateChat),
 
     //Minimap
@@ -54,7 +56,7 @@ enum class WindowPane(val fixed: Int = 0, val resizable: Int, vararg val windows
     EMOTES(217, 103, Emotes),
     FRIENDS_CHAT(214, 100, FriendsChat),
     FRIENDS_LIST(213, 99, FriendsList),
-    INVENTORY(208, 94, Inventory),
+    INVENTORY(208, 94, Inventory, TradeSide),
     LOGOUT(222, 108, Logout),
     SPELLBOOK(211, 97, ModernSpellbook, LunarSpellbook, AncientSpellbook, DungeoneeringSpellbook),
     MUSIC_PLAYER(218, 104, MusicPlayer),
@@ -67,6 +69,7 @@ enum class WindowPane(val fixed: Int = 0, val resizable: Int, vararg val windows
     WORN_EQUIPMENT(209, 95, WornEquipment),
 
     //Main screen
+    AREA(15, 15, AreaStatusIcon),
     OVERLAY(9, 12),
     MAIN_SCREEN(9, 12),
     FULL_SCREEN(0, 0, ResizableGameframe, FixedGameframe, WorldMap);

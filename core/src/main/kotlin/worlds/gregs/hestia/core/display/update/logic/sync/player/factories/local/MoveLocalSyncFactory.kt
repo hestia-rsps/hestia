@@ -2,22 +2,23 @@ package worlds.gregs.hestia.core.display.update.logic.sync.player.factories.loca
 
 import com.artemis.ComponentMapper
 import worlds.gregs.hestia.artemis.bag.map.EntitySyncBag
-import worlds.gregs.hestia.core.display.update.model.components.Moving
 import worlds.gregs.hestia.core.display.update.api.SyncFactory
 import worlds.gregs.hestia.core.display.update.logic.sync.SynchronizeSystem
 import worlds.gregs.hestia.core.display.update.logic.sync.ViewportSystem.Companion.DEFAULT_VIEW_DISTANCE
-import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.display.update.logic.sync.player.stages.MoveLocalPlayerSync
+import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.world.movement.api.Mobile
+import worlds.gregs.hestia.core.world.movement.model.MovementType
+import worlds.gregs.hestia.core.world.movement.model.components.types.Movement
 
 class MoveLocalSyncFactory : SyncFactory<MoveLocalPlayerSync>(true, false, true) {
 
-    private lateinit var movingMapper: ComponentMapper<Moving>
+    private lateinit var movementMapper: ComponentMapper<Movement>
     private lateinit var mobileMapper: ComponentMapper<Mobile>
     private lateinit var positionMapper: ComponentMapper<Position>
 
     override fun change(sync: SynchronizeSystem<*>, bag: EntitySyncBag, other: Int): Boolean {
-        return movingMapper.has(other)
+        return movementMapper.get(other).actual == MovementType.Move
     }
 
     override fun create(main: Int, other: Int, update: Boolean): MoveLocalPlayerSync {

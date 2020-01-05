@@ -1,13 +1,13 @@
 package worlds.gregs.hestia.content.activity.skill
 
 import worlds.gregs.hestia.artemis.send
+import worlds.gregs.hestia.content.activity.skill.Skill.*
 import worlds.gregs.hestia.core.display.client.model.Configs
+import worlds.gregs.hestia.core.display.window.api.Windows.Companion.SkillGuide
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.SkillLevelDetails
-import worlds.gregs.hestia.core.display.window.api.Windows.Companion.SkillMenu
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.Stats
 import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
 import worlds.gregs.hestia.core.display.window.model.events.WindowOpened
-import worlds.gregs.hestia.game.entity.Skill
 import worlds.gregs.hestia.network.client.encoders.messages.Config
 import worlds.gregs.hestia.network.client.encoders.messages.ConfigFile
 import worlds.gregs.hestia.network.client.encoders.messages.SkillLevel
@@ -15,12 +15,12 @@ import kotlin.math.pow
 
 lateinit var es: EventSystem
 
-val flash = listOf(Skill.ATTACK, Skill.STRENGTH, Skill.DEFENCE, Skill.RANGE, Skill.PRAYER, Skill.MAGIC, Skill.CONSTITUTION, Skill.AGILITY, Skill.HERBLORE, Skill.THIEVING, Skill.CRAFTING, Skill.FLETCHING, Skill.MINING,
-        Skill.SMITHING, Skill.FISHING, Skill.COOKING, Skill.FIREMAKING, Skill.WOODCUTTING, Skill.RUNECRAFTING, Skill.SLAYER, Skill.FARMING, Skill.CONSTRUCTION, Skill.HUNTER, Skill.SUMMONING, Skill.DUNGEONEERING)
-val stats = listOf(Skill.STRENGTH, Skill.AGILITY, Skill.DEFENCE, Skill.HERBLORE, Skill.FISHING, Skill.RANGE, Skill.THIEVING, Skill.COOKING, Skill.PRAYER, Skill.CRAFTING, Skill.MAGIC, Skill.FLETCHING, Skill.RUNECRAFTING,
-        Skill.SLAYER, Skill.FARMING, Skill.CONSTRUCTION, Skill.HUNTER, Skill.SUMMONING, Skill.DUNGEONEERING, Skill.WOODCUTTING, Skill.FIREMAKING, Skill.SMITHING, Skill.MINING, Skill.CONSTITUTION, Skill.ATTACK)
-val menu = listOf(Skill.ATTACK, Skill.STRENGTH, Skill.RANGE, Skill.MAGIC, Skill.DEFENCE, Skill.CONSTITUTION, Skill.PRAYER, Skill.AGILITY, Skill.HERBLORE, Skill.THIEVING, Skill.CRAFTING, Skill.RUNECRAFTING,
-        Skill.MINING, Skill.SMITHING, Skill.FISHING, Skill.COOKING, Skill.FIREMAKING, Skill.WOODCUTTING, Skill.FLETCHING, Skill.SLAYER, Skill.FARMING, Skill.CONSTRUCTION, Skill.HUNTER, Skill.SUMMONING, Skill.DUNGEONEERING)
+val flash = listOf(ATTACK, STRENGTH, DEFENCE, RANGE, PRAYER, MAGIC, CONSTITUTION, AGILITY, HERBLORE, THIEVING, CRAFTING, FLETCHING, MINING,
+        SMITHING, FISHING, COOKING, FIREMAKING, WOODCUTTING, RUNECRAFTING, SLAYER, FARMING, CONSTRUCTION, HUNTER, SUMMONING, DUNGEONEERING)
+val stats = listOf(STRENGTH, AGILITY, DEFENCE, HERBLORE, FISHING, RANGE, THIEVING, COOKING, PRAYER, CRAFTING, MAGIC, FLETCHING, RUNECRAFTING,
+        SLAYER, FARMING, CONSTRUCTION, HUNTER, SUMMONING, DUNGEONEERING, WOODCUTTING, FIREMAKING, SMITHING, MINING, CONSTITUTION, ATTACK)
+val menu = listOf(ATTACK, STRENGTH, RANGE, MAGIC, DEFENCE, CONSTITUTION, PRAYER, AGILITY, HERBLORE, THIEVING, CRAFTING, RUNECRAFTING,
+        MINING, SMITHING, FISHING, COOKING, FIREMAKING, WOODCUTTING, FLETCHING, SLAYER, FARMING, CONSTRUCTION, HUNTER, SUMMONING, DUNGEONEERING)
 
 on<WindowOpened> {
     where { target == Stats }
@@ -29,7 +29,7 @@ on<WindowOpened> {
         val total = flash.filter { false /* has leveled up */ }.map { 2.0.pow(it.ordinal) }.sum().toInt()
         es.send(entityId, Config(Configs.SKILL_STAT_FLASH, total))
 
-        Skill.values().forEach {
+        values().forEach {
             es.send(entityId, SkillLevel(it.ordinal, 99, 14000000))
         }
     }
@@ -62,11 +62,11 @@ on<WindowInteraction> {
                  */
                 val config = if(leveledUp) menuIndex * 8 + extra else menuIndex
                 entity send Config(if(leveledUp) Configs.LEVEL_UP_DETAILS else Configs.SKILL_MENU, config)
-                entity openWindow if(leveledUp) SkillLevelDetails else SkillMenu
+                entity openWindow if(leveledUp) SkillLevelDetails else SkillGuide
                 if(leveledUp) {
                     //TODO Replace with SKILL_STAT_FLASH config refresh once level up system is added
                     //Disable flash
-                    entity send ConfigFile(if(skill == Skill.DUNGEONEERING) 7756 else 4731 + menuIndex, 0)
+                    entity send ConfigFile(if(skill == DUNGEONEERING) 7756 else 4731 + menuIndex, 0)
                 }
             }
         }

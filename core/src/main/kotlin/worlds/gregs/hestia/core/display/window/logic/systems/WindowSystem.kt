@@ -3,6 +3,7 @@ package worlds.gregs.hestia.core.display.window.logic.systems
 import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.event.common.Subscribe
+import org.slf4j.LoggerFactory
 import worlds.gregs.hestia.artemis.send
 import worlds.gregs.hestia.core.display.window.api.Windows
 import worlds.gregs.hestia.core.display.window.model.WindowPane
@@ -37,10 +38,11 @@ class WindowSystem : Windows() {
         //Gameframe components
         listOf(
                 if (gameFrame.resizable) ResizableGameframe else FixedGameframe,//Gameframe
-                ChatBox, ChatBackground, ChatSettings, PrivateChat,//Chat box
+                ChatBox, ChatBackground, FilterButtons, PrivateChat,//Chat box
                 HealthOrb, PrayerOrb, EnergyOrb, SummoningOrb,//Minimap
                 CombatStyles, TaskSystem, Stats, QuestJournals, Inventory, WornEquipment, PrayerList, ModernSpellbook,//Tabs
-                FriendsList, FriendsChat, ClanChat, Options, Emotes, MusicPlayer, Notes
+                FriendsList, FriendsChat, ClanChat, Options, Emotes, MusicPlayer, Notes,
+                AreaStatusIcon
         ).forEach {
             openWindow(entityId, it)
         }
@@ -95,16 +97,16 @@ class WindowSystem : Windows() {
         es.dispatch(WindowOpened(entityId, id))
     }
 
-    override fun closeWindow(entityId: Int, id: Int, silent: Boolean) {
+    override fun closeWindow(entityId: Int, window: Int, silent: Boolean) {
         val windowRelationships = windowRelationshipsMapper.get(entityId)
         val relationships = windowRelationships.relationships
-        val parent = relationships.getParent(id)
-        if (parent != id) {
+        val parent = relationships.getParent(window)
+        if (parent != window) {
             val gameFrame = gameFrameMapper.get(entityId)
-            val index = getIndex(id, gameFrame.resizable)!!
-            relationships[parent]!!.remove(id)
+            val index = getIndex(window, gameFrame.resizable)
+            relationships[parent]!!.remove(window)
             es.send(entityId, WidgetClose(parent, index))
-            es.dispatch(WindowClosed(entityId, id, silent))
+            es.dispatch(WindowClosed(entityId, window, silent))
         } else {
             //Window not open
         }
@@ -171,8 +173,15 @@ class WindowSystem : Windows() {
         }
     }
 
+    override fun getPane(id: Int): WindowPane = panes[id] ?: WindowPane.MAIN_SCREEN
+
     @Subscribe
-    private fun openWindow(event: OpenWindow) = openWindow(event.entity, event.target)
+    private fun openWindow(event: OpenWindow) {
+        val result = openWindow(event.entity, event.target)
+        if(result is WindowResult.Issue) {
+            logger.warn("Issue opening window $event $result")
+        }
+    }
 
     @Subscribe
     private fun closeWindow(event: CloseWindow) = closeWindow(event.entity, event.target)
@@ -193,8 +202,6 @@ class WindowSystem : Windows() {
     private fun getIndex(id: Int, resizeable: Boolean): Int {
         return getPane(id).getIndex(resizeable)
     }
-
-    private fun getPane(id: Int): WindowPane = panes[id] ?: WindowPane.MAIN_SCREEN
 
     private fun WindowPane.getIndex(resizeable: Boolean): Int {
         return if (resizeable) resizable else fixed
@@ -238,6 +245,10 @@ class WindowSystem : Windows() {
             }
         }
         return child
+    }
+
+    companion object {
+        private val logger = LoggerFactory.getLogger(WindowSystem::class.java)!!
     }
 
 }

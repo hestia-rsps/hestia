@@ -60,7 +60,8 @@ class ClientCodec : MessageHandshakeCodec() {
         bind(PingDecoder())
 
         bind(ClientResponseEncoder())
-        bind(WindowWidgetSettingsEncoder())
+        bind(WidgetSettingsEncoder())
+        bind(WidgetVisibilityEncoder())
         bind(ConfigEncoder())
         bind(ConfigFileEncoder())
         bind(ConfigGlobalEncoder())
@@ -78,7 +79,7 @@ class ClientCodec : MessageHandshakeCodec() {
         bind(ScriptEncoder())
         bind(SkillLevelEncoder())
         bind(WidgetCloseEncoder())
-        bind(WindowWidgetAnimationEncoder())
+        bind(WidgetAnimationEncoder())
         bind(WidgetComponentTextEncoder())
         bind(WidgetHeadMobEncoder())
         bind(WidgetHeadPlayerEncoder())

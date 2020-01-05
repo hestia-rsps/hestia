@@ -7,19 +7,20 @@ import worlds.gregs.hestia.artemis.Aspect
 import worlds.gregs.hestia.artemis.players
 import worlds.gregs.hestia.artemis.toArray
 import worlds.gregs.hestia.core.display.update.logic.DirectionUtils.Companion.getOffset
-import worlds.gregs.hestia.core.display.update.model.components.Moving
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.mob.api.MobChunk
 import worlds.gregs.hestia.core.entity.player.api.PlayerChunk
 import worlds.gregs.hestia.core.mobs
+import worlds.gregs.hestia.core.world.movement.model.MovementType
 import worlds.gregs.hestia.core.world.movement.model.components.Shift
 import worlds.gregs.hestia.core.world.movement.model.components.calc.Follow
 import worlds.gregs.hestia.core.world.movement.model.components.calc.Step
+import worlds.gregs.hestia.core.world.movement.model.components.types.Movement
 
 @Wire(failOnNull = false)
 class FollowSystem : IteratingSystem(Aspect.all(Position::class, Shift::class)) {
     private lateinit var followMapper: ComponentMapper<Follow>
-    private lateinit var movingMapper: ComponentMapper<Moving>
+    private lateinit var movementMapper: ComponentMapper<Movement>
     private lateinit var positionMapper: ComponentMapper<Position>
     private lateinit var stepMapper: ComponentMapper<Step>
     private lateinit var shiftMapper: ComponentMapper<Shift>
@@ -39,7 +40,7 @@ class FollowSystem : IteratingSystem(Aspect.all(Position::class, Shift::class)) 
         val shift = shiftMapper.get(entityId)
 
         //Cancel follow if target changes plane or instant moves
-        if(shift.plane != 0 || movingMapper.has(entityId)) {
+        if(shift.plane != 0 || movementMapper.get(entityId).actual == MovementType.Move) {
             entities.forEach {
                 followMapper.remove(it)
             }

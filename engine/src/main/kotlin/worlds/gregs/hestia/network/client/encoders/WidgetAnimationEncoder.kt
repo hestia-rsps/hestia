@@ -5,11 +5,11 @@ import world.gregs.hestia.core.network.codec.packet.Endian
 import world.gregs.hestia.core.network.codec.packet.Modifier
 import world.gregs.hestia.core.network.codec.packet.PacketBuilder
 import world.gregs.hestia.core.network.protocol.ClientOpcodes.WIDGET_ANIMATION
-import worlds.gregs.hestia.network.client.encoders.messages.WindowWidgetAnimation
+import worlds.gregs.hestia.network.client.encoders.messages.WidgetAnimation
 
-class WindowWidgetAnimationEncoder : MessageEncoder<WindowWidgetAnimation>() {
+class WidgetAnimationEncoder : MessageEncoder<WidgetAnimation>() {
 
-    override fun encode(builder: PacketBuilder, message: WindowWidgetAnimation) {
+    override fun encode(builder: PacketBuilder, message: WidgetAnimation) {
         val (id, widget, animation) = message
         builder.apply {
             writeOpcode(WIDGET_ANIMATION)

@@ -23,6 +23,7 @@ import worlds.gregs.hestia.core.display.update.model.components.ForceChat
 import worlds.gregs.hestia.core.display.update.model.components.Transform
 import worlds.gregs.hestia.core.display.window.logic.systems.WindowSystem
 import worlds.gregs.hestia.core.display.window.model.WindowPane
+import worlds.gregs.hestia.core.display.window.model.actions.CloseWindow
 import worlds.gregs.hestia.core.display.window.model.actions.OpenWindow
 import worlds.gregs.hestia.core.display.window.model.actions.RefreshWindow
 import worlds.gregs.hestia.core.entity.entity.logic.systems.update.animate
@@ -40,8 +41,10 @@ import worlds.gregs.hestia.core.entity.item.floor.model.events.CreateFloorItem
 import worlds.gregs.hestia.core.entity.player.model.events.UpdateAppearance
 import worlds.gregs.hestia.core.script.dsl.task.*
 import worlds.gregs.hestia.core.task.logic.systems.TaskSystem
+import worlds.gregs.hestia.core.world.movement.model.MovementType
 import worlds.gregs.hestia.core.world.movement.model.components.calc.Follow
 import worlds.gregs.hestia.core.world.movement.model.components.types.MoveStep
+import worlds.gregs.hestia.core.world.movement.model.components.types.Movement
 import worlds.gregs.hestia.game.update.blocks.Marker
 import worlds.gregs.hestia.service.cache.definition.definitions.ItemDefinition
 import worlds.gregs.hestia.service.cache.definition.systems.ItemDefinitionSystem
@@ -78,6 +81,10 @@ interface Task : Continuation<Any> {
     suspend fun cancel(message: String) = cancel(TaskCancellation.Cancellation(message))
 
     infix fun <T : Component> Int.get(c: KClass<T>): T {
+        return world.getMapper(c.java).get(this)
+    }
+
+    infix fun <T : Component> Int.getUnsafe(c: KClass<T>): T? {
         return world.getMapper(c.java).get(this)
     }
 
@@ -120,7 +127,7 @@ interface Task : Continuation<Any> {
         Windows
      */
     infix fun Int.openWindow(window: Int) {
-        world dispatch OpenWindow(this, window)//TODO needs callback
+        world dispatch OpenWindow(this, window)
     }
 
     infix fun Int.refreshWindow(window: Int) {
@@ -128,7 +135,7 @@ interface Task : Continuation<Any> {
     }
 
     infix fun Int.closeWindow(window: Int) {
-        world dispatch RefreshWindow(this, window)
+        world dispatch CloseWindow(this, window)
     }
 
     infix fun Int.closeWindow(pane: WindowPane) {
@@ -253,6 +260,11 @@ interface Task : Continuation<Any> {
         val follow = this create Follow::class
         follow.entity = target
     }
+
+    fun Int.movementType() = (entity get Movement::class).actual
+    fun Int.isRunning() = movementType() == MovementType.Run
+    fun Int.isWalking() = movementType() == MovementType.Walk
+    fun Int.isMoving() = movementType() == MovementType.Move
     /*
         Message
      */

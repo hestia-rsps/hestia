@@ -1,4 +1,4 @@
-package worlds.gregs.hestia.game.entity
+package worlds.gregs.hestia.content.activity.skill
 
 enum class Skill {
     ATTACK,

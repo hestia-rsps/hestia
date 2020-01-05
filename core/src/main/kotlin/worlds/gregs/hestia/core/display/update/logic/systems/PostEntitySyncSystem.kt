@@ -32,7 +32,6 @@ class PostEntitySyncSystem : IteratingSystem(Aspect.all(Renderable::class)) {
     private lateinit var transformMapper: ComponentMapper<Transform>
     private lateinit var walkMapper: ComponentMapper<WalkStep>
     private lateinit var runMapper: ComponentMapper<RunStep>
-    private lateinit var movingMapper: ComponentMapper<Moving>
     private lateinit var batchAnimationsMapper: ComponentMapper<BatchAnimations>
     private lateinit var colourOverlayMapper: ComponentMapper<ColourOverlay>
     private lateinit var timeBarMapper: ComponentMapper<TimeBar>
@@ -54,7 +53,6 @@ class PostEntitySyncSystem : IteratingSystem(Aspect.all(Renderable::class)) {
         transformMapper.remove(entityId)
         walkMapper.remove(entityId)
         runMapper.remove(entityId)
-        movingMapper.remove(entityId)
         batchAnimationsMapper.remove(entityId)
         colourOverlayMapper.remove(entityId)
         timeBarMapper.remove(entityId)

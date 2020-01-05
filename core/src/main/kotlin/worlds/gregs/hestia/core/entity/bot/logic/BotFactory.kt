@@ -16,11 +16,13 @@ import worlds.gregs.hestia.core.entity.item.container.model.Inventory
 import worlds.gregs.hestia.core.task.model.components.TaskQueue
 import worlds.gregs.hestia.core.world.collision.model.components.Ghost
 import worlds.gregs.hestia.core.world.movement.api.Mobile
+import worlds.gregs.hestia.core.world.movement.model.components.types.Movement
 import worlds.gregs.hestia.game.entity.Player
 
 class BotFactory : ArchetypeFactory {
 
     override fun getBuilder(): ArchetypeBuilder {
-        return ArchetypeBuilder().add(Player::class, ClientIndex::class, Renderable::class, Position::class, AppearanceData::class, DisplayName::class, Mobile::class, Ghost::class, TaskQueue::class, Viewport::class, Inventory::class, WindowRelationships::class, ContextMenu::class, RequestList::class)
+        return ArchetypeBuilder().add(Player::class, ClientIndex::class, Renderable::class, Position::class, AppearanceData::class, DisplayName::class, Mobile::class, Ghost::class, TaskQueue::class, Viewport::class, Inventory::class, WindowRelationships::class,
+                ContextMenu::class, RequestList::class, Movement::class)
     }
 }

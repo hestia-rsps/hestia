@@ -5,7 +5,7 @@ import worlds.gregs.hestia.core.display.window.api.Windows.Companion.CombatStyle
 import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
 import worlds.gregs.hestia.core.display.window.model.events.WindowOpened
 import worlds.gregs.hestia.network.client.encoders.messages.Config
-import worlds.gregs.hestia.network.client.encoders.messages.WindowWidgetSettings
+import worlds.gregs.hestia.network.client.encoders.messages.WidgetSettings
 
 on<WindowOpened> {
     where { target == CombatStyles }
@@ -33,6 +33,6 @@ on<WindowInteraction> {
 
 fun Task.toggle(unlock: Boolean) {
     for (widget in 11..14) {
-        entity send WindowWidgetSettings(CombatStyles, widget, -1, 0, if (unlock) 2 else 0)
+        entity send WidgetSettings(CombatStyles, widget, -1, 0, if (unlock) 2 else 0)
     }
 }

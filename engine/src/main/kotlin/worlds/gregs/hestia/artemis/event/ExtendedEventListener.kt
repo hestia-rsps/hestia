@@ -29,7 +29,7 @@ class ExtendedEventListener(private val priority: Int, private val skipCancelled
     }
 
     override fun compareTo(other: ExtendedEventListener): Int {
-        return other.priority - priority
+        return priority - other.priority
     }
 
 }

@@ -1,10 +1,10 @@
 package worlds.gregs.hestia.content.display.windows.main
 
-import worlds.gregs.hestia.core.display.window.api.Windows.Companion.ChatSettings
+import worlds.gregs.hestia.core.display.window.api.Windows.Companion.FilterButtons
 import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
 
 on<WindowInteraction> {
-    where { target == ChatSettings }
+    where { target == FilterButtons }
     task {
         val (_, _, widget, _, _, option) = event(this)
         when(widget) {

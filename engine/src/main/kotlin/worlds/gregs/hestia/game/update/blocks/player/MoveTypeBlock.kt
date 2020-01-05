@@ -2,4 +2,7 @@ package worlds.gregs.hestia.game.update.blocks.player
 
 import worlds.gregs.hestia.game.update.UpdateBlock
 
-data class MoveTypeBlock(override val flag: Int, val moving: Boolean, val walking: Boolean, val running: Boolean) : UpdateBlock
+/**
+ * @param movementType walk=1, run=2, instant move=127
+ */
+data class MoveTypeBlock(override val flag: Int, val movementType: Int) : UpdateBlock

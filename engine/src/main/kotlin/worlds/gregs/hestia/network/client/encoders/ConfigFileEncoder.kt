@@ -18,7 +18,7 @@ class ConfigFileEncoder : MessageEncoder<ConfigFile>() {
                 writeShort(id)
             } else {
                 writeByte(value, Modifier.SUBTRACT)
-                writeShort(value, Modifier.ADD)
+                writeShort(id, Modifier.ADD)
             }
         }
     }

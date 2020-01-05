@@ -5,7 +5,6 @@ import net.mostlyoriginal.api.event.common.EventSystem
 import org.slf4j.LoggerFactory
 import worlds.gregs.hestia.GameServer
 import worlds.gregs.hestia.core.display.client.model.components.Viewport
-import worlds.gregs.hestia.core.display.window.api.Requests
 import worlds.gregs.hestia.core.display.window.model.PlayerOptions
 import worlds.gregs.hestia.core.display.window.model.Request
 import worlds.gregs.hestia.core.display.window.model.events.PlayerOption
@@ -18,7 +17,6 @@ class PlayerOptionMessageHandler : MessageHandlerSystem<PlayerOptionMessage>() {
 
     private val logger = LoggerFactory.getLogger(PlayerOptionMessageHandler::class.java)!!
     private lateinit var viewportMapper: ComponentMapper<Viewport>
-    private lateinit var requests: Requests
 
     override fun initialize() {
         super.initialize()
@@ -42,10 +40,6 @@ class PlayerOptionMessageHandler : MessageHandlerSystem<PlayerOptionMessage>() {
             return logger.warn("Cannot find player option $message")
         }
 
-        if(request != null && requests.hasRequest(playerId, entityId, request)) {
-            requests.respond(playerId, entityId, request)
-        } else if(choice != null) {
-            es.dispatch(PlayerOption(entityId, playerId, choice))
-        }
+        es.dispatch(PlayerOption(entityId, playerId, choice ?: request?.option ?: return))
     }
 }

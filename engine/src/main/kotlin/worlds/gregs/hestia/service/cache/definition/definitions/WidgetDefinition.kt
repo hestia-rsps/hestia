@@ -344,9 +344,9 @@ class WidgetDefinition {
         mouseExitHandler = decodeScript(buffer)
         anObjectArray4771 = decodeScript(buffer)
         anObjectArray4768 = decodeScript(buffer)
-        anObjectArray4807 = decodeScript(buffer)
+        anObjectArray4807 = decodeScript(buffer)//State/value change
         invUpdateHandler = decodeScript(buffer)
-        anObjectArray4788 = decodeScript(buffer)
+        anObjectArray4788 = decodeScript(buffer)//Update/refresh
         updateHandler = decodeScript(buffer)
         anObjectArray4770 = decodeScript(buffer)
         if (i >= 0) {

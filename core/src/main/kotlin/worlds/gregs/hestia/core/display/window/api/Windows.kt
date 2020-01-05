@@ -37,14 +37,16 @@ abstract class Windows : SubscriptionSystem(Aspect.all(WindowRelationships::clas
 
     abstract fun verifyWindow(entityId: Int, hash: Int): Boolean
 
+    abstract fun getPane(id: Int): WindowPane
 
     companion object {
+        //https://www.rune-server.ee/runescape-development/rs-503-client-server/configuration/683354-interface-list-official-names.html
         const val FixedGameframe = 548
         const val ResizableGameframe = 746
 
         const val ChatBackground = 137
         const val ChatBox = 752
-        const val ChatSettings = 751
+        const val FilterButtons = 751
         const val PrivateChat = 754
 
         const val EnergyOrb = 750
@@ -74,15 +76,19 @@ abstract class Windows : SubscriptionSystem(Aspect.all(WindowRelationships::clas
 
         const val WorldMap = 755
 
-        const val MainScreen = 0
         const val EquipmentBonuses = 667
         const val FriendsChatSetup = 1108
         const val GraphicsOptions = 742
         const val ItemsKeptOnDeath = 17
         const val PriceChecker = 206
         const val SkillLevelDetails = 741
-        const val SkillMenu = 499
+        const val SkillGuide = 499
         const val SoundOptions = 743
         const val TaskList = 917
+        const val TradeConfirm = 334
+        const val TradeMain = 335
+        const val TradeSide = 336
+        const val AssistXP = 301
+        const val AreaStatusIcon = 745
     }
 }

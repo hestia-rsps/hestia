@@ -10,7 +10,7 @@ import world.gregs.hestia.core.network.codec.message.Message
  * @param toSlot The end slot index
  * @param settings The settings hash
  */
-data class WindowWidgetSettings(val id: Int, val widget: Int, val fromSlot: Int, val toSlot: Int, val settings: Int) : Message {
+data class WidgetSettings(val id: Int, val widget: Int, val fromSlot: Int, val toSlot: Int, val settings: Int) : Message {
 
     constructor(id: Int, widget: Int, fromSlot: Int, toSlot: Int, vararg options: Int) : this(id, widget, fromSlot, toSlot, settings(*options))
 
