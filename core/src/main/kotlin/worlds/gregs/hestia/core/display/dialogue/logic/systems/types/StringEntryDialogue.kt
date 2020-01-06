@@ -36,11 +36,11 @@ class StringEntryDialogueSystem : DialogueBaseSystem() {
 
     @Subscribe
     private fun handleInput(event: StringEntered) {
-        val (entityId, text) = event
-        val suspension = tasks.getSuspension(entityId)
+        val (text) = event
+        val suspension = tasks.getSuspension(event.entity)
         if (suspension is StringEntryDialogue) {
             //Continue
-            tasks.resume(entityId, suspension, text)
+            tasks.resume(event.entity, suspension, text)
         } else {
             logger.warn("Unexpected dialogue suspension task $suspension")
         }

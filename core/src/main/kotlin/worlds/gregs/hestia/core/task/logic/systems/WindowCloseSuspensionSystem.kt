@@ -27,11 +27,11 @@ class WindowCloseSuspensionSystem : PassiveSystem() {
 
     @Subscribe
     private fun handle(event: WindowClosed) {
-        val (entityId, window) = event
-        val suspension = tasks.getSuspension(entityId)
+        val (window) = event
+        val suspension = tasks.getSuspension(event.entity)
         if(suspension is WindowCloseSuspension) {
             if(suspension.window == window) {
-                tasks.resume(entityId, suspension, Unit)
+                tasks.resume(event.entity, suspension, Unit)
             }
         }
     }

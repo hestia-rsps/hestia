@@ -1,5 +1,5 @@
 package worlds.gregs.hestia.core.world.movement.model.events
 
-import worlds.gregs.hestia.core.task.api.event.EntityEvent
+import worlds.gregs.hestia.core.action.WorldEvent
 
-data class Moved(override val entity: Int) : EntityEvent
+data class Moved(val entity: Int) : WorldEvent()

@@ -7,6 +7,7 @@ import org.slf4j.LoggerFactory
 import worlds.gregs.hestia.GameServer
 import worlds.gregs.hestia.artemis.Aspect
 import worlds.gregs.hestia.artemis.toArray
+import worlds.gregs.hestia.core.action.perform
 import worlds.gregs.hestia.core.display.window.api.Windows
 import worlds.gregs.hestia.core.entity.`object`.model.components.GameObject
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
@@ -62,6 +63,6 @@ class WidgetOnObjectHandler : MessageHandlerSystem<WidgetOnObject>() {
         val objectId = landObjects.list[pos]?.firstOrNull { gameObjectMapper.get(it).id == id }
                 ?: return logger.warn("Invalid widget on object message $message")
 
-        es.dispatch(ItemOnObject(entityId, objectId, hash, slot, type))
+        es.perform(entityId, ItemOnObject(objectId, hash, slot, type))
     }
 }

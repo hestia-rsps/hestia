@@ -4,6 +4,7 @@ import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.event.common.EventSystem
 import org.slf4j.LoggerFactory
 import worlds.gregs.hestia.GameServer
+import worlds.gregs.hestia.core.action.perform
 import worlds.gregs.hestia.core.display.client.model.components.Viewport
 import worlds.gregs.hestia.core.display.window.model.PlayerOptions
 import worlds.gregs.hestia.core.display.window.model.Request
@@ -40,6 +41,6 @@ class PlayerOptionMessageHandler : MessageHandlerSystem<PlayerOptionMessage>() {
             return logger.warn("Cannot find player option $message")
         }
 
-        es.dispatch(PlayerOption(entityId, playerId, choice ?: request?.option ?: return))
+        es.perform(entityId, PlayerOption(playerId, choice ?: request?.option ?: return))
     }
 }

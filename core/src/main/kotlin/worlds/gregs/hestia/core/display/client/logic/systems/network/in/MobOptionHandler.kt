@@ -4,6 +4,7 @@ import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.event.common.EventSystem
 import org.slf4j.LoggerFactory
 import worlds.gregs.hestia.GameServer
+import worlds.gregs.hestia.core.action.perform
 import worlds.gregs.hestia.core.display.client.model.components.Viewport
 import worlds.gregs.hestia.core.entity.entity.model.components.Type
 import worlds.gregs.hestia.core.entity.mob.model.events.MobOption
@@ -33,7 +34,7 @@ class MobOptionHandler : MessageHandlerSystem<MobOptionMessage>() {
             val definition = mobDefinitions.get(type.id)
             val option = definition.options.getOrNull(option - 1)
             if(option != null) {
-                es.dispatch(MobOption(entityId, mobId, option, definition.name))//ID NOT TYPE
+                es.perform(entityId, MobOption(mobId, option, definition.name))//ID NOT TYPE
             } else {
                 logger.warn("Invalid mob option ${type.id} $option ${definition.options.toList()}")
             }

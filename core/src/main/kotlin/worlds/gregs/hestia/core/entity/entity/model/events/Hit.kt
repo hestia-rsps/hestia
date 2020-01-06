@@ -1,5 +1,5 @@
 package worlds.gregs.hestia.core.entity.entity.model.events
 
-import net.mostlyoriginal.api.event.common.Event
+import worlds.gregs.hestia.core.action.Action
 
-class Hit(val entityId: Int, val amount: Int, val mark: Int, val delay: Int = 0, var critical: Boolean = false, val source: Int = -1, val soak: Int = -1) : Event
+class Hit(val amount: Int, val mark: Int, val delay: Int = 0, var critical: Boolean = false, val source: Int = -1, val soak: Int = -1) : Action()

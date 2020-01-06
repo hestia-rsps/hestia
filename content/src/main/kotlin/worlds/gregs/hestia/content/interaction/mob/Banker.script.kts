@@ -5,11 +5,10 @@ import worlds.gregs.hestia.core.task.api.Task.Companion.FIRST
 import worlds.gregs.hestia.core.task.api.Task.Companion.FOURTH
 import worlds.gregs.hestia.core.task.api.Task.Companion.SECOND
 import worlds.gregs.hestia.core.task.api.Task.Companion.THIRD
-import worlds.gregs.hestia.core.task.api.event.target
 
 on<MobOption> {
     where { option == "Talk-to" && name == "Banker" }
-    task(TaskPriority.High) {
+    fun MobOption.task() = queue(TaskPriority.High) {
         entity distance 2 interact target
         onCancel { closeDialogue() }
 
@@ -56,4 +55,5 @@ on<MobOption> {
         }
         closeDialogue()
     }
+    then(MobOption::task)
 }

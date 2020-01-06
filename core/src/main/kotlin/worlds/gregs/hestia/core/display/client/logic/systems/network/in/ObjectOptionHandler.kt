@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory
 import worlds.gregs.hestia.GameServer
 import worlds.gregs.hestia.artemis.Aspect
 import worlds.gregs.hestia.artemis.toArray
+import worlds.gregs.hestia.core.action.perform
 import worlds.gregs.hestia.core.entity.`object`.model.components.GameObject
 import worlds.gregs.hestia.core.entity.`object`.model.events.ObjectOption
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
@@ -51,7 +52,7 @@ class ObjectOptionHandler : MessageHandlerSystem<ObjectOptionMessage>() {
                 val def = objectDefinitions.get(id)
                 val action = def.options.getOrNull(option - 1)
                 if(action != null) {
-                    es.dispatch(ObjectOption(entityId, objectId, action, def.name))
+                    es.perform(entityId, ObjectOption(objectId, action, def.name))
                 } else {
                     logger.warn("Invalid object option $id $option ${def.options.toList()}")
                 }

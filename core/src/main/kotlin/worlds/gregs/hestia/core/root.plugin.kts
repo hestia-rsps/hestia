@@ -16,6 +16,7 @@ import worlds.gregs.hestia.core.world.land.LandPlugin
 import worlds.gregs.hestia.core.world.map.MapPlugin
 import worlds.gregs.hestia.core.world.movement.MovementPlugin
 import worlds.gregs.hestia.core.world.region.RegionPlugin
+import worlds.gregs.hestia.core.action.ActionPlugin
 
 setup {
     dependsOn(Task_plugin::class.java)
@@ -31,6 +32,7 @@ setup {
     dependsOn(MapPlugin::class.java)
     dependsOn(MobPlugin::class.java)
     dependsOn(ItemPlugin::class.java)
+    dependsOn(ActionPlugin::class.java)
     dependsOn(MovementPlugin::class.java)
     dependsOn(ObjectPlugin::class.java)
     dependsOn(PlayerPlugin::class.java)

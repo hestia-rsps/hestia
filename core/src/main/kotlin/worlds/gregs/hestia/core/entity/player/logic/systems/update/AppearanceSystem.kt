@@ -35,7 +35,7 @@ class AppearanceSystem : SubscriptionSystem(Aspect.all(Player::class)) {
 
     @Subscribe
     fun update(event: UpdateAppearance) {
-        update(event.entityId)
+        update(event.entity)
     }
 
     private fun update(entityId: Int) {

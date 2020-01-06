@@ -4,6 +4,7 @@ import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.event.common.EventSystem
 import org.slf4j.LoggerFactory
 import worlds.gregs.hestia.GameServer
+import worlds.gregs.hestia.core.action.perform
 import worlds.gregs.hestia.core.display.client.model.components.Viewport
 import worlds.gregs.hestia.core.display.window.api.Windows
 import worlds.gregs.hestia.core.entity.item.container.model.Inventory
@@ -46,6 +47,6 @@ class WidgetOnPlayerHandler : MessageHandlerSystem<WidgetOnPlayer>() {
             return logger.warn("Invalid widget on player index $message")
         }
 
-        es.dispatch(ItemOnPlayer(entityId, playerId, hash, slot, type))
+        es.perform(entityId, ItemOnPlayer(playerId, hash, slot, type))
     }
 }

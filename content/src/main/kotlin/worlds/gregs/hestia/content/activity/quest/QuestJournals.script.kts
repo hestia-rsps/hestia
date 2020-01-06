@@ -7,7 +7,7 @@ import worlds.gregs.hestia.network.client.encoders.messages.Config
 
 on<WindowOpened> {
     where { target == QuestJournals }
-    task {
+    then {
         val questPoints = 1
         entity send Config(Configs.QUEST_POINTS, questPoints)
         //TODO maximum quest points config

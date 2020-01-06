@@ -10,10 +10,8 @@ import net.mostlyoriginal.api.event.common.EventSystem
 import org.slf4j.Logger
 import org.slf4j.LoggerFactory
 import world.gregs.hestia.core.network.codec.message.Message
-import world.gregs.hestia.core.services.plural
 import worlds.gregs.hestia.artemis.getSystem
 import worlds.gregs.hestia.artemis.send
-import worlds.gregs.hestia.core.display.client.model.components.ClientIndex
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.DialogueBuilder
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.dialogue
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.options
@@ -27,17 +25,10 @@ import worlds.gregs.hestia.core.display.window.model.actions.CloseWindow
 import worlds.gregs.hestia.core.display.window.model.actions.OpenWindow
 import worlds.gregs.hestia.core.display.window.model.actions.RefreshWindow
 import worlds.gregs.hestia.core.entity.entity.logic.systems.update.animate
-import worlds.gregs.hestia.core.entity.entity.logic.systems.update.graphic
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.entity.model.events.Hit
-import worlds.gregs.hestia.core.entity.item.container.api.Composition
-import worlds.gregs.hestia.core.entity.item.container.api.ItemResult
-import worlds.gregs.hestia.core.entity.item.container.logic.ContainerTransformBuilder
-import worlds.gregs.hestia.core.entity.item.container.logic.transform
-import worlds.gregs.hestia.core.entity.item.container.model.Inventory
 import worlds.gregs.hestia.core.entity.item.container.model.Item
 import worlds.gregs.hestia.core.entity.item.container.model.ItemContainer
-import worlds.gregs.hestia.core.entity.item.floor.model.events.CreateFloorItem
 import worlds.gregs.hestia.core.entity.player.model.events.UpdateAppearance
 import worlds.gregs.hestia.core.script.dsl.task.*
 import worlds.gregs.hestia.core.task.logic.systems.TaskSystem
@@ -46,8 +37,6 @@ import worlds.gregs.hestia.core.world.movement.model.components.calc.Follow
 import worlds.gregs.hestia.core.world.movement.model.components.types.MoveStep
 import worlds.gregs.hestia.core.world.movement.model.components.types.Movement
 import worlds.gregs.hestia.game.update.blocks.Marker
-import worlds.gregs.hestia.service.cache.definition.definitions.ItemDefinition
-import worlds.gregs.hestia.service.cache.definition.systems.ItemDefinitionSystem
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.suspendCoroutine
 import kotlin.reflect.KClass
@@ -127,15 +116,15 @@ interface Task : Continuation<Any> {
         Windows
      */
     infix fun Int.openWindow(window: Int) {
-        world dispatch OpenWindow(this, window)
+        world dispatch OpenWindow(window)
     }
 
     infix fun Int.refreshWindow(window: Int) {
-        world dispatch RefreshWindow(this, window)
+        world dispatch RefreshWindow(window)
     }
 
     infix fun Int.closeWindow(window: Int) {
-        world dispatch CloseWindow(this, window)
+        world dispatch CloseWindow(window)
     }
 
     infix fun Int.closeWindow(pane: WindowPane) {
@@ -171,78 +160,6 @@ interface Task : Continuation<Any> {
     suspend infix fun Int.options(message: String) = DialogueBuilder(target = this).options(message)
 
     suspend infix fun DialogueBuilder.options(message: String) = options(apply { this.message = message })
-
-    /*
-        Containers
-     */
-
-    infix fun Int.overflow(overflow: Boolean) = ContainerTransformBuilder(overflow)
-
-    infix fun Int.inventory(f: Composition) = inventory() transform f
-    fun Int.inventory() = this get Inventory::class
-
-    fun Item.definition(): ItemDefinition {
-        val system = world system ItemDefinitionSystem::class
-        return system.get(type)
-    }
-
-    /**
-     * Checks the parameters match the values in the container
-     */
-    suspend fun ItemContainer.validateSlot(slot: Int): Item {
-        val item = items.getOrNull(slot)
-        if (item == null) {
-            cancel("Invalid item container slot $slot")
-            return item!!
-        }
-        return item
-    }
-
-    /**
-     * Checks the parameters match the values in the container
-     */
-    suspend fun ItemContainer.validateItem(slot: Int, type: Int): Item? {
-        val item = items.getOrNull(slot)
-        if (item == null && type != -1 || item != null && item.type != type) {
-            cancel("Invalid item container item $slot $type - $item")
-            return null
-        }
-        return item
-    }
-
-    infix fun Inventory.transform(f: Composition) = ContainerTransformBuilder().transform(f)
-
-    infix fun ContainerTransformBuilder.transform(f: Composition) = transform(apply { function = f })
-
-    infix fun Int.drop(item: Item) {
-        //TODO proper floor item dsl
-        val position = this get Position::class
-        val displayName = this get DisplayName::class
-        val clientIndex = this get ClientIndex::class
-        world dispatch CreateFloorItem(item.type, item.amount, position.x, position.y, position.plane, displayName.name, 60, clientIndex.index, 60)
-    }
-
-    /**
-     * Abstraction of common error messages
-     */
-    infix fun Int.purchase(f: Composition): Boolean {
-        return when (val result = overflow(false).transform(f)) {
-            is ItemResult.Success -> true
-            is ItemResult.Issue -> {
-                entity message when (result) {
-                    ItemResult.Issue.Invalid -> {
-                        log("Issue with purchase. ${(entity get Inventory::class).items.toList()}")
-                        "Whoops, looks like something went wrong, please try again."
-                    }
-                    ItemResult.Issue.Full -> "You don't have enough inventory space."
-                    is ItemResult.Issue.Underflow ->
-                        "You don't have enough ${getSystem(ItemDefinitionSystem::class).get(result.item.type).name.plural(result.item.amount)}."
-                }
-                false
-            }
-            else -> false
-        }
-    }
 
     /*
         Movement
@@ -305,9 +222,7 @@ interface Task : Continuation<Any> {
 
     infix fun Int.animate(id: Int) = this@Task.animate(id)
 
-    infix fun Int.graphic(id: Int) = this@Task.graphic(id)
-
-    fun Int.updateAppearance() = dispatch(UpdateAppearance(this))
+    fun Int.updateAppearance() = dispatch(UpdateAppearance())
 
     infix fun Int.transform(mob: Int) {
         create(Transform::class).mobId = mob
@@ -321,10 +236,34 @@ interface Task : Continuation<Any> {
     }
 
     infix fun Int.hit(amount: Int) {
-        dispatch(Hit(this, amount, Marker.MELEE, 0, false, -1, -1))
+        dispatch(Hit(amount, Marker.MELEE, 0, false, -1, -1))
     }
 
     fun log(message: String) = logger.warn(message)
+
+
+    /**
+     * Checks the parameters match the values in the container
+     */
+    suspend fun ItemContainer.validateItem(slot: Int, type: Int): Item? {
+        val item = items.getOrNull(slot)
+        if (item == null && type != -1 || item != null && item.type != type) {
+            cancel("Invalid item container item $slot $type - $item")
+            return null
+        }
+        return item
+    }
+
+    /**
+     * Checks the slot value isn't empty
+     */
+    suspend fun ItemContainer.validateSlot(slot: Int): Item {
+        val item = items.getOrNull(slot)
+        if (item == null) {
+            cancel("Invalid item container slot $slot - $item")
+        }
+        return item!!
+    }
 
     companion object {
         const val FIRST = 0

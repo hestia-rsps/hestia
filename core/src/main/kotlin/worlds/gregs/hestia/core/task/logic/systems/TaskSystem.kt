@@ -92,8 +92,7 @@ class TaskSystem : Tasks() {
 
     @Subscribe
     private fun start(event: StartTask) {
-        val (entityId, task) = event
-        activateTask(entityId, task)
+        activateTask(event.entity, event.task)
     }
 
     override fun activateTask(entityId: Int, task: InactiveTask<*>) {

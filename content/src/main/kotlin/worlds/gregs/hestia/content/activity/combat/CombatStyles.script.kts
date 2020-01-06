@@ -1,5 +1,6 @@
 package worlds.gregs.hestia.content.activity.combat
 
+import worlds.gregs.hestia.core.action.Action
 import worlds.gregs.hestia.core.display.client.model.Configs
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.CombatStyles
 import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
@@ -9,15 +10,14 @@ import worlds.gregs.hestia.network.client.encoders.messages.WidgetSettings
 
 on<WindowOpened> {
     where { target == CombatStyles }
-    task {
+    then {
         toggle(true)
     }
 }
 
 on<WindowInteraction> {
     where { target == CombatStyles }
-    task {
-        val (_, _, widget) = event(this)
+    then {
         when (widget) {
             4 -> {//Special attack bar
             }
@@ -31,7 +31,7 @@ on<WindowInteraction> {
     }
 }
 
-fun Task.toggle(unlock: Boolean) {
+fun Action.toggle(unlock: Boolean) {
     for (widget in 11..14) {
         entity send WidgetSettings(CombatStyles, widget, -1, 0, if (unlock) 2 else 0)
     }

@@ -1,5 +1,5 @@
 package worlds.gregs.hestia.core.entity.entity.model.events
 
-import net.mostlyoriginal.api.event.common.Event
+import worlds.gregs.hestia.core.action.Action
 
-data class Animate(val entityId: Int, val id: Int, val speed: Int = 0): Event
+data class Animate(val id: Int, val speed: Int = 0): Action()

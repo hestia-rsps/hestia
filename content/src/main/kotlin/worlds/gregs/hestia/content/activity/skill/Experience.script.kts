@@ -5,14 +5,12 @@ import worlds.gregs.hestia.network.client.encoders.messages.SkillLevel
 var total = 14000000//Temp
 
 on<Experience> {
-    task {
-        val event = event(this)
-        val (_, skill, amount) = event
-        if(event.isCancelled) {
-            return@task//FIXME cancelling
+    then {
+        if(isCancelled) {
+            return@then//FIXME cancelling
         }
         //Add
-        total += amount
+        total += increase
         entity send SkillLevel(skill.ordinal, 99, total)
     }
 }

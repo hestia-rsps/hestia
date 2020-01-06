@@ -4,13 +4,14 @@ import world.gregs.hestia.core.network.protocol.messages.FriendsChatName
 import world.gregs.hestia.core.network.protocol.messages.FriendsChatSettings
 import worlds.gregs.hestia.core.display.dialogue.model.events.StringEntered
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.FriendsChatSetup
+import worlds.gregs.hestia.core.display.window.logic.systems.WindowSystem
 import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
 import worlds.gregs.hestia.core.display.window.model.events.WindowOpened
 import worlds.gregs.hestia.network.client.encoders.messages.Script
 
 on<WindowOpened> {
     where { target == FriendsChatSetup }
-    task {
+    then {
         //Send details
         GameServer.worldSession?.write(FriendsChatSettings(entity, FriendsChatSetup shl 16, 0))
     }
@@ -18,16 +19,15 @@ on<WindowOpened> {
 
 //Chat prefix
 on<StringEntered> {
-    whereTask { entity hasWindowOpen FriendsChatSetup }
-    then { (entity, string) ->
+    where { system(WindowSystem::class).hasWindow(entity, FriendsChatSetup) }
+    then {
         GameServer.worldSession?.write(FriendsChatName(entity, string))
     }
 }
 
 on<WindowInteraction> {
     where { target == FriendsChatSetup }
-    task {
-        val (_, _, widget, _, _, option) = event(this)
+    then {
         when(widget) {
             22 -> {//Chat name
                 when(option) {

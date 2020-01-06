@@ -1,6 +1,7 @@
 package worlds.gregs.hestia.content.interaction.item
 
 import org.slf4j.LoggerFactory
+import worlds.gregs.hestia.content.interaction.item.Inventory_script.Inv
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.Inventory
 import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
 import worlds.gregs.hestia.core.display.window.model.events.WindowOpened
@@ -12,30 +13,30 @@ import worlds.gregs.hestia.network.client.encoders.messages.WidgetSettings
 
 val logger = LoggerFactory.getLogger(Inventory_script::class.java)!!
 
+private typealias Inv = worlds.gregs.hestia.core.entity.item.container.model.Inventory
 on<WindowOpened> {
     where { target == Inventory }
-    task {
+    then {
         entity send WidgetSettings(Inventory, 0, 0, 27, 4554126)//Item slots
         entity send WidgetSettings(Inventory, 0, 28, 55, 2097152)//Draggable slots
-        val items = entity.inventory().items.map { if(it == null) Pair(-1, 0) else Pair(it.type, it.amount)}
+        val items = entity.get(Inv::class).items.map { if(it == null) Pair(-1, 0) else Pair(it.type, it.amount)}
         entity send WidgetItems(93, items)
     }
 }
 
 on<WindowRefresh> {
     where { target == Inventory }
-    task {
-        val items = entity.inventory().items.map { if(it == null) Pair(-1, 0) else Pair(it.type, it.amount)}
+    then {
+        val items = entity.get(Inv::class).items.map { if(it == null) Pair(-1, 0) else Pair(it.type, it.amount)}
         entity send WidgetItems(93, items)
     }
 }
 
 on<WindowInteraction> {
     where { target == Inventory }
-    task {
-        val (_, _, _, type, slot, option) = event(this)
-
-        val inventory = entity.inventory()
+    fun WindowInteraction.task() = queue {
+        val (_, _, type, slot, option) = this@task
+        val inventory = entity.get(Inv::class)
         val item = inventory.validateItem(slot, type)!!
 
         val choice = item.definition().options.getOrNull(option - 1)
@@ -56,12 +57,13 @@ on<WindowInteraction> {
             else -> logger.warn("Unknown item option $item $option")
         }
     }
+    then(WindowInteraction::task)
 }
 
 on<WindowSwitch> {
     where { fromWindow == Inventory && toWindow == Inventory }
-    task {
-        val (_, _, fromSlot, _, _, toIndex, toType) = event(this)
+    fun WindowSwitch.task() = queue {
+        val (_, fromSlot, _, _, toIndex, toType) = this@task
         val toSlot = toIndex - 28
 
         val inventory = entity.inventory()
@@ -71,4 +73,5 @@ on<WindowSwitch> {
         inventory transform switch(fromSlot, toSlot)
         //Ignore results
     }
+    then(WindowSwitch::task)
 }

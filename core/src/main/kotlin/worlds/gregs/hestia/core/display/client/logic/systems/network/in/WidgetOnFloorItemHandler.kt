@@ -4,6 +4,7 @@ import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.event.common.EventSystem
 import org.slf4j.LoggerFactory
 import worlds.gregs.hestia.GameServer
+import worlds.gregs.hestia.core.action.perform
 import worlds.gregs.hestia.core.display.window.api.Windows
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.entity.model.components.Type
@@ -53,6 +54,6 @@ class WidgetOnFloorItemHandler : MessageHandlerSystem<WidgetOnFloorItem>() {
                     && typeMapper.get(itemId).id == floorType//Same type
         } ?: return logger.warn("Invalid widget on floor item $message")
 
-        es.dispatch(ItemOnFloorItem(entityId, floorItem, hash, slot, type))
+        es.perform(entityId, ItemOnFloorItem(floorItem, hash, slot, type))
     }
 }

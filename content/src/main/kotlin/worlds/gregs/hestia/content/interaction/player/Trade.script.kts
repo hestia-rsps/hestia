@@ -1,7 +1,7 @@
 package worlds.gregs.hestia.content.interaction.player
 
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.TradeMain
-import worlds.gregs.hestia.core.display.window.logic.systems.request
+import worlds.gregs.hestia.core.display.window.logic.systems.RequestSystem
 import worlds.gregs.hestia.core.display.window.model.PlayerOptions.TRADE
 import worlds.gregs.hestia.core.display.window.model.Request
 import worlds.gregs.hestia.core.display.window.model.WindowPane
@@ -9,38 +9,44 @@ import worlds.gregs.hestia.core.display.window.model.events.AcceptedRequest
 import worlds.gregs.hestia.core.display.window.model.events.PlayerOption
 import worlds.gregs.hestia.core.display.window.model.events.RequestResponse
 import worlds.gregs.hestia.core.script.dsl.task.ChatType.GameTrade
-import worlds.gregs.hestia.core.task.api.event.target
+import worlds.gregs.hestia.core.action.Action
+import worlds.gregs.hestia.core.display.client.model.events.Chat
+import worlds.gregs.hestia.core.display.window.model.actions.OpenWindow
+import worlds.gregs.hestia.core.display.window.model.actions.CloseWindowPane
 
 on<PlayerOption> {
     where { option == TRADE }
-    task(TaskPriority.High) {
+    fun PlayerOption.task() = queue(TaskPriority.High) {
         entity distance 1 interact target
-        request(Request.TRADE)
+        system(RequestSystem::class).sendRequest(entity, target, Request.TRADE)
     }
+    then(PlayerOption::task)
 }
 
 //The original requester
 on<RequestResponse> {
     where { request == Request.TRADE }
-    task(TaskPriority.High) {
-        trade()
+    fun RequestResponse.task() = queue(TaskPriority.High) {
+        trade(this, target)
     }
+    then(RequestResponse::task)
 }
 
 //The responder
 on<AcceptedRequest> {
     where { request == Request.TRADE }
-    task(TaskPriority.High) {
-        trade()
+    fun AcceptedRequest.task() = queue(TaskPriority.High) {
+        trade(this, target)
     }
+    then(AcceptedRequest::task)
 }
 
-fun Task.trade() {
-    onCancel {
-        entity closeWindow WindowPane.MAIN_SCREEN
-        target closeWindow WindowPane.MAIN_SCREEN
-        entity type GameTrade message "Trade declined."
-        target type GameTrade message "Other player declined trade."
+fun Action.trade(task: Task, target: Int) {
+    task.onCancel {
+        entity perform CloseWindowPane(WindowPane.MAIN_SCREEN)
+        target perform CloseWindowPane(WindowPane.MAIN_SCREEN)
+        entity perform Chat("Trade declined.", GameTrade)
+        target perform Chat("Other player declined trade.", GameTrade)
     }
-    entity openWindow TradeMain
+    entity perform OpenWindow(TradeMain)
 }

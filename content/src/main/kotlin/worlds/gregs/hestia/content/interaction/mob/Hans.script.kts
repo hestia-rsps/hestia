@@ -15,7 +15,6 @@ import worlds.gregs.hestia.core.task.api.Task.Companion.FIRST
 import worlds.gregs.hestia.core.task.api.Task.Companion.FOURTH
 import worlds.gregs.hestia.core.task.api.Task.Companion.SECOND
 import worlds.gregs.hestia.core.task.api.Task.Companion.THIRD
-import worlds.gregs.hestia.core.task.api.event.target
 
 val year = 365
 val fiveYears = year * 5
@@ -24,7 +23,7 @@ val veteranCape = remove(995, 50000) andThen addAll(20763, 20764)
 
 on<MobOption> {
     where { option == "Talk-to" && name == "Hans" }
-    task(TaskPriority.High) {
+    fun MobOption.task() = queue(TaskPriority.High) {
         entity interact target
         onCancel { closeDialogue() }
 
@@ -94,4 +93,5 @@ on<MobOption> {
         }
         closeDialogue()
     }
+    then(MobOption::task)
 }

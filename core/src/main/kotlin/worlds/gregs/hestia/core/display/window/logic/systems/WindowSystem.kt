@@ -5,9 +5,11 @@ import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.event.common.Subscribe
 import org.slf4j.LoggerFactory
 import worlds.gregs.hestia.artemis.send
+import worlds.gregs.hestia.core.action.perform
 import worlds.gregs.hestia.core.display.window.api.Windows
 import worlds.gregs.hestia.core.display.window.model.WindowPane
 import worlds.gregs.hestia.core.display.window.model.actions.CloseWindow
+import worlds.gregs.hestia.core.display.window.model.actions.CloseWindowPane
 import worlds.gregs.hestia.core.display.window.model.actions.OpenWindow
 import worlds.gregs.hestia.core.display.window.model.actions.RefreshWindow
 import worlds.gregs.hestia.core.display.window.model.components.GameFrame
@@ -94,7 +96,7 @@ class WindowSystem : Windows() {
         } else {
             es.send(entityId, WindowOpen(isPermanent(pane), parent, index, id))
         }
-        es.dispatch(WindowOpened(entityId, id))
+        es.perform(entityId, WindowOpened(id))
     }
 
     override fun closeWindow(entityId: Int, window: Int, silent: Boolean) {
@@ -106,7 +108,7 @@ class WindowSystem : Windows() {
             val index = getIndex(window, gameFrame.resizable)
             relationships[parent]!!.remove(window)
             es.send(entityId, WidgetClose(parent, index))
-            es.dispatch(WindowClosed(entityId, window, silent))
+            es.perform(entityId, WindowClosed(window, silent))
         } else {
             //Window not open
         }
@@ -168,7 +170,7 @@ class WindowSystem : Windows() {
     override fun refreshWindow(entityId: Int, window: Int) {
         val relationships = windowRelationshipsMapper.get(entityId).relationships
         relationships.walk(window) { id, _ ->
-            es.dispatch(WindowRefresh(entityId, id))
+            es.perform(entityId, WindowRefresh(id))
             false
         }
     }
@@ -187,6 +189,11 @@ class WindowSystem : Windows() {
     private fun closeWindow(event: CloseWindow) = closeWindow(event.entity, event.target)
 
     @Subscribe
+    private fun closeWindowPane(event: CloseWindowPane) {
+        closeWindow(event.entity, getWindow(event.entity, event.pane) ?: return)
+    }
+
+    @Subscribe
     private fun refreshWindow(event: RefreshWindow) = refreshWindow(event.entity, event.target)
 
     @Subscribe
@@ -195,7 +202,7 @@ class WindowSystem : Windows() {
         if (verifyWindow(entityId, hash)) {
             val windowId = hash shr 16
             val widgetId = hash - (windowId shl 16)
-            es.dispatch(WindowInteraction(entityId, windowId, widgetId, from, to, option))
+            es.perform(entityId, WindowInteraction(windowId, widgetId, from, to, option))
         }
     }
 

@@ -8,11 +8,11 @@ lateinit var windows: Windows
 
 on<Command> {
     where { prefix == "inter" }
-    then { (entityId, _, content) ->
+    then {
         val id = content.toInt()
-        windows.closeWindows(entityId, MAIN_SCREEN)
+        windows.closeWindows(entity, MAIN_SCREEN)
         if(id != -1) {
-            windows.openWindow(entityId, id)
+            windows.openWindow(entity, id)
         }
         isCancelled = true
     }

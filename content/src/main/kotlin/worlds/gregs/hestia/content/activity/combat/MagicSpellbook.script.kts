@@ -8,8 +8,7 @@ import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
 
 on<WindowInteraction> {
     where { target == ModernSpellbook || target == LunarSpellbook || target == AncientSpellbook || target == DungeoneeringSpellbook }
-    task {
-        val (_, _, widget) = event(this)
+    then {
         //TODO test these are all the same regardless of spellbook type
         when (widget) {
             2 -> {//Defensive casting

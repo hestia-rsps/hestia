@@ -10,7 +10,7 @@ import worlds.gregs.hestia.network.client.encoders.messages.WidgetSettings
 
 on<WindowOpened> {
     where { target == PrayerList }
-    task {
+    then {
         val quickPrayers = false
         entity send WidgetSettings(PrayerList, if (quickPrayers) 42 else 8, 0, 29, options = *intArrayOf(0))
         entity send Config(Configs.PRAYER_POINTS, 990)
@@ -22,8 +22,7 @@ on<WindowOpened> {
 
 on<WindowInteraction> {
     where { target == PrayerList }
-    task {
-        val (_, _, widget) = event(this)
+    then {
         when(widget) {
             12 -> {}//Show/Hide stat adjustments
         }

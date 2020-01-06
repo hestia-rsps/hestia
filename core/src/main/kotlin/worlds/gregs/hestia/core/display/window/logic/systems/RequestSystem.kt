@@ -4,16 +4,13 @@ import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.event.common.EventSystem
 import world.gregs.hestia.core.network.protocol.encoders.messages.Chat
 import worlds.gregs.hestia.artemis.send
+import worlds.gregs.hestia.core.action.perform
 import worlds.gregs.hestia.core.display.update.model.components.DisplayName
 import worlds.gregs.hestia.core.display.window.api.Requests
 import worlds.gregs.hestia.core.display.window.model.Request
 import worlds.gregs.hestia.core.display.window.model.components.RequestList
 import worlds.gregs.hestia.core.display.window.model.events.AcceptedRequest
 import worlds.gregs.hestia.core.display.window.model.events.RequestResponse
-import worlds.gregs.hestia.core.task.api.Task
-import worlds.gregs.hestia.core.task.api.entity
-import worlds.gregs.hestia.core.task.api.event.target
-import worlds.gregs.hestia.core.task.api.getSystem
 import worlds.gregs.hestia.game.Engine
 
 /**
@@ -48,8 +45,8 @@ class RequestSystem : Requests() {
         if(request.sendResponse != null) {
             es.send(entityId, Chat(request.otherType, 0, null, request.sendResponse))
         }
-        es.dispatch(RequestResponse(target, entityId, request))
-        es.dispatch(AcceptedRequest(entityId, target, request))
+        es.perform(target, RequestResponse(entityId, request))
+        es.perform(entityId, AcceptedRequest(target, request))
         purgeRequests(entityId, target, request)
     }
 
@@ -72,8 +69,4 @@ class RequestSystem : Requests() {
     companion object {
         private const val THIRTY_SECONDS = 50
     }
-}
-
-infix fun Task.request(request: Request) {
-    getSystem(RequestSystem::class).sendRequest(entity, target, request)
 }

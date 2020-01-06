@@ -4,11 +4,10 @@ import worlds.gregs.hestia.core.entity.entity.model.components.Type
 import worlds.gregs.hestia.core.entity.item.container.api.ItemResult
 import worlds.gregs.hestia.core.entity.item.floor.model.components.Amount
 import worlds.gregs.hestia.core.entity.item.floor.model.events.FloorItemOption
-import worlds.gregs.hestia.core.task.api.event.target
 
 on<FloorItemOption> {
     where { option == "Take" }
-    task(TaskPriority.High) {
+    fun FloorItemOption.task() = queue(TaskPriority.High) {
         entity distance 0 interact target
 
         //Get floor item info
@@ -28,4 +27,5 @@ on<FloorItemOption> {
                 entity message "You don't have enough inventory space to hold that item."
         }
     }
+    then(FloorItemOption::task)
 }

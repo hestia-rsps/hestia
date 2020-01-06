@@ -3,15 +3,15 @@ package worlds.gregs.hestia.content.display.windows.main
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.GraphicsOptions
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.Options
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.SoundOptions
+import worlds.gregs.hestia.core.display.window.model.actions.OpenWindow
 import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
 
 on<WindowInteraction> {
     where { target == Options }
-    task {
-        val (_, _, widget) = event(this)
+    then {
         when (widget) {
-            14 -> entity openWindow GraphicsOptions
-            16 -> entity openWindow SoundOptions
+            14 -> entity perform OpenWindow(GraphicsOptions)
+            16 -> entity perform OpenWindow(SoundOptions)
             6 -> {//Mouse buttons
             }
             3 -> {//Profanity filter

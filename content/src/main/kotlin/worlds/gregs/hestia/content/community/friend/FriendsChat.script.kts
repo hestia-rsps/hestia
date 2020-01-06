@@ -6,8 +6,7 @@ import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
 
 on<WindowInteraction> {
     where { target == FriendsChat }
-    task {
-        val (_, _, widget) = event(this)
+    then {
         when(widget) {
             27 -> {//Join/Leave
             }

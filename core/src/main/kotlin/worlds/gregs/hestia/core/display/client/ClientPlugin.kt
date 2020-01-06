@@ -1,6 +1,7 @@
 package worlds.gregs.hestia.core.display.client
 
 import com.artemis.WorldConfigurationBuilder
+import worlds.gregs.hestia.core.display.client.logic.systems.ChatSystem
 import worlds.gregs.hestia.core.display.client.logic.systems.DisconnectSystem
 import worlds.gregs.hestia.core.display.client.logic.systems.network.ClientConnectSystem
 import worlds.gregs.hestia.core.display.client.logic.systems.network.ClientDisconnectSystem
@@ -30,6 +31,7 @@ class ClientPlugin : Plugin {
         b.with(PRE_SYNC_PRIORITY, ClientRegionLoadSystem())
         b.with(POST_UPDATE_PRIORITY, PacketSender())
         b.with(WorldConfigurationBuilder.Priority.HIGHEST - 2, DisconnectSystem())
+        b.with(ChatSystem())
         b.dependsOn(ClientUpdatePlugin::class.java)
     }
 

@@ -4,6 +4,7 @@ import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.event.common.EventSystem
 import org.slf4j.LoggerFactory
 import worlds.gregs.hestia.GameServer
+import worlds.gregs.hestia.core.action.perform
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.entity.model.components.Type
 import worlds.gregs.hestia.core.entity.item.floor.api.FloorItems
@@ -42,7 +43,7 @@ class FloorItemOptionHandler : MessageHandlerSystem<FloorItemOptionMessage>() {
             val definition = itemDefinitions.get(id)
             val action = definition.floorOptions.getOrNull(option - 1)
             if(action != null) {
-                es.dispatch(FloorItemOption(entityId, item, action))
+                es.perform(entityId, FloorItemOption(item, action))
             } else {
                 logger.warn("Invalid floor item option $id $option")
             }

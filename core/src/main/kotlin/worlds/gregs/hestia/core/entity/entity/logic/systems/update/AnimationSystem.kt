@@ -11,7 +11,6 @@ import worlds.gregs.hestia.core.display.update.model.components.anim.ThirdAnimat
 import worlds.gregs.hestia.core.entity.entity.model.events.Animate
 import worlds.gregs.hestia.core.task.api.Task
 import worlds.gregs.hestia.core.task.api.dispatch
-import worlds.gregs.hestia.core.task.api.entity
 
 class AnimationSystem : PassiveSystem() {
     private lateinit var firstAnimationMapper: ComponentMapper<FirstAnimation>
@@ -28,7 +27,7 @@ class AnimationSystem : PassiveSystem() {
 
     @Subscribe
     fun inserted(event: Animate) {
-        val entityId = event.entityId
+        val entityId = event.entity
         //Check for existing animations
         maps.asSequence().forEach {
             if(!it.has(entityId)) {
@@ -43,4 +42,4 @@ class AnimationSystem : PassiveSystem() {
     }
 }
 
-fun Task.animate(id: Int, speed: Int = 0) = dispatch(Animate(entity, id, speed))
+fun Task.animate(id: Int, speed: Int = 0) = dispatch(Animate(id, speed))

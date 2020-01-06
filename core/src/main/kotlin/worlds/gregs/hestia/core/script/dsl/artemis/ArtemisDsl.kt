@@ -214,23 +214,24 @@ class SubscribeBuilder(aspect: Aspect.Builder?, var insert: ((Int) -> Unit)?, va
  * @param action The action to take if the conditions are met
  */
 @ArtemisDsl
-class EventListenerBuilder<E : Event>(private var event: KClass<E>, var priority: Int, var skipCancelledEvents: Boolean, var conditional: (E.(event: E) -> Boolean)?, var action: (E.(event: E) -> Unit)?) {
+class EventListenerBuilder<E : Event>(private var event: KClass<E>, var priority: Int, var skipCancelledEvents: Boolean, var conditional: (E.() -> Boolean)?, var action: (E.() -> Unit)?) {
     /**
      * Alternative way of setting event condition
      * @param action The conditions to meet before invoking event action
      */
-    fun where(action: E.(event: E) -> Boolean) {
+    fun where(action: E.() -> Boolean) {
         if (conditional != null) {
             throw IllegalArgumentException("Conditional has already been set for this listener $this")
         }
         this.conditional = action
     }
 
+
     /**
      * Alternative way of setting event action
      * @param action The action to take when an event is dispatched
      */
-    fun then(action: E.(event: E) -> Unit) {
+    fun then(action: E.() -> Unit) {
         if (this.action != null) {
             throw IllegalArgumentException("Action has already been set for this listener $this")
         }
@@ -243,7 +244,7 @@ class EventListenerBuilder<E : Event>(private var event: KClass<E>, var priority
     @Suppress("UNCHECKED_CAST")
     fun build(): ArtemisEventListener? {
         return if (action != null) {
-            ArtemisEventListener(event, priority, skipCancelledEvents, conditional as (Event.(Event) -> Boolean)?, action!! as (Event.(Event) -> Unit))
+            ArtemisEventListener(event, priority, skipCancelledEvents, conditional as (Event.() -> Boolean)?, action!! as (Event.() -> Unit))
         } else {
             null
         }

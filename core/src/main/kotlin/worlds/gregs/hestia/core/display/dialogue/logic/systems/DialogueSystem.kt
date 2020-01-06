@@ -2,6 +2,7 @@ package worlds.gregs.hestia.core.display.dialogue.logic.systems
 
 import net.mostlyoriginal.api.event.common.EventSystem
 import org.slf4j.LoggerFactory
+import worlds.gregs.hestia.core.action.perform
 import worlds.gregs.hestia.core.display.dialogue.api.DialogueBase
 import worlds.gregs.hestia.core.task.model.InactiveTask
 import worlds.gregs.hestia.core.task.model.ReusableTask
@@ -22,6 +23,6 @@ class DialogueSystem : DialogueBase() {
         //Find base dialogue in the script
         val task = scripts[name] ?: return logger.debug("Could not find dialogue '$name'")
         //Queue the task
-        es.dispatch(StartTask(entityId, InactiveTask(task, targetId)))
+        es.perform(entityId, StartTask(InactiveTask(task, targetId)))
     }
 }

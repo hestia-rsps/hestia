@@ -5,8 +5,7 @@ import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
 
 on<WindowInteraction> {
     where { target == FilterButtons }
-    task {
-        val (_, _, widget, _, _, option) = event(this)
+    then {
         when(widget) {
             31 -> {//Regular chat
             when(option) {

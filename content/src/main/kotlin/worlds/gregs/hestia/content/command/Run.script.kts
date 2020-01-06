@@ -10,9 +10,9 @@ lateinit var updateMovementMapper: ComponentMapper<UpdateMovement>
 
 on<Command> {
     where { prefix == "run" }
-    then { (entityId, _, content) ->
-        runToggledMapper.set(entityId, !runToggledMapper.has(entityId))
-        updateMovementMapper.create(entityId)
+    then {
+        runToggledMapper.set(entity, !runToggledMapper.has(entity))
+        updateMovementMapper.create(entity)
         isCancelled = true
     }
 }

@@ -2,7 +2,7 @@ package worlds.gregs.hestia.core.entity.item.container.logic
 
 import arrow.core.*
 import arrow.fx.IO
-import org.checkerframework.checker.units.qual.A
+import worlds.gregs.hestia.core.action.Action
 import worlds.gregs.hestia.core.entity.item.container.api.*
 import worlds.gregs.hestia.core.entity.item.container.logic.ContainerEditor.addEmptySlot
 import worlds.gregs.hestia.core.entity.item.container.logic.ContainerEditor.canStack
@@ -13,9 +13,6 @@ import worlds.gregs.hestia.core.entity.item.container.model.Inventory
 import worlds.gregs.hestia.core.entity.item.container.model.Item
 import worlds.gregs.hestia.core.entity.item.container.model.ItemContainer
 import worlds.gregs.hestia.core.entity.item.container.model.StackType
-import worlds.gregs.hestia.core.task.api.Task
-import worlds.gregs.hestia.core.task.api.getComponent
-import worlds.gregs.hestia.core.task.api.getSystem
 import worlds.gregs.hestia.service.cache.DefinitionReader
 import worlds.gregs.hestia.service.cache.definition.definitions.ItemDefinition
 import worlds.gregs.hestia.service.cache.definition.systems.ItemDefinitionSystem
@@ -34,10 +31,10 @@ data class ContainerTransformBuilder(val overflow: Boolean = true) {
     lateinit var function: Composition
 }
 
-fun Task.transform(builder: ContainerTransformBuilder): ItemResult {
-    val definitions = getSystem(ItemDefinitionSystem::class).reader
-    val stackType = getSystem(InventorySystem::class).stackType
-    val container = getComponent(Inventory::class)
+fun Action.transform(builder: ContainerTransformBuilder): ItemResult {
+    val definitions = system(ItemDefinitionSystem::class).reader
+    val stackType = system(InventorySystem::class).stackType
+    val container = entity.get(Inventory::class)
     return container.transform(definitions, stackType, builder.function, builder.overflow)
 }
 

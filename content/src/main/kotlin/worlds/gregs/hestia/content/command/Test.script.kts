@@ -2,16 +2,39 @@ package worlds.gregs.hestia.content.command
 
 import worlds.gregs.hestia.content.activity.skill.Experience
 import worlds.gregs.hestia.content.activity.skill.Skill.CRAFTING
+import worlds.gregs.hestia.core.action.Action
 import worlds.gregs.hestia.core.display.client.model.events.Command
+
+data class TestAction(val someData: Int = 0) : Action() {
+    constructor(entity: Int, someData: Int) : this(someData) {
+        this.entity = entity
+    }
+}
+
+on<TestAction> {
+    where { someData == 1 || entity == 4 }
+
+    then {
+        entity perform TestAction(2)
+        entity perform task {
+            entity perform TestAction(2)
+        }
+        someData
+    }
+//    fun TestAction.task() = queue {
+//        entity perform TestAction(2)
+//    }
+//    then(TestAction::task)
+}
 
 on<Command> {
     where { prefix == "test" }
-    task {
+
+    fun Command.task() = queue {
         onCancel { closeDialogue() }
-        val (_, _, content) = event(this)
         val es = world system EventSystem::class
 //        entity openWindow AssistXP
-        world dispatch Experience(entity, CRAFTING, 10000)
+        world dispatch Experience(CRAFTING, 10000)
 //        entity send WidgetComponentText(AssistXP, 10, "You've earned the maximum XP from the Assist System with a 24-hour period.<br>You can assist again in 24 hours.")
 //        entity send Script(527)
 //        entity send Script(524, 301 shl 16 or 45)
@@ -24,4 +47,5 @@ on<Command> {
 //        mob("Hello", 1, content.toInt(), "Hans")
 //        closeDialogue()
     }
+    then(Command::task)
 }

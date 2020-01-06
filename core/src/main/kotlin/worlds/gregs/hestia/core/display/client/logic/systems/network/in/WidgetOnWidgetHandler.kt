@@ -4,6 +4,7 @@ import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.event.common.EventSystem
 import org.slf4j.LoggerFactory
 import worlds.gregs.hestia.GameServer
+import worlds.gregs.hestia.core.action.perform
 import worlds.gregs.hestia.core.display.window.api.Windows
 import worlds.gregs.hestia.core.entity.item.container.model.Inventory
 import worlds.gregs.hestia.core.entity.item.container.model.events.ItemOnItem
@@ -38,6 +39,6 @@ class WidgetOnWidgetHandler : MessageHandlerSystem<WidgetOnWidget>() {
             return logger.warn("Invalid widget on widget message $message")
         }
 
-        es.dispatch(ItemOnItem(entityId, fromHash, fromType, fromSlot, toHash, toType, toSlot))
+        es.perform(entityId, ItemOnItem(fromHash, fromType, fromSlot, toHash, toType, toSlot))
     }
 }
