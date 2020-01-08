@@ -39,7 +39,6 @@ abstract class Action : WorldEvent(), Cancellable {
     fun queue(priority: TaskPriority = TaskPriority.Normal, action: SuspendableQueue) {
         entity perform task(priority, action)
     }
-    //TODO temp remove
 
 
     /*

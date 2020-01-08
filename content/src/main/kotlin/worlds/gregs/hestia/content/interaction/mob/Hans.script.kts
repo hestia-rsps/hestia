@@ -2,6 +2,7 @@ package worlds.gregs.hestia.content.interaction.mob
 
 import arrow.syntax.function.andThen
 import world.gregs.hestia.core.services.plural
+import worlds.gregs.hestia.core.display.client.model.events.Chat
 import worlds.gregs.hestia.core.display.dialogue.model.Expression.Agree
 import worlds.gregs.hestia.core.display.dialogue.model.Expression.Delayed
 import worlds.gregs.hestia.core.display.dialogue.model.Expression.Disregard
@@ -9,6 +10,9 @@ import worlds.gregs.hestia.core.display.dialogue.model.Expression.EvilLaugh
 import worlds.gregs.hestia.core.display.dialogue.model.Expression.Laugh
 import worlds.gregs.hestia.core.display.dialogue.model.Expression.Sad
 import worlds.gregs.hestia.core.display.dialogue.model.Expression.Uncertain
+import worlds.gregs.hestia.core.display.dialogue.model.events.CloseDialogue
+import worlds.gregs.hestia.core.display.update.model.components.ForceChat
+import worlds.gregs.hestia.core.display.update.model.components.direction.Watch
 import worlds.gregs.hestia.core.entity.mob.model.events.MobOption
 import worlds.gregs.hestia.core.entity.player.model.components.Member
 import worlds.gregs.hestia.core.task.api.Task.Companion.FIRST
@@ -24,10 +28,10 @@ val veteranCape = remove(995, 50000) andThen addAll(20763, 20764)
 on<MobOption> {
     where { option == "Talk-to" && name == "Hans" }
     fun MobOption.task() = queue(TaskPriority.High) {
-        entity interact target
-        onCancel { closeDialogue() }
+        entity.interact(target, 1)
+        onCancel { entity perform CloseDialogue() }
 
-        target watch entity
+        target.create(Watch::class).entity = entity
         target dialogue "Hello. What are you doing here?"
 
         var choice = entity options """
@@ -45,7 +49,7 @@ on<MobOption> {
             SECOND -> {
                 entity animation EvilLaugh dialogue "I have come to kill everyone in this castle!"
                 //TODO("target stepAway entity")
-                target say "Help! Help!"
+                target.create(ForceChat::class).message = "Help! Help!"
             }
             THIRD -> {
                 entity animation Uncertain dialogue "I don't know. I'm lost. Where am I?"
@@ -71,7 +75,7 @@ on<MobOption> {
                         1 -> "Not long until you are now too, only 1 day!"
                         else -> "It'll be longer than a year for you yet I'm afraid."
                     }
-                    entity message "You will be able to claim the 5-year veteran cape from Hans ${if (daysLeft > 1) "in $daysLeft ${"day".plural(daysLeft)}." else "tomorrow!"}"
+                    entity perform Chat("You will be able to claim the 5-year veteran cape from Hans ${if (daysLeft > 1) "in $daysLeft ${"day".plural(daysLeft)}." else "tomorrow!"}")
                 } else {
                     target animation Disregard dialogue """
                         And it looks like you've been here for a decent amount
@@ -91,7 +95,7 @@ on<MobOption> {
                 }
             }
         }
-        closeDialogue()
+        entity perform CloseDialogue()
     }
     then(MobOption::task)
 }

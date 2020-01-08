@@ -1,5 +1,5 @@
 package worlds.gregs.hestia.core.display.dialogue.model.events
 
-import worlds.gregs.hestia.artemis.InstantEvent
+import worlds.gregs.hestia.core.action.Action
 
-data class CloseDialogue(val entityId: Int) : InstantEvent
+class CloseDialogue : Action()

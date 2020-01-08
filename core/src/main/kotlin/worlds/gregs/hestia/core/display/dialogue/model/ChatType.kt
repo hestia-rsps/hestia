@@ -1,7 +1,4 @@
-package worlds.gregs.hestia.core.script.dsl.task
-
-import world.gregs.hestia.core.network.protocol.encoders.messages.Chat
-import worlds.gregs.hestia.core.task.api.Task
+package worlds.gregs.hestia.core.display.dialogue.model
 
 object ChatType {
     const val Game = 0
@@ -22,10 +19,4 @@ object ChatType {
     const val GameAssist = 104
     const val ChallengeClanWar = 107
     const val Alliance = 108
-}
-data class ChatBuilder(val entity: Int, var message: String? = null, var type: Int = 0, var tile: Int = 0, var name: String? = null)
-
-
-fun Task.chat(builder: ChatBuilder) {
-    builder.entity.send(Chat(builder.type, builder.tile, builder.name, builder.message ?: return))
 }

@@ -9,8 +9,6 @@ import worlds.gregs.hestia.core.display.update.model.components.anim.FourthAnima
 import worlds.gregs.hestia.core.display.update.model.components.anim.SecondAnimation
 import worlds.gregs.hestia.core.display.update.model.components.anim.ThirdAnimation
 import worlds.gregs.hestia.core.entity.entity.model.events.Animate
-import worlds.gregs.hestia.core.task.api.Task
-import worlds.gregs.hestia.core.task.api.dispatch
 
 class AnimationSystem : PassiveSystem() {
     private lateinit var firstAnimationMapper: ComponentMapper<FirstAnimation>
@@ -41,5 +39,3 @@ class AnimationSystem : PassiveSystem() {
         }
     }
 }
-
-fun Task.animate(id: Int, speed: Int = 0) = dispatch(Animate(id, speed))

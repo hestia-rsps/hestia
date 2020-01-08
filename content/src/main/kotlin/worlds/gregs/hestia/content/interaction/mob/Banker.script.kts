@@ -1,5 +1,7 @@
 package worlds.gregs.hestia.content.interaction.mob
 
+import worlds.gregs.hestia.core.display.dialogue.model.events.CloseDialogue
+import worlds.gregs.hestia.core.display.update.model.components.direction.Watch
 import worlds.gregs.hestia.core.entity.mob.model.events.MobOption
 import worlds.gregs.hestia.core.task.api.Task.Companion.FIRST
 import worlds.gregs.hestia.core.task.api.Task.Companion.FOURTH
@@ -9,10 +11,10 @@ import worlds.gregs.hestia.core.task.api.Task.Companion.THIRD
 on<MobOption> {
     where { option == "Talk-to" && name == "Banker" }
     fun MobOption.task() = queue(TaskPriority.High) {
-        entity distance 2 interact target
-        onCancel { closeDialogue() }
+        entity.interact(target, 2)
+        onCancel { entity perform CloseDialogue() }
 
-        target watch entity
+        target.create(Watch::class).entity = entity
         //TODO unwatch entity if exceeds interact distance * 2
         target dialogue "Good day. How may I help you?"
 
@@ -53,7 +55,7 @@ on<MobOption> {
                 }
             }
         }
-        closeDialogue()
+        entity perform CloseDialogue()
     }
     then(MobOption::task)
 }

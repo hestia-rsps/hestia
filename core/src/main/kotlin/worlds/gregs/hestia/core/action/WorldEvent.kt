@@ -10,7 +10,6 @@ import world.gregs.hestia.core.network.codec.message.Message
 import worlds.gregs.hestia.artemis.events.OutBoundMessage
 import worlds.gregs.hestia.core.task.api.SuspendableQueue
 import worlds.gregs.hestia.core.task.api.TaskPriority
-import worlds.gregs.hestia.core.task.logic.systems.awaitWindow
 import worlds.gregs.hestia.core.task.model.InactiveTask
 import worlds.gregs.hestia.core.task.model.ReusableTask
 import worlds.gregs.hestia.core.task.model.events.StartTask
@@ -47,17 +46,8 @@ abstract class WorldEvent : Event {
 
 
     fun task(priority: TaskPriority = TaskPriority.Normal, action: SuspendableQueue) : Action {
-        return StartTask(InactiveTask(ReusableTask(priority, queue(priority, action)), Unit))
+        return StartTask(InactiveTask(ReusableTask(priority, action), Unit))
     }
-
-    private fun extension(action: SuspendableQueue) = action
-
-    /**
-     * If [priority] is [TaskPriority.Low] then wait for screen to close before continuing
-     * @param priority The rule to start the task
-     * @param action The suspendable queue to process
-     */
-    private fun queue(priority: TaskPriority = TaskPriority.Normal, action: SuspendableQueue): SuspendableQueue = if (priority == TaskPriority.Low) extension { awaitWindow(); action() } else action
 
 
     fun log(message: String) = logger.warn(message)

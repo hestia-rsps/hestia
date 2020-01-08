@@ -53,9 +53,8 @@ class DialogueBoxSystem : PassiveSystem() {
      */
     @Subscribe
     private fun closure(event: CloseDialogue) {
-        val (entityId) = event
-        if(windows.hasWindow(entityId, Windows.ChatBox)) {
-            windows.closeWindow(entityId, Windows.ChatBox)
+        if(windows.hasWindow(event.entity, Windows.ChatBox)) {
+            windows.closeWindow(event.entity, Windows.ChatBox)
         }
     }
 

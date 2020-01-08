@@ -13,11 +13,11 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import worlds.gregs.hestia.MockkGame
 import worlds.gregs.hestia.artemis.send
+import worlds.gregs.hestia.core.display.dialogue.logic.systems.DialogueBoxSystem
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.StringEntryDialogue
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.StringEntryDialogueSystem
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.stringEntry
 import worlds.gregs.hestia.core.display.dialogue.model.events.StringEntered
-import worlds.gregs.hestia.core.display.dialogue.logic.systems.DialogueBoxSystem
 import worlds.gregs.hestia.core.task.api.Task
 import worlds.gregs.hestia.core.task.api.TaskType
 import worlds.gregs.hestia.core.task.api.Tasks
@@ -101,7 +101,7 @@ internal class StringEntryDialogueTest : MockkGame() {
         val suspension: TaskType<String> = mockk()
         every { tasks.getSuspension(entityId) } returns suspension
         //When
-        es.dispatch(StringEntered(entityId, "text"))
+        es.dispatch(StringEntered("text").apply { entity = entityId })
         //Then
         verify(exactly = 0) { tasks.resume(entityId, suspension, "text") }
     }
@@ -113,7 +113,7 @@ internal class StringEntryDialogueTest : MockkGame() {
         val suspension = spyk(StringEntryDialogue("Title", mockk(relaxed = true)))
         every { tasks.getSuspension(entityId) } returns suspension
         //When
-        es.dispatch(StringEntered(entityId, "text"))
+        es.dispatch(StringEntered( "text").apply { entity = entityId })
         //Then
         verifyOrder {
             tasks.resume(entityId, suspension, "text")

@@ -102,7 +102,7 @@ internal class WindowCloseSuspensionSystemTest : MockkGame(WorldConfigurationBui
         every { screen == widget } returns true
         println(suspension)
         //When
-        es.dispatch(WindowClosed(entityId, widget, false))
+        es.dispatch(WindowClosed(widget, false).apply { entity = entityId })
         //Then
         verify { tasks.resume(entityId, suspension, Unit) }
     }
@@ -115,7 +115,7 @@ internal class WindowCloseSuspensionSystemTest : MockkGame(WorldConfigurationBui
         every { tasks.getSuspension(entityId) } returns suspension
         every { screen == widget } returns false
         //When
-        es.dispatch(WindowClosed(entityId, widget, false))
+        es.dispatch(WindowClosed(widget, false).apply { entity = entityId })
         //Then
         verify(exactly = 0) { tasks.resume(entityId, suspension, any()) }
     }

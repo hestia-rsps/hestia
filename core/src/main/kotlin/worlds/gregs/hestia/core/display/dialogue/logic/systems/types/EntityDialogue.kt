@@ -17,10 +17,10 @@ import worlds.gregs.hestia.core.task.api.TaskType
 import worlds.gregs.hestia.core.task.api.entity
 import worlds.gregs.hestia.core.task.api.world
 import worlds.gregs.hestia.core.task.model.events.ProcessTaskSuspension
+import worlds.gregs.hestia.network.client.encoders.messages.WidgetAnimation
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetHeadMob
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetHeadPlayer
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetItem
-import worlds.gregs.hestia.network.client.encoders.messages.WidgetAnimation
 import worlds.gregs.hestia.service.cache.definition.systems.ItemDefinitionSystem
 import worlds.gregs.hestia.service.cache.definition.systems.MobDefinitionSystem
 

@@ -10,7 +10,6 @@ import worlds.gregs.hestia.core.display.update.model.components.gfx.SecondGraphi
 import worlds.gregs.hestia.core.display.update.model.components.gfx.ThirdGraphic
 import worlds.gregs.hestia.core.entity.entity.model.events.Graphic
 import worlds.gregs.hestia.core.task.api.Task
-import worlds.gregs.hestia.core.task.api.dispatch
 
 class GraphicsSystem : PassiveSystem() {
     private lateinit var firstGraphicMapper: ComponentMapper<FirstGraphic>
@@ -43,8 +42,4 @@ class GraphicsSystem : PassiveSystem() {
             }
         }
     }
-}
-
-fun Task.graphic(id: Int, delay: Int = 0, height: Int = 0, rotation: Int = 0, forceRefresh: Boolean = false) {
-    dispatch(Graphic(id, delay, height, rotation, forceRefresh))
 }

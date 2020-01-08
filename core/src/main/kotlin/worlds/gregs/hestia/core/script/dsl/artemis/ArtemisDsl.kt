@@ -5,7 +5,7 @@ import com.artemis.systems.IteratingSystem
 import com.artemis.utils.IntBag
 import net.mostlyoriginal.api.event.common.Event
 import net.mostlyoriginal.api.system.core.PassiveSystem
-import worlds.gregs.hestia.artemis.dsl.ArtemisEventListener
+import worlds.gregs.hestia.artemis.event.ExtendedEventListener
 import worlds.gregs.hestia.artemis.forEach
 import worlds.gregs.hestia.core.script.dsl.artemis.SystemBuilder.Companion.EMPTY_ASPECT
 import kotlin.reflect.KClass
@@ -242,9 +242,9 @@ class EventListenerBuilder<E : Event>(private var event: KClass<E>, var priority
      * @return the created [ArtemisSubscription] as long as [action] is set
      */
     @Suppress("UNCHECKED_CAST")
-    fun build(): ArtemisEventListener? {
+    fun build(): ExtendedEventListener? {
         return if (action != null) {
-            ArtemisEventListener(event, priority, skipCancelledEvents, conditional as (Event.() -> Boolean)?, action!! as (Event.() -> Unit))
+            ExtendedEventListener(event, priority, skipCancelledEvents, conditional as (Event.() -> Boolean)?, action!! as (Event.() -> Unit))
         } else {
             null
         }

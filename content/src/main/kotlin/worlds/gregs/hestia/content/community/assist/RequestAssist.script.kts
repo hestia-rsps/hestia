@@ -8,15 +8,18 @@ import worlds.gregs.hestia.content.activity.skill.Skill
 import worlds.gregs.hestia.core.action.Action
 import worlds.gregs.hestia.core.action.WorldEvent
 import worlds.gregs.hestia.core.display.client.model.events.Chat
+import worlds.gregs.hestia.core.display.dialogue.model.ChatType.GameAssist
 import worlds.gregs.hestia.core.display.update.model.components.DisplayName
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.AreaStatusIcon
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.AssistXP
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.FilterButtons
 import worlds.gregs.hestia.core.display.window.logic.systems.RequestSystem
+import worlds.gregs.hestia.core.display.window.logic.systems.WindowSystem
 import worlds.gregs.hestia.core.display.window.model.FilterMode
 import worlds.gregs.hestia.core.display.window.model.PlayerOptions.ASSIST
 import worlds.gregs.hestia.core.display.window.model.Request
 import worlds.gregs.hestia.core.display.window.model.actions.CloseWindow
+import worlds.gregs.hestia.core.display.window.model.actions.OpenWindow
 import worlds.gregs.hestia.core.display.window.model.components.Assistance
 import worlds.gregs.hestia.core.display.window.model.components.Assisting
 import worlds.gregs.hestia.core.display.window.model.events.AcceptedRequest
@@ -24,8 +27,10 @@ import worlds.gregs.hestia.core.display.window.model.events.PlayerOption
 import worlds.gregs.hestia.core.display.window.model.events.RequestResponse
 import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
-import worlds.gregs.hestia.core.script.dsl.task.ChatType.GameAssist
+import worlds.gregs.hestia.core.entity.entity.model.events.Animate
+import worlds.gregs.hestia.core.entity.entity.model.events.Graphic
 import worlds.gregs.hestia.core.task.logic.systems.awaitWindow
+import worlds.gregs.hestia.core.task.logic.systems.wait
 import worlds.gregs.hestia.core.world.movement.model.MovementType
 import worlds.gregs.hestia.core.world.movement.model.components.types.Movement
 import worlds.gregs.hestia.core.world.movement.model.events.Moved
@@ -47,19 +52,19 @@ on<PlayerOption> {
         val lastRequest = Engine.ticks - assisting.lastRequest
         if (lastRequest < requestDelay) {
             val waitTime = requestDelay - lastRequest
-            entity type GameAssist message "You have only just made an assistance request"
-            entity type GameAssist message "You have to wait $waitTime ${"second".plural(waitTime)} before making a new request."
+            entity perform Chat("You have only just made an assistance request", GameAssist)
+            entity perform Chat("You have to wait $waitTime ${"second".plural(waitTime)} before making a new request.", GameAssist)
             return@queue
         }
         val targetAssisting = target get Assisting::class
         update(targetAssisting)
         if (targetAssisting.experienceGained >= maximumExperience) {
-            entity type GameAssist message "${target.getName()} is unable to assist at the moment."//Unconfirmed
+            entity perform Chat("${target.get(DisplayName::class).name} is unable to assist at the moment.", GameAssist)//Unconfirmed
             val hours = assisting.getHoursRemaining()
-            target type GameAssist message "An assist request has been refused. You can assist again in $hours ${"hour".plural(hours)}."
+            target perform Chat("An assist request has been refused. You can assist again in $hours ${"hour".plural(hours)}.", GameAssist)
             return@queue
         }
-        entity distance 1 interact target
+        entity.interact(target, 1)
         system(RequestSystem::class).sendRequest(entity, target, Request.ASSIST)
         assisting.lastRequest = Engine.ticks
     }
@@ -69,13 +74,16 @@ on<PlayerOption> {
 //The assistance requester
 on<RequestResponse> {
     where { request == Request.ASSIST }
-    then {
+    fun RequestResponse.task() = queue(TaskPriority.High) {
         entity perform Chat("You are being assisted by ${target.get(DisplayName::class).name}.", GameAssist)
         val assistance = entity create Assistance::class
         assistance.helper = target
         assistance.point.set(target get Position::class)
         entity send WidgetVisibility(AreaStatusIcon, 2, false)
+        wait(2)
+        entity perform Animate(7299)
     }
+    then(RequestResponse::task)
 }
 
 //The assistance giver
@@ -83,17 +91,19 @@ on<AcceptedRequest> {
     where { request == Request.ASSIST }
     fun AcceptedRequest.task() = queue(TaskPriority.High) {
         onCancel { cancel(entity, target) }
-        entity type GameAssist message "You are assisting ${target.getName()}."
+        entity perform Chat("You are assisting ${target.get(DisplayName::class).name}.", GameAssist)
         val assisting = entity get Assisting::class
         update(assisting)
-        entity openWindow AssistXP
+        entity perform OpenWindow(AssistXP)
         entity send WidgetComponentText(AssistXP, 10, "The Assist System is available for you to use.")
-        entity send WidgetComponentText(AssistXP, 73, "Assist System XP Display - You are assisting ${target.getName()}")//TODO there's probably a packet or config for replacing `<name>`
+        entity send WidgetComponentText(AssistXP, 73, "Assist System XP Display - You are assisting ${target.get(DisplayName::class).name}")//TODO there's probably a packet or config for replacing `<name>`
         entity send WidgetVisibility(AreaStatusIcon, 2, false)
         entity send ConfigFile(4103, assisting.experienceGained * 10)
+        entity perform Animate(7299)
+        entity perform Graphic(1247)
         //TODO disable inventory
         awaitWindow(AssistXP)
-        if (entity hasWindowOpen AssistXP) {
+        if (system(WindowSystem::class).hasWindow(entity, AssistXP)) {
             cancel(entity, target)
         }
     }

@@ -4,6 +4,7 @@ import worlds.gregs.hestia.content.activity.skill.Experience
 import worlds.gregs.hestia.content.activity.skill.Skill.CRAFTING
 import worlds.gregs.hestia.core.action.Action
 import worlds.gregs.hestia.core.display.client.model.events.Command
+import worlds.gregs.hestia.core.display.dialogue.model.events.CloseDialogue
 
 data class TestAction(val someData: Int = 0) : Action() {
     constructor(entity: Int, someData: Int) : this(someData) {
@@ -31,10 +32,10 @@ on<Command> {
     where { prefix == "test" }
 
     fun Command.task() = queue {
-        onCancel { closeDialogue() }
+        onCancel { entity perform CloseDialogue() }
         val es = world system EventSystem::class
 //        entity openWindow AssistXP
-        world dispatch Experience(CRAFTING, 10000)
+        entity perform Experience(CRAFTING, 10000)
 //        entity send WidgetComponentText(AssistXP, 10, "You've earned the maximum XP from the Assist System with a 24-hour period.<br>You can assist again in 24 hours.")
 //        entity send Script(527)
 //        entity send Script(524, 301 shl 16 or 45)

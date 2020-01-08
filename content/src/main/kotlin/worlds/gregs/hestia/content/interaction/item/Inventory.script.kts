@@ -2,12 +2,14 @@ package worlds.gregs.hestia.content.interaction.item
 
 import org.slf4j.LoggerFactory
 import worlds.gregs.hestia.content.interaction.item.Inventory_script.Inv
+import worlds.gregs.hestia.core.display.client.model.events.Chat
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.Inventory
 import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
 import worlds.gregs.hestia.core.display.window.model.events.WindowOpened
 import worlds.gregs.hestia.core.display.window.model.events.WindowRefresh
 import worlds.gregs.hestia.core.display.window.model.events.WindowSwitch
 import worlds.gregs.hestia.core.entity.item.container.api.ItemResult
+import worlds.gregs.hestia.core.display.dialogue.model.ChatType
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetItems
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetSettings
 
@@ -52,7 +54,7 @@ on<WindowInteraction> {
                 }
             }
             option == 8 -> {//Examine
-                entity message "It's ${item.definition().name}."//Temp
+                entity perform Chat("It's ${item.definition().name}.")//Temp
             }
             else -> logger.warn("Unknown item option $item $option")
         }

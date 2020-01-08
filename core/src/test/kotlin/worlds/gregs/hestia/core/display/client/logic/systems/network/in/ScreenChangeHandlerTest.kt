@@ -7,10 +7,9 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import world.gregs.hestia.core.network.codec.packet.Packet
 import world.gregs.hestia.core.network.codec.packet.PacketWriter
-import worlds.gregs.hestia.core.display.window.model.components.GameFrame
-import worlds.gregs.hestia.core.display.widget.logic.systems.screen.GraphicsOptionsSystem
-import worlds.gregs.hestia.network.client.decoders.messages.ScreenChange
 import worlds.gregs.hestia.artemis.getSystem
+import worlds.gregs.hestia.core.display.window.model.components.GameFrame
+import worlds.gregs.hestia.network.client.decoders.messages.ScreenChange
 import worlds.gregs.hestia.tools.InterfaceTester
 
 internal class ScreenChangeHandlerTest : InterfaceTester(WorldConfigurationBuilder().with(ScreenChangeHandler())) {
@@ -27,7 +26,7 @@ internal class ScreenChangeHandlerTest : InterfaceTester(WorldConfigurationBuild
     @BeforeEach
     override fun setup() {
         super.setup()
-        open(GraphicsOptionsSystem::class)
+//        open(GraphicsOptionsSystem::class)
         gameFrame.displayMode = 0
         gameFrame.width = 0
         gameFrame.height = 0
@@ -44,7 +43,7 @@ internal class ScreenChangeHandlerTest : InterfaceTester(WorldConfigurationBuild
     @Test
     fun `No reload when graphics options interface closed`() {
         //Given
-        close(GraphicsOptionsSystem::class)
+//        close(GraphicsOptionsSystem::class)
         //When
         sendScreen(gameMode = 1)
         //Then
@@ -54,7 +53,7 @@ internal class ScreenChangeHandlerTest : InterfaceTester(WorldConfigurationBuild
     @Test
     fun `Reload when graphics options interface open`() {
         //Given
-        open(GraphicsOptionsSystem::class)
+//        open(GraphicsOptionsSystem::class)
         //When
         sendScreen(gameMode = 1)
         //Then
@@ -117,7 +116,7 @@ internal class ScreenChangeHandlerTest : InterfaceTester(WorldConfigurationBuild
     @Test
     fun `Screen dimensions change when graphics interface closed and game mode changed`() {
         //Given
-        close(GraphicsOptionsSystem::class)
+//        close(GraphicsOptionsSystem::class)
         //When
         sendScreen(width = 100, height = 100)
         //Then

@@ -7,36 +7,32 @@ import com.artemis.World
 import kotlinx.coroutines.CompletionHandler
 import net.mostlyoriginal.api.event.common.Event
 import net.mostlyoriginal.api.event.common.EventSystem
-import org.slf4j.Logger
-import org.slf4j.LoggerFactory
 import world.gregs.hestia.core.network.codec.message.Message
 import worlds.gregs.hestia.artemis.getSystem
 import worlds.gregs.hestia.artemis.send
+import worlds.gregs.hestia.core.action.perform
+import worlds.gregs.hestia.core.display.client.model.events.Chat
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.DialogueBuilder
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.dialogue
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.options
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.statement
-import worlds.gregs.hestia.core.display.update.model.components.DisplayName
-import worlds.gregs.hestia.core.display.update.model.components.ForceChat
-import worlds.gregs.hestia.core.display.update.model.components.Transform
-import worlds.gregs.hestia.core.display.window.logic.systems.WindowSystem
-import worlds.gregs.hestia.core.display.window.model.WindowPane
-import worlds.gregs.hestia.core.display.window.model.actions.CloseWindow
-import worlds.gregs.hestia.core.display.window.model.actions.OpenWindow
-import worlds.gregs.hestia.core.display.window.model.actions.RefreshWindow
-import worlds.gregs.hestia.core.entity.entity.logic.systems.update.animate
+import worlds.gregs.hestia.core.display.update.model.components.direction.Face
+import worlds.gregs.hestia.core.display.update.model.components.direction.Facing
+import worlds.gregs.hestia.core.entity.`object`.model.components.GameObject
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
-import worlds.gregs.hestia.core.entity.entity.model.events.Hit
+import worlds.gregs.hestia.core.entity.entity.model.components.Size
+import worlds.gregs.hestia.core.entity.entity.model.components.height
+import worlds.gregs.hestia.core.entity.entity.model.components.width
 import worlds.gregs.hestia.core.entity.item.container.model.Item
 import worlds.gregs.hestia.core.entity.item.container.model.ItemContainer
-import worlds.gregs.hestia.core.entity.player.model.events.UpdateAppearance
-import worlds.gregs.hestia.core.script.dsl.task.*
 import worlds.gregs.hestia.core.task.logic.systems.TaskSystem
-import worlds.gregs.hestia.core.world.movement.model.MovementType
+import worlds.gregs.hestia.core.task.logic.systems.awaitDistance
+import worlds.gregs.hestia.core.task.logic.systems.awaitRoute
+import worlds.gregs.hestia.core.task.logic.systems.wait
+import worlds.gregs.hestia.core.world.movement.logic.systems.calc.StepBesideSystem
 import worlds.gregs.hestia.core.world.movement.model.components.calc.Follow
-import worlds.gregs.hestia.core.world.movement.model.components.types.MoveStep
-import worlds.gregs.hestia.core.world.movement.model.components.types.Movement
-import worlds.gregs.hestia.game.update.blocks.Marker
+import worlds.gregs.hestia.core.world.movement.model.components.calc.Route
+import worlds.gregs.hestia.service.cache.definition.systems.ObjectDefinitionSystem
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.suspendCoroutine
 import kotlin.reflect.KClass
@@ -103,42 +99,6 @@ interface Task : Continuation<Any> {
 
 
     /*
-        Interact
-     */
-
-    infix fun Int.distance(distance: Int) = DistanceBuilder(entity = this, distance = distance)
-
-    suspend infix fun Int.interact(target: Int) = DistanceBuilder(entity = this).interact(target)
-
-    suspend infix fun DistanceBuilder.interact(target: Int) = this@Task.interact(InteractBuilder(this, target))
-
-    /*
-        Windows
-     */
-    infix fun Int.openWindow(window: Int) {
-        world dispatch OpenWindow(window)
-    }
-
-    infix fun Int.refreshWindow(window: Int) {
-        world dispatch RefreshWindow(window)
-    }
-
-    infix fun Int.closeWindow(window: Int) {
-        world dispatch CloseWindow(window)
-    }
-
-    infix fun Int.closeWindow(pane: WindowPane) {
-        val window = getSystem(WindowSystem::class).getWindow(this, pane)
-        if (window != null) {
-            this closeWindow window
-        }
-    }
-
-    infix fun Int.hasWindowOpen(window: Int) = getSystem(WindowSystem::class).hasWindow(this, window)
-
-    infix fun Int.windowNotOpen(window: Int): Boolean = !(this hasWindowOpen window)
-
-    /*
         Dialogue
      */
     infix fun Int.animation(animation: Int) = DialogueBuilder(target = this, animation = animation)
@@ -160,86 +120,6 @@ interface Task : Continuation<Any> {
     suspend infix fun Int.options(message: String) = DialogueBuilder(target = this).options(message)
 
     suspend infix fun DialogueBuilder.options(message: String) = options(apply { this.message = message })
-
-    /*
-        Movement
-     */
-    infix fun Int.move(position: Position) = move(position.x, position.y, position.plane)
-
-    fun Int.move(x: Int, y: Int, plane: Int? = null) {
-        val step = this create MoveStep::class
-        step.x = x
-        step.y = y
-        step.plane = plane ?: (this get Position::class).plane
-    }
-
-    infix fun Int.follow(target: Int) {
-        val follow = this create Follow::class
-        follow.entity = target
-    }
-
-    fun Int.movementType() = (entity get Movement::class).actual
-    fun Int.isRunning() = movementType() == MovementType.Run
-    fun Int.isWalking() = movementType() == MovementType.Walk
-    fun Int.isMoving() = movementType() == MovementType.Move
-    /*
-        Message
-     */
-
-    infix fun Int.message(message: String) = ChatBuilder(this).message(message)
-
-    fun Int.getName(): String {
-        return (this get DisplayName::class).name ?: "null"//Could be expanded to using definitions too
-    }
-
-    infix fun ChatBuilder.message(message: String) = chat(apply { this.message = message })
-
-    infix fun Int.type(type: Int) = ChatBuilder(this, type = type)
-
-    infix fun ChatBuilder.type(type: Int) = apply { this.type = type }
-
-    infix fun ChatBuilder.tile(tile: Int) = apply { this.tile = tile }
-
-    infix fun ChatBuilder.name(name: String) = apply { this.name = name }
-
-
-    infix fun Int.face(target: Int) {
-
-    }
-
-    suspend infix fun Int.watch(target: Int) = watch(this, target)
-
-    infix fun World.delete(target: Int) = world.delete(target)
-
-
-    infix fun Int.samePosition(target: Int): Boolean {
-        val position = this get Position::class
-        val target = target get Position::class
-        return position.same(target)
-    }
-
-    infix fun Int.notSamePosition(target: Int): Boolean = !samePosition(target)
-
-    infix fun Int.animate(id: Int) = this@Task.animate(id)
-
-    fun Int.updateAppearance() = dispatch(UpdateAppearance())
-
-    infix fun Int.transform(mob: Int) {
-        create(Transform::class).mobId = mob
-    }
-
-    /**
-     * Force chat
-     */
-    infix fun Int.say(message: String) {
-        create(ForceChat::class).message = message
-    }
-
-    infix fun Int.hit(amount: Int) {
-        dispatch(Hit(amount, Marker.MELEE, 0, false, -1, -1))
-    }
-
-    fun log(message: String) = logger.warn(message)
 
 
     /**
@@ -264,6 +144,85 @@ interface Task : Continuation<Any> {
         }
         return item!!
     }
+/*
+    Interaction
+ */
+
+    data class DistanceBuilder(val entity: Int, var distance: Int = 1)
+
+    data class InteractBuilder(val distance: DistanceBuilder, var target: Int = -1)
+
+
+    /**
+     * Checks static entity is valid, creates route, waits for movement and returns if reached entity
+     */
+    suspend fun Int.interact(target: Int, distance: Int) {
+        onCancel {
+            val position = target.get(Position::class)
+            entity.get(Face::class).apply { x = position.x; y = position.y }
+            entity.create(Facing::class)
+            world.getSystem(EventSystem::class).perform(entity, Chat("You can't reach that."))
+        }
+
+        val position = entity get Position::class
+        val targetPosition = target getUnsafe Position::class
+
+        //Check valid entity
+        if (!world.entityManager.isActive(target) || targetPosition == null || targetPosition.plane != position.plane) {
+            return cancel(TaskCancellation.OutOfReach)
+        }
+
+        val result: Boolean
+
+        //If range check, then follow (mob/player)
+        if (distance > 0) {
+            //Start following
+            val follow = entity create Follow::class
+            follow.entity = target
+
+            //Wait till within distance
+            result = awaitDistance(target, distance)
+            //Cancel target
+            follow.entity = -1
+        } else {
+            //Start route
+            val route = entity create Route::class
+            route.entityId = target
+            route.alternative = true
+
+            val actualRoute = awaitRoute()
+            wait(1) //The system processes before the client has updated, so we wait 1 tick allowing the client to catch up.
+            result = canInteract(actualRoute, position, targetPosition, target)
+        }
+
+        //Cancel if not possible
+        if (!result) {
+            cancel(TaskCancellation.OutOfReach)
+        }
+    }
+
+    private fun canInteract(route: worlds.gregs.hestia.core.task.logic.systems.Route, position: Position, targetPosition: Position, targetEntityId: Int): Boolean {
+        if (route.steps < 0) {
+            return false
+        }
+        val sizeX: Int
+        val sizeY: Int
+
+        val gameObject = getMapper(GameObject::class).get(targetEntityId)
+        if (gameObject != null) {
+            val definitions = getSystem(ObjectDefinitionSystem::class)
+            val definition = definitions.get(gameObject.id)
+            sizeX = definition.sizeX
+            sizeY = definition.sizeY
+        } else {
+            val sizeMapper = getMapper(Size::class)
+            sizeX = sizeMapper.width(targetEntityId)
+            sizeY = sizeMapper.height(targetEntityId)
+        }
+
+        return !route.alternative || StepBesideSystem.isNear(position.x, position.y, targetPosition.x, targetPosition.y, sizeX, sizeY, true)
+    }
+
 
     companion object {
         const val FIRST = 0
@@ -272,7 +231,6 @@ interface Task : Continuation<Any> {
         const val FOURTH = 3
         const val FIFTH = 4
         val SUCCESS = null
-        private val logger: Logger = LoggerFactory.getLogger(Task::class.java)!!
     }
 }
 

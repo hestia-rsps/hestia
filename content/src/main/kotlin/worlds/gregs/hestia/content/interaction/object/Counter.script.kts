@@ -5,7 +5,7 @@ import worlds.gregs.hestia.core.entity.`object`.model.events.ObjectOption
 on<ObjectOption> {
     where { option == "Use" && name == "Counter" }
     fun ObjectOption.task() = queue(TaskPriority.High) {
-        entity distance 0 interact target
+        entity.interact(target, 0)
         TODO("Open bank")
     }
     then(ObjectOption::task)
