@@ -12,6 +12,7 @@ import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import worlds.gregs.hestia.MockkGame
+import worlds.gregs.hestia.core.display.window.api.Windows
 import worlds.gregs.hestia.core.display.window.model.events.WindowClosed
 import worlds.gregs.hestia.core.task.api.Task
 import worlds.gregs.hestia.core.task.api.TaskType
@@ -35,6 +36,9 @@ internal class WindowCloseSuspensionSystemTest : MockkGame(WorldConfigurationBui
     @RelaxedMockK
     lateinit var tasks: Tasks
 
+    @RelaxedMockK
+    lateinit var windows: Windows
+
     var screen = 10
 
     var widget = screen
@@ -55,7 +59,7 @@ internal class WindowCloseSuspensionSystemTest : MockkGame(WorldConfigurationBui
     }
 
     override fun config(config: WorldConfigurationBuilder) {
-        config.with(system, tasks)
+        config.with(system, tasks, windows)
     }
 
     @Test

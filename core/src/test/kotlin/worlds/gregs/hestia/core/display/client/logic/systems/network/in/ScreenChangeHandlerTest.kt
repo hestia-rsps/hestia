@@ -2,12 +2,15 @@ package worlds.gregs.hestia.core.display.client.logic.systems.network.`in`
 
 import com.artemis.Entity
 import com.artemis.WorldConfigurationBuilder
+import com.nhaarman.mockitokotlin2.times
+import com.nhaarman.mockitokotlin2.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import world.gregs.hestia.core.network.codec.packet.Packet
 import world.gregs.hestia.core.network.codec.packet.PacketWriter
 import worlds.gregs.hestia.artemis.getSystem
+import worlds.gregs.hestia.core.display.window.api.Windows.Companion.GraphicsOptions
 import worlds.gregs.hestia.core.display.window.model.components.GameFrame
 import worlds.gregs.hestia.network.client.decoders.messages.ScreenChange
 import worlds.gregs.hestia.tools.InterfaceTester
@@ -26,7 +29,7 @@ internal class ScreenChangeHandlerTest : InterfaceTester(WorldConfigurationBuild
     @BeforeEach
     override fun setup() {
         super.setup()
-//        open(GraphicsOptionsSystem::class)
+        open(GraphicsOptions)
         gameFrame.displayMode = 0
         gameFrame.width = 0
         gameFrame.height = 0
@@ -43,7 +46,7 @@ internal class ScreenChangeHandlerTest : InterfaceTester(WorldConfigurationBuild
     @Test
     fun `No reload when graphics options interface closed`() {
         //Given
-//        close(GraphicsOptionsSystem::class)
+        close(GraphicsOptions)
         //When
         sendScreen(gameMode = 1)
         //Then
@@ -53,7 +56,7 @@ internal class ScreenChangeHandlerTest : InterfaceTester(WorldConfigurationBuild
     @Test
     fun `Reload when graphics options interface open`() {
         //Given
-//        open(GraphicsOptionsSystem::class)
+        open(GraphicsOptions)
         //When
         sendScreen(gameMode = 1)
         //Then
@@ -133,7 +136,7 @@ internal class ScreenChangeHandlerTest : InterfaceTester(WorldConfigurationBuild
     }
 
     private fun assertReloaded(times: Int) {
-        assertReloaded(times, 0)
+        verify(ui, times(times)).updateGameframe(0)
     }
 
     private fun sendScreen(entityId: Int = 0, gameMode: Int = 0, width: Int = 765, height: Int = 503) {

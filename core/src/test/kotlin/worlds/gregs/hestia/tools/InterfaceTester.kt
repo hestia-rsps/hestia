@@ -30,16 +30,16 @@ abstract class InterfaceTester(config: WorldConfigurationBuilder) : GameTest(con
 
 
     internal fun assertReloaded(times: Int, entity: Int) {
-        verify(ui, times(times)).refreshWindow(entity, any())
+        verify(ui, times(times)).refreshWindow(eq(entity), any())
     }
 
 
     internal fun assertOpened(times: Int, entity: Int, widget: Int) {
-        verify(ui, times(times)).openWindow(entity, widget)
+        verify(ui, times(times)).openWindow(eq(entity), eq(widget))
     }
 
     internal fun assertClosed(times: Int, entity: Int) {
-        verify(ui, times(times)).closeWindow(entity, any())
+        verify(ui, times(times)).closeWindow(eq(entity), any(), any())
     }
 
     internal fun assertClicked(times: Int, entity: Int, window: Int, widget: Int, option: Int) {

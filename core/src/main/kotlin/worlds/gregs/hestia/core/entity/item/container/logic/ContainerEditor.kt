@@ -2,7 +2,7 @@ package worlds.gregs.hestia.core.entity.item.container.logic
 
 import arrow.core.*
 import arrow.fx.IO
-import worlds.gregs.hestia.core.action.Action
+import worlds.gregs.hestia.core.action.model.EntityAction
 import worlds.gregs.hestia.core.entity.item.container.api.*
 import worlds.gregs.hestia.core.entity.item.container.logic.ContainerEditor.addEmptySlot
 import worlds.gregs.hestia.core.entity.item.container.logic.ContainerEditor.canStack
@@ -31,7 +31,7 @@ data class ContainerTransformBuilder(val overflow: Boolean = true) {
     lateinit var function: Composition
 }
 
-fun Action.transform(builder: ContainerTransformBuilder): ItemResult {
+fun EntityAction.transform(builder: ContainerTransformBuilder): ItemResult {
     val definitions = system(ItemDefinitionSystem::class).reader
     val stackType = system(InventorySystem::class).stackType
     val container = entity.get(Inventory::class)

@@ -4,7 +4,7 @@ import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.event.common.EventSystem
 import org.slf4j.LoggerFactory
 import worlds.gregs.hestia.GameServer
-import worlds.gregs.hestia.core.action.perform
+import worlds.gregs.hestia.core.action.model.perform
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.entity.model.components.Type
 import worlds.gregs.hestia.core.entity.item.floor.api.FloorItems

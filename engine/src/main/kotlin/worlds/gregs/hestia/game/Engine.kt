@@ -45,7 +45,6 @@ abstract class Engine : Thread("Game Engine") {
 
     companion object {
         var ticks: Int = 0
-            private set
         private var LAST_CYCLE_CTM: Long = 0
         private const val WORLD_CYCLE_TIME = 600
         private val logger = LoggerFactory.getLogger(Engine::class.java)

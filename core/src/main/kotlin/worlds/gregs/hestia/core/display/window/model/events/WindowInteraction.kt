@@ -1,7 +1,7 @@
 package worlds.gregs.hestia.core.display.window.model.events
 
 import worlds.gregs.hestia.artemis.InstantEvent
-import worlds.gregs.hestia.core.action.Action
+import worlds.gregs.hestia.core.action.model.EntityAction
 
 /**
  * A client interaction with a window widget
@@ -11,4 +11,4 @@ import worlds.gregs.hestia.core.action.Action
  * @param second Second parameter
  * @param option Option parameter
  */
-data class WindowInteraction(val target: Int, val widget: Int, val first: Int, val second: Int, val option: Int) : Action(), InstantEvent
+data class WindowInteraction(val target: Int, val widget: Int, val first: Int, val second: Int, val option: Int) : EntityAction(), InstantEvent

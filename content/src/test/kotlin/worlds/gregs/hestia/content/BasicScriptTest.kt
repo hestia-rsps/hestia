@@ -3,9 +3,9 @@ package worlds.gregs.hestia.content
 import org.junit.jupiter.api.Test
 import worlds.gregs.hestia.core.display.window.model.events.ButtonClick
 import worlds.gregs.hestia.core.script.ScriptBase
-import worlds.gregs.hestia.script.ScriptTesterMock
+import worlds.gregs.hestia.script.ScriptMock
 
-internal class BasicScriptTest : ScriptTesterMock<ScriptBase>() {
+internal class BasicScriptTest : ScriptMock<ScriptBase>() {
 
     @Test
     fun `first test`() {

@@ -4,7 +4,7 @@ import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.event.common.EventSystem
 import world.gregs.hestia.core.network.protocol.encoders.messages.Chat
 import worlds.gregs.hestia.artemis.send
-import worlds.gregs.hestia.core.action.perform
+import worlds.gregs.hestia.core.action.model.perform
 import worlds.gregs.hestia.core.display.update.model.components.DisplayName
 import worlds.gregs.hestia.core.display.window.api.Requests
 import worlds.gregs.hestia.core.display.window.model.Request

@@ -9,7 +9,7 @@ import org.junit.jupiter.api.BeforeEach
 import worlds.gregs.hestia.artemis.event.PollingEventDispatcher
 import worlds.gregs.hestia.core.script.ScriptBuilder
 
-abstract class ScriptTesterWorld<T : ScriptBuilder>(private val aspect: Aspect.Builder? = null) : ScriptLoader {
+abstract class ScriptWorld<T : ScriptBuilder>(private val aspect: Aspect.Builder? = null) : ScriptLoader {
 
     protected lateinit var script: T
     protected lateinit var world: World

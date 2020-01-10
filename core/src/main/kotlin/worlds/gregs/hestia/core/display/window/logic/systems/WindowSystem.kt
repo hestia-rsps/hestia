@@ -5,7 +5,7 @@ import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.event.common.Subscribe
 import org.slf4j.LoggerFactory
 import worlds.gregs.hestia.artemis.send
-import worlds.gregs.hestia.core.action.perform
+import worlds.gregs.hestia.core.action.model.perform
 import worlds.gregs.hestia.core.display.window.api.Windows
 import worlds.gregs.hestia.core.display.window.model.WindowPane
 import worlds.gregs.hestia.core.display.window.model.actions.CloseWindow

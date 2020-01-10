@@ -8,9 +8,9 @@ import org.junit.jupiter.api.Test
 import worlds.gregs.hestia.core.display.client.model.events.Command
 import worlds.gregs.hestia.core.display.dialogue.api.DialogueBase
 import worlds.gregs.hestia.core.script.ScriptBase
-import worlds.gregs.hestia.script.ScriptTesterMock
+import worlds.gregs.hestia.script.ScriptMock
 
-internal class DialogScriptTest : ScriptTesterMock<ScriptBase>() {
+internal class DialogScriptTest : ScriptMock<ScriptBase>() {
 /*
     override fun build(builder: WorldConfigurationBuilder) {
         val base: DialogueBase = mock()

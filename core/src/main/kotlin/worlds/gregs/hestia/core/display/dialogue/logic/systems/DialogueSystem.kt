@@ -2,7 +2,7 @@ package worlds.gregs.hestia.core.display.dialogue.logic.systems
 
 import net.mostlyoriginal.api.event.common.EventSystem
 import org.slf4j.LoggerFactory
-import worlds.gregs.hestia.core.action.perform
+import worlds.gregs.hestia.core.action.model.perform
 import worlds.gregs.hestia.core.display.dialogue.api.DialogueBase
 import worlds.gregs.hestia.core.task.model.InactiveTask
 import worlds.gregs.hestia.core.task.model.ReusableTask

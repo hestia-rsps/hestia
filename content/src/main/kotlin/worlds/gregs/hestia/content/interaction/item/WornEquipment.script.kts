@@ -1,6 +1,6 @@
 package worlds.gregs.hestia.content.interaction.item
 
-import worlds.gregs.hestia.core.action.Action
+import worlds.gregs.hestia.core.action.model.EntityAction
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.EquipmentBonuses
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.ItemsKeptOnDeath
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.PriceChecker
@@ -25,7 +25,7 @@ on<WindowRefresh> {
     }
 }
 
-fun Action.sendItems() {
+fun EntityAction.sendItems() {
     entity send WidgetItems(94, (0 until 15).map { Pair(it, 1) })
 }
 

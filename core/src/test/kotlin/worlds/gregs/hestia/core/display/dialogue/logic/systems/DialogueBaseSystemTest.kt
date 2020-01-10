@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory
 import world.gregs.hestia.core.network.protocol.encoders.messages.WidgetComponentText
 import worlds.gregs.hestia.MockkGame
 import worlds.gregs.hestia.artemis.send
+import worlds.gregs.hestia.core.display.window.api.Windows
 import worlds.gregs.hestia.core.task.api.Tasks
 import worlds.gregs.hestia.core.task.model.components.TaskQueue
 
@@ -27,6 +28,8 @@ internal class DialogueBaseSystemTest : MockkGame() {
 
     @RelaxedMockK
     private lateinit var tasks: Tasks
+    @RelaxedMockK
+    private lateinit var windows: Windows
 
     @SpyK
     var boxSystem = DialogueBoxSystem()
@@ -35,7 +38,7 @@ internal class DialogueBaseSystemTest : MockkGame() {
     var component = TaskQueue()
 
     override fun config(config: WorldConfigurationBuilder) {
-        config.with(system, tasks, boxSystem)
+        config.with(system, tasks, boxSystem, windows)
     }
 
     @BeforeEach

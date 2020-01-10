@@ -1,8 +1,9 @@
-package worlds.gregs.hestia.core.action
+package worlds.gregs.hestia.core.action.model
 
 import net.mostlyoriginal.api.event.common.Cancellable
 import net.mostlyoriginal.api.event.common.EventSystem
 import world.gregs.hestia.core.services.plural
+import worlds.gregs.hestia.core.action.logic.dispatch
 import worlds.gregs.hestia.core.display.client.model.components.ClientIndex
 import worlds.gregs.hestia.core.display.client.model.events.Chat
 import worlds.gregs.hestia.core.display.update.model.components.DisplayName
@@ -19,7 +20,7 @@ import worlds.gregs.hestia.core.task.api.TaskPriority
 import worlds.gregs.hestia.service.cache.definition.definitions.ItemDefinition
 import worlds.gregs.hestia.service.cache.definition.systems.ItemDefinitionSystem
 
-abstract class Action : WorldEvent(), Cancellable {
+abstract class EntityAction : WorldAction(), Cancellable {
     var cancel = false
 
     override fun setCancelled(value: Boolean) {
@@ -31,6 +32,19 @@ abstract class Action : WorldEvent(), Cancellable {
     }
 
     var entity: Int = -1
+
+
+    infix fun Int.perform(action: EntityAction) {
+        action.entity = this
+        super.perform(action)
+    }
+
+    override fun perform(action: Action) {
+        if(action is EntityAction) {
+            action.entity = entity
+        }
+        super.perform(action)
+    }
 
     /**
      * Workaround for sending tasks cleanly
@@ -90,7 +104,7 @@ abstract class Action : WorldEvent(), Cancellable {
     }
 }
 
-fun EventSystem.perform(entityId: Int, action: Action) {
+fun EventSystem.perform(entityId: Int, action: EntityAction) {
     action.entity = entityId
     dispatch(action)
 }

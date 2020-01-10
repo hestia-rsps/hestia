@@ -3,14 +3,12 @@ package worlds.gregs.hestia.core.task.api
 import com.artemis.BaseSystem
 import com.artemis.Component
 import com.artemis.ComponentMapper
-import com.artemis.World
 import kotlinx.coroutines.CompletionHandler
-import net.mostlyoriginal.api.event.common.Event
 import net.mostlyoriginal.api.event.common.EventSystem
 import world.gregs.hestia.core.network.codec.message.Message
 import worlds.gregs.hestia.artemis.getSystem
 import worlds.gregs.hestia.artemis.send
-import worlds.gregs.hestia.core.action.perform
+import worlds.gregs.hestia.core.action.model.perform
 import worlds.gregs.hestia.core.display.client.model.events.Chat
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.DialogueBuilder
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.dialogue
@@ -59,42 +57,28 @@ interface Task : Continuation<Any> {
      */
 
     suspend fun cancel(cancellation: TaskCancellation) = suspendCoroutine<Unit> {
-        val tasks = world system TaskSystem::class
+        val tasks = system(TaskSystem::class)
         tasks.cancel(entity, cancellation)
     }
 
     suspend fun cancel(message: String) = cancel(TaskCancellation.Cancellation(message))
 
-    infix fun <T : Component> Int.get(c: KClass<T>): T {
-        return world.getMapper(c.java).get(this)
-    }
+    infix fun <T : Component> Int.get(c: KClass<T>) = map(c).get(this)
 
-    infix fun <T : Component> Int.getUnsafe(c: KClass<T>): T? {
-        return world.getMapper(c.java).get(this)
-    }
+    infix fun <T : Component> Int.getUnsafe(c: KClass<T>): T? = map(c).get(this)
 
-    infix fun <T : Component> Int.create(c: KClass<T>): T {
-        return world.getMapper(c.java).create(this)
-    }
+    infix fun <T : Component> Int.create(c: KClass<T>) = map(c).create(this)
 
-    infix fun <T : Component> Int.remove(c: KClass<T>) {
-        world.getMapper(c.java).remove(this)
-    }
+    infix fun <T : Component> Int.remove(c: KClass<T>) = map(c).remove(this)
 
-    infix fun <T : Component> Int.has(c: KClass<T>): Boolean {
-        return world.getMapper(c.java).has(this)
-    }
+    infix fun <T : Component> Int.has(c: KClass<T>) = map(c).has(this)
 
-    infix fun <T : BaseSystem> World.system(c: KClass<T>): T {
-        return getSystem(c.java)
-    }
+    infix fun <T : BaseSystem> system(c: KClass<T>) = world.getSystem(c.java)
+
+    fun <T : Component> map(c: KClass<T>): ComponentMapper<T> = world.getMapper(c.java)
 
     infix fun Int.send(message: Message) {
-        getSystem(EventSystem::class).send(this, message)
-    }
-
-    infix fun World.dispatch(event: Event) {
-        getSystem(EventSystem::class).dispatch(event)
+        system(EventSystem::class).send(this, message)
     }
 
 
@@ -147,10 +131,6 @@ interface Task : Continuation<Any> {
 /*
     Interaction
  */
-
-    data class DistanceBuilder(val entity: Int, var distance: Int = 1)
-
-    data class InteractBuilder(val distance: DistanceBuilder, var target: Int = -1)
 
 
     /**
@@ -208,14 +188,14 @@ interface Task : Continuation<Any> {
         val sizeX: Int
         val sizeY: Int
 
-        val gameObject = getMapper(GameObject::class).get(targetEntityId)
+        val gameObject = targetEntityId.getUnsafe(GameObject::class)
         if (gameObject != null) {
-            val definitions = getSystem(ObjectDefinitionSystem::class)
+            val definitions = system(ObjectDefinitionSystem::class)
             val definition = definitions.get(gameObject.id)
             sizeX = definition.sizeX
             sizeY = definition.sizeY
         } else {
-            val sizeMapper = getMapper(Size::class)
+            val sizeMapper = map(Size::class)
             sizeX = sizeMapper.width(targetEntityId)
             sizeY = sizeMapper.height(targetEntityId)
         }
@@ -233,9 +213,3 @@ interface Task : Continuation<Any> {
         val SUCCESS = null
     }
 }
-
-fun <T : Component> Task.getMapper(c: KClass<T>): ComponentMapper<T> = world.getMapper(c.java)
-
-fun <T : Component> Task.getComponent(c: KClass<T>): T = getMapper(c).get(entity)
-
-fun <T : BaseSystem> Task.getSystem(c: KClass<T>): T = world.getSystem(c.java)

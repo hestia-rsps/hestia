@@ -10,7 +10,8 @@ import org.junit.jupiter.api.assertThrows
 import org.mockito.Matchers.anyInt
 import worlds.gregs.hestia.artemis.Aspect
 import worlds.gregs.hestia.artemis.event.ExtendedEventDispatchStrategy
-import worlds.gregs.hestia.core.action.WorldEvent
+import worlds.gregs.hestia.core.action.model.Action
+import worlds.gregs.hestia.core.action.model.WorldAction
 
 internal class ScriptBaseTest {
 
@@ -24,7 +25,7 @@ internal class ScriptBaseTest {
     @Test
     fun `Add event listener`() {
         //When
-        script.on<WorldEvent>(action = {})
+        script.on<Action>(action = {})
         //Then
         assertThat(script.listeners).isNotEmpty
     }
@@ -78,7 +79,7 @@ internal class ScriptBaseTest {
     @Test
     fun `Registers listeners`() {
         //Given
-        script.on<WorldEvent>(action = {})
+        script.on<Action>(action = {})
         val world = mock<World>()
         whenever(world.aspectSubscriptionManager).thenReturn(mock())
         val dispatcher = mock<ExtendedEventDispatchStrategy>()

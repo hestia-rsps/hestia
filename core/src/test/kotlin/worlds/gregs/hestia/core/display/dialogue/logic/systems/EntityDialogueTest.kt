@@ -12,6 +12,7 @@ import worlds.gregs.hestia.MockkGame
 import worlds.gregs.hestia.artemis.send
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.*
 import worlds.gregs.hestia.core.display.dialogue.model.events.ContinueDialogue
+import worlds.gregs.hestia.core.display.window.api.Windows
 import worlds.gregs.hestia.core.task.api.TaskType
 import worlds.gregs.hestia.core.task.api.Tasks
 import worlds.gregs.hestia.core.task.model.events.ProcessTaskSuspension
@@ -39,12 +40,15 @@ internal class EntityDialogueTest : MockkGame() {
     private lateinit var tasks: Tasks
 
     @RelaxedMockK
+    private lateinit var windows: Windows
+
+    @RelaxedMockK
     private lateinit var itemReader: ItemDefinitionReader
     @RelaxedMockK
     private lateinit var mobReader: MobDefinitionReader
 
     override fun config(config: WorldConfigurationBuilder) {
-        config.with(system, tasks, boxSystem, ItemDefinitionSystem(itemReader), MobDefinitionSystem(mobReader))
+        config.with(system, tasks, boxSystem, windows, ItemDefinitionSystem(itemReader), MobDefinitionSystem(mobReader))
     }
 
     @Test

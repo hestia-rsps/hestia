@@ -18,6 +18,7 @@ import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.StringEntry
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.StringEntryDialogueSystem
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.stringEntry
 import worlds.gregs.hestia.core.display.dialogue.model.events.StringEntered
+import worlds.gregs.hestia.core.display.window.api.Windows
 import worlds.gregs.hestia.core.task.api.Task
 import worlds.gregs.hestia.core.task.api.TaskType
 import worlds.gregs.hestia.core.task.api.Tasks
@@ -39,6 +40,9 @@ internal class StringEntryDialogueTest : MockkGame() {
 
     @RelaxedMockK
     private lateinit var tasks: Tasks
+    @RelaxedMockK
+    private lateinit var windows: Windows
+
     private lateinit var continuation: CancellableContinuation<String>
 
     @BeforeEach
@@ -51,7 +55,7 @@ internal class StringEntryDialogueTest : MockkGame() {
     }
 
     override fun config(config: WorldConfigurationBuilder) {
-        config.with(system, tasks, DialogueBoxSystem())
+        config.with(system, tasks, DialogueBoxSystem(), windows)
     }
 
     @Test

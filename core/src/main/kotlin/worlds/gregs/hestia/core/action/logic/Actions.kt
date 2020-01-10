@@ -1,4 +1,4 @@
-package worlds.gregs.hestia.core.action
+package worlds.gregs.hestia.core.action.logic
 
 import com.artemis.BaseSystem
 import com.artemis.World

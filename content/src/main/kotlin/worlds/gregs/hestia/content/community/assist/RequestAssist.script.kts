@@ -5,8 +5,7 @@ import world.gregs.hestia.core.services.int
 import world.gregs.hestia.core.services.plural
 import worlds.gregs.hestia.content.activity.skill.Experience
 import worlds.gregs.hestia.content.activity.skill.Skill
-import worlds.gregs.hestia.core.action.Action
-import worlds.gregs.hestia.core.action.WorldEvent
+import worlds.gregs.hestia.core.action.model.EntityAction
 import worlds.gregs.hestia.core.display.client.model.events.Chat
 import worlds.gregs.hestia.core.display.dialogue.model.ChatType.GameAssist
 import worlds.gregs.hestia.core.display.update.model.components.DisplayName
@@ -49,8 +48,8 @@ on<PlayerOption> {
     fun PlayerOption.task() = queue(TaskPriority.High) {
         val assisting = entity get Assisting::class
         //Delayed requesting
-        val lastRequest = Engine.ticks - assisting.lastRequest
-        if (lastRequest < requestDelay) {
+        val lastRequest = Engine.ticks - assisting.lastRequest//10 - 5
+        if (lastRequest in 1 until requestDelay - 1) {
             val waitTime = requestDelay - lastRequest
             entity perform Chat("You have only just made an assistance request", GameAssist)
             entity perform Chat("You have to wait $waitTime ${"second".plural(waitTime)} before making a new request.", GameAssist)
@@ -158,7 +157,7 @@ on<WindowInteraction> {
                     entity perform Chat("You've earned the maximum XP (30,000 Xp) from the Assist System within a 24-hour period.", GameAssist)
                     entity perform Chat("You can assist again in $hours ${"hour".plural(hours)}.", GameAssist)
                 } else {
-                    entity perform Chat("You have earned ${assisting.experienceGained / 10} Xp. The Assist system is available to you.", GameAssist)
+                    entity perform Chat("You have earned ${assisting.experienceGained} Xp. The Assist system is available to you.", GameAssist)
                 }
             }
         }
@@ -199,7 +198,7 @@ fun Assisting.getHoursRemaining(): Int {
 /**
  * Checks to see if the 24 hour timeout has passed
  */
-fun Action.update(assisting: Assisting) {
+fun EntityAction.update(assisting: Assisting) {
     if (assisting.timeout <= 0) {
         return
     }
@@ -218,7 +217,7 @@ fun Action.update(assisting: Assisting) {
  * @param entity The helper
  * @param target The assisted
  */
-fun WorldEvent.cancel(entity: Int, target: Int) {
+fun EntityAction.cancel(entity: Int, target: Int) {
     entity perform CloseWindow(AssistXP)
     entity perform Chat("You have stopped assisting ${target.get(DisplayName::class).name}.", GameAssist)
     target perform Chat("${entity.get(DisplayName::class).name} has stopped assisting you.", GameAssist)//Unconfirmed

@@ -12,11 +12,12 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import worlds.gregs.hestia.MockkGame
 import worlds.gregs.hestia.artemis.send
+import worlds.gregs.hestia.core.display.dialogue.logic.systems.DialogueBoxSystem
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.IntegerEntryDialogue
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.IntegerEntryDialogueSystem
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.intEntry
 import worlds.gregs.hestia.core.display.dialogue.model.events.IntegerEntered
-import worlds.gregs.hestia.core.display.dialogue.logic.systems.DialogueBoxSystem
+import worlds.gregs.hestia.core.display.window.api.Windows
 import worlds.gregs.hestia.core.task.api.TaskType
 import worlds.gregs.hestia.core.task.api.Tasks
 import worlds.gregs.hestia.core.task.model.TaskContinuation
@@ -36,8 +37,11 @@ internal class IntegerEntryDialogueTest : MockkGame() {
     @RelaxedMockK
     private lateinit var tasks: Tasks
 
+    @RelaxedMockK
+    private lateinit var windows: Windows
+
     override fun config(config: WorldConfigurationBuilder) {
-        config.with(system, tasks, DialogueBoxSystem())
+        config.with(system, tasks, DialogueBoxSystem(), windows)
     }
 
     @Test

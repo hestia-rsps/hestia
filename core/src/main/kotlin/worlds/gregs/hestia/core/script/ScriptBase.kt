@@ -6,7 +6,7 @@ import com.artemis.WorldConfigurationBuilder
 import com.artemis.annotations.Wire
 import worlds.gregs.hestia.artemis.event.ExtendedEventDispatchStrategy
 import worlds.gregs.hestia.artemis.event.ExtendedEventListener
-import worlds.gregs.hestia.core.action.WorldEvent
+import worlds.gregs.hestia.core.action.model.Action
 import worlds.gregs.hestia.core.script.dsl.artemis.*
 import kotlin.script.experimental.annotations.KotlinScript
 
@@ -35,7 +35,7 @@ abstract class ScriptBase : ScriptBuilder() {
      * @param action The action to take when conditions are met
      * @param setup Alternative builder setup
      */
-    inline fun <reified E : WorldEvent> on(priority: Int = 0, skipCancelledEvents: Boolean = true, noinline conditional: (E.() -> Boolean)? = null, noinline action: (E.() -> Unit)? = null, setup: EventListenerBuilder<E>.() -> Unit = {}) {
+    inline fun <reified E : Action> on(priority: Int = 0, skipCancelledEvents: Boolean = true, noinline conditional: (E.() -> Boolean)? = null, noinline action: (E.() -> Unit)? = null, setup: EventListenerBuilder<E>.() -> Unit = {}) {
         val builder = EventListenerBuilder(E::class, priority, skipCancelledEvents, conditional, action)
         builder.setup()
         listeners += builder.build() ?: return

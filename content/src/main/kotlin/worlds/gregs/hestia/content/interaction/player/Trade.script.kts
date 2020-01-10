@@ -1,6 +1,6 @@
 package worlds.gregs.hestia.content.interaction.player
 
-import worlds.gregs.hestia.core.action.Action
+import worlds.gregs.hestia.core.action.model.EntityAction
 import worlds.gregs.hestia.core.display.client.model.events.Chat
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.TradeMain
 import worlds.gregs.hestia.core.display.window.logic.systems.RequestSystem
@@ -41,7 +41,7 @@ on<AcceptedRequest> {
     then(AcceptedRequest::task)
 }
 
-fun Action.trade(task: Task, target: Int) {
+fun EntityAction.trade(task: Task, target: Int) {
     task.onCancel {
         entity perform CloseWindowPane(WindowPane.MAIN_SCREEN)
         target perform CloseWindowPane(WindowPane.MAIN_SCREEN)

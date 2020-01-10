@@ -1,6 +1,6 @@
 package worlds.gregs.hestia.core.entity.item.container.model.events
 
-import worlds.gregs.hestia.core.action.Action
+import worlds.gregs.hestia.core.action.model.EntityAction
 
 /**
  * Using an item on a mob
@@ -8,4 +8,4 @@ import worlds.gregs.hestia.core.action.Action
  * @param slot The container slot
  * @param type The item type
  */
-data class ItemOnMob(val target: Int, val slot: Int, val type: Int) : Action()
+data class ItemOnMob(val target: Int, val slot: Int, val type: Int) : EntityAction()

@@ -1,6 +1,6 @@
 package worlds.gregs.hestia.content.activity.combat
 
-import worlds.gregs.hestia.core.action.Action
+import worlds.gregs.hestia.core.action.model.EntityAction
 import worlds.gregs.hestia.core.display.client.model.Configs
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.CombatStyles
 import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
@@ -31,7 +31,7 @@ on<WindowInteraction> {
     }
 }
 
-fun Action.toggle(unlock: Boolean) {
+fun EntityAction.toggle(unlock: Boolean) {
     for (widget in 11..14) {
         entity send WidgetSettings(CombatStyles, widget, -1, 0, if (unlock) 2 else 0)
     }

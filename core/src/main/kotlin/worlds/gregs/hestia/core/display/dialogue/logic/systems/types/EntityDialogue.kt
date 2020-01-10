@@ -15,7 +15,6 @@ import worlds.gregs.hestia.core.entity.mob.api.Mob
 import worlds.gregs.hestia.core.task.api.Task
 import worlds.gregs.hestia.core.task.api.TaskType
 import worlds.gregs.hestia.core.task.api.entity
-import worlds.gregs.hestia.core.task.api.world
 import worlds.gregs.hestia.core.task.model.events.ProcessTaskSuspension
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetAnimation
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetHeadMob
@@ -96,7 +95,7 @@ suspend fun Task.dialogue(builder: DialogueBuilder) {
         val type = builder.target get Type::class
         mob(builder.message, type.id, builder.animation, builder.title)
     } else {
-        val definitions = world system ItemDefinitionSystem::class
+        val definitions = system(ItemDefinitionSystem::class)
         if (builder.target < definitions.reader.size) {//TODO Check if needs to be <=
             val type = builder.target get Type::class
             item(builder.message, type.id, builder.title)

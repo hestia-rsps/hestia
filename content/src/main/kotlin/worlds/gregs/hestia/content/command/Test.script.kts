@@ -2,11 +2,11 @@ package worlds.gregs.hestia.content.command
 
 import worlds.gregs.hestia.content.activity.skill.Experience
 import worlds.gregs.hestia.content.activity.skill.Skill.CRAFTING
-import worlds.gregs.hestia.core.action.Action
+import worlds.gregs.hestia.core.action.model.EntityAction
 import worlds.gregs.hestia.core.display.client.model.events.Command
 import worlds.gregs.hestia.core.display.dialogue.model.events.CloseDialogue
 
-data class TestAction(val someData: Int = 0) : Action() {
+data class TestAction(val someData: Int = 0) : EntityAction() {
     constructor(entity: Int, someData: Int) : this(someData) {
         this.entity = entity
     }

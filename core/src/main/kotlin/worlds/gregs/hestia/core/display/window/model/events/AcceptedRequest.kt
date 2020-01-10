@@ -1,6 +1,6 @@
 package worlds.gregs.hestia.core.display.window.model.events
 
-import worlds.gregs.hestia.core.action.Action
+import worlds.gregs.hestia.core.action.model.EntityAction
 import worlds.gregs.hestia.core.display.window.model.Request
 
 /**
@@ -8,4 +8,4 @@ import worlds.gregs.hestia.core.display.window.model.Request
  * @param target The target player
  * @param request The selected request
  */
-data class AcceptedRequest(val target: Int, val request: Request) : Action()
+data class AcceptedRequest(val target: Int, val request: Request) : EntityAction()
