@@ -30,6 +30,8 @@ abstract class WorldAction : Action {
 
     override infix fun <T : Component> Int.get(c: KClass<T>): T = map(c).get(this)
 
+    override infix fun <T : Component> Int.getUnsafe(c: KClass<T>): T? = map(c).get(this)
+
     override infix fun <T : Component> Int.create(c: KClass<T>): T = map(c).create(this)
 
     override infix fun <T : Component> Int.remove(c: KClass<T>) = map(c).remove(this)
@@ -44,11 +46,9 @@ abstract class WorldAction : Action {
 
     override infix fun <T : BaseSystem> World.system(c: KClass<T>): T = getSystem(c.java)
 
-
     override fun task(priority: TaskPriority, action: SuspendableQueue): EntityAction {
         return StartTask(InactiveTask(ReusableTask(priority, action), Unit))
     }
-
 
     override fun log(message: String) = logger.warn(message)
 

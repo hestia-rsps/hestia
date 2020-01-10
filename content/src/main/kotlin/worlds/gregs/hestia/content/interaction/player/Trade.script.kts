@@ -13,11 +13,20 @@ import worlds.gregs.hestia.core.display.window.model.events.AcceptedRequest
 import worlds.gregs.hestia.core.display.window.model.events.PlayerOption
 import worlds.gregs.hestia.core.display.window.model.events.RequestResponse
 import worlds.gregs.hestia.core.display.dialogue.model.ChatType.GameTrade
+import worlds.gregs.hestia.core.task.logic.systems.WithinRange
+import worlds.gregs.hestia.core.world.movement.model.components.calc.Follow
 
 on<PlayerOption> {
     where { option == TRADE }
     fun PlayerOption.task() = queue(TaskPriority.High) {
-        entity.interact(target, 1)
+        entity.create(Follow::class).entity = target
+        val within = await(WithinRange(target, 1))
+        entity remove Follow::class
+
+        if(!within) {
+            entity perform Chat("You can't reach that.")
+            return@queue
+        }
         system(RequestSystem::class).sendRequest(entity, target, Request.TRADE)
     }
     then(PlayerOption::task)

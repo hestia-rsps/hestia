@@ -28,9 +28,11 @@ import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.entity.model.events.Animate
 import worlds.gregs.hestia.core.entity.entity.model.events.Graphic
-import worlds.gregs.hestia.core.task.logic.systems.awaitWindow
-import worlds.gregs.hestia.core.task.logic.systems.wait
+import worlds.gregs.hestia.core.task.logic.systems.TickSuspension
+import worlds.gregs.hestia.core.task.logic.systems.WindowCloseSuspension
+import worlds.gregs.hestia.core.task.logic.systems.WithinRange
 import worlds.gregs.hestia.core.world.movement.model.MovementType
+import worlds.gregs.hestia.core.world.movement.model.components.calc.Follow
 import worlds.gregs.hestia.core.world.movement.model.components.types.Movement
 import worlds.gregs.hestia.core.world.movement.model.events.Moved
 import worlds.gregs.hestia.game.Engine
@@ -63,7 +65,15 @@ on<PlayerOption> {
             target perform Chat("An assist request has been refused. You can assist again in $hours ${"hour".plural(hours)}.", GameAssist)
             return@queue
         }
-        entity.interact(target, 1)
+
+        entity.create(Follow::class).entity = target
+        val within = await(WithinRange(target, 1))
+        entity remove Follow::class
+
+        if(!within) {
+            entity perform Chat("You can't reach that.")
+            return@queue
+        }
         system(RequestSystem::class).sendRequest(entity, target, Request.ASSIST)
         assisting.lastRequest = Engine.ticks
     }
@@ -79,7 +89,7 @@ on<RequestResponse> {
         assistance.helper = target
         assistance.point.set(target get Position::class)
         entity send WidgetVisibility(AreaStatusIcon, 2, false)
-        wait(2)
+        await(TickSuspension(2))
         entity perform Animate(7299)
     }
     then(RequestResponse::task)
@@ -101,7 +111,7 @@ on<AcceptedRequest> {
         entity perform Animate(7299)
         entity perform Graphic(1247)
         //TODO disable inventory
-        awaitWindow(AssistXP)
+        await(WindowCloseSuspension(AssistXP))
         if (system(WindowSystem::class).hasWindow(entity, AssistXP)) {
             cancel(entity, target)
         }

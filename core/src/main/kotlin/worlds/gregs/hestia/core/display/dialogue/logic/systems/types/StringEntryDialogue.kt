@@ -14,7 +14,7 @@ import worlds.gregs.hestia.core.task.api.TaskType
 import worlds.gregs.hestia.core.task.model.events.ProcessTaskSuspension
 import worlds.gregs.hestia.network.client.encoders.messages.Script
 
-data class StringEntryDialogue(val title: String, override val continuation: CancellableContinuation<String>) : TaskType<String>, Dialogue
+data class StringEntryDialogue(val title: String, override var continuation: CancellableContinuation<String>) : TaskType<String>, Dialogue
 
 suspend fun Task.stringEntry(title: String) = suspendCancellableCoroutine<String> {
     suspension = StringEntryDialogue(title, it)

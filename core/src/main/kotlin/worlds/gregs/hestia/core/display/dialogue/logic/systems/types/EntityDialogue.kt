@@ -10,11 +10,8 @@ import worlds.gregs.hestia.core.display.dialogue.logic.systems.DialogueBaseSyste
 import worlds.gregs.hestia.core.display.dialogue.model.Expression.Talking
 import worlds.gregs.hestia.core.display.dialogue.model.events.ContinueDialogue
 import worlds.gregs.hestia.core.display.update.model.components.DisplayName
-import worlds.gregs.hestia.core.entity.entity.model.components.Type
-import worlds.gregs.hestia.core.entity.mob.api.Mob
 import worlds.gregs.hestia.core.task.api.Task
 import worlds.gregs.hestia.core.task.api.TaskType
-import worlds.gregs.hestia.core.task.api.entity
 import worlds.gregs.hestia.core.task.model.events.ProcessTaskSuspension
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetAnimation
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetHeadMob
@@ -89,7 +86,7 @@ data class DialogueBuilder(val target: Int, var animation: Int = Talking, var ti
 
 @Throws(UnsupportedOperationException::class)
 suspend fun Task.dialogue(builder: DialogueBuilder) {
-    if (builder.target == entity) {
+    /*if (builder.target == entity) {
         player(builder.message, builder.animation, builder.title)
     } else if (builder.target has Mob::class) {
         val type = builder.target get Type::class
@@ -102,5 +99,5 @@ suspend fun Task.dialogue(builder: DialogueBuilder) {
         } else if (builder.target != -1) {
             throw UnsupportedOperationException("Unknown target $builder")
         }
-    }
+    }*/
 }

@@ -12,7 +12,7 @@ import worlds.gregs.hestia.core.task.api.Task
 import worlds.gregs.hestia.core.task.api.TaskType
 import worlds.gregs.hestia.core.task.model.events.ProcessTaskSuspension
 
-data class StatementDialogue(override val lines: List<String>, override val title: String?, override val continuation: CancellableContinuation<Unit>) : TaskType<Unit>, LinesDialogue() {
+data class StatementDialogue(override val lines: List<String>, override val title: String?, override var continuation: CancellableContinuation<Unit>) : TaskType<Unit>, LinesDialogue() {
     init {
         check(lines.size <= 5) { "Maximum statement dialogue lines 5" }
     }

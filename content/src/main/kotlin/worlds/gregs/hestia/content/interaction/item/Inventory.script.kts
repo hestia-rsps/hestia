@@ -9,7 +9,6 @@ import worlds.gregs.hestia.core.display.window.model.events.WindowOpened
 import worlds.gregs.hestia.core.display.window.model.events.WindowRefresh
 import worlds.gregs.hestia.core.display.window.model.events.WindowSwitch
 import worlds.gregs.hestia.core.entity.item.container.api.ItemResult
-import worlds.gregs.hestia.core.display.dialogue.model.ChatType
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetItems
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetSettings
 
@@ -39,7 +38,7 @@ on<WindowInteraction> {
     fun WindowInteraction.task() = queue {
         val (_, _, type, slot, option) = this@task
         val inventory = entity.get(Inv::class)
-        val item = inventory.validateItem(slot, type)!!
+        val item = inventory.validateItem(slot, type)
 
         val choice = item.definition().options.getOrNull(option - 1)
 

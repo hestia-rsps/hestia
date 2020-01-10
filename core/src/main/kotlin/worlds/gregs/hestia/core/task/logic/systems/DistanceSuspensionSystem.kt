@@ -13,10 +13,12 @@ import worlds.gregs.hestia.core.task.api.Tasks
 import worlds.gregs.hestia.core.task.model.components.TaskQueue
 import worlds.gregs.hestia.core.world.movement.api.Mobile
 
-data class DistanceSuspension(val targetId: Int, val distance: Int, override val continuation: CancellableContinuation<Boolean>) : TaskType<Boolean>
+data class WithinRange(val targetId: Int, val distance: Int) : TaskType<Boolean> {
+    override lateinit var continuation: CancellableContinuation<Boolean>
 
-suspend fun Task.awaitDistance(targetId: Int, distance: Int) = suspendCancellableCoroutine<Boolean> {
-    suspension = DistanceSuspension(targetId, distance, it)
+    constructor(targetId: Int, distance: Int, continuation: CancellableContinuation<Boolean>) : this(targetId, distance) {
+        this.continuation = continuation
+    }
 }
 
 class DistanceSuspensionSystem : IteratingSystem(Aspect.all(TaskQueue::class, Mobile::class, Position::class)) {
@@ -26,7 +28,7 @@ class DistanceSuspensionSystem : IteratingSystem(Aspect.all(TaskQueue::class, Mo
 
     override fun process(entityId: Int) {
         val suspension = tasks.getSuspension(entityId)
-        if(suspension is DistanceSuspension) {
+        if(suspension is WithinRange) {
             val (targetId, distance) = suspension
 
             val targetPosition = positionMapper(targetId)

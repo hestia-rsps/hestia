@@ -4,7 +4,7 @@ import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.suspendCancellableCoroutine
 import worlds.gregs.hestia.core.task.api.Task
 
-data class MobDialogue(override val lines: List<String>, override val title: String?, val mob: Int, val animation: Int, override val continuation: CancellableContinuation<Unit>) : EntityDialogue() {
+data class MobDialogue(override val lines: List<String>, override val title: String?, val mob: Int, val animation: Int, override var continuation: CancellableContinuation<Unit>) : EntityDialogue() {
     init {
         check(lines.size <= 4) { "Maximum mob dialogue lines 4" }
     }

@@ -61,7 +61,7 @@ internal class DistanceSuspensionSystemTest : MockkGame() {
     fun `Invalid target id resumes false`() {
         //Given
         val entityId = 0
-        val suspension = DistanceSuspension(1, 1, mockk(relaxed = true))
+        val suspension = WithinRange(1, 1, mockk(relaxed = true))
         every { tasks.getSuspension(entityId) } returns suspension
         //When
         tick()
@@ -76,7 +76,7 @@ internal class DistanceSuspensionSystemTest : MockkGame() {
         target.edit().add(TaskQueue()).add(Mobile())
         tick()
         val entityId = 0
-        val suspension = DistanceSuspension(target.id, 1, mockk(relaxed = true))
+        val suspension = WithinRange(target.id, 1, mockk(relaxed = true))
         every { tasks.getSuspension(entityId) } returns suspension
         //When
         tick()
@@ -91,7 +91,7 @@ internal class DistanceSuspensionSystemTest : MockkGame() {
         target.edit().add(TaskQueue()).add(Mobile()).add(Position(2, 0, 0))
         tick()
         val entityId = 0
-        val suspension = DistanceSuspension(target.id, 1, mockk(relaxed = true))
+        val suspension = WithinRange(target.id, 1, mockk(relaxed = true))
         every { tasks.getSuspension(entityId) } returns suspension
         //When
         tick()
@@ -106,7 +106,7 @@ internal class DistanceSuspensionSystemTest : MockkGame() {
         target.edit().add(TaskQueue()).add(Mobile()).add(Position(1, 0, 0))
         tick()
         val entityId = 0
-        val suspension = DistanceSuspension(target.id, 1, mockk(relaxed = true))
+        val suspension = WithinRange(target.id, 1, mockk(relaxed = true))
         every { tasks.getSuspension(entityId) } returns suspension
         //When
         tick()

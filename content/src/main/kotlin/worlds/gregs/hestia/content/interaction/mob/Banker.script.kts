@@ -1,5 +1,6 @@
 package worlds.gregs.hestia.content.interaction.mob
 
+import worlds.gregs.hestia.core.display.client.model.events.Chat
 import worlds.gregs.hestia.core.display.dialogue.model.events.CloseDialogue
 import worlds.gregs.hestia.core.display.update.model.components.direction.Watch
 import worlds.gregs.hestia.core.entity.mob.model.events.MobOption
@@ -7,11 +8,20 @@ import worlds.gregs.hestia.core.task.api.Task.Companion.FIRST
 import worlds.gregs.hestia.core.task.api.Task.Companion.FOURTH
 import worlds.gregs.hestia.core.task.api.Task.Companion.SECOND
 import worlds.gregs.hestia.core.task.api.Task.Companion.THIRD
+import worlds.gregs.hestia.core.task.logic.systems.WithinRange
+import worlds.gregs.hestia.core.world.movement.model.components.calc.Follow
 
 on<MobOption> {
     where { option == "Talk-to" && name == "Banker" }
     fun MobOption.task() = queue(TaskPriority.High) {
-        entity.interact(target, 2)
+        entity.create(Follow::class).entity = target
+        val within = await(WithinRange(target, 2))
+        entity remove Follow::class
+
+        if(!within) {
+            entity perform Chat("You can't reach that.")
+            return@queue
+        }
         onCancel { entity perform CloseDialogue() }
 
         target.create(Watch::class).entity = entity

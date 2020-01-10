@@ -12,7 +12,7 @@ import worlds.gregs.hestia.core.task.api.Task
 import worlds.gregs.hestia.core.task.api.TaskType
 import worlds.gregs.hestia.core.task.model.events.ProcessTaskSuspension
 
-data class OptionsDialogue(override val lines: List<String>, override val title: String?, override val continuation: CancellableContinuation<Int>) : TaskType<Int>, LinesDialogue() {
+data class OptionsDialogue(override val lines: List<String>, override val title: String?, override var continuation: CancellableContinuation<Int>) : TaskType<Int>, LinesDialogue() {
     init {
         check(lines.size <= 5) { "Maximum option dialogue lines 5" }
         check(lines.size >= 2) { "Minimum option dialogue lines 2" }

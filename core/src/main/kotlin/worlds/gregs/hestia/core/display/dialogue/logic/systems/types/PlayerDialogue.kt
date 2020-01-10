@@ -4,7 +4,7 @@ import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.suspendCancellableCoroutine
 import worlds.gregs.hestia.core.task.api.Task
 
-data class PlayerDialogue(override val lines: List<String>, override val title: String?, val animation: Int, override val continuation: CancellableContinuation<Unit>) : EntityDialogue() {
+data class PlayerDialogue(override val lines: List<String>, override val title: String?, val animation: Int, override var continuation: CancellableContinuation<Unit>) : EntityDialogue() {
     init {
         check(lines.size <= 4) { "Maximum player dialogue lines 4" }
     }

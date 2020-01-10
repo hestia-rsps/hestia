@@ -12,10 +12,8 @@ import worlds.gregs.hestia.core.task.api.TaskType
 import worlds.gregs.hestia.core.task.api.Tasks
 import worlds.gregs.hestia.core.task.model.events.ProcessTaskSuspension
 
-data class WindowPaneCloseSuspension(val pane: WindowPane, override val continuation: CancellableContinuation<Unit>) : TaskType<Unit>
-
-suspend fun Task.awaitWindow(pane: WindowPane = WindowPane.MAIN_SCREEN) = suspendCancellableCoroutine<Unit> {
-    suspension = WindowPaneCloseSuspension(pane, it)
+data class WindowPaneCloseSuspension(val pane: WindowPane = WindowPane.MAIN_SCREEN) : TaskType<Unit> {
+    override lateinit var continuation: CancellableContinuation<Unit>
 }
 
 /**

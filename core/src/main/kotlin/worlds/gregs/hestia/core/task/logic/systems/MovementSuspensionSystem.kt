@@ -15,12 +15,9 @@ import worlds.gregs.hestia.core.world.movement.model.components.Steps
 
 data class Route(val steps: Int, val alternative: Boolean)
 
-class RouteSuspension(override val continuation: CancellableContinuation<Route>) : TaskType<Route> {
+class RouteSuspension : TaskType<Route> {
     lateinit var route: Route
-}
-
-suspend fun Task.awaitRoute() = suspendCancellableCoroutine<Route> {
-    suspension = RouteSuspension(it)
+    override lateinit var continuation: CancellableContinuation<Route>
 }
 
 class MovementSuspensionSystem : IteratingSystem(Aspect.all(TaskQueue::class, Mobile::class, Position::class)) {

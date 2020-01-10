@@ -21,6 +21,8 @@ interface Action : Event {
 
     infix fun <T : Component> Int.get(c: KClass<T>): T
 
+    infix fun <T : Component> Int.getUnsafe(c: KClass<T>): T?
+
     infix fun <T : Component> Int.create(c: KClass<T>): T
 
     infix fun <T : Component> Int.remove(c: KClass<T>)
