@@ -2,6 +2,7 @@ package worlds.gregs.hestia.content.interaction.player
 
 import worlds.gregs.hestia.core.action.model.EntityAction
 import worlds.gregs.hestia.core.display.client.model.events.Chat
+import worlds.gregs.hestia.core.display.dialogue.model.ChatType.GameTrade
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.TradeMain
 import worlds.gregs.hestia.core.display.window.logic.systems.RequestSystem
 import worlds.gregs.hestia.core.display.window.model.PlayerOptions.TRADE
@@ -12,16 +13,15 @@ import worlds.gregs.hestia.core.display.window.model.actions.OpenWindow
 import worlds.gregs.hestia.core.display.window.model.events.AcceptedRequest
 import worlds.gregs.hestia.core.display.window.model.events.PlayerOption
 import worlds.gregs.hestia.core.display.window.model.events.RequestResponse
-import worlds.gregs.hestia.core.display.dialogue.model.ChatType.GameTrade
 import worlds.gregs.hestia.core.task.logic.systems.WithinRange
-import worlds.gregs.hestia.core.world.movement.model.components.calc.Follow
+import worlds.gregs.hestia.core.world.movement.model.events.Follow
 
 on<PlayerOption> {
     where { option == TRADE }
     fun PlayerOption.task() = queue(TaskPriority.High) {
-        entity.create(Follow::class).entity = target
+        entity perform Follow(target)
         val within = await(WithinRange(target, 1))
-        entity remove Follow::class
+        entity perform Follow(-1)
 
         if(!within) {
             entity perform Chat("You can't reach that.")

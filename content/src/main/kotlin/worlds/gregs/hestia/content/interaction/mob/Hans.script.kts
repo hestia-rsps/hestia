@@ -20,7 +20,8 @@ import worlds.gregs.hestia.core.task.api.Task.Companion.FOURTH
 import worlds.gregs.hestia.core.task.api.Task.Companion.SECOND
 import worlds.gregs.hestia.core.task.api.Task.Companion.THIRD
 import worlds.gregs.hestia.core.task.logic.systems.WithinRange
-import worlds.gregs.hestia.core.world.movement.model.components.calc.Follow
+import worlds.gregs.hestia.core.world.movement.model.components.calc.Following
+import worlds.gregs.hestia.core.world.movement.model.events.Follow
 
 val year = 365
 val fiveYears = year * 5
@@ -31,9 +32,9 @@ on<MobOption> {
     where { option == "Talk-to" && name == "Hans" }
     fun MobOption.task() = queue(TaskPriority.High) {
 
-        entity.create(Follow::class).entity = target
+        entity perform Follow(target)
         val within = await(WithinRange(target, 1))
-        entity remove Follow::class
+        entity perform Follow(-1)
 
         if(!within) {
             entity perform Chat("You can't reach that.")
@@ -42,7 +43,7 @@ on<MobOption> {
 
         onCancel { entity perform CloseDialogue() }
 
-        target.create(Watch::class).entity = entity
+        target perform Watch(entity)
         target dialogue "Hello. What are you doing here?"
 
         var choice = entity options """

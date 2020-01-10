@@ -1,5 +1,6 @@
 package worlds.gregs.hestia.content.interaction.mob
 
+import worlds.gregs.hestia.core.action.model.perform
 import worlds.gregs.hestia.core.display.client.model.events.Chat
 import worlds.gregs.hestia.core.display.dialogue.model.events.CloseDialogue
 import worlds.gregs.hestia.core.display.update.model.components.direction.Watch
@@ -9,14 +10,15 @@ import worlds.gregs.hestia.core.task.api.Task.Companion.FOURTH
 import worlds.gregs.hestia.core.task.api.Task.Companion.SECOND
 import worlds.gregs.hestia.core.task.api.Task.Companion.THIRD
 import worlds.gregs.hestia.core.task.logic.systems.WithinRange
-import worlds.gregs.hestia.core.world.movement.model.components.calc.Follow
+import worlds.gregs.hestia.core.world.movement.model.components.calc.Following
+import worlds.gregs.hestia.core.world.movement.model.events.Follow
 
 on<MobOption> {
     where { option == "Talk-to" && name == "Banker" }
     fun MobOption.task() = queue(TaskPriority.High) {
-        entity.create(Follow::class).entity = target
+        entity perform Follow(target)
         val within = await(WithinRange(target, 2))
-        entity remove Follow::class
+        entity perform Follow(-1)
 
         if(!within) {
             entity perform Chat("You can't reach that.")
@@ -24,7 +26,7 @@ on<MobOption> {
         }
         onCancel { entity perform CloseDialogue() }
 
-        target.create(Watch::class).entity = entity
+        target perform Watch(entity)
         //TODO unwatch entity if exceeds interact distance * 2
         target dialogue "Good day. How may I help you?"
 

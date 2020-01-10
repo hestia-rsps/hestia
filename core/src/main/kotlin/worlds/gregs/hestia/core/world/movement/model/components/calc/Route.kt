@@ -1,7 +1,6 @@
 package worlds.gregs.hestia.core.world.movement.model.components.calc
 
-import com.artemis.Component
-import com.artemis.annotations.PooledWeaver
+import worlds.gregs.hestia.artemis.InstantEvent
+import worlds.gregs.hestia.core.action.model.EntityAction
 
-@PooledWeaver
-data class Route(var entityId: Int = -1, var alternative: Boolean = false, var success: (() -> Unit)? = null, var failure: (() -> Unit)? = null) : Component()
+data class Route(val target: Int, val alternative: Boolean = false) : EntityAction(), InstantEvent

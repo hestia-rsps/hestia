@@ -5,7 +5,6 @@ import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.event.common.Subscribe
 import net.mostlyoriginal.api.system.core.PassiveSystem
 import worlds.gregs.hestia.core.display.update.model.Direction
-import worlds.gregs.hestia.core.display.update.model.components.direction.Face
 import worlds.gregs.hestia.core.display.update.model.components.direction.Facing
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.entity.model.components.Type
@@ -18,7 +17,6 @@ class MobCreation(private val spawn: Boolean) : PassiveSystem() {
     private lateinit var typeMapper: ComponentMapper<Type>
     private lateinit var positionMapper: ComponentMapper<Position>
     private lateinit var facingMapper: ComponentMapper<Facing>
-    private lateinit var faceMapper: ComponentMapper<Face>
     private lateinit var archetype: Archetype
 
     override fun initialize() {
@@ -44,12 +42,9 @@ class MobCreation(private val spawn: Boolean) : PassiveSystem() {
         val position = positionMapper.get(entityId)
         position.set(x, y, plane)
 
-        val face = faceMapper.get(entityId)
+        val face = facingMapper.get(entityId)
         face.x = direction.deltaX
         face.y = direction.deltaY
-        if(direction != Direction.SOUTH && direction != Direction.NONE) {
-            facingMapper.create(entityId)
-        }
         return entityId
     }
 }

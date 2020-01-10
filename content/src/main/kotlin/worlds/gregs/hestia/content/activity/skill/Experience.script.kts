@@ -6,9 +6,6 @@ var total = 14000000//Temp
 
 on<Experience> {
     then {
-        if(isCancelled) {
-            return@then//FIXME cancelling
-        }
         //Add
         total += increase
         entity send SkillLevel(skill.ordinal, 99, total)

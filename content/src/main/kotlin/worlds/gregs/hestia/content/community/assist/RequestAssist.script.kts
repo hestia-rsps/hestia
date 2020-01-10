@@ -32,8 +32,8 @@ import worlds.gregs.hestia.core.task.logic.systems.TickSuspension
 import worlds.gregs.hestia.core.task.logic.systems.WindowCloseSuspension
 import worlds.gregs.hestia.core.task.logic.systems.WithinRange
 import worlds.gregs.hestia.core.world.movement.model.MovementType
-import worlds.gregs.hestia.core.world.movement.model.components.calc.Follow
 import worlds.gregs.hestia.core.world.movement.model.components.types.Movement
+import worlds.gregs.hestia.core.world.movement.model.events.Follow
 import worlds.gregs.hestia.core.world.movement.model.events.Moved
 import worlds.gregs.hestia.game.Engine
 import worlds.gregs.hestia.network.client.encoders.messages.ConfigFile
@@ -66,9 +66,9 @@ on<PlayerOption> {
             return@queue
         }
 
-        entity.create(Follow::class).entity = target
+        entity perform Follow(target)
         val within = await(WithinRange(target, 1))
-        entity remove Follow::class
+        entity perform Follow(-1)
 
         if(!within) {
             entity perform Chat("You can't reach that.")

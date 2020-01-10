@@ -49,7 +49,7 @@ class PostEntitySyncSystem : IteratingSystem(Aspect.all(Renderable::class)) {
         damageMapper.remove(entityId)
         forceChatMapper.remove(entityId)
         forceMovementMapper.remove(entityId)
-        facingMapper.remove(entityId)
+        facingMapper.remove(entityId)//FIXME this data is lost.
         transformMapper.remove(entityId)
         walkMapper.remove(entityId)
         runMapper.remove(entityId)

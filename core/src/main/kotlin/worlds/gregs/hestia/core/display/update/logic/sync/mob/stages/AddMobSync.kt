@@ -2,7 +2,7 @@ package worlds.gregs.hestia.core.display.update.logic.sync.mob.stages
 
 import world.gregs.hestia.core.network.codec.packet.PacketBuilder
 import worlds.gregs.hestia.artemis.ConcurrentObjectPool
-import worlds.gregs.hestia.core.display.update.model.components.direction.Face
+import worlds.gregs.hestia.core.display.update.model.components.direction.Facing
 import worlds.gregs.hestia.game.update.SyncStage
 import worlds.gregs.hestia.core.display.update.logic.DirectionUtils
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
@@ -10,7 +10,7 @@ import worlds.gregs.hestia.core.entity.entity.model.components.Position
 class AddMobSync : SyncStage {
 
     var clientIndex: Int = -1
-    var face: Face? = null
+    var facing: Facing? = null
     var update: Boolean = false
     lateinit var delta: Position
     var plane: Int = -1
@@ -22,7 +22,7 @@ class AddMobSync : SyncStage {
             //Client index
             writeBits(15, clientIndex)
             //Facing
-            val direction = if (face != null) DirectionUtils.getFaceDirection(face!!.x, face!!.y) else 0//A costly calculation for updating, so we do it here in the encoding thread
+            val direction = if (facing != null) DirectionUtils.getFaceDirection(facing!!.x, facing!!.y) else 0//A costly calculation for updating, so we do it here in the encoding thread
             writeBits(3, (direction shr 11) - 4)
             //Update
             writeBits(1, update)
@@ -46,11 +46,11 @@ class AddMobSync : SyncStage {
     companion object {
         private val pool = ConcurrentObjectPool(AddMobSync::class.java)
 
-        fun create(clientIndex: Int, face: Face?, update: Boolean, delta: Position, plane: Int, mobType: Int, regionChange: Boolean): AddMobSync {
+        fun create(clientIndex: Int, facing: Facing?, update: Boolean, delta: Position, plane: Int, mobType: Int, regionChange: Boolean): AddMobSync {
             val obj = pool.obtain()
             obj.apply {
                 this.clientIndex = clientIndex
-                this.face = face
+                this.facing = facing
                 this.update = update
                 this.delta = delta
                 this.plane = plane

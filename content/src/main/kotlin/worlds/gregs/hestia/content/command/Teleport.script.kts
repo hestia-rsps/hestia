@@ -3,11 +3,11 @@ package worlds.gregs.hestia.content.command
 import com.artemis.ComponentMapper
 import worlds.gregs.hestia.core.display.client.model.events.Command
 import worlds.gregs.hestia.core.world.movement.model.components.Steps
-import worlds.gregs.hestia.core.world.movement.model.components.calc.Follow
+import worlds.gregs.hestia.core.world.movement.model.components.calc.Following
 import worlds.gregs.hestia.core.world.movement.model.components.types.MoveStep
 
-lateinit var followMapper: ComponentMapper<Follow>
-lateinit var shiftMapper: ComponentMapper<Follow>
+lateinit var followingMapper: ComponentMapper<Following>
+lateinit var shiftMapper: ComponentMapper<Following>
 lateinit var stepsMapper: ComponentMapper<Steps>
 
 on<Command> {
@@ -16,7 +16,7 @@ on<Command> {
 
         fun move(x: Int, y: Int, plane: Int) {
             //TODO temp clearing, needs a proper system
-            followMapper.remove(entity)
+            followingMapper.remove(entity)
             shiftMapper.remove(entity)
             stepsMapper.get(entity)?.clear()
 //            entity.send()//TODO send minimap flag removal

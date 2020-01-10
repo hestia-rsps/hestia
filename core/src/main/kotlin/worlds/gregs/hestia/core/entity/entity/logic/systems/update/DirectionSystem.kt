@@ -2,7 +2,7 @@ package worlds.gregs.hestia.core.entity.entity.logic.systems.update
 
 import com.artemis.ComponentMapper
 import com.artemis.systems.IteratingSystem
-import worlds.gregs.hestia.core.display.update.model.components.direction.Face
+import worlds.gregs.hestia.core.display.update.model.components.direction.Facing
 import worlds.gregs.hestia.core.world.movement.model.components.Shift
 import worlds.gregs.hestia.artemis.Aspect
 
@@ -13,12 +13,12 @@ import worlds.gregs.hestia.artemis.Aspect
 class DirectionSystem : IteratingSystem(Aspect.all(Shift::class)) {
 
     private lateinit var shiftMapper: ComponentMapper<Shift>
-    private lateinit var faceMapper: ComponentMapper<Face>
+    private lateinit var facingMapper: ComponentMapper<Facing>
 
     override fun process(entityId: Int) {
         val shift = shiftMapper.get(entityId)
         if(shift.x != 0 || shift.y != 0) {
-            val face = faceMapper.create(entityId)
+            val face = facingMapper.create(entityId)
             face.x = shift.x
             face.y = shift.y
         }

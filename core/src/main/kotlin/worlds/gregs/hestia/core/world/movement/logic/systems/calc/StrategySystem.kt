@@ -2,8 +2,8 @@ package worlds.gregs.hestia.core.world.movement.logic.systems.calc
 
 import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
-import com.artemis.systems.IteratingSystem
-import worlds.gregs.hestia.artemis.Aspect
+import net.mostlyoriginal.api.event.common.Subscribe
+import net.mostlyoriginal.api.system.core.PassiveSystem
 import worlds.gregs.hestia.core.entity.`object`.model.components.GameObject
 import worlds.gregs.hestia.core.entity.`object`.model.components.ObjectType
 import worlds.gregs.hestia.core.entity.`object`.model.components.Rotation
@@ -29,9 +29,8 @@ import worlds.gregs.hestia.service.cache.definition.systems.ObjectDefinitionSyst
  * Calculates the [RouteStrategy] to use in [PathSystem]
  */
 @Wire(failOnNull = false, injectInherited = true)
-class StrategySystem : IteratingSystem(Aspect.all(Position::class, Route::class)) {
+class StrategySystem : PassiveSystem() {
 
-    private lateinit var routeMapper: ComponentMapper<Route>
     private lateinit var objectMapper: ComponentMapper<GameObject>
     private lateinit var objectTypeMapper: ComponentMapper<ObjectType>
     private lateinit var rotationMapper: ComponentMapper<Rotation>
@@ -44,12 +43,10 @@ class StrategySystem : IteratingSystem(Aspect.all(Position::class, Route::class)
     private lateinit var publicMapper: ComponentMapper<Public>
     private lateinit var privateMapper: ComponentMapper<Private>
 
-    override fun process(entityId: Int) {
-        val route = routeMapper.get(entityId)
-        routeMapper.remove(entityId)
-
-        val targetId = route.entityId
-
+    @Subscribe
+    fun startRoute(action: Route) {
+        val (targetId, alternative) = action
+        val entityId = action.entity
         val targetPosition = positionMapper.get(targetId)
 
         //Choose strategy
@@ -69,6 +66,7 @@ class StrategySystem : IteratingSystem(Aspect.all(Position::class, Route::class)
         //Navigate
         pathMapper.create(entityId).apply {
             this.strategy = strategy
+            this.alternative = alternative
         }
     }
 

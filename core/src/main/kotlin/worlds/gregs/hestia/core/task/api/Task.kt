@@ -2,19 +2,11 @@ package worlds.gregs.hestia.core.task.api
 
 import kotlinx.coroutines.CompletionHandler
 import kotlinx.coroutines.suspendCancellableCoroutine
-import worlds.gregs.hestia.core.action.model.Action
 import worlds.gregs.hestia.core.action.model.EntityAction
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.DialogueBuilder
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.dialogue
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.options
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.statement
-import worlds.gregs.hestia.core.entity.`object`.model.components.GameObject
-import worlds.gregs.hestia.core.entity.entity.model.components.Position
-import worlds.gregs.hestia.core.entity.entity.model.components.Size
-import worlds.gregs.hestia.core.entity.entity.model.components.height
-import worlds.gregs.hestia.core.entity.entity.model.components.width
-import worlds.gregs.hestia.core.world.movement.logic.systems.calc.StepBesideSystem
-import worlds.gregs.hestia.service.cache.definition.systems.ObjectDefinitionSystem
 import kotlin.coroutines.Continuation
 
 interface Task : Continuation<Any> {
@@ -71,32 +63,6 @@ interface Task : Continuation<Any> {
     suspend infix fun Int.options(message: String) = DialogueBuilder(target = this).options(message)
 
     suspend infix fun DialogueBuilder.options(message: String) = options(apply { this.message = message })
-
-/*
-    Interaction
- */
-
-    fun Action.canInteract(route: worlds.gregs.hestia.core.task.logic.systems.Route, position: Position, targetPosition: Position, targetEntityId: Int): Boolean {
-        if (route.steps < 0) {
-            return false
-        }
-        val sizeX: Int
-        val sizeY: Int
-
-        val gameObject = targetEntityId.getUnsafe(GameObject::class)
-        if (gameObject != null) {
-            val definitions = system(ObjectDefinitionSystem::class)
-            val definition = definitions.get(gameObject.id)
-            sizeX = definition.sizeX
-            sizeY = definition.sizeY
-        } else {
-            val sizeMapper = map(Size::class)
-            sizeX = sizeMapper.width(targetEntityId)
-            sizeY = sizeMapper.height(targetEntityId)
-        }
-
-        return !route.alternative || StepBesideSystem.isNear(position.x, position.y, targetPosition.x, targetPosition.y, sizeX, sizeY, true)
-    }
 
 
     companion object {

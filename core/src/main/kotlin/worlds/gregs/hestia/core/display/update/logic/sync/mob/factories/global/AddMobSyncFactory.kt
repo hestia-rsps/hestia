@@ -6,7 +6,7 @@ import worlds.gregs.hestia.core.display.client.model.components.ClientIndex
 import worlds.gregs.hestia.core.display.update.api.SyncFactory
 import worlds.gregs.hestia.core.display.update.logic.sync.SynchronizeSystem
 import worlds.gregs.hestia.core.display.update.logic.sync.mob.stages.AddMobSync
-import worlds.gregs.hestia.core.display.update.model.components.direction.Face
+import worlds.gregs.hestia.core.display.update.model.components.direction.Facing
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.entity.model.components.Type
 import worlds.gregs.hestia.core.world.movement.model.MovementType
@@ -15,7 +15,7 @@ import worlds.gregs.hestia.core.world.movement.model.components.types.Movement
 class AddMobSyncFactory : SyncFactory<AddMobSync>(false, true, true) {
 
     private lateinit var clientIndexMapper: ComponentMapper<ClientIndex>
-    private lateinit var faceMapper: ComponentMapper<Face>
+    private lateinit var facingMapper: ComponentMapper<Facing>
     private lateinit var typeMapper: ComponentMapper<Type>
     private lateinit var movementMapper: ComponentMapper<Movement>
     private lateinit var positionMapper: ComponentMapper<Position>
@@ -26,7 +26,7 @@ class AddMobSyncFactory : SyncFactory<AddMobSync>(false, true, true) {
 
     override fun create(main: Int, other: Int, update: Boolean): AddMobSync {
         //Facing
-        val face = faceMapper.get(other)
+        val face = facingMapper.get(other)
         //Position y
         val position = positionMapper.get(other)
         val delta = Position.delta(position, positionMapper.get(main))

@@ -1,7 +1,5 @@
 package worlds.gregs.hestia.core.display.update.model.components.direction
 
-import com.artemis.Component
-import com.artemis.annotations.PooledWeaver
+import worlds.gregs.hestia.core.action.model.EntityAction
 
-@PooledWeaver
-data class Watch(var entity: Int = -1) : Component()
+data class Watch(val target: Int = -1) : EntityAction()
