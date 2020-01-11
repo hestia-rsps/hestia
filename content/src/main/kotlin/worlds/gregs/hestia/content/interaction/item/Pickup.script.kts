@@ -11,12 +11,12 @@ import worlds.gregs.hestia.core.entity.item.floor.model.events.FloorItemOption
 import worlds.gregs.hestia.core.task.logic.systems.RouteSuspension
 import worlds.gregs.hestia.core.task.logic.systems.TickSuspension
 import worlds.gregs.hestia.core.world.movement.logic.systems.calc.StepBesideSystem.Companion.isNear
-import worlds.gregs.hestia.core.world.movement.model.components.calc.Route
+import worlds.gregs.hestia.core.world.movement.model.events.Interact
 
 on<FloorItemOption> {
     where { option == "Take" }
     fun FloorItemOption.task() = queue(TaskPriority.High) {
-        entity perform Route(target, true)
+        entity perform Interact(target, true)
 
         val route = await(RouteSuspension())
         val canInteract = route.steps >= 0 && !route.alternative || isNear(entity get Position::class, target get Position::class, 1, 1, true)

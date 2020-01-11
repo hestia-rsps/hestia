@@ -8,13 +8,13 @@ import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.task.logic.systems.RouteSuspension
 import worlds.gregs.hestia.core.task.logic.systems.TickSuspension
 import worlds.gregs.hestia.core.world.movement.logic.systems.calc.StepBesideSystem.Companion.isNear
-import worlds.gregs.hestia.core.world.movement.model.components.calc.Route
+import worlds.gregs.hestia.core.world.movement.model.events.Interact
 import worlds.gregs.hestia.service.cache.definition.systems.ObjectDefinitionSystem
 
 on<ObjectOption> {
     where { option == "Use" && name == "Counter" }
     fun ObjectOption.task() = queue(TaskPriority.High) {
-        entity perform Route(target, true)
+        entity perform Interact(target, true)
 
         val route = await(RouteSuspension())
         val definition = system(ObjectDefinitionSystem::class).get(target.get(GameObject::class).id)

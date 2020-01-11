@@ -1,7 +1,6 @@
 package worlds.gregs.hestia.core.world.movement.logic.systems.calc
 
 import com.artemis.ComponentMapper
-import com.artemis.annotations.Wire
 import net.mostlyoriginal.api.event.common.Subscribe
 import net.mostlyoriginal.api.system.core.PassiveSystem
 import worlds.gregs.hestia.core.entity.`object`.model.components.GameObject
@@ -20,16 +19,15 @@ import worlds.gregs.hestia.core.world.movement.logic.strategies.FixedTileStrateg
 import worlds.gregs.hestia.core.world.movement.logic.strategies.FloorItemStrategy
 import worlds.gregs.hestia.core.world.movement.logic.strategies.ObjectStrategy
 import worlds.gregs.hestia.core.world.movement.model.components.calc.Path
-import worlds.gregs.hestia.core.world.movement.model.components.calc.Route
+import worlds.gregs.hestia.core.world.movement.model.events.Interact
 import worlds.gregs.hestia.game.entity.Player
 import worlds.gregs.hestia.service.cache.definition.systems.ObjectDefinitionSystem
 
 /**
- * StrategySystem
+ * InteractSystem
  * Calculates the [RouteStrategy] to use in [PathSystem]
  */
-@Wire(failOnNull = false, injectInherited = true)
-class StrategySystem : PassiveSystem() {
+class InteractSystem : PassiveSystem() {
 
     private lateinit var objectMapper: ComponentMapper<GameObject>
     private lateinit var objectTypeMapper: ComponentMapper<ObjectType>
@@ -44,9 +42,8 @@ class StrategySystem : PassiveSystem() {
     private lateinit var privateMapper: ComponentMapper<Private>
 
     @Subscribe
-    fun startRoute(action: Route) {
+    fun startRoute(action: Interact) {
         val (targetId, alternative) = action
-        val entityId = action.entity
         val targetPosition = positionMapper.get(targetId)
 
         //Choose strategy
@@ -57,14 +54,14 @@ class StrategySystem : PassiveSystem() {
                 val id = objectMapper.get(targetId)
                 val type = objectTypeMapper.get(targetId)
                 val def = objectDefinitions.get(id.id)
-                ObjectStrategy(type.type, targetPosition, rotationMapper.get(targetId).rotation, def.sizeX, def.sizeY, def.plane)
+                ObjectStrategy(type.type, targetPosition, rotationMapper.get(targetId).rotation, def.sizeX, def.sizeY, def.blockFlag)
             }
             publicMapper.has(targetId) || privateMapper.has(targetId) -> FloorItemStrategy(targetPosition.x, targetPosition.y)
             else -> FixedTileStrategy(targetPosition.x, targetPosition.y)
         }
 
         //Navigate
-        pathMapper.create(entityId).apply {
+        pathMapper.create(action.entity).apply {
             this.strategy = strategy
             this.alternative = alternative
         }

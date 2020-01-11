@@ -22,7 +22,8 @@ import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.entity.model.events.Animate
 import worlds.gregs.hestia.core.entity.entity.model.events.Graphic
-import worlds.gregs.hestia.core.task.logic.systems.awaitWindow
+import worlds.gregs.hestia.core.task.logic.systems.TickSuspension
+import worlds.gregs.hestia.core.task.logic.systems.WithinRange
 import worlds.gregs.hestia.core.world.movement.model.MovementType
 import worlds.gregs.hestia.core.world.movement.model.components.types.Movement
 import worlds.gregs.hestia.core.world.movement.model.events.Moved
@@ -44,7 +45,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
         every { action.target } returns targetId
         action.mockTask()
         val assisting = mockk<Assisting>(relaxed = true)
-        with(task) {
+        with(action) {
             every { any<Int>().get(Assisting::class) } returns assisting
         }
         Engine.ticks = 10
@@ -68,7 +69,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
         every { action.option } returns ASSIST
         every { action.target } returns targetId
         action.mockTask()
-        with(task) {
+        with(action) {
             every { entityId.get(Assisting::class) } returns assisting
             every { targetId.get(Assisting::class) } returns targetAssisting
             every { any<Int>().get(DisplayName::class) } returns mockk(relaxed = true)
@@ -95,7 +96,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
         every { action.target } returns targetId
         action.mockTask()
         val req = mockk<RequestSystem>(relaxed = true)
-        with(task) {
+        with(action) {
             every { entityId.get(Assisting::class) } returns assisting
             every { targetId.get(Assisting::class) } returns targetAssisting
             every { system(RequestSystem::class) } returns req//FIXME one or the other
@@ -106,14 +107,14 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
         val map = getMapper(DisplayName::class)
         every { map.get(targetId) } returns mockk<DisplayName>(relaxed = true).apply { name = "Name" }
         with(task) {
-//            coEvery { entityId.interact(targetId, 1) } answers {}
+            coEvery { await(WithinRange(targetId, 1)) } answers { true }
         }
         setSystem(req)//FIXME one or the other
         //When
         send(action)
         //Then
         with(task) {
-//            coVerify { entityId.interact(targetId, 1) }
+            coVerify { await(WithinRange(targetId, 1)) }
         }
         verify {
             req.sendRequest(entityId, targetId, Request.ASSIST)
@@ -129,21 +130,23 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
         every { action.request } returns Request.ASSIST
         every { action.target } returns targetId
         action.mockTask()
-        mockkStatic("worlds.gregs.hestia.core.task.logic.systems.TickSuspensionSystemKt", "worlds.gregs.hestia.artemis.ExtensionFunctionsKt")
-        with(task) {
+        mockkStatic("worlds.gregs.hestia.artemis.ExtensionFunctionsKt")
+        with(action) {
             every { entityId.create(Assistance::class) } returns assist
             every { targetId.get(DisplayName::class) } returns mockk(relaxed = true)
             every { targetId.get(Position::class) } returns mockk(relaxed = true)
-            coEvery { wait(any()) } answers {}
+        }
+        with(task) {
+            coEvery { await(any<TickSuspension>()) } answers {}
         }
         //When
         send(action)
         //Then
-        with(task) {
+        with(action) {
             verify { entityId.send(WidgetVisibility(Windows.AreaStatusIcon, 2, false)) }
         }
         with(task) {
-            coVerify { wait(2) }
+            coVerify { await(TickSuspension(2)) }
         }
         with(action) {
             verify {
@@ -158,13 +161,14 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
         val action = mockkAction<AcceptedRequest>()
         every { action.request } returns Request.ASSIST
         every { action.target } returns targetId
-        mockkStatic("worlds.gregs.hestia.core.task.logic.systems.WindowCloseSuspensionSystemKt")
         action.mockTask()
-        with(task) {
+        with(action) {
             every { entityId.get(Assisting::class) } returns mockk(relaxed = true)
             every { targetId.get(DisplayName::class) } returns mockk(relaxed = true)
             every { targetId.get(Position::class) } returns mockk(relaxed = true)
-            coEvery { awaitWindow(any<Int>()) } answers {}
+        }
+        with(task) {
+            coEvery { await(any<TickSuspension>()) } answers {}
         }
         //When
         send(action)
@@ -173,16 +177,8 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
             verify {
                 entityId.perform(any<Chat>())
                 entityId.perform(OpenWindow(Windows.AssistXP))
-            }
-        }
-        with(task) {
-            verify {
                 entityId.send(WidgetVisibility(Windows.AreaStatusIcon, 2, false))
                 entityId.send(ConfigFile(4103, 0))
-            }
-        }
-        with(action) {
-            verify {
                 entityId.perform(Animate(7299))
                 entityId.perform(Graphic(1247))
             }

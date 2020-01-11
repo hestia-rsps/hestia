@@ -1,24 +1,18 @@
 package worlds.gregs.hestia.core.world.movement.logic.systems.calc
 
 import com.artemis.ComponentMapper
+import com.artemis.EntitySubscription
 import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
-import net.mostlyoriginal.api.event.common.Subscribe
 import worlds.gregs.hestia.artemis.Aspect
-import worlds.gregs.hestia.artemis.players
 import worlds.gregs.hestia.artemis.toArray
 import worlds.gregs.hestia.core.display.update.logic.DirectionUtils.Companion.getOffset
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
-import worlds.gregs.hestia.core.entity.mob.api.MobChunk
-import worlds.gregs.hestia.core.entity.player.api.PlayerChunk
-import worlds.gregs.hestia.core.mobs
-import worlds.gregs.hestia.core.world.movement.api.Mobile
 import worlds.gregs.hestia.core.world.movement.model.MovementType
 import worlds.gregs.hestia.core.world.movement.model.components.Shift
 import worlds.gregs.hestia.core.world.movement.model.components.calc.Following
 import worlds.gregs.hestia.core.world.movement.model.components.calc.Step
 import worlds.gregs.hestia.core.world.movement.model.components.types.Movement
-import worlds.gregs.hestia.core.world.movement.model.events.Follow
 
 @Wire(failOnNull = false)
 class FollowSystem : IteratingSystem(Aspect.all(Position::class, Shift::class)) {
@@ -27,18 +21,18 @@ class FollowSystem : IteratingSystem(Aspect.all(Position::class, Shift::class)) 
     private lateinit var positionMapper: ComponentMapper<Position>
     private lateinit var stepMapper: ComponentMapper<Step>
     private lateinit var shiftMapper: ComponentMapper<Shift>
-    private var playerChunk: PlayerChunk? = null
-    private var mobChunk: MobChunk? = null
+    private lateinit var followers: EntitySubscription
+
+    override fun initialize() {
+        super.initialize()
+        followers = world.aspectSubscriptionManager.get(Aspect.all(Following::class))
+    }
 
     override fun process(entityId: Int) {
         val position = positionMapper.get(entityId)
 
         //Get all followers
-        val players = (playerChunk?.get(position) ?: world.players().toArray().asList()).filter { followingMapper.has(it) && followingMapper.get(it).entity == entityId }
-        val mobs = (mobChunk?.get(position) ?: world.mobs().toArray().asList()).filter { followingMapper.has(it) && followingMapper.get(it).entity == entityId }
-
-        //TODO a nicer way of getting all and testing getting entities
-        val entities = players.union(mobs)
+        val entities = followers.entities.toArray().filter { followingMapper.get(it).entity == entityId }
 
         val shift = shiftMapper.get(entityId)
 

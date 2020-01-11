@@ -3,14 +3,16 @@ package worlds.gregs.hestia.core.world.movement.logic.systems.calc
 import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
 import com.artemis.systems.IteratingSystem
+import worlds.gregs.hestia.artemis.Aspect
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.entity.model.components.Size
 import worlds.gregs.hestia.core.entity.entity.model.components.height
 import worlds.gregs.hestia.core.entity.entity.model.components.width
 import worlds.gregs.hestia.core.world.movement.api.Mobile
+import worlds.gregs.hestia.core.world.movement.model.MovementType
 import worlds.gregs.hestia.core.world.movement.model.components.calc.Beside
 import worlds.gregs.hestia.core.world.movement.model.components.calc.Stalk
-import worlds.gregs.hestia.artemis.Aspect
+import worlds.gregs.hestia.core.world.movement.model.components.types.Movement
 
 @Wire(failOnNull = false)
 class StalkSystem : IteratingSystem(Aspect.all(Mobile::class, Position::class, Stalk::class)) {
@@ -18,6 +20,7 @@ class StalkSystem : IteratingSystem(Aspect.all(Mobile::class, Position::class, S
     private lateinit var positionMapper: ComponentMapper<Position>
     private lateinit var besideMapper: ComponentMapper<Beside>
     private lateinit var sizeMapper: ComponentMapper<Size>
+    private lateinit var movementMapper: ComponentMapper<Movement>
 
     override fun process(entityId: Int) {
         val stalk = stalkMapper.get(entityId)
@@ -32,8 +35,8 @@ class StalkSystem : IteratingSystem(Aspect.all(Mobile::class, Position::class, S
         val position = positionMapper.get(entityId)
         val targetPosition = positionMapper.get(targetId)
 
-        //Cancel stalking if target isn't on the same plane
-        if(position.plane != targetPosition.plane) {
+        //Cancel stalking if target isn't on the same plane or instant moves
+        if(position.plane != targetPosition.plane || movementMapper.get(targetId).actual == MovementType.Move) {
             stalkMapper.remove(entityId)
             return
         }
