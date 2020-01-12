@@ -19,7 +19,7 @@ import worlds.gregs.hestia.core.display.window.model.components.Assistance
 import worlds.gregs.hestia.core.display.window.model.components.Assisting
 import worlds.gregs.hestia.core.display.window.model.events.*
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
-import worlds.gregs.hestia.core.entity.entity.model.events.Animate
+import worlds.gregs.hestia.core.entity.entity.model.events.Animation
 import worlds.gregs.hestia.core.entity.entity.model.events.Graphic
 import worlds.gregs.hestia.core.task.model.await.Ticks
 import worlds.gregs.hestia.core.task.model.await.WithinRange
@@ -156,7 +156,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
         }
         with(action) {
             verify {
-                entityId.perform(Animate(7299))
+                entityId.perform(Animation(7299))
             }
         }
     }
@@ -185,7 +185,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
                 entityId.perform(OpenWindow(Windows.AssistXP))
                 entityId.send(WidgetVisibility(Windows.AreaStatusIcon, 2, false))
                 entityId perform SendVariable("total_xp_earned")
-                entityId.perform(Animate(7299))
+                entityId.perform(Animation(7299))
                 entityId.perform(Graphic(1247))
             }
         }

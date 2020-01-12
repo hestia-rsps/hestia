@@ -25,6 +25,19 @@ class AnimationDefinition : Definition {
     var leftHand: Int = -1
     var walkingPrecedence: Int = -1
 
+    fun getTime() = (durations?.sum() ?: 0) * 10
+
+    fun getClientCycles(): Int {
+        if (durations == null) {
+            return 0
+        }
+        var total = 0
+        for (i in 0 until durations!!.size - 3) {
+            total += durations!![i]
+        }
+        return total
+    }
+
     fun changeValues() {
         if (walkingPrecedence == -1) {
             walkingPrecedence = if (interleaveOrder == null) {

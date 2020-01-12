@@ -2,10 +2,10 @@ package worlds.gregs.hestia.core.display.update.logic.sync.mob.stages
 
 import world.gregs.hestia.core.network.codec.packet.PacketBuilder
 import worlds.gregs.hestia.artemis.ConcurrentObjectPool
-import worlds.gregs.hestia.core.display.update.model.components.direction.Facing
-import worlds.gregs.hestia.game.update.SyncStage
 import worlds.gregs.hestia.core.display.update.logic.DirectionUtils
+import worlds.gregs.hestia.core.display.update.model.components.direction.Facing
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
+import worlds.gregs.hestia.game.update.SyncStage
 
 class AddMobSync : SyncStage {
 

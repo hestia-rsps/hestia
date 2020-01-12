@@ -1,5 +1,6 @@
 package worlds.gregs.hestia.core.action.model
 
+import kotlinx.coroutines.suspendCancellableCoroutine
 import net.mostlyoriginal.api.event.common.Cancellable
 import net.mostlyoriginal.api.event.common.EventSystem
 import world.gregs.hestia.core.services.plural
@@ -16,6 +17,8 @@ import worlds.gregs.hestia.core.entity.item.container.model.Inventory
 import worlds.gregs.hestia.core.entity.item.container.model.Item
 import worlds.gregs.hestia.core.entity.item.floor.model.events.CreateFloorItem
 import worlds.gregs.hestia.core.task.api.SuspendableQueue
+import worlds.gregs.hestia.core.task.api.Task
+import worlds.gregs.hestia.core.task.api.TaskType
 import worlds.gregs.hestia.service.cache.definition.definitions.ItemDefinition
 import worlds.gregs.hestia.service.cache.definition.systems.ItemDefinitionSystem
 
@@ -32,7 +35,6 @@ abstract class EntityAction : WorldAction(), Cancellable {
 
     var entity: Int = -1
 
-
     infix fun Int.perform(action: EntityAction) {
         action.entity = this
         super.perform(action)
@@ -46,8 +48,8 @@ abstract class EntityAction : WorldAction(), Cancellable {
     }
 
     /**
-     * Workaround for sending tasks cleanly
-     * [Compound extensions](https://github.com/Kotlin/KEEP/pull/176/commits) would be the proper solution
+     * Workarounds for sending tasks cleanly as [EventListenerBuilder] [then] methods
+     * [Compound extensions](https://github.com/Kotlin/KEEP/pull/176) would be the proper solution
      */
     fun queue(priority: Int = 0, action: SuspendableQueue) {
         entity perform task(priority, action)
@@ -55,6 +57,16 @@ abstract class EntityAction : WorldAction(), Cancellable {
 
     fun strongQueue(priority: Int = 1, action: SuspendableQueue) {
         entity perform strongTask(priority, action)
+    }
+
+    /**
+     * Ideal solution here would be `infix fun (Int, Task).awaitPerform(action: A)`
+     * Using [Compound extensions](https://github.com/Kotlin/KEEP/pull/176)
+     */
+    suspend fun <T, A> Task.awaitPerform(entity: Int, action: A) where A: EntityAction, A: TaskType<T> = suspendCancellableCoroutine<T> {
+        action.continuation = it
+        suspension = action
+        entity.perform(action)
     }
 
 

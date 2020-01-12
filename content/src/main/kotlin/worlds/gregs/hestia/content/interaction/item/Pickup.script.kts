@@ -4,7 +4,7 @@ import worlds.gregs.hestia.core.display.client.model.events.Chat
 import worlds.gregs.hestia.core.display.update.model.components.direction.Face
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.entity.model.components.Type
-import worlds.gregs.hestia.core.entity.entity.model.events.Animate
+import worlds.gregs.hestia.core.entity.entity.model.events.Animation
 import worlds.gregs.hestia.core.entity.item.container.api.ItemResult
 import worlds.gregs.hestia.core.entity.item.floor.model.components.Amount
 import worlds.gregs.hestia.core.entity.item.floor.model.events.FloorItemOption
@@ -35,7 +35,7 @@ on<FloorItemOption> {
         when(entity overflow false transform add(type.id, amount.amount)) {
             is ItemResult.Success -> {
                 if (!entity.get(Position::class).same(target.get(Position::class))) {
-                    entity perform Animate(832)//or 3864
+                    entity perform Animation(832)//or 3864
                 }
                 //Remove floor item
                 world.delete(target)

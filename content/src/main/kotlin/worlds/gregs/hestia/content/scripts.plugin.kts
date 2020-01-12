@@ -19,11 +19,11 @@ import worlds.gregs.hestia.content.interaction.item.WornEquipment_script
 import worlds.gregs.hestia.content.interaction.mob.Banker_script
 import worlds.gregs.hestia.content.interaction.mob.Hans_script
 import worlds.gregs.hestia.content.interaction.player.Follow_script
-import worlds.gregs.hestia.content.interaction.player.Rest_script
+import worlds.gregs.hestia.content.interaction.player.Resting_script
 import worlds.gregs.hestia.content.interaction.player.Trade_script
 
 val scripts = listOf(Logout_script(),
-        FilterButtons_script(), MagicSpellbook_script(), Options_script(), Emotes_script(), Inventory_script(), Notes_script(), PrayerList_script(), QuestJournals_script(), Experience_script(), Stats_script(), WorldMap_script(), WornEquipment_script(), CombatStyles_script(), Gameframe_script(), Minimap_script(), RequestAssist_script(), Rest_script(), Follow_script(), Trade_script(), Item_script(), Pickup_script(), Test_script(), Counter_script(), Banker_script(), Hans_script(), Appearance_script(), BotControl_script(), EntityCount_script(), Interface_script(), Teleport_script())
+        FilterButtons_script(), MagicSpellbook_script(), Options_script(), Emotes_script(), Inventory_script(), Notes_script(), PrayerList_script(), QuestJournals_script(), Experience_script(), Stats_script(), WorldMap_script(), WornEquipment_script(), CombatStyles_script(), Gameframe_script(), Minimap_script(), RequestAssist_script(), Resting_script(), Follow_script(), Trade_script(), Item_script(), Pickup_script(), Test_script(), Counter_script(), Banker_script(), Hans_script(), Appearance_script(), BotControl_script(), EntityCount_script(), Interface_script(), Teleport_script())
 
 setup {
     scripts.forEach {

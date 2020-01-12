@@ -5,10 +5,11 @@ import worlds.gregs.hestia.artemis.Aspect
 import worlds.gregs.hestia.core.display.update.api.BlockFactory
 import worlds.gregs.hestia.core.display.update.logic.DirectionUtils
 import worlds.gregs.hestia.core.display.update.model.components.Renderable
+import worlds.gregs.hestia.core.display.update.model.components.direction.FaceUpdate
 import worlds.gregs.hestia.core.display.update.model.components.direction.Facing
 import worlds.gregs.hestia.game.update.blocks.player.FaceDirectionPlayerBlock
 
-class FaceDirectionPlayerBlockFactory(flag: Int) : BlockFactory<FaceDirectionPlayerBlock>(Aspect.all(Renderable::class, Facing::class), true, flag = flag) {
+class FaceDirectionPlayerBlockFactory(flag: Int) : BlockFactory<FaceDirectionPlayerBlock>(Aspect.all(Renderable::class, FaceUpdate::class), true, flag = flag) {
 
     private lateinit var facingMapper: ComponentMapper<Facing>
 

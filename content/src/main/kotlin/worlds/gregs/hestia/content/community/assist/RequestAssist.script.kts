@@ -26,7 +26,7 @@ import worlds.gregs.hestia.core.display.window.model.events.*
 import worlds.gregs.hestia.core.display.window.model.variable.BooleanVariable
 import worlds.gregs.hestia.core.display.window.model.variable.IntVariable
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
-import worlds.gregs.hestia.core.entity.entity.model.events.Animate
+import worlds.gregs.hestia.core.entity.entity.model.events.Animation
 import worlds.gregs.hestia.core.entity.entity.model.events.Graphic
 import worlds.gregs.hestia.core.task.model.await.Ticks
 import worlds.gregs.hestia.core.task.model.await.WindowClose
@@ -101,7 +101,7 @@ on<RequestResponse> {
         assistance.point.set(target get Position::class)
         entity send WidgetVisibility(AreaStatusIcon, 2, false)
         await(Ticks(2))
-        entity perform Animate(7299)
+        entity perform Animation(7299)
     }
     then(RequestResponse::task)
 }
@@ -119,7 +119,7 @@ on<AcceptedRequest> {
         entity send WidgetComponentText(AssistXP, 73, "Assist System XP Display - You are assisting ${target.get(DisplayName::class).name}")//TODO there's probably a packet or config for replacing `<name>`
         entity send WidgetVisibility(AreaStatusIcon, 2, false)
         entity perform SendVariable("total_xp_earned")
-        entity perform Animate(7299)
+        entity perform Animation(7299)
         entity perform Graphic(1247)
         //TODO disable inventory
         await(WindowClose(AssistXP))

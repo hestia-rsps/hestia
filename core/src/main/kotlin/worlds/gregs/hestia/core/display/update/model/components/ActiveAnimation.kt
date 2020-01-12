@@ -4,7 +4,7 @@ import com.artemis.Component
 import com.artemis.annotations.PooledWeaver
 
 @PooledWeaver
-open class Animation() : Component() {
+open class ActiveAnimation() : Component() {
 
     constructor(id: Int, speed: Int = 0) : this() {
         this.id = id

@@ -28,11 +28,11 @@ abstract class ContainerSystem(container: KClass<out ItemContainer>) : Iterating
 /**
  * Checks the parameters match the values in the container
  */
-fun ItemContainer.validateItem(slot: Int, type: Int): Item {
+fun ItemContainer.validateItem(slot: Int, type: Int): Item? {
     val item = items.getOrNull(slot)
-    if(item == null) {
+    if(item == null && type != -1) {
         throw TaskCancellation.Cancellation("Null item container item $slot $type")
-    } else if(item.type != type) {
+    } else if(item != null && item.type != type) {
         throw TaskCancellation.Cancellation("Invalid item container item $slot $type - $item")
     }
     return item

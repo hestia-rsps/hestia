@@ -38,7 +38,7 @@ on<WindowInteraction> {
     fun WindowInteraction.task() = queue {
         val (_, _, type, slot, option) = this@task
         val inventory = entity.get(Inv::class)
-        val item = inventory.validateItem(slot, type)
+        val item = inventory.validateItem(slot, type) ?: return@queue logger.warn("Invalid item slot $slot $type $option")
 
         val choice = item.definition().options.getOrNull(option - 1)
 

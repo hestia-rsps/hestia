@@ -8,7 +8,7 @@ import worlds.gregs.hestia.core.display.update.model.components.anim.FirstAnimat
 import worlds.gregs.hestia.core.display.update.model.components.anim.FourthAnimation
 import worlds.gregs.hestia.core.display.update.model.components.anim.SecondAnimation
 import worlds.gregs.hestia.core.display.update.model.components.anim.ThirdAnimation
-import worlds.gregs.hestia.core.display.update.model.components.direction.Facing
+import worlds.gregs.hestia.core.display.update.model.components.direction.FaceUpdate
 import worlds.gregs.hestia.core.display.update.model.components.direction.Watching
 import worlds.gregs.hestia.core.display.update.model.components.gfx.FirstGraphic
 import worlds.gregs.hestia.core.display.update.model.components.gfx.FourthGraphic
@@ -28,7 +28,7 @@ class PostEntitySyncSystem : IteratingSystem(Aspect.all(Renderable::class)) {
     private lateinit var damageMapper: ComponentMapper<Damage>
     private lateinit var forceChatMapper: ComponentMapper<ForceChat>
     private lateinit var forceMovementMapper: ComponentMapper<ForceMovement>
-    private lateinit var facingMapper: ComponentMapper<Facing>
+    private lateinit var faceUpdateMapper: ComponentMapper<FaceUpdate>
     private lateinit var transformMapper: ComponentMapper<Transform>
     private lateinit var walkMapper: ComponentMapper<WalkStep>
     private lateinit var runMapper: ComponentMapper<RunStep>
@@ -49,7 +49,7 @@ class PostEntitySyncSystem : IteratingSystem(Aspect.all(Renderable::class)) {
         damageMapper.remove(entityId)
         forceChatMapper.remove(entityId)
         forceMovementMapper.remove(entityId)
-        facingMapper.remove(entityId)//FIXME this data is lost.
+        faceUpdateMapper.remove(entityId)
         transformMapper.remove(entityId)
         walkMapper.remove(entityId)
         runMapper.remove(entityId)

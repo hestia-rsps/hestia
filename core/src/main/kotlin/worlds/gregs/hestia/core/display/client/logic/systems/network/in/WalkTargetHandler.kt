@@ -5,6 +5,7 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import net.mostlyoriginal.api.event.common.EventSystem
 import worlds.gregs.hestia.GameServer
 import worlds.gregs.hestia.core.action.model.perform
+import worlds.gregs.hestia.core.task.api.TaskCancellation
 import worlds.gregs.hestia.core.task.model.InactiveTask
 import worlds.gregs.hestia.core.task.model.await.ClearTasks
 import worlds.gregs.hestia.core.task.model.events.StartTask
@@ -33,7 +34,7 @@ class WalkTargetHandler : MessageHandlerSystem<WalkMap>() {
         val (x, y, running) = message
         es.perform(entityId, StartTask(InactiveTask(1) {
             suspendCancellableCoroutine<Unit> {
-                val clear = ClearTasks(1)
+                val clear = ClearTasks(1, TaskCancellation.Walk(x, y))
                 clear.continuation = it
                 suspension = clear
                 es.perform(entityId, clear)

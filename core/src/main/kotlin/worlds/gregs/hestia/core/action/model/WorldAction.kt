@@ -4,6 +4,7 @@ import com.artemis.BaseSystem
 import com.artemis.Component
 import com.artemis.ComponentMapper
 import com.artemis.World
+import kotlinx.coroutines.suspendCancellableCoroutine
 import net.mostlyoriginal.api.event.common.Event
 import org.slf4j.LoggerFactory
 import world.gregs.hestia.core.network.codec.message.Message
@@ -49,9 +50,14 @@ abstract class WorldAction : Action {
         return StartTask(InactiveTask(priority, action))
     }
 
-    override fun Action.strongTask(priority: Int, queue: SuspendableQueue): EntityAction {
+    override fun strongTask(priority: Int, queue: SuspendableQueue): EntityAction {
         return StartTask(InactiveTask(priority) {
-            this@strongTask.await(ClearTasks(priority))
+            suspendCancellableCoroutine<Unit> {
+                val clear = ClearTasks(priority)
+                clear.continuation = it
+                suspension = clear
+                perform(clear)
+            }
             queue(this)
         })
     }

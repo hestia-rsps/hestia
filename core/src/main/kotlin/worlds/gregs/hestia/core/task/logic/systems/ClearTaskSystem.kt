@@ -15,7 +15,7 @@ class ClearTaskSystem : IteratingSystem(Aspect.all(TaskQueue::class)) {
     @Subscribe
     private fun clearTasks(action: ClearTasks) {
         val entityId = action.entity
-        tasks.cancelAll(entityId, TaskCancellation.Priority, action.priority)
+        tasks.cancelAll(entityId, action.cause ?: TaskCancellation.Priority, action.priority)
     }
 
     override fun process(entityId: Int) {

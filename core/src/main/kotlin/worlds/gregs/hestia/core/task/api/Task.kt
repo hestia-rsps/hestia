@@ -2,7 +2,6 @@ package worlds.gregs.hestia.core.task.api
 
 import kotlinx.coroutines.CompletionHandler
 import kotlinx.coroutines.suspendCancellableCoroutine
-import worlds.gregs.hestia.core.action.model.Action
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.DialogueBuilder
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.dialogue
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.options
@@ -41,14 +40,6 @@ interface Task : Continuation<Any> {
     suspend fun <T> await(type: TaskType<T>) = suspendCancellableCoroutine<T> {
         type.continuation = it
         suspension = type
-    }
-
-    suspend fun <T> Action.await(type: TaskType<T>) = suspendCancellableCoroutine<T> {
-        type.continuation = it
-        suspension = type
-        if(type is Action) {
-            perform(type)
-        }
     }
 
     /*

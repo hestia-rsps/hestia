@@ -66,6 +66,7 @@ on<WindowInteraction> {
 on<WindowOpened> {
     where { target == EnergyOrb }
     then {
+        entity perform SendVariable("energy_orb")
         entity send RunEnergy(100)
     }
 }

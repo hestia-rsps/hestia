@@ -1,6 +1,8 @@
 package worlds.gregs.hestia.core.display.update.logic.block.factory
 
 import com.artemis.ComponentMapper
+import worlds.gregs.hestia.artemis.Aspect
+import worlds.gregs.hestia.artemis.one
 import worlds.gregs.hestia.core.display.update.api.BlockFactory
 import worlds.gregs.hestia.core.display.update.model.components.Renderable
 import worlds.gregs.hestia.core.display.update.model.components.anim.FirstAnimation
@@ -8,8 +10,6 @@ import worlds.gregs.hestia.core.display.update.model.components.anim.FourthAnima
 import worlds.gregs.hestia.core.display.update.model.components.anim.SecondAnimation
 import worlds.gregs.hestia.core.display.update.model.components.anim.ThirdAnimation
 import worlds.gregs.hestia.game.update.blocks.AnimationBlock
-import worlds.gregs.hestia.artemis.Aspect
-import worlds.gregs.hestia.artemis.one
 
 open class AnimationBlockFactory(flag: Int, mob: Boolean = false) : BlockFactory<AnimationBlock>(Aspect.all(Renderable::class).one(FirstAnimation::class, SecondAnimation::class, ThirdAnimation::class, FourthAnimation::class), flag = flag, mob = mob) {
 

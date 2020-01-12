@@ -16,6 +16,6 @@ enum class MobSpawns(val id: Int, val x: Int, val y: Int, val plane: Int = 0, va
     MAN_2(3, 3091, 3509),
     MAN_3(3, 3100, 3511),
     SHOPKEEPER(3, 3081, 3509),
-
     HANS(0, 3087, 3499),
+    MUSICIAN(29, 3090, 3492, direction = Direction.WEST),
 }
