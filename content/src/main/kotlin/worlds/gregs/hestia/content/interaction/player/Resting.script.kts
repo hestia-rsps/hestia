@@ -5,7 +5,6 @@ import worlds.gregs.hestia.core.action.model.EntityAction
 import worlds.gregs.hestia.core.display.client.model.events.Chat
 import worlds.gregs.hestia.core.display.update.model.components.UpdateMovement
 import worlds.gregs.hestia.core.display.update.model.components.direction.Face
-import worlds.gregs.hestia.core.display.update.model.components.direction.Watch
 import worlds.gregs.hestia.core.display.window.api.Variable
 import worlds.gregs.hestia.core.display.window.api.Variables
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.EnergyOrb
@@ -43,10 +42,6 @@ enum class RestType(val sit: Int, val stand: Int) {
 on<MobOption> {
     where { option == "Listen-to" }
     fun MobOption.task() = strongQueue {
-        onCancel {
-            entity perform Watch(-1)
-            entity perform Follow(-1)
-        }
         entity perform Follow(target)
         val within = await(WithinRange(target, 1))
         entity perform Follow(-1)

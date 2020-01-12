@@ -5,6 +5,6 @@ import worlds.gregs.hestia.core.action.model.EntityAction
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.entity.model.components.Size
 
-data class Face(val x: Int, val y: Int) : EntityAction(), InstantEvent {
-    constructor(position: Position, size: Size? = null) : this(FaceUpdate.getFaceX(position, size?.sizeX ?: 1), FaceUpdate.getFaceY(position, size?.sizeY ?: 1))
+data class Face(val x: Int, val y: Int, val sizeX: Int = 1, val sizeY: Int = 1) : EntityAction(), InstantEvent {
+    constructor(position: Position, size: Size? = null) : this(position.x, position.y, size?.sizeX ?: 1, size?.sizeY ?: 1)
 }

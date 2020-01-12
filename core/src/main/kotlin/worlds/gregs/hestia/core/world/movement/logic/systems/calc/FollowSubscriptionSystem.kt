@@ -34,7 +34,6 @@ class FollowSubscriptionSystem : SubscriptionSystem(Aspect.all(Position::class, 
         val entityId = action.entity
         if(entityId == -1) {
             followingMapper.remove(entityId)
-            es.perform(entityId, Watch(entityId))
         } else if(mobileMapper.has(entityId)) {
             val following = followingMapper.create(entityId)
             following.entity = action.target
