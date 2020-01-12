@@ -6,7 +6,7 @@ import worlds.gregs.hestia.core.world.movement.model.events.Follow
 
 on<PlayerOption> {
     where { option == FOLLOW }
-    fun PlayerOption.task() = queue(TaskPriority.High) {
+    fun PlayerOption.task() = strongQueue {
         entity perform Follow(target)
     }
     then(PlayerOption::task)

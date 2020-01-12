@@ -3,7 +3,10 @@ package worlds.gregs.hestia.core.task.logic.systems
 import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.event.common.Subscribe
-import worlds.gregs.hestia.core.task.api.*
+import worlds.gregs.hestia.core.task.api.Task
+import worlds.gregs.hestia.core.task.api.TaskCancellation
+import worlds.gregs.hestia.core.task.api.TaskType
+import worlds.gregs.hestia.core.task.api.Tasks
 import worlds.gregs.hestia.core.task.model.InactiveTask
 import worlds.gregs.hestia.core.task.model.TaskContinuation
 import worlds.gregs.hestia.core.task.model.components.TaskQueue
@@ -11,6 +14,7 @@ import worlds.gregs.hestia.core.task.model.context.EntityContext
 import worlds.gregs.hestia.core.task.model.context.ParamContext
 import worlds.gregs.hestia.core.task.model.events.ProcessTaskSuspension
 import worlds.gregs.hestia.core.task.model.events.StartTask
+import java.util.*
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.createCoroutine
 import kotlin.coroutines.resume
@@ -28,32 +32,34 @@ class TaskSystem : Tasks() {
 
     override fun process(entityId: Int) {
         val taskQueue = taskQueueMapper.get(entityId)
-        while (taskQueue.inactiveTasks.size > 0) {
-            val inactiveTask = taskQueue.inactiveTasks.poll()
-            val (inactive, param) = inactiveTask
-            val (priority, block) = inactive
-            //Cancel if strong task
-            if (priority == TaskPriority.High) {
-                cancelAll(entityId, TaskCancellation.Priority)
-            }
-            //Create coroutine
+        var inactiveTask = taskQueue.inactiveTasks.poll()
+
+        while(inactiveTask != null) {
+            val (block, param) = inactiveTask
+            //Create task
             val task = TaskContinuation(if(param != null) ParamContext(taskQueue.context, param) else taskQueue.context)
-            //Queue
-            taskQueue.active.push(task)
-            //Start
+            //Start task
             val cont = block.createCoroutine(task, task)
             processTask(entityId, taskQueue, task, cont, Unit)
+            //Queue
+            if(!task.isCancelled && !task.isCompleted) {
+                taskQueue.active.push(task)
+            }
+            //Queue next
+            inactiveTask = taskQueue.inactiveTasks.poll()
         }
     }
 
     override fun getSuspension(entityId: Int): TaskType<*>? {
         val component = taskQueueMapper.get(entityId) ?: return null
+        component.active.purgeHead()
         val peek = component.active.peek()
         return peek?.suspension
     }
 
     override fun <T> resume(entityId: Int, type: TaskType<T>, result: T): Boolean {
         val taskQueue = taskQueueMapper.get(entityId) ?: return false
+        taskQueue.active.purgeHead()
         val task = taskQueue.active.peek()
         val suspension = task?.suspension
         return if (suspension != null) {
@@ -64,9 +70,17 @@ class TaskSystem : Tasks() {
         }
     }
 
+    internal fun Deque<Task>.purgeHead() {
+        val task = peek() ?: return
+        if(task.isCompleted || task.isCancelled) {
+            poll()
+            purgeHead()
+        }
+    }
+
     internal fun check(entityId: Int, queue: TaskQueue, task: Task) {
         when {
-            task.isCompleted || task.isCancelled -> queue.active.remove(task)
+            task.suspension == null || task.isCompleted || task.isCancelled -> queue.active.remove(task)
             task.isActive -> es.dispatch(ProcessTaskSuspension(entityId, task.suspension ?: return))
         }
     }

@@ -28,9 +28,9 @@ import worlds.gregs.hestia.core.display.window.model.variable.IntVariable
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.entity.model.events.Animate
 import worlds.gregs.hestia.core.entity.entity.model.events.Graphic
-import worlds.gregs.hestia.core.task.logic.systems.TickSuspension
-import worlds.gregs.hestia.core.task.logic.systems.WindowCloseSuspension
-import worlds.gregs.hestia.core.task.logic.systems.WithinRange
+import worlds.gregs.hestia.core.task.model.await.Ticks
+import worlds.gregs.hestia.core.task.model.await.WindowClose
+import worlds.gregs.hestia.core.task.model.await.WithinRange
 import worlds.gregs.hestia.core.world.movement.model.MovementType
 import worlds.gregs.hestia.core.world.movement.model.components.types.Movement
 import worlds.gregs.hestia.core.world.movement.model.events.Follow
@@ -58,7 +58,7 @@ lateinit var variables: Variables
 
 on<PlayerOption> {
     where { option == ASSIST }
-    fun PlayerOption.task() = queue(TaskPriority.High) {
+    fun PlayerOption.task() = strongQueue {
         val assisting = entity get Assisting::class
         //Delayed requesting
         val lastRequest = Engine.ticks - assisting.lastRequest//10 - 5
@@ -66,7 +66,7 @@ on<PlayerOption> {
             val waitTime = requestDelay - lastRequest
             entity perform Chat("You have only just made an assistance request", GameAssist)
             entity perform Chat("You have to wait $waitTime ${"second".plural(waitTime)} before making a new request.", GameAssist)
-            return@queue
+            return@strongQueue
         }
         val targetAssisting = target get Assisting::class
         update(targetAssisting)
@@ -74,7 +74,7 @@ on<PlayerOption> {
             entity perform Chat("${target.get(DisplayName::class).name} is unable to assist at the moment.", GameAssist)//Unconfirmed
             val hours = assisting.getHoursRemaining()
             target perform Chat("An assist request has been refused. You can assist again in $hours ${"hour".plural(hours)}.", GameAssist)
-            return@queue
+            return@strongQueue
         }
 
         entity perform Follow(target)
@@ -83,7 +83,7 @@ on<PlayerOption> {
 
         if(!within) {
             entity perform Chat("You can't reach that.")
-            return@queue
+            return@strongQueue
         }
         system(RequestSystem::class).sendRequest(entity, target, Request.ASSIST)
         assisting.lastRequest = Engine.ticks
@@ -94,13 +94,13 @@ on<PlayerOption> {
 //The assistance requester
 on<RequestResponse> {
     where { request == Request.ASSIST }
-    fun RequestResponse.task() = queue(TaskPriority.High) {
+    fun RequestResponse.task() = strongQueue {
         entity perform Chat("You are being assisted by ${target.get(DisplayName::class).name}.", GameAssist)
         val assistance = entity create Assistance::class
         assistance.helper = target
         assistance.point.set(target get Position::class)
         entity send WidgetVisibility(AreaStatusIcon, 2, false)
-        await(TickSuspension(2))
+        await(Ticks(2))
         entity perform Animate(7299)
     }
     then(RequestResponse::task)
@@ -109,7 +109,7 @@ on<RequestResponse> {
 //The assistance giver
 on<AcceptedRequest> {
     where { request == Request.ASSIST }
-    fun AcceptedRequest.task() = queue(TaskPriority.High) {
+    fun AcceptedRequest.task() = strongQueue {
         onCancel { cancel(entity, target) }
         entity perform Chat("You are assisting ${target.get(DisplayName::class).name}.", GameAssist)
         val assisting = entity get Assisting::class
@@ -122,7 +122,7 @@ on<AcceptedRequest> {
         entity perform Animate(7299)
         entity perform Graphic(1247)
         //TODO disable inventory
-        await(WindowCloseSuspension(AssistXP))
+        await(WindowClose(AssistXP))
         if (system(WindowSystem::class).hasWindow(entity, AssistXP)) {
             cancel(entity, target)
         }

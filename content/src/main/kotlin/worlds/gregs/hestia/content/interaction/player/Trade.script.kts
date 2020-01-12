@@ -13,19 +13,19 @@ import worlds.gregs.hestia.core.display.window.model.actions.OpenWindow
 import worlds.gregs.hestia.core.display.window.model.events.AcceptedRequest
 import worlds.gregs.hestia.core.display.window.model.events.PlayerOption
 import worlds.gregs.hestia.core.display.window.model.events.RequestResponse
-import worlds.gregs.hestia.core.task.logic.systems.WithinRange
+import worlds.gregs.hestia.core.task.model.await.WithinRange
 import worlds.gregs.hestia.core.world.movement.model.events.Follow
 
 on<PlayerOption> {
     where { option == TRADE }
-    fun PlayerOption.task() = queue(TaskPriority.High) {
+    fun PlayerOption.task() = strongQueue {
         entity perform Follow(target)
         val within = await(WithinRange(target, 1))
         entity perform Follow(-1)
 
         if(!within) {
             entity perform Chat("You can't reach that.")
-            return@queue
+            return@strongQueue
         }
         system(RequestSystem::class).sendRequest(entity, target, Request.TRADE)
     }
@@ -35,7 +35,7 @@ on<PlayerOption> {
 //The original requester
 on<RequestResponse> {
     where { request == Request.TRADE }
-    fun RequestResponse.task() = queue(TaskPriority.High) {
+    fun RequestResponse.task() = strongQueue {
         trade(this, target)
     }
     then(RequestResponse::task)
@@ -44,7 +44,7 @@ on<RequestResponse> {
 //The responder
 on<AcceptedRequest> {
     where { request == Request.TRADE }
-    fun AcceptedRequest.task() = queue(TaskPriority.High) {
+    fun AcceptedRequest.task() = strongQueue {
         trade(this, target)
     }
     then(AcceptedRequest::task)

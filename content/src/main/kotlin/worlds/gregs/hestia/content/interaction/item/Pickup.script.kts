@@ -8,23 +8,23 @@ import worlds.gregs.hestia.core.entity.entity.model.events.Animate
 import worlds.gregs.hestia.core.entity.item.container.api.ItemResult
 import worlds.gregs.hestia.core.entity.item.floor.model.components.Amount
 import worlds.gregs.hestia.core.entity.item.floor.model.events.FloorItemOption
-import worlds.gregs.hestia.core.task.logic.systems.RouteSuspension
-import worlds.gregs.hestia.core.task.logic.systems.TickSuspension
+import worlds.gregs.hestia.core.task.model.await.Route
+import worlds.gregs.hestia.core.task.model.await.Ticks
 import worlds.gregs.hestia.core.world.movement.logic.systems.calc.StepBesideSystem.Companion.isNear
 import worlds.gregs.hestia.core.world.movement.model.events.Interact
 
 on<FloorItemOption> {
     where { option == "Take" }
-    fun FloorItemOption.task() = queue(TaskPriority.High) {
+    fun FloorItemOption.task() = strongQueue {
         entity perform Interact(target, true)
 
-        val route = await(RouteSuspension())
+        val route = await(Route())
         val canInteract = route.steps >= 0 && !route.alternative || isNear(entity get Position::class, target get Position::class, 1, 1, true)
-        await(TickSuspension(1))
+        await(Ticks(1))
         if(!canInteract) {
             entity perform Face(target get Position::class)
             entity perform Chat("You can't reach that.")
-            return@queue
+            return@strongQueue
         }
 
         //Get floor item info

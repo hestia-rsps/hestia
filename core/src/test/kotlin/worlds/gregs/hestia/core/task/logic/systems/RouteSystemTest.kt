@@ -15,16 +15,17 @@ import worlds.gregs.hestia.MockkGame
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.task.api.TaskType
 import worlds.gregs.hestia.core.task.api.Tasks
+import worlds.gregs.hestia.core.task.model.await.Route
 import worlds.gregs.hestia.core.task.model.components.TaskQueue
 import worlds.gregs.hestia.core.world.movement.api.Mobile
 import worlds.gregs.hestia.core.world.movement.model.components.Shift
 import worlds.gregs.hestia.core.world.movement.model.components.Steps
 
 @ExtendWith(MockKExtension::class)
-internal class MovementSuspensionSystemTest : MockkGame(WorldConfigurationBuilder()) {
+internal class RouteSystemTest : MockkGame(WorldConfigurationBuilder()) {
 
     @SpyK
-    var system = MovementSuspensionSystem()
+    var system = RouteSystem()
 
     @SpyK
     var component = TaskQueue()
@@ -67,7 +68,7 @@ internal class MovementSuspensionSystemTest : MockkGame(WorldConfigurationBuilde
     fun `Resume if no steps component`() {
         //Given
         val entityId = 0
-        val suspension: RouteSuspension = mockk(relaxed = true)
+        val suspension: Route = mockk(relaxed = true)
         every { tasks.getSuspension(entityId) } returns suspension
         //When
         tick()
@@ -83,7 +84,7 @@ internal class MovementSuspensionSystemTest : MockkGame(WorldConfigurationBuilde
         val entityId = 0
         val steps = spyk(Steps())
         world.getEntity(entityId).edit().add(steps)
-        val suspension: RouteSuspension = mockk(relaxed = true)
+        val suspension: Route = mockk(relaxed = true)
         every { steps.hasNext } returns false
         every { tasks.getSuspension(entityId) } returns suspension
         //When
@@ -98,7 +99,7 @@ internal class MovementSuspensionSystemTest : MockkGame(WorldConfigurationBuilde
         val entityId = 0
         val steps = spyk(Steps())
         world.getEntity(entityId).edit().add(steps)
-        val suspension: RouteSuspension = mockk(relaxed = true)
+        val suspension: Route = mockk(relaxed = true)
         every { steps.hasNext } returns true
         every { tasks.getSuspension(entityId) } returns suspension
         //When

@@ -52,7 +52,7 @@ abstract class ScriptTester<T : ScriptBase>(aspect: Aspect.Builder? = null) : Sc
         with(task) {
             every { any<Int>().send(any()) } answers {}
         }
-        every { queue(any(), any()) } answers {
+        every { queue(any()) } answers {
             val queue = arg<SuspendableQueue>(1)
             continuation = queue.createCoroutine(task, task)
             continuation.resume(Unit)

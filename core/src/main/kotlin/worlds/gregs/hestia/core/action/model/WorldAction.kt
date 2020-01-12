@@ -10,9 +10,8 @@ import world.gregs.hestia.core.network.codec.message.Message
 import worlds.gregs.hestia.artemis.events.OutBoundMessage
 import worlds.gregs.hestia.core.action.logic.dispatch
 import worlds.gregs.hestia.core.task.api.SuspendableQueue
-import worlds.gregs.hestia.core.task.api.TaskPriority
 import worlds.gregs.hestia.core.task.model.InactiveTask
-import worlds.gregs.hestia.core.task.model.ReusableTask
+import worlds.gregs.hestia.core.task.model.await.ClearTasks
 import worlds.gregs.hestia.core.task.model.events.StartTask
 import kotlin.reflect.KClass
 
@@ -46,8 +45,15 @@ abstract class WorldAction : Action {
 
     override infix fun <T : BaseSystem> World.system(c: KClass<T>): T = getSystem(c.java)
 
-    override fun task(priority: TaskPriority, action: SuspendableQueue): EntityAction {
-        return StartTask(InactiveTask(ReusableTask(priority, action), Unit))
+    override fun task(action: SuspendableQueue): EntityAction {
+        return StartTask(InactiveTask(action, Unit))
+    }
+
+    override fun strongTask(action: SuspendableQueue): EntityAction {
+        return StartTask(InactiveTask({
+            await(ClearTasks())
+            action(this)
+        }, Unit))
     }
 
     override fun log(message: String) = logger.warn(message)

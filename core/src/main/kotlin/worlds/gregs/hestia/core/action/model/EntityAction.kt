@@ -16,7 +16,6 @@ import worlds.gregs.hestia.core.entity.item.container.model.Inventory
 import worlds.gregs.hestia.core.entity.item.container.model.Item
 import worlds.gregs.hestia.core.entity.item.floor.model.events.CreateFloorItem
 import worlds.gregs.hestia.core.task.api.SuspendableQueue
-import worlds.gregs.hestia.core.task.api.TaskPriority
 import worlds.gregs.hestia.service.cache.definition.definitions.ItemDefinition
 import worlds.gregs.hestia.service.cache.definition.systems.ItemDefinitionSystem
 
@@ -50,8 +49,12 @@ abstract class EntityAction : WorldAction(), Cancellable {
      * Workaround for sending tasks cleanly
      * [Compound extensions](https://github.com/Kotlin/KEEP/pull/176/commits) would be the proper solution
      */
-    fun queue(priority: TaskPriority = TaskPriority.Normal, action: SuspendableQueue) {
-        entity perform task(priority, action)
+    fun queue(action: SuspendableQueue) {
+        entity perform task(action)
+    }
+
+    fun strongQueue(action: SuspendableQueue) {
+        entity perform strongTask(action)
     }
 
 

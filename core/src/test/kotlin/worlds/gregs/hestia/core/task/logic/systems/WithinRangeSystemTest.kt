@@ -14,14 +14,15 @@ import worlds.gregs.hestia.MockkGame
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.task.api.TaskType
 import worlds.gregs.hestia.core.task.api.Tasks
+import worlds.gregs.hestia.core.task.model.await.WithinRange
 import worlds.gregs.hestia.core.task.model.components.TaskQueue
 import worlds.gregs.hestia.core.world.movement.api.Mobile
 
 @ExtendWith(MockKExtension::class)
-internal class DistanceSuspensionSystemTest : MockkGame() {
+internal class WithinRangeSystemTest : MockkGame() {
 
     @SpyK
-    var system = DistanceSuspensionSystem()
+    var system = WithinRangeSystem()
 
     @SpyK
     var component = TaskQueue()

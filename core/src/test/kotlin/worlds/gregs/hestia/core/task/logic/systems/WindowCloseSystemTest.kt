@@ -17,15 +17,16 @@ import worlds.gregs.hestia.core.display.window.model.events.WindowClosed
 import worlds.gregs.hestia.core.task.api.Task
 import worlds.gregs.hestia.core.task.api.TaskType
 import worlds.gregs.hestia.core.task.api.Tasks
+import worlds.gregs.hestia.core.task.model.await.WindowClose
 import worlds.gregs.hestia.core.task.model.components.TaskQueue
 import worlds.gregs.hestia.core.task.model.events.ProcessTaskSuspension
 import kotlin.coroutines.resume
 
 @ExtendWith(MockKExtension::class)
-internal class WindowCloseSuspensionSystemTest : MockkGame(WorldConfigurationBuilder()) {
+internal class WindowCloseSystemTest : MockkGame(WorldConfigurationBuilder()) {
 
     @SpyK
-    var system = WindowPaneCloseSuspensionSystem()
+    var system = WindowPaneCloseSystem()
 
     @SpyK
     var component = TaskQueue()
@@ -52,8 +53,8 @@ internal class WindowCloseSuspensionSystemTest : MockkGame(WorldConfigurationBui
         entity = world.createEntity()
         entity.edit().add(component)
         tick()
-        every { task.suspension = any() } propertyType WindowCloseSuspension::class answers {
-            continuation = arg<WindowCloseSuspension>(0).continuation
+        every { task.suspension = any() } propertyType WindowClose::class answers {
+            continuation = arg<WindowClose>(0).continuation
             continuation.resume(Unit)
         }
     }

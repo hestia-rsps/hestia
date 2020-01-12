@@ -14,14 +14,15 @@ import worlds.gregs.hestia.GameTest
 import worlds.gregs.hestia.core.task.api.Task
 import worlds.gregs.hestia.core.task.api.TaskType
 import worlds.gregs.hestia.core.task.api.Tasks
+import worlds.gregs.hestia.core.task.model.await.Ticks
 import worlds.gregs.hestia.core.task.model.components.TaskQueue
 import kotlin.coroutines.resume
 
 @ExtendWith(MockKExtension::class)
-internal class TickSuspensionSystemTest : GameTest(WorldConfigurationBuilder()) {
+internal class TicksSystemTest : GameTest(WorldConfigurationBuilder()) {
 
     @SpyK
-    var system = TickSuspensionSystem()
+    var system = TicksSystem()
 
     @RelaxedMockK
     lateinit var task: Task
@@ -37,8 +38,8 @@ internal class TickSuspensionSystemTest : GameTest(WorldConfigurationBuilder()) 
     override fun setup() {
         super.setup()
         world.createEntity().edit().add(queue)
-        every { task.suspension = any() } propertyType TickSuspension::class answers {
-            continuation = arg<TickSuspension>(0).continuation
+        every { task.suspension = any() } propertyType Ticks::class answers {
+            continuation = arg<Ticks>(0).continuation
             continuation.resume(Unit)
         }
     }

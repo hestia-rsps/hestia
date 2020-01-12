@@ -7,7 +7,6 @@ import com.artemis.World
 import net.mostlyoriginal.api.event.common.Event
 import world.gregs.hestia.core.network.codec.message.Message
 import worlds.gregs.hestia.core.task.api.SuspendableQueue
-import worlds.gregs.hestia.core.task.api.TaskPriority
 import kotlin.reflect.KClass
 
 interface Action : Event {
@@ -37,7 +36,8 @@ interface Action : Event {
 
     infix fun <T : BaseSystem> World.system(c: KClass<T>): T
 
-    fun task(priority: TaskPriority = TaskPriority.Normal, action: SuspendableQueue) : EntityAction
+    fun task(action: SuspendableQueue) : EntityAction
+    fun strongTask(action: SuspendableQueue) : EntityAction
 
     fun log(message: String)
 

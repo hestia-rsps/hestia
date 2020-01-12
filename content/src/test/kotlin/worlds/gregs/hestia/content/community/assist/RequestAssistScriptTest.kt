@@ -21,7 +21,7 @@ import worlds.gregs.hestia.core.display.window.model.events.*
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.entity.model.events.Animate
 import worlds.gregs.hestia.core.entity.entity.model.events.Graphic
-import worlds.gregs.hestia.core.task.logic.systems.TickSuspension
+import worlds.gregs.hestia.core.task.logic.systems.Ticks
 import worlds.gregs.hestia.core.task.logic.systems.WithinRange
 import worlds.gregs.hestia.core.world.movement.model.MovementType
 import worlds.gregs.hestia.core.world.movement.model.components.types.Movement
@@ -143,7 +143,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
             every { targetId.get(Position::class) } returns mockk(relaxed = true)
         }
         with(task) {
-            coEvery { await(any<TickSuspension>()) } answers {}
+            coEvery { await(any<Ticks>()) } answers {}
         }
         //When
         send(action)
@@ -152,7 +152,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
             verify { entityId.send(WidgetVisibility(Windows.AreaStatusIcon, 2, false)) }
         }
         with(task) {
-            coVerify { await(TickSuspension(2)) }
+            coVerify { await(Ticks(2)) }
         }
         with(action) {
             verify {
@@ -174,7 +174,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
             every { targetId.get(Position::class) } returns mockk(relaxed = true)
         }
         with(task) {
-            coEvery { await(any<TickSuspension>()) } answers {}
+            coEvery { await(any<Ticks>()) } answers {}
         }
         //When
         send(action)

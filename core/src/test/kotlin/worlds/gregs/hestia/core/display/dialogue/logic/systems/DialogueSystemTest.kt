@@ -15,9 +15,7 @@ import worlds.gregs.hestia.core.display.dialogue.api.Dialogue
 import worlds.gregs.hestia.core.display.window.api.Windows
 import worlds.gregs.hestia.core.task.api.SuspendableQueue
 import worlds.gregs.hestia.core.task.api.Task
-import worlds.gregs.hestia.core.task.api.TaskPriority
 import worlds.gregs.hestia.core.task.api.Tasks
-import worlds.gregs.hestia.core.task.model.ReusableTask
 import worlds.gregs.hestia.core.task.model.components.TaskQueue
 import worlds.gregs.hestia.core.task.model.events.StartTask
 
@@ -63,12 +61,11 @@ internal class DialogueSystemTest : MockkGame() {
         //Given
         val id = "script"
         //When
-        system.addDialogue(id, ReusableTask(TaskPriority.Low, queue))
+        system.addDialogue(id, queue)
         //Then
         assertEquals(1, system.scripts.size)
         assertTrue(system.scripts.containsKey(id))
-        assertEquals(queue, system.scripts[id]!!.block)
-        assertEquals(TaskPriority.Low, system.scripts[id]!!.priority)
+        assertEquals(queue, system.scripts[id]!!)
     }
 
     @Test
@@ -76,7 +73,7 @@ internal class DialogueSystemTest : MockkGame() {
         //Given
         val entityId = 0
         val name = "name"
-        system.scripts[name] = ReusableTask(TaskPriority.Low, queue)
+        system.scripts[name] = queue
         //When
         system.startDialogue(entityId, name)
         //Then

@@ -19,7 +19,7 @@ import worlds.gregs.hestia.core.task.api.Task.Companion.FIRST
 import worlds.gregs.hestia.core.task.api.Task.Companion.FOURTH
 import worlds.gregs.hestia.core.task.api.Task.Companion.SECOND
 import worlds.gregs.hestia.core.task.api.Task.Companion.THIRD
-import worlds.gregs.hestia.core.task.logic.systems.WithinRange
+import worlds.gregs.hestia.core.task.model.await.WithinRange
 import worlds.gregs.hestia.core.world.movement.model.components.calc.Following
 import worlds.gregs.hestia.core.world.movement.model.events.Follow
 
@@ -30,7 +30,7 @@ val veteranCape = remove(995, 50000) andThen addAll(20763, 20764)
 
 on<MobOption> {
     where { option == "Talk-to" && name == "Hans" }
-    fun MobOption.task() = queue(TaskPriority.High) {
+    fun MobOption.task() = strongQueue {
 
         entity perform Follow(target)
         val within = await(WithinRange(target, 1))
@@ -38,7 +38,7 @@ on<MobOption> {
 
         if(!within) {
             entity perform Chat("You can't reach that.")
-            return@queue
+            return@strongQueue
         }
 
         onCancel { entity perform CloseDialogue() }

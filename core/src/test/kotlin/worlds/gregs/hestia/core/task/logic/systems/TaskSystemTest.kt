@@ -12,7 +12,6 @@ import org.junit.jupiter.api.extension.ExtendWith
 import worlds.gregs.hestia.MockkGame
 import worlds.gregs.hestia.core.task.api.*
 import worlds.gregs.hestia.core.task.model.InactiveTask
-import worlds.gregs.hestia.core.task.model.ReusableTask
 import worlds.gregs.hestia.core.task.model.components.TaskQueue
 import worlds.gregs.hestia.core.task.model.context.EntityContext
 import worlds.gregs.hestia.core.task.model.events.ProcessTaskSuspension
@@ -60,7 +59,7 @@ internal class TaskSystemTest : MockkGame() {
         val active = spyk(LinkedList<Task>())
         every { component.active } returns active
         val list: Deque<InactiveTask<Unit>> = LinkedList<InactiveTask<Unit>>()
-        list.push(InactiveTask(ReusableTask(TaskPriority.Low, queue), Unit))
+        list.push(InactiveTask(queue, Unit))
         val inactive = spyk(list)
         val details = spyk(LinkedList<Task>())
         every { component.inactiveTasks } returns (inactive as Deque<InactiveTask<*>>)
@@ -83,7 +82,7 @@ internal class TaskSystemTest : MockkGame() {
         val queue = mockk<SuspendableQueue>(relaxed = true)
         val active = spyk(LinkedList<Task>())
         val list: Deque<InactiveTask<Unit>> = LinkedList<InactiveTask<Unit>>()
-        list.push(InactiveTask(ReusableTask(TaskPriority.High, queue), Unit))
+        list.push(InactiveTask(queue, Unit))
         val inactive = spyk(list)
         every { component.inactiveTasks } returns (inactive as Deque<InactiveTask<*>>)
         every { component.active } returns active
@@ -306,7 +305,7 @@ internal class TaskSystemTest : MockkGame() {
         val block: SuspendableQueue = mockk()
 
         //When
-        system.activateTask(0, InactiveTask(ReusableTask(TaskPriority.Low, block), Unit))
+        system.activateTask(0, InactiveTask(block, Unit))
         //Then
         verifyOrder {
             inactive.push(any())
