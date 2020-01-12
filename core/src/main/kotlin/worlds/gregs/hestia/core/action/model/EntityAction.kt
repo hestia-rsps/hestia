@@ -49,12 +49,12 @@ abstract class EntityAction : WorldAction(), Cancellable {
      * Workaround for sending tasks cleanly
      * [Compound extensions](https://github.com/Kotlin/KEEP/pull/176/commits) would be the proper solution
      */
-    fun queue(action: SuspendableQueue) {
-        entity perform task(action)
+    fun queue(priority: Int = 0, action: SuspendableQueue) {
+        entity perform task(priority, action)
     }
 
-    fun strongQueue(action: SuspendableQueue) {
-        entity perform strongTask(action)
+    fun strongQueue(priority: Int = 1, action: SuspendableQueue) {
+        entity perform strongTask(priority, action)
     }
 
 

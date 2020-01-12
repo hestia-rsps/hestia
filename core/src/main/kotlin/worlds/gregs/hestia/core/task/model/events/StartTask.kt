@@ -7,4 +7,4 @@ import worlds.gregs.hestia.core.task.model.InactiveTask
 /**
  * Queue's a priority task
  */
-data class StartTask(val task: InactiveTask<*>) : EntityAction(), InstantEvent
+data class StartTask(val task: InactiveTask) : EntityAction(), InstantEvent

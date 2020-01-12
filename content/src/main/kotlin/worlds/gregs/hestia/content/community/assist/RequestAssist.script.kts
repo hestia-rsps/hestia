@@ -61,7 +61,7 @@ on<PlayerOption> {
     fun PlayerOption.task() = strongQueue {
         val assisting = entity get Assisting::class
         //Delayed requesting
-        val lastRequest = Engine.ticks - assisting.lastRequest//10 - 5
+        val lastRequest = Engine.ticks - assisting.lastRequest
         if (lastRequest in 1 until requestDelay - 1) {
             val waitTime = requestDelay - lastRequest
             entity perform Chat("You have only just made an assistance request", GameAssist)

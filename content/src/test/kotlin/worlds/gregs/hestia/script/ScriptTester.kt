@@ -13,8 +13,8 @@ import worlds.gregs.hestia.core.script.ScriptBase
 import worlds.gregs.hestia.core.task.api.SuspendableQueue
 import worlds.gregs.hestia.core.task.api.Task
 import worlds.gregs.hestia.core.task.api.TaskCancellation
-import worlds.gregs.hestia.core.task.model.context.EntityContext
 import kotlin.coroutines.Continuation
+import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.coroutines.createCoroutine
 import kotlin.coroutines.resume
 
@@ -28,7 +28,7 @@ abstract class ScriptTester<T : ScriptBase>(aspect: Aspect.Builder? = null) : Sc
     lateinit var task: Task
     val entityId = -1
 
-    inline fun <reified T : Action> mockkAction(): T {
+    inline fun <reified T : Action> mockAction(): T {
         val action = mockk<T>(relaxed = true)
         if(action is EntityAction) {
             every { action.entity } returns entityId
@@ -47,14 +47,18 @@ abstract class ScriptTester<T : ScriptBase>(aspect: Aspect.Builder? = null) : Sc
 
     fun EntityAction.mockTask() {
         task = mockk(relaxed = true)
-        every { task.context } returns EntityContext(world, entity)
         coEvery { task.cancel(any<TaskCancellation>()) } answers {}
-        with(task) {
-            every { any<Int>().send(any()) } answers {}
-        }
-        every { queue(any()) } answers {
+        every { task.context } returns EmptyCoroutineContext
+        every { any<Int>().send(any()) } answers {}
+        every { queue(any(), any()) } answers {
             val queue = arg<SuspendableQueue>(1)
             continuation = queue.createCoroutine(task, task)
+            continuation.resume(Unit)
+        }
+        every { strongQueue(any(), any()) } answers {
+            val queue = arg<SuspendableQueue>(1)
+            val coroutine = queue.createCoroutine(task, task)
+            continuation = coroutine
             continuation.resume(Unit)
         }
     }

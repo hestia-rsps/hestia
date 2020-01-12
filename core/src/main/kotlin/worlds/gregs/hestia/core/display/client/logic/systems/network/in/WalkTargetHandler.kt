@@ -1,11 +1,12 @@
 package worlds.gregs.hestia.core.display.client.logic.systems.network.`in`
 
 import com.artemis.ComponentMapper
+import kotlinx.coroutines.suspendCancellableCoroutine
 import net.mostlyoriginal.api.event.common.EventSystem
 import worlds.gregs.hestia.GameServer
 import worlds.gregs.hestia.core.action.model.perform
 import worlds.gregs.hestia.core.task.model.InactiveTask
-import worlds.gregs.hestia.core.task.model.await.awaitClearTasks
+import worlds.gregs.hestia.core.task.model.await.ClearTasks
 import worlds.gregs.hestia.core.task.model.events.StartTask
 import worlds.gregs.hestia.core.world.movement.logic.strategies.FixedTileStrategy
 import worlds.gregs.hestia.core.world.movement.model.components.Shift
@@ -30,8 +31,13 @@ class WalkTargetHandler : MessageHandlerSystem<WalkMap>() {
 
     override fun handle(entityId: Int, message: WalkMap) {
         val (x, y, running) = message
-        es.perform(entityId, StartTask(InactiveTask({
-            awaitClearTasks(es, entityId)
+        es.perform(entityId, StartTask(InactiveTask(1) {
+            suspendCancellableCoroutine<Unit> {
+                val clear = ClearTasks(1)
+                clear.continuation = it
+                suspension = clear
+                es.perform(entityId, clear)
+            }
 
             //TODO temp clearing, needs a proper system
             //Clear current steps
@@ -47,7 +53,7 @@ class WalkTargetHandler : MessageHandlerSystem<WalkMap>() {
             pathMapper.create(entityId).apply {
                 this.strategy = FixedTileStrategy(x, y)
             }
-        }, Unit)))
+        }))
     }
 
 }

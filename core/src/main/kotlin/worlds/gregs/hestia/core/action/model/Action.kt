@@ -36,8 +36,15 @@ interface Action : Event {
 
     infix fun <T : BaseSystem> World.system(c: KClass<T>): T
 
-    fun task(action: SuspendableQueue) : EntityAction
-    fun strongTask(action: SuspendableQueue) : EntityAction
+    /**
+     * Starts a suspendable task
+     */
+    fun task(priority: Int = 0, action: SuspendableQueue) : EntityAction
+
+    /**
+     * A strong task clears all tasks with the same or lower priority
+     */
+    fun Action.strongTask(priority: Int = 1, action: SuspendableQueue) : EntityAction
 
     fun log(message: String)
 

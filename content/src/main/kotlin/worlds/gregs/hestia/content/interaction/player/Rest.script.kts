@@ -48,7 +48,7 @@ on<WindowInteraction> {
                     val type = RestType.values().random()
                     //TODO store value before rest on blackboard
                     onCancel {
-                        entity perform task {
+                        entity perform task(2) {
                             entity perform Animate(type.end)
                             await(Ticks(3))//await anim
                             entity perform SetVariable("energy_orb", current)

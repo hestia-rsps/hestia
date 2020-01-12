@@ -10,97 +10,92 @@ import worlds.gregs.hestia.core.task.api.Tasks
 import worlds.gregs.hestia.core.task.model.InactiveTask
 import worlds.gregs.hestia.core.task.model.TaskContinuation
 import worlds.gregs.hestia.core.task.model.components.TaskQueue
-import worlds.gregs.hestia.core.task.model.context.EntityContext
-import worlds.gregs.hestia.core.task.model.context.ParamContext
 import worlds.gregs.hestia.core.task.model.events.ProcessTaskSuspension
 import worlds.gregs.hestia.core.task.model.events.StartTask
 import java.util.*
-import kotlin.coroutines.Continuation
-import kotlin.coroutines.createCoroutine
-import kotlin.coroutines.resume
-import kotlin.coroutines.resumeWithException
+import kotlin.coroutines.*
 
 class TaskSystem : Tasks() {
 
     private lateinit var taskQueueMapper: ComponentMapper<TaskQueue>
     private lateinit var es: EventSystem
 
-    override fun inserted(entityId: Int) {
-        val taskQueue = taskQueueMapper.get(entityId)
-        taskQueue.context = EntityContext(world, entityId)
-    }
-
     override fun process(entityId: Int) {
         val taskQueue = taskQueueMapper.get(entityId)
-        var inactiveTask = taskQueue.inactiveTasks.poll()
-
-        while(inactiveTask != null) {
-            val (block, param) = inactiveTask
+        while(taskQueue.inactiveTasks.isNotEmpty()) {
+            val (priority, block) = taskQueue.inactiveTasks.poll()
             //Create task
-            val task = TaskContinuation(if(param != null) ParamContext(taskQueue.context, param) else taskQueue.context)
+            val task = TaskContinuation(EmptyCoroutineContext)
             //Start task
             val cont = block.createCoroutine(task, task)
-            processTask(entityId, taskQueue, task, cont, Unit)
+            processTask(entityId, task, cont, Unit)
             //Queue
             if(!task.isCancelled && !task.isCompleted) {
-                taskQueue.active.push(task)
+                val queue = taskQueue.active.getOrPut(priority) { LinkedList() }
+                queue.push(task)
             }
-            //Queue next
-            inactiveTask = taskQueue.inactiveTasks.poll()
         }
     }
 
     override fun getSuspension(entityId: Int): TaskType<*>? {
         val component = taskQueueMapper.get(entityId) ?: return null
-        component.active.purgeHead()
-        val peek = component.active.peek()
+        val queue = purge(component.active) ?: return null
+        val peek = queue.peek()
         return peek?.suspension
     }
 
     override fun <T> resume(entityId: Int, type: TaskType<T>, result: T): Boolean {
         val taskQueue = taskQueueMapper.get(entityId) ?: return false
-        taskQueue.active.purgeHead()
-        val task = taskQueue.active.peek()
+        val queue = purge(taskQueue.active) ?: return false
+        val task = queue.peek()
         val suspension = task?.suspension
         return if (suspension != null) {
-            processTask(entityId, taskQueue, task, type.continuation, result)
+            processTask(entityId, task, type.continuation, result)
             true
         } else {
             false
         }
     }
 
-    internal fun Deque<Task>.purgeHead() {
-        val task = peek() ?: return
-        if(task.isCompleted || task.isCancelled) {
-            poll()
-            purgeHead()
+    internal fun purge(map: MutableMap<Int, Deque<Task>>?): Deque<Task>? {
+        val iterator = map?.iterator() ?: return null
+        while(iterator.hasNext()) {
+            val queue = iterator.next().value
+            var peek = queue.peek()
+            while(queue.isNotEmpty()) {
+                if (peek.isCompleted || peek.isCancelled) {//Purge
+                    queue.poll()
+                    peek = queue.peek()
+                } else {//Valid value
+                    return queue
+                }
+            }
+            iterator.remove()
         }
+        return null
     }
 
-    internal fun check(entityId: Int, queue: TaskQueue, task: Task) {
-        when {
-            task.suspension == null || task.isCompleted || task.isCancelled -> queue.active.remove(task)
-            task.isActive -> es.dispatch(ProcessTaskSuspension(entityId, task.suspension ?: return))
-        }
-    }
-
-    internal fun <T> processTask(entityId: Int, queue: TaskQueue, task: Task, continuation: Continuation<T>, result: T) {
+    internal fun <T> processTask(entityId: Int, task: Task, continuation: Continuation<T>, result: T) {
         continuation.resume(result)
-        check(entityId, queue, task)
+        if(task.isActive) {
+            es.dispatch(ProcessTaskSuspension(entityId, task.suspension ?: return))
+        }
     }
 
     override fun cancel(entityId: Int, cause: TaskCancellation) {
         val component = taskQueueMapper.get(entityId)
-        val poll = component?.active?.poll() ?: return
+        val poll = purge(component?.active)?.poll() ?: return
         poll.resumeWithException(cause)
     }
 
-    override fun cancelAll(entityId: Int, cause: TaskCancellation) {
-        val component = taskQueueMapper.get(entityId)
-        while (component?.active?.size ?: -1 > 0) {
-            val poll = component?.active?.poll() ?: return
-            poll.resumeWithException(cause)
+    override fun cancelAll(entityId: Int, cause: TaskCancellation, priority: Int) {
+        val component = taskQueueMapper.get(entityId) ?: return
+        component.active.forEach { (p, queue) ->
+            if(priority == -1 || p <= priority) {
+                while(queue.isNotEmpty()) {
+                    queue.poll().resumeWithException(cause)
+                }
+            }
         }
     }
 
@@ -109,8 +104,8 @@ class TaskSystem : Tasks() {
         activateTask(event.entity, event.task)
     }
 
-    override fun activateTask(entityId: Int, task: InactiveTask<*>) {
+    override fun activateTask(entityId: Int, task: InactiveTask) {
         val component = taskQueueMapper.get(entityId) ?: return
-        component.inactiveTasks.push(task)
+        component.inactiveTasks.addLast(task)
     }
 }

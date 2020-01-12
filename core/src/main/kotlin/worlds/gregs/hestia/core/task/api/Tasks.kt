@@ -13,8 +13,8 @@ abstract class Tasks : IteratingSystem(Aspect.all(TaskQueue::class)) {
 
     abstract fun cancel(entityId: Int, cause: TaskCancellation)
 
-    abstract fun cancelAll(entityId: Int, cause: TaskCancellation)
+    abstract fun cancelAll(entityId: Int, cause: TaskCancellation, priority: Int = -1)
 
-    abstract fun activateTask(entityId: Int, task: InactiveTask<*>)
+    abstract fun activateTask(entityId: Int, task: InactiveTask)
 
 }

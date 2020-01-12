@@ -45,15 +45,15 @@ abstract class WorldAction : Action {
 
     override infix fun <T : BaseSystem> World.system(c: KClass<T>): T = getSystem(c.java)
 
-    override fun task(action: SuspendableQueue): EntityAction {
-        return StartTask(InactiveTask(action, Unit))
+    override fun task(priority: Int, action: SuspendableQueue): EntityAction {
+        return StartTask(InactiveTask(priority, action))
     }
 
-    override fun strongTask(action: SuspendableQueue): EntityAction {
-        return StartTask(InactiveTask({
-            await(ClearTasks())
-            action(this)
-        }, Unit))
+    override fun Action.strongTask(priority: Int, queue: SuspendableQueue): EntityAction {
+        return StartTask(InactiveTask(priority) {
+            this@strongTask.await(ClearTasks(priority))
+            queue(this)
+        })
     }
 
     override fun log(message: String) = logger.warn(message)

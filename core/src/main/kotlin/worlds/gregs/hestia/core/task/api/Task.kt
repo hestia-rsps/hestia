@@ -8,9 +8,11 @@ import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.dialogue
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.options
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.statement
 import kotlin.coroutines.Continuation
+import kotlin.coroutines.CoroutineContext
 
 interface Task : Continuation<Any> {
-    override val context: TaskContext
+
+    override val context: CoroutineContext
 
     var suspension: TaskType<*>?
 

@@ -23,6 +23,6 @@ class DialogueSystem : DialogueBase() {
         //Find base dialogue in the script
         val task = scripts[name] ?: return logger.debug("Could not find dialogue '$name'")
         //Queue the task
-        es.perform(entityId, StartTask(InactiveTask(task, targetId)))
+//        es.perform(entityId, StartTask(InactiveTask(task, targetId)))
     }
 }

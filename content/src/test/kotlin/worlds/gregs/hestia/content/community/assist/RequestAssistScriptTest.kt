@@ -21,8 +21,8 @@ import worlds.gregs.hestia.core.display.window.model.events.*
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.entity.model.events.Animate
 import worlds.gregs.hestia.core.entity.entity.model.events.Graphic
-import worlds.gregs.hestia.core.task.logic.systems.Ticks
-import worlds.gregs.hestia.core.task.logic.systems.WithinRange
+import worlds.gregs.hestia.core.task.model.await.Ticks
+import worlds.gregs.hestia.core.task.model.await.WithinRange
 import worlds.gregs.hestia.core.world.movement.model.MovementType
 import worlds.gregs.hestia.core.world.movement.model.components.types.Movement
 import worlds.gregs.hestia.core.world.movement.model.events.Moved
@@ -46,7 +46,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
     @Test
     fun `Can't request if too soon since last request`() {
         //Given
-        val action = mockkAction<PlayerOption>()
+        val action = mockAction<PlayerOption>()
         every { action.option } returns ASSIST
         every { action.target } returns targetId
         action.mockTask()
@@ -71,7 +71,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
         //Given
         val assisting = mockk<Assisting>(relaxed = true)
         val targetAssisting = mockk<Assisting>(relaxed = true)
-        val action = mockkAction<PlayerOption>()
+        val action = mockAction<PlayerOption>()
         every { action.option } returns ASSIST
         every { action.target } returns targetId
         action.mockTask()
@@ -97,7 +97,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
         //Given
         val assisting = mockk<Assisting>(relaxed = true)
         val targetAssisting = mockk<Assisting>(relaxed = true)
-        val action = mockkAction<PlayerOption>()
+        val action = mockAction<PlayerOption>()
         every { action.option } returns ASSIST
         every { action.target } returns targetId
         action.mockTask()
@@ -132,7 +132,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
     fun `Request accepted`() {
         //Given
         val assist = mockk<Assistance>(relaxed = true)
-        val action = mockkAction<RequestResponse>()
+        val action = mockAction<RequestResponse>()
         every { action.request } returns Request.ASSIST
         every { action.target } returns targetId
         action.mockTask()
@@ -164,7 +164,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
     @Test
     fun `Response accepted`() {
         //Given
-        val action = mockkAction<AcceptedRequest>()
+        val action = mockAction<AcceptedRequest>()
         every { action.request } returns Request.ASSIST
         every { action.target } returns targetId
         action.mockTask()
@@ -194,7 +194,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
     @Test
     fun `Window interaction`() {
         //Given
-        val action = mockkAction<WindowInteraction>()
+        val action = mockAction<WindowInteraction>()
         every { action.target } returns Windows.AssistXP
         every { action.widget } returns 82
         //When
@@ -210,7 +210,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
     @Test
     fun `Invalid window interaction`() {
         //Given
-        val action = mockkAction<WindowInteraction>()
+        val action = mockAction<WindowInteraction>()
         every { action.target } returns Windows.AssistXP
         every { action.widget } returns 83
         //When
@@ -224,7 +224,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
     @Test
     fun `Within range`() {
         //Given
-        val action = mockkAction<Moved>()
+        val action = mockAction<Moved>()
         val assistance = mockk<Assistance>(relaxed = true)
         val movement = mockk<Movement>(relaxed = true)
         with(action) {
@@ -247,7 +247,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
     @Test
     fun `Exact range`() {
         //Given
-        val action = mockkAction<Moved>()
+        val action = mockAction<Moved>()
         val assistance = mockk<Assistance>(relaxed = true)
         val movement = mockk<Movement>(relaxed = true)
         with(action) {
@@ -270,7 +270,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
     @Test
     fun `Outside of range cancels`() {
         //Given
-        val action = mockkAction<Moved>()
+        val action = mockAction<Moved>()
         val assistance = mockk<Assistance>(relaxed = true)
         val movement = mockk<Movement>(relaxed = true)
         with(action) {
@@ -293,7 +293,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
     @Test
     fun `Teleport moves range point`() {
         //Given
-        val action = mockkAction<Moved>()
+        val action = mockAction<Moved>()
         val assistance = mockk<Assistance>(relaxed = true)
         val movement = mockk<Movement>(relaxed = true)
         val position = Position(50, 50, 0)
@@ -320,7 +320,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
     fun `Xp time greater than max`() {
         //Given
         val hours = 4L
-        val action = mockkAction<WindowInteraction>()
+        val action = mockAction<WindowInteraction>()
         every { action.target } returns Windows.FilterButtons
         every { action.widget } returns 16
         every { action.option } returns 9
@@ -345,7 +345,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
     fun `Xp time exactly max`() {
         //Given
         val hours = 4L
-        val action = mockkAction<WindowInteraction>()
+        val action = mockAction<WindowInteraction>()
         every { action.target } returns Windows.FilterButtons
         every { action.widget } returns 16
         every { action.option } returns 9
@@ -370,7 +370,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
     fun `Xp time less than max`() {
         //Given
         val hours = 4
-        val action = mockkAction<WindowInteraction>()
+        val action = mockAction<WindowInteraction>()
         every { action.target } returns Windows.FilterButtons
         every { action.widget } returns 16
         every { action.option } returns 9
@@ -394,7 +394,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
         //Given
         val skill = Skill.CRAFTING
         val increase = 500
-        val action = mockkAction<Experience>()
+        val action = mockAction<Experience>()
         every { action.skill } returns skill
         every { action.increase } returns increase
         val assistance = mockk<Assistance>(relaxed = true)
@@ -423,7 +423,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
         //Given
         val skill = Skill.CRAFTING
         val increase = 500
-        val action = mockkAction<Experience>()
+        val action = mockAction<Experience>()
         every { action.skill } returns skill
         every { action.increase } returns increase
         val assistance = mockk<Assistance>(relaxed = true)
@@ -452,7 +452,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
         //Given
         val skill = Skill.CRAFTING
         val increase = 500
-        val action = mockkAction<Experience>()
+        val action = mockAction<Experience>()
         with(action) {
             every { entityId.has(Assistance::class) } returns false
         }
@@ -472,7 +472,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
         //Given
         val skill = Skill.CRAFTING
         val increase = 500
-        val action = mockkAction<Experience>()
+        val action = mockAction<Experience>()
         every { action.skill } returns skill
         every { action.increase } returns increase
         val assistance = mockk<Assistance>(relaxed = true)
