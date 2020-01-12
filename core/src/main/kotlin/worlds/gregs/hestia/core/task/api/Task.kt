@@ -22,7 +22,7 @@ interface Task : Continuation<Any> {
         get() = suspension?.continuation?.isCancelled ?: false
 
     val isCompleted: Boolean
-        get() = suspension?.continuation?.isCompleted ?: true
+        get() = suspension?.continuation?.isCompleted ?: false
 
 
     /*

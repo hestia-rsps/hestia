@@ -1,6 +1,7 @@
 package worlds.gregs.hestia.content.community.assist
 
 import io.mockk.*
+import io.mockk.impl.annotations.RelaxedMockK
 import org.junit.jupiter.api.Test
 import worlds.gregs.hestia.content.activity.skill.Experience
 import worlds.gregs.hestia.content.activity.skill.Skill
@@ -8,6 +9,7 @@ import worlds.gregs.hestia.core.action.model.EntityAction
 import worlds.gregs.hestia.core.display.client.model.events.Chat
 import worlds.gregs.hestia.core.display.dialogue.model.ChatType
 import worlds.gregs.hestia.core.display.update.model.components.DisplayName
+import worlds.gregs.hestia.core.display.window.api.Variables
 import worlds.gregs.hestia.core.display.window.api.Windows
 import worlds.gregs.hestia.core.display.window.logic.systems.RequestSystem
 import worlds.gregs.hestia.core.display.window.model.PlayerOptions.ASSIST
@@ -15,10 +17,7 @@ import worlds.gregs.hestia.core.display.window.model.Request
 import worlds.gregs.hestia.core.display.window.model.actions.OpenWindow
 import worlds.gregs.hestia.core.display.window.model.components.Assistance
 import worlds.gregs.hestia.core.display.window.model.components.Assisting
-import worlds.gregs.hestia.core.display.window.model.events.AcceptedRequest
-import worlds.gregs.hestia.core.display.window.model.events.PlayerOption
-import worlds.gregs.hestia.core.display.window.model.events.RequestResponse
-import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
+import worlds.gregs.hestia.core.display.window.model.events.*
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.entity.model.events.Animate
 import worlds.gregs.hestia.core.entity.entity.model.events.Graphic
@@ -28,7 +27,6 @@ import worlds.gregs.hestia.core.world.movement.model.MovementType
 import worlds.gregs.hestia.core.world.movement.model.components.types.Movement
 import worlds.gregs.hestia.core.world.movement.model.events.Moved
 import worlds.gregs.hestia.game.Engine
-import worlds.gregs.hestia.network.client.encoders.messages.ConfigFile
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetVisibility
 import worlds.gregs.hestia.script.ScriptTester
 import java.util.concurrent.TimeUnit
@@ -36,6 +34,14 @@ import java.util.concurrent.TimeUnit
 internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
 
     val targetId = 0
+
+    @RelaxedMockK
+    lateinit var variables: Variables
+
+    override fun loadInjections() {
+        inject(Variables::class, variables)
+        super.loadInjections()
+    }
 
     @Test
     fun `Can't request if too soon since last request`() {
@@ -76,12 +82,12 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
         }
         every { assisting.lastRequest } returns 5
         Engine.ticks = 15
-        every { targetAssisting.experienceGained } returns 30000
+        every { variables.get(targetId, "total_xp_earned", 0) } returns 30000
         //When
         send(action)
         //Then
         verify {
-            targetAssisting.experienceGained
+            variables.get(targetId, "total_xp_earned", 0)
         }
         verify(exactly = 0) { world.getSystem(RequestSystem::class.java) }
     }
@@ -103,7 +109,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
         }
         every { assisting.lastRequest } returns 5
         Engine.ticks = 15
-        every { targetAssisting.experienceGained } returns 0
+        every { variables.get(targetId, "total_xp_earned", 0) } returns 0
         val map = getMapper(DisplayName::class)
         every { map.get(targetId) } returns mockk<DisplayName>(relaxed = true).apply { name = "Name" }
         with(task) {
@@ -156,7 +162,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
     }
 
     @Test
-    fun `Response received`() {
+    fun `Response accepted`() {
         //Given
         val action = mockkAction<AcceptedRequest>()
         every { action.request } returns Request.ASSIST
@@ -178,7 +184,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
                 entityId.perform(any<Chat>())
                 entityId.perform(OpenWindow(Windows.AssistXP))
                 entityId.send(WidgetVisibility(Windows.AreaStatusIcon, 2, false))
-                entityId.send(ConfigFile(4103, 0))
+                entityId perform SendVariable("total_xp_earned")
                 entityId.perform(Animate(7299))
                 entityId.perform(Graphic(1247))
             }
@@ -191,19 +197,12 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
         val action = mockkAction<WindowInteraction>()
         every { action.target } returns Windows.AssistXP
         every { action.widget } returns 82
-        val assisting = mockk<Assisting>(relaxed = true)
-        val array = BooleanArray(9)
-        array[8] = true
-        every { assisting.skills } returns array
-        with(action) {
-            every { entityId.create(Assisting::class) } returns assisting
-        }
         //When
         send(action)
         //Then
         with(action) {
             verify {
-                entityId.send(ConfigFile(4102, 0))//True becomes false
+                entityId.perform(ToggleVariable("assist_toggle_8"))
             }
         }
     }
@@ -326,7 +325,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
         every { action.widget } returns 16
         every { action.option } returns 9
         val assisting = mockk<Assisting>(relaxed = true)
-        every { assisting.experienceGained } returns 35000
+        every { variables.get(entityId, "total_xp_earned", 0) } returns 35000
         every { assisting.timeout } returns System.currentTimeMillis() - TimeUnit.HOURS.toMillis(hours)
         with(action) {
             every { entityId.get(Assisting::class) } returns assisting
@@ -351,7 +350,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
         every { action.widget } returns 16
         every { action.option } returns 9
         val assisting = mockk<Assisting>(relaxed = true)
-        every { assisting.experienceGained } returns 30000
+        every { variables.get(entityId, "total_xp_earned", 0) } returns 30000
         every { assisting.timeout } returns System.currentTimeMillis() - TimeUnit.HOURS.toMillis(hours)
         with(action) {
             every { entityId.get(Assisting::class) } returns assisting
@@ -376,7 +375,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
         every { action.widget } returns 16
         every { action.option } returns 9
         val assisting = mockk<Assisting>(relaxed = true)
-        every { assisting.experienceGained } returns 10000
+        every { variables.get(entityId, "total_xp_earned", 0) } returns 10000
         with(action) {
             every { entityId.get(Assisting::class) } returns assisting
         }
@@ -401,10 +400,8 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
         val assistance = mockk<Assistance>(relaxed = true)
         assistance.helper = targetId
         val assisting = mockk<Assisting>(relaxed = true)
-        val array = BooleanArray(9)
-        array[1] = true
-        every { assisting.skills } returns array
-        every { assisting.experienceGained } returns 1000
+        every { variables.get(targetId, "assist_toggle_1", false) } returns true
+        every { variables.get(targetId, "total_xp_earned", 0) } returns 1000
         with(action) {
             every { entityId.has(Assistance::class) } returns true
             every { entityId.get(Assistance::class) } returns assistance
@@ -416,7 +413,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
         with(action) {
             verify {
                 targetId perform Experience(skill, increase)
-                targetId send ConfigFile(4103, 10000)
+                targetId perform SetVariable("total_xp_earned", 6000)//1000 + 500 * 10
             }
         }
     }
@@ -432,8 +429,8 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
         val assistance = mockk<Assistance>(relaxed = true)
         assistance.helper = targetId
         val assisting = mockk<Assisting>(relaxed = true)
-        every { assisting.skills } returns BooleanArray(9)
-        every { assisting.experienceGained } returns 1000
+        every { variables.get(targetId, "assist_toggle_1", false) } returns false
+        every { variables.get(targetId, "total_xp_earned", 0) } returns 1000
         with(action) {
             every { entityId.has(Assistance::class) } returns true
             every { entityId.get(Assistance::class) } returns assistance
@@ -445,7 +442,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
         with(action) {
             verify(exactly = 0) {
                 targetId perform Experience(skill, increase)
-                targetId send ConfigFile(4103, 10000)
+                targetId perform SetVariable("total_xp_earned", 6000)
             }
         }
     }
@@ -465,7 +462,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
         with(action) {
             verify(exactly = 0) {
                 targetId perform Experience(skill, increase)
-                targetId send ConfigFile(4103, 10000)
+                targetId perform SetVariable("total_xp_earned", 5000)
             }
         }
     }
@@ -481,10 +478,8 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
         val assistance = mockk<Assistance>(relaxed = true)
         assistance.helper = targetId
         val assisting = mockk<Assisting>(relaxed = true)
-        val array = BooleanArray(9)
-        array[1] = true
-        every { assisting.skills } returns array
-        every { assisting.experienceGained } returns 35000
+        every { variables.get(targetId, "assist_toggle_1", false) } returns true
+        every { variables.get(targetId, "total_xp_earned", 0) } returns 35000
         with(action) {
             every { entityId.has(Assistance::class) } returns true
             every { entityId.get(Assistance::class) } returns assistance
@@ -496,7 +491,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
         with(action) {
             verify(exactly = 0) {
                 targetId perform Experience(skill, increase)
-                targetId send ConfigFile(4103, 10000)
+                targetId perform SetVariable("total_xp_earned", 40000)
             }
         }
     }

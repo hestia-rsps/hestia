@@ -1,32 +1,35 @@
 package worlds.gregs.hestia.content.activity.skill
 
 import worlds.gregs.hestia.content.activity.skill.Skill.*
-import worlds.gregs.hestia.core.display.client.model.Configs
+import worlds.gregs.hestia.core.display.window.api.Variable
+import worlds.gregs.hestia.core.display.window.api.Variables
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.SkillGuide
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.SkillLevelDetails
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.Stats
 import worlds.gregs.hestia.core.display.window.model.actions.OpenWindow
-import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
-import worlds.gregs.hestia.core.display.window.model.events.WindowOpened
-import worlds.gregs.hestia.network.client.encoders.messages.Config
-import worlds.gregs.hestia.network.client.encoders.messages.ConfigFile
+import worlds.gregs.hestia.core.display.window.model.events.*
+import worlds.gregs.hestia.core.display.window.model.variable.BitwiseVariable
+import worlds.gregs.hestia.core.display.window.model.variable.IntVariable
 import worlds.gregs.hestia.network.client.encoders.messages.SkillLevel
-import kotlin.math.pow
 
-val flash = listOf(ATTACK, STRENGTH, DEFENCE, RANGE, PRAYER, MAGIC, CONSTITUTION, AGILITY, HERBLORE, THIEVING, CRAFTING, FLETCHING, MINING,
-        SMITHING, FISHING, COOKING, FIREMAKING, WOODCUTTING, RUNECRAFTING, SLAYER, FARMING, CONSTRUCTION, HUNTER, SUMMONING, DUNGEONEERING)
 val stats = listOf(STRENGTH, AGILITY, DEFENCE, HERBLORE, FISHING, RANGE, THIEVING, COOKING, PRAYER, CRAFTING, MAGIC, FLETCHING, RUNECRAFTING,
         SLAYER, FARMING, CONSTRUCTION, HUNTER, SUMMONING, DUNGEONEERING, WOODCUTTING, FIREMAKING, SMITHING, MINING, CONSTITUTION, ATTACK)
 val menu = listOf(ATTACK, STRENGTH, RANGE, MAGIC, DEFENCE, CONSTITUTION, PRAYER, AGILITY, HERBLORE, THIEVING, CRAFTING, RUNECRAFTING,
         MINING, SMITHING, FISHING, COOKING, FIREMAKING, WOODCUTTING, FLETCHING, SLAYER, FARMING, CONSTRUCTION, HUNTER, SUMMONING, DUNGEONEERING)
 
+BitwiseVariable(1179, Variable.Type.VARP, true, values = listOf(
+        ATTACK, STRENGTH, DEFENCE, RANGE, PRAYER, MAGIC, CONSTITUTION, AGILITY, HERBLORE, THIEVING, CRAFTING, FLETCHING, MINING,
+        SMITHING, FISHING, COOKING, FIREMAKING, WOODCUTTING, RUNECRAFTING, SLAYER, FARMING, CONSTRUCTION, HUNTER, SUMMONING, DUNGEONEERING
+)).register("skill_stat_flash")
+IntVariable(1230, Variable.Type.VARP).register("level_up_details")
+IntVariable(965, Variable.Type.VARP).register("skill_guide")
+
+lateinit var variables: Variables
+
 on<WindowOpened> {
     where { target == Stats }
     then {
-
-        val total = flash.filter { false /* has leveled up */ }.map { 2.0.pow(it.ordinal) }.sum().toInt()
-        entity send Config(Configs.SKILL_STAT_FLASH, total)
-
+        entity perform SendVariable("skill_stat_flash")
         values().forEach {
             entity send SkillLevel(it.ordinal, 99, 14000000)
         }
@@ -47,23 +50,18 @@ on<WindowInteraction> {
                     widget == 19 -> 1
                     else -> 0
                 }
+
                 val skill = stats[index]
                 val menuIndex = menu.indexOf(skill) + 1
 
-                val leveledUp = false
-                val extra = 0
-                /*
-                    2 - combat level milestone
-                    4 - total level milestone
-                    6 - total level & combat level milestones
-                 */
-                val config = if(leveledUp) menuIndex * 8 + extra else menuIndex
-                entity send Config(if(leveledUp) Configs.LEVEL_UP_DETAILS else Configs.SKILL_MENU, config)
-                entity perform OpenWindow(if(leveledUp) SkillLevelDetails else SkillGuide)
-                if(leveledUp) {
-                    //TODO Replace with SKILL_STAT_FLASH config refresh once level up system is added
-                    //Disable flash
-                    entity send ConfigFile(if(skill == DUNGEONEERING) 7756 else 4731 + menuIndex, 0)
+                if(variables.has(entity, "skill_stat_flash", skill)) {
+                    val extra = 0//0 - normal, 2 - combat milestone, 4 - total milestone
+                    entity perform SetVariable("level_up_details", menuIndex * 8 + extra)
+                    entity perform OpenWindow(SkillLevelDetails)
+                    entity perform RemoveVariable("skill_stat_flash", skill)
+                } else {
+                    entity perform SetVariable("skill_guide", menuIndex)
+                    entity perform OpenWindow(SkillGuide)
                 }
             }
         }

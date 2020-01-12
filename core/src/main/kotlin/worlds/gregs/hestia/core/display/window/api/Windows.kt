@@ -49,9 +49,9 @@ abstract class Windows : SubscriptionSystem(Aspect.all(WindowRelationships::clas
         const val FilterButtons = 751
         const val PrivateChat = 754
 
-        const val EnergyOrb = 750
         const val HealthOrb = 748
         const val PrayerOrb = 749
+        const val EnergyOrb = 750
         const val SummoningOrb = 747
 
         const val ClanChat = 1110

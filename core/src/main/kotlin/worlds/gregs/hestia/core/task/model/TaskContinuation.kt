@@ -17,9 +17,10 @@ class TaskContinuation(override val context: TaskContext) : Task {
     override fun resumeWith(result: Result<Any>) {
         if (result.isFailure) {
             val exception = result.exceptionOrNull()!!
-            if(exception is TaskCancellation && exception !is TaskCancellation.Cancellation) {
+            if(exception is TaskCancellation) {
                 onCancel?.invoke(exception)
-            } else {
+            }
+            if(exception !is TaskCancellation || exception is TaskCancellation.Cancellation) {
                 exception.printStackTrace()
             }
         }

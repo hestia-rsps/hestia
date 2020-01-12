@@ -80,12 +80,12 @@ class WidgetDefinition {
     var id: Int = -1
     val params: HashMap<Long, Any>? = null
     var verticalTextAlign: Int = 0
-    var anIntArray4829: IntArray? = null
+    var clientVarc: IntArray? = null
     var monochrome: Boolean = true
     var monitoredInventories: IntArray? = null
     var mouseMotionHandler: Array<Any?>? = null
     var horizontalTextAlign: Int = 0
-    var anIntArray4838: IntArray? = null
+    var clientVarp: IntArray? = null
     var anInt4839: Int = -1
     lateinit var setting: WidgetSettingDefinition
     var type = 0
@@ -362,10 +362,10 @@ class WidgetDefinition {
         anObjectArray4753 = decodeScript(buffer)
         anObjectArray4688 = decodeScript(buffer)
         anObjectArray4775 = decodeScript(buffer)
-        anIntArray4838 = method4150(107.toByte(), buffer)
+        clientVarp = method4150(107.toByte(), buffer)
         monitoredInventories = method4150(101.toByte(), buffer)
         anIntArray4789 = method4150(98.toByte(), buffer)
-        anIntArray4829 = method4150(126.toByte(), buffer)
+        clientVarc = method4150(126.toByte(), buffer)
         anIntArray4805 = method4150(117.toByte(), buffer)
     }
 

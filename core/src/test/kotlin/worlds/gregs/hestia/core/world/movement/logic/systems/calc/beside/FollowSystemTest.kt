@@ -2,6 +2,7 @@ package worlds.gregs.hestia.core.world.movement.logic.systems.calc.beside
 
 import com.artemis.Entity
 import com.artemis.WorldConfigurationBuilder
+import com.nhaarman.mockitokotlin2.mock
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 import worlds.gregs.hestia.artemis.dependsOn
@@ -10,9 +11,14 @@ import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.world.movement.MovementPlugin
 import worlds.gregs.hestia.core.world.movement.model.components.calc.Following
 import worlds.gregs.hestia.core.world.movement.model.components.calc.Step
+import worlds.gregs.hestia.service.cache.definition.systems.ObjectDefinitionSystem
 import worlds.gregs.hestia.tools.PlayerTester
 
 class FollowSystemTest : PlayerTester(WorldConfigurationBuilder().dependsOn(MovementPlugin::class)) {
+
+    override fun config(config: WorldConfigurationBuilder) {
+        config.with(ObjectDefinitionSystem(mock()))
+    }
 
     @Test
     fun `Follow watches entity`() {

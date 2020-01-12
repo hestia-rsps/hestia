@@ -6,11 +6,11 @@ import world.gregs.hestia.core.network.codec.packet.Modifier
 import world.gregs.hestia.core.network.codec.packet.PacketBuilder
 import world.gregs.hestia.core.network.protocol.ClientOpcodes.CONFIG
 import world.gregs.hestia.core.network.protocol.ClientOpcodes.CONFIG_LARGE
-import worlds.gregs.hestia.network.client.encoders.messages.Config
+import worlds.gregs.hestia.network.client.encoders.messages.Varp
 
-class ConfigEncoder : MessageEncoder<Config>() {
+class VarpEncoder : MessageEncoder<Varp>() {
 
-    override fun encode(builder: PacketBuilder, message: Config) {
+    override fun encode(builder: PacketBuilder, message: Varp) {
         val (id, value, large) = message
         builder.apply {
             writeOpcode(if(large) CONFIG_LARGE else CONFIG)

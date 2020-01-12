@@ -13,7 +13,7 @@ class VarBitDefinitions {
             Settings.load()
             val store = CacheStore()
             val reader = VarBitDefinitionReader(store)
-            val varBit = reader.get(75)
+            val varBit = reader.get(313)
             println(ToStringBuilder.reflectionToString(varBit, ToStringStyle.MULTI_LINE_STYLE))
         }
     }

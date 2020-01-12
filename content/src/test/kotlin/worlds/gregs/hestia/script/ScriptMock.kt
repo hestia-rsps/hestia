@@ -49,10 +49,13 @@ abstract class ScriptMock<T : ScriptBuilder>(private val aspect: Aspect.Builder?
         typedInjections.clear()
 
         //Add defaults
-        inject(world)
+        inject(World::class, world)
         setSystem(es)
         every { world.aspectSubscriptionManager } returns mockk(relaxed = true)
+        loadInjections()
+    }
 
+    open fun loadInjections() {
         val fieldHandler = mockk<FieldHandler>()
         //Might need to be expanded at some point to handle other injection types
         every { fieldHandler.resolve(any(), any(), any()) } answers {
@@ -80,11 +83,6 @@ abstract class ScriptMock<T : ScriptBuilder>(private val aspect: Aspect.Builder?
 
     fun <T : Any> inject(type: KClass<T>, any: T): T {
         typedInjections[type.java] = any
-        return any
-    }
-
-    inline fun <reified T : Any> inject(any: T): T {
-        typedInjections[any::class.java] = any
         return any
     }
 

@@ -1,7 +1,6 @@
 package worlds.gregs.hestia.content.community.assist
 
 import world.gregs.hestia.core.network.protocol.encoders.messages.WidgetComponentText
-import world.gregs.hestia.core.services.int
 import world.gregs.hestia.core.services.plural
 import worlds.gregs.hestia.content.activity.skill.Experience
 import worlds.gregs.hestia.content.activity.skill.Skill
@@ -9,6 +8,8 @@ import worlds.gregs.hestia.core.action.model.EntityAction
 import worlds.gregs.hestia.core.display.client.model.events.Chat
 import worlds.gregs.hestia.core.display.dialogue.model.ChatType.GameAssist
 import worlds.gregs.hestia.core.display.update.model.components.DisplayName
+import worlds.gregs.hestia.core.display.window.api.Variable
+import worlds.gregs.hestia.core.display.window.api.Variables
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.AreaStatusIcon
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.AssistXP
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.FilterButtons
@@ -21,10 +22,9 @@ import worlds.gregs.hestia.core.display.window.model.actions.CloseWindow
 import worlds.gregs.hestia.core.display.window.model.actions.OpenWindow
 import worlds.gregs.hestia.core.display.window.model.components.Assistance
 import worlds.gregs.hestia.core.display.window.model.components.Assisting
-import worlds.gregs.hestia.core.display.window.model.events.AcceptedRequest
-import worlds.gregs.hestia.core.display.window.model.events.PlayerOption
-import worlds.gregs.hestia.core.display.window.model.events.RequestResponse
-import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
+import worlds.gregs.hestia.core.display.window.model.events.*
+import worlds.gregs.hestia.core.display.window.model.variable.BooleanVariable
+import worlds.gregs.hestia.core.display.window.model.variable.IntVariable
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.entity.model.events.Animate
 import worlds.gregs.hestia.core.entity.entity.model.events.Graphic
@@ -36,14 +36,25 @@ import worlds.gregs.hestia.core.world.movement.model.components.types.Movement
 import worlds.gregs.hestia.core.world.movement.model.events.Follow
 import worlds.gregs.hestia.core.world.movement.model.events.Moved
 import worlds.gregs.hestia.game.Engine
-import worlds.gregs.hestia.network.client.encoders.messages.ConfigFile
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetVisibility
 import java.util.concurrent.TimeUnit
 
 val skills = listOf(Skill.RUNECRAFTING, Skill.CRAFTING, Skill.FLETCHING, Skill.CONSTRUCTION, Skill.FARMING, Skill.MAGIC, Skill.SMITHING, Skill.COOKING, Skill.HERBLORE)
-val config = listOf(4090, 4091, 4093, 4095, 4096, 4098, 4100, 4101, 4102)
 val maximumExperience = 30000
 val requestDelay = 10
+
+BooleanVariable(4091, Variable.Type.VARBIT, true).register("assist_toggle_1")
+BooleanVariable(4093, Variable.Type.VARBIT, true).register("assist_toggle_2")
+BooleanVariable(4095, Variable.Type.VARBIT, true).register("assist_toggle_3")
+BooleanVariable(4096, Variable.Type.VARBIT, true).register("assist_toggle_4")
+BooleanVariable(4098, Variable.Type.VARBIT, true).register("assist_toggle_5")
+BooleanVariable(4100, Variable.Type.VARBIT, true).register("assist_toggle_6")
+BooleanVariable(4101, Variable.Type.VARBIT, true).register("assist_toggle_7")
+BooleanVariable(4102, Variable.Type.VARBIT, true).register("assist_toggle_8")
+
+IntVariable(1088, Variable.Type.VARP, true).register("total_xp_earned")//Same as 4103 varbit
+
+lateinit var variables: Variables
 
 on<PlayerOption> {
     where { option == ASSIST }
@@ -59,7 +70,7 @@ on<PlayerOption> {
         }
         val targetAssisting = target get Assisting::class
         update(targetAssisting)
-        if (targetAssisting.experienceGained >= maximumExperience) {
+        if (variables.get(target, "total_xp_earned", 0) >= maximumExperience) {
             entity perform Chat("${target.get(DisplayName::class).name} is unable to assist at the moment.", GameAssist)//Unconfirmed
             val hours = assisting.getHoursRemaining()
             target perform Chat("An assist request has been refused. You can assist again in $hours ${"hour".plural(hours)}.", GameAssist)
@@ -107,7 +118,7 @@ on<AcceptedRequest> {
         entity send WidgetComponentText(AssistXP, 10, "The Assist System is available for you to use.")
         entity send WidgetComponentText(AssistXP, 73, "Assist System XP Display - You are assisting ${target.get(DisplayName::class).name}")//TODO there's probably a packet or config for replacing `<name>`
         entity send WidgetVisibility(AreaStatusIcon, 2, false)
-        entity send ConfigFile(4103, assisting.experienceGained * 10)
+        entity perform SendVariable("total_xp_earned")
         entity perform Animate(7299)
         entity perform Graphic(1247)
         //TODO disable inventory
@@ -123,10 +134,8 @@ on<AcceptedRequest> {
 on<WindowInteraction> {
     where { target == AssistXP && widget in 74..82 }
     then {
-        val assisting = entity create Assisting::class
         val index = widget - 74
-        assisting.skills[index] = !assisting.skills[index]
-        entity send ConfigFile(config[index], assisting.skills[index].int)
+        entity perform ToggleVariable("assist_toggle_$index")
     }
 }
 
@@ -162,12 +171,13 @@ on<WindowInteraction> {
             4 -> assisting.mode = FilterMode.Off
             9 -> {//Xp Earned/Time
                 update(assisting)
-                if (assisting.experienceGained >= maximumExperience) {
+                val earned = variables.get(entity, "total_xp_earned", 0)
+                if (earned >= maximumExperience) {
                     val hours = assisting.getHoursRemaining()
                     entity perform Chat("You've earned the maximum XP (30,000 Xp) from the Assist System within a 24-hour period.", GameAssist)
                     entity perform Chat("You can assist again in $hours ${"hour".plural(hours)}.", GameAssist)
                 } else {
-                    entity perform Chat("You have earned ${assisting.experienceGained} Xp. The Assist system is available to you.", GameAssist)
+                    entity perform Chat("You have earned $earned Xp. The Assist system is available to you.", GameAssist)
                 }
             }
         }
@@ -182,16 +192,18 @@ on<Experience>(1) {
         val target = assistance.helper
         val assisting = target get Assisting::class
         val index = skills.indexOf(skill)
+        val active = variables.get(target, "assist_toggle_$index", false)
+        var gained = variables.get(target, "total_xp_earned", 0)
         //If skill is being assisted
-        if (index != -1 && assisting.skills[index] && assisting.experienceGained < maximumExperience) {
-            assisting.experienceGained += increase
-            if (assisting.experienceGained >= maximumExperience) {
+        if (index != -1 && active && gained < maximumExperience) {
+            gained += increase * 10//TODO decide how to handle experience
+            if (gained >= maximumExperience) {
                 target send WidgetComponentText(AssistXP, 10, "You've earned the maximum XP from the Assist System with a 24-hour period.\nYou can assist again in 24 hours.")
                 assisting.timeout = System.currentTimeMillis() + TimeUnit.HOURS.toMillis(24)
             }
             //TODO what if increase > maximum or entity level > targets
             target perform Experience(skill, increase)
-            target send ConfigFile(4103, assisting.experienceGained * 10)
+            target perform SetVariable("total_xp_earned", gained)
             isCancelled = true
         }
     }
@@ -214,7 +226,7 @@ fun EntityAction.update(assisting: Assisting) {
     }
     val remainingTime = System.currentTimeMillis() - assisting.timeout
     if (remainingTime <= 0) {
-        assisting.experienceGained = 0
+        entity perform SetVariable("total_xp_earned", 0)
         assisting.timeout = 0
         entity perform Chat("It has been 24 hours since you first helped someone using the Assist System.", GameAssist)
         entity perform Chat("You can now use it to gain the full amount of XP.", GameAssist)
