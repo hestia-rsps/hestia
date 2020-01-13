@@ -27,7 +27,7 @@ class WindowDefinitions {
             val store = CacheStore()
             val reader = WindowDefinitionReader(store)
 //            repeat(reader.size) { id ->
-                val window = reader.get(26)
+                val window = reader.get(679)
                 if (window.size > 1) {
 //                    println("Widget $id")
                     window.forEach { (index, widget) ->

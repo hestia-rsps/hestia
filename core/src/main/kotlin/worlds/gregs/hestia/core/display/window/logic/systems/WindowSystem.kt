@@ -18,6 +18,7 @@ import worlds.gregs.hestia.core.display.window.model.events.*
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetClose
 import worlds.gregs.hestia.network.client.encoders.messages.WindowOpen
 import worlds.gregs.hestia.network.client.encoders.messages.WindowPaneUpdate
+import worlds.gregs.hestia.service.cache.definition.systems.WindowDefinitionSystem
 
 class WindowSystem : Windows() {
 
@@ -25,6 +26,7 @@ class WindowSystem : Windows() {
     private lateinit var gameFrameMapper: ComponentMapper<GameFrame>
     private val panes = mutableMapOf<Int, WindowPane>()
     private lateinit var es: EventSystem
+    private lateinit var definitions: WindowDefinitionSystem
 
     override fun initialize() {
         super.initialize()
@@ -157,8 +159,19 @@ class WindowSystem : Windows() {
     }
 
     override fun verifyWindow(entityId: Int, hash: Int): Boolean {
-        val relationships = windowRelationshipsMapper.get(entityId)?.relationships
-        return relationships?.containsKey(hash shr 16) ?: false
+        val relationships = windowRelationshipsMapper.get(entityId)?.relationships ?: return false
+        val windowId = hash shr 16
+        if(!relationships.containsKey(windowId)) {
+            return false//Interface not open
+        }
+
+        val widgetId = hash - (windowId shl 16)
+        val definition = definitions.get(windowId)
+        if(!definition.containsKey(widgetId)) {
+            return false//Invalid component index
+        }
+
+        return true
     }
 
     override fun refreshWindow(entityId: Int, window: Int) {

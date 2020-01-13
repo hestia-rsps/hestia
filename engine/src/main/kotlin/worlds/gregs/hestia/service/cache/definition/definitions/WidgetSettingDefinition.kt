@@ -1,6 +1,6 @@
 package worlds.gregs.hestia.service.cache.definition.definitions
 
-class WidgetSettingDefinition(var setting: Int, var anInt7413: Int) {
+data class WidgetSettingDefinition(var setting: Int, var anInt7413: Int) {
     fun method2743(i: Int): Int {
         return setting and 0x3fda8 shr 11
     }
