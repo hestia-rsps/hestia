@@ -3,7 +3,7 @@ package worlds.gregs.hestia.content.activity.combat
 import worlds.gregs.hestia.core.action.model.EntityAction
 import worlds.gregs.hestia.core.display.window.api.Variable
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.CombatStyles
-import worlds.gregs.hestia.core.display.window.model.events.SetVariable
+import worlds.gregs.hestia.core.display.window.model.events.variable.SetVariable
 import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
 import worlds.gregs.hestia.core.display.window.model.events.WindowOpened
 import worlds.gregs.hestia.core.display.window.model.variable.IntVariable

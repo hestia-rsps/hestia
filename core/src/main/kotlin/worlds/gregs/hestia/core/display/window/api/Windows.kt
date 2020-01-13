@@ -164,6 +164,16 @@ abstract class Windows : SubscriptionSystem(Aspect.all(WindowRelationships::clas
         const val TextBoxContinue = 835
         const val TextBoxContinueResizable = 846
         const val MobilisingArmies1 = 856
+        const val SkillCreation = 905
+        const val SkillCreationAmount = 916
+        const val SmeltType = 941
+        const val MakeAmount = 944
+        const val TextBoxChat = 1018
+        const val TextBoxContinue2 = 1020
+        const val DoubleChat3 = 1145
+        const val DoubleChat2 = 1146
+        const val DoubleChat1 = 1147
+        const val DoubleChat4 = 1148
 
         //Player
         const val Chat1 = 64

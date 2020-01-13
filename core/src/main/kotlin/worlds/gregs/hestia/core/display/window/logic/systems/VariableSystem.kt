@@ -8,10 +8,11 @@ import worlds.gregs.hestia.artemis.send
 import worlds.gregs.hestia.core.display.window.api.Variable
 import worlds.gregs.hestia.core.display.window.api.Variables
 import worlds.gregs.hestia.core.display.window.model.components.VariableStore
-import worlds.gregs.hestia.core.display.window.model.events.*
+import worlds.gregs.hestia.core.display.window.model.events.variable.*
 import worlds.gregs.hestia.core.display.window.model.variable.BitwiseVariable
 import worlds.gregs.hestia.network.client.encoders.messages.Varbit
 import worlds.gregs.hestia.network.client.encoders.messages.Varc
+import worlds.gregs.hestia.network.client.encoders.messages.VarcStr
 import worlds.gregs.hestia.network.client.encoders.messages.Varp
 import kotlin.collections.component1
 import kotlin.collections.component2
@@ -27,60 +28,64 @@ class VariableSystem : Variables() {
         val store = variableStoreMapper.get(entityId) ?: return
         store.values.forEach { (hash, value) ->
             val variable = variables[hash]!!
-            if(variable.persistent) {
+            if (variable.persistent) {
                 println("Save ${names.entries.firstOrNull { it.value == hash }} $value")
             }
         }
     }
 
-    override fun <T> set(entityId: Int, key: String, value: T) {
+    override fun <T : Any> set(entityId: Int, key: String, value: T, refresh: Boolean) {
         val store = variableStoreMapper.get(entityId) ?: return
         val variable = variables[key] as? Variable<T> ?: return logger.warn("Cannot variable for key '$key'")
-        val intValue = variable.getInt(value)
-        store.set(variable, intValue)
-        variable.send(entityId, store)
+        store.set(variable, value)
+        if (refresh) {
+            variable.send(entityId, store)
+        }
     }
 
     override fun send(entityId: Int, key: String) {
         val store = variableStoreMapper.get(entityId) ?: return
         val variable = variables[key] ?: return logger.warn("Cannot variable for key '$key'")
-
         variable.send(entityId, store)
     }
 
-    override fun <T> get(entityId: Int, key: String, default: T): T {
+    override fun <T : Any> get(entityId: Int, key: String, default: T): T {
         val store = variableStoreMapper.get(entityId) ?: return default
         val variable = variables[key] as? Variable<T> ?: return default
-        return variable.getValue(store.get(variable))
+        return store.get(variable)
     }
 
-    override fun <T> add(entityId: Int, key: String, id: T) {
+    override fun <T : Any> add(entityId: Int, key: String, id: T, refresh: Boolean) {
         val store = variableStoreMapper.get(entityId) ?: return
         val variable = variables[key] as? BitwiseVariable<T> ?: return logger.warn("Cannot variable for key '$key'")
 
         val power = variable.getPower(id) ?: return logger.warn("Invalid bitwise value '$id'")
         val value = store.get(variable)
 
-        if(!value.has(power)) {//If isn't already added
+        if (!value.has(power)) {//If isn't already added
             store.set(variable, value + power)//Add
-            variable.send(entityId, store)
+            if (refresh) {
+                variable.send(entityId, store)
+            }
         }
     }
 
-    override fun <T> remove(entityId: Int, key: String, id: T) {
+    override fun <T : Any> remove(entityId: Int, key: String, id: T, refresh: Boolean) {
         val store = variableStoreMapper.get(entityId) ?: return
         val variable = variables[key] as? BitwiseVariable<T> ?: return logger.warn("Cannot variable for key '$key'")
 
         val power = variable.getPower(id) ?: return logger.warn("Invalid bitwise value '$id'")
         val value = store.get(variable)
 
-        if(value.has(power)) {//If is added
+        if (value.has(power)) {//If is added
             store.set(variable, value - power)//Remove
-            variable.send(entityId, store)
+            if (refresh) {
+                variable.send(entityId, store)
+            }
         }
     }
 
-    override fun <T> has(entityId: Int, key: String, id: T): Boolean {
+    override fun <T : Any> has(entityId: Int, key: String, id: T): Boolean {
         val store = variableStoreMapper.get(entityId) ?: return false
         val variable = variables[key] as? BitwiseVariable<T> ?: return false
 
@@ -91,8 +96,8 @@ class VariableSystem : Variables() {
     }
 
     @Subscribe
-    private fun <T> setVariable(action: SetVariable<T>) {
-        set(action.entity, action.key, action.value)
+    private fun <T : Any> setVariable(action: SetVariable<T>) {
+        set(action.entity, action.key, action.value, action.refresh)
     }
 
     @Subscribe
@@ -101,26 +106,27 @@ class VariableSystem : Variables() {
     }
 
     @Subscribe
-    private fun <T> addVariable(action: AddVariable<T>) {
-        add(action.entity, action.key, action.value)
+    private fun <T : Any> addVariable(action: AddVariable<T>) {
+        add(action.entity, action.key, action.value, action.refresh)
     }
 
     @Subscribe
-    private fun <T> removeVariable(action: RemoveVariable<T>) {
-        remove(action.entity, action.key, action.value)
+    private fun <T : Any> removeVariable(action: RemoveVariable<T>) {
+        remove(action.entity, action.key, action.value, action.refresh)
     }
 
     @Subscribe
-    private fun <T> toggleVariable(action: ToggleVariable) {
-        set(action.entity, action.key, !get(action.entity, action.key, false))
+    private fun <T : Any> toggleVariable(action: ToggleVariable) {
+        set(action.entity, action.key, !get(action.entity, action.key, false), action.refresh)
     }
 
-    private fun <T> Variable<T>.send(entityId: Int, store: VariableStore) {
+    private fun <T : Any> Variable<T>.send(entityId: Int, store: VariableStore) {
         val value = store.get(this)
-        es.send(entityId, when(type) {
-            Variable.Type.VARP -> Varp(id, value)//Config
-            Variable.Type.VARBIT -> Varbit(id, value)//File
-            Variable.Type.VARC -> Varc(id, value)//Global
+        es.send(entityId, when (type) {
+            Variable.Type.VARP -> Varp(id, toInt(value))
+            Variable.Type.VARBIT -> Varbit(id, toInt(value))
+            Variable.Type.VARC -> Varc(id, toInt(value))
+            Variable.Type.VARCSTR -> VarcStr(id, value as String)
         })
     }
 
@@ -133,9 +139,9 @@ class VariableSystem : Variables() {
          * Checks a [BitwiseVariable] for [id] value
          * @return pow(2, index) or null if not found
          */
-        private fun <T> BitwiseVariable<T>.getPower(id: T) : Int? {
+        private fun <T : Any> BitwiseVariable<T>.getPower(id: T): Int? {
             val index = values.indexOf(id)
-            if(index == -1) {
+            if (index == -1) {
                 return null//Invalid value
             }
             return 1 shl index//Return power of 2 of the index
@@ -149,15 +155,15 @@ class VariableSystem : Variables() {
         /**
          * Gets [VariableStore]'s current value or [variable] default
          */
-        private fun VariableStore.get(variable: Variable<*>): Int {
-            return values[variable.hash] ?: variable.defaultValue
+        private fun <T : Any> VariableStore.get(variable: Variable<T>): T {
+            return values[variable.hash] as? T ?: variable.defaultValue
         }
 
         /**
          * Sets [VariableStore] value, removes if [variable] default
          */
-        private fun <T> VariableStore.set(variable: Variable<T>, value: Int) {
-            if(value == variable.defaultValue) {
+        private fun <T : Any> VariableStore.set(variable: Variable<T>, value: T) {
+            if (value == variable.defaultValue) {
                 values.remove(variable.hash)
             } else {
                 values[variable.hash] = value
@@ -167,7 +173,7 @@ class VariableSystem : Variables() {
         /**
          * Extension for [variables] to get using [names]
          */
-        private operator fun <T> Map<Int, T>.get(key: String): T? {
+        private operator fun <T : Any> Map<Int, T>.get(key: String): T? {
             return get(names[key])
         }
     }

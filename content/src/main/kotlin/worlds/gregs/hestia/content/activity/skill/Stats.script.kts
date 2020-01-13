@@ -7,7 +7,11 @@ import worlds.gregs.hestia.core.display.window.api.Windows.Companion.SkillGuide
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.SkillLevelDetails
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.Stats
 import worlds.gregs.hestia.core.display.window.model.actions.OpenWindow
-import worlds.gregs.hestia.core.display.window.model.events.*
+import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
+import worlds.gregs.hestia.core.display.window.model.events.WindowOpened
+import worlds.gregs.hestia.core.display.window.model.events.variable.RemoveVariable
+import worlds.gregs.hestia.core.display.window.model.events.variable.SendVariable
+import worlds.gregs.hestia.core.display.window.model.events.variable.SetVariable
 import worlds.gregs.hestia.core.display.window.model.variable.BitwiseVariable
 import worlds.gregs.hestia.core.display.window.model.variable.IntVariable
 import worlds.gregs.hestia.network.client.encoders.messages.SkillLevel

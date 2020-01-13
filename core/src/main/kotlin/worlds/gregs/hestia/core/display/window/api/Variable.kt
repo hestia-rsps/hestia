@@ -2,25 +2,22 @@ package worlds.gregs.hestia.core.display.window.api
 
 import worlds.gregs.hestia.core.display.window.logic.systems.VariableSystem.Companion.names
 import worlds.gregs.hestia.core.display.window.logic.systems.VariableSystem.Companion.variables
-import worlds.gregs.hestia.core.display.window.model.variable.BooleanVariable
-import worlds.gregs.hestia.core.display.window.model.variable.IntVariable
-import worlds.gregs.hestia.core.display.window.model.variable.StringVariable
 
-interface Variable<T> {
+interface Variable<T : Any> {
     val id: Int
-    val defaultValue: Int
+    val defaultValue: T
     val type: Type
     val persistent: Boolean
 
     val hash: Int
         get() = toHash(id, type)
 
-    fun getInt(value: T): Int
-
-    fun getValue(value: Int): T
+    open fun toInt(value: T): Int {
+        return -1
+    }
 
     enum class Type {
-        VARBIT, VARP, VARC
+        VARBIT, VARP, VARC, VARCSTR
     }
 
     fun register(name: String) {

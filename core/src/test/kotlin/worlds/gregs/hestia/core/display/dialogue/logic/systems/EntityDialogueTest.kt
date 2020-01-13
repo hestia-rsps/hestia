@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import worlds.gregs.hestia.MockkGame
 import worlds.gregs.hestia.artemis.send
+import worlds.gregs.hestia.core.action.model.perform
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.*
 import worlds.gregs.hestia.core.display.dialogue.model.events.ContinueDialogue
 import worlds.gregs.hestia.core.display.window.api.Windows
@@ -171,7 +172,7 @@ internal class EntityDialogueTest : MockkGame() {
         val entityId = 0
         every { tasks.getSuspension(entityId) } returns dialogue
         //When
-        es.dispatch(ContinueDialogue(entityId, 0, 0, 0))
+        es.perform(entityId, ContinueDialogue(0, 0, 0))
         //Then
         verify(exactly = 0) { tasks.resume(entityId, dialogue, any()) }
     }
@@ -184,7 +185,7 @@ internal class EntityDialogueTest : MockkGame() {
         every { dialogue.lines } returns listOf("One line")
         every { tasks.getSuspension(entityId) } returns dialogue
         //When
-        es.dispatch(ContinueDialogue(entityId, 0, 25, 0))
+        es.perform(entityId, ContinueDialogue(0, 25, 0))
         //Then
         verify(exactly = 0) { tasks.resume(entityId, dialogue, Unit) }
     }
@@ -198,7 +199,7 @@ internal class EntityDialogueTest : MockkGame() {
         every { tasks.getSuspension(entityId) } returns dialogue
         every { boxSystem.handleContinue(any()) } answers {}
         //When
-        es.dispatch(ContinueDialogue(entityId, 0, 5, 0))
+        es.perform(entityId, ContinueDialogue( 0, 5, 0))
         //Then
         verify { tasks.resume(entityId, dialogue, Unit) }
     }

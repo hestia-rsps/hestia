@@ -43,7 +43,7 @@ class OptionsDialogueSystem : DialogueBaseSystem() {
 
     @Subscribe(ignoreCancelledEvents = true)
     private fun handleContinue(event: ContinueDialogue) {
-        val (entityId, _, option, _) = event
+        /*val (entityId, _, option, _) = event
         val suspension = tasks.getSuspension(entityId)
         if (suspension is OptionsDialogue) {
             val choice = option - if(suspension.lines.size == 3) 2 else 1
@@ -53,7 +53,7 @@ class OptionsDialogueSystem : DialogueBaseSystem() {
             } else {
                 logger.warn("Error resuming task suspension $suspension")
             }
-        }
+        }*/
     }
 
 }

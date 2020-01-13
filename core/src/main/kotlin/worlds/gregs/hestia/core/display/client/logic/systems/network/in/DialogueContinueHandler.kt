@@ -3,6 +3,7 @@ package worlds.gregs.hestia.core.display.client.logic.systems.network.`in`
 import com.artemis.annotations.Wire
 import net.mostlyoriginal.api.event.common.EventSystem
 import worlds.gregs.hestia.GameServer
+import worlds.gregs.hestia.core.action.model.perform
 import worlds.gregs.hestia.core.display.dialogue.model.events.ContinueDialogue
 import worlds.gregs.hestia.game.entity.MessageHandlerSystem
 import worlds.gregs.hestia.network.client.decoders.messages.DialogueContinue
@@ -27,7 +28,7 @@ class DialogueContinueHandler : MessageHandlerSystem<DialogueContinue>() {
             option -= 100
         }
 
-        es.dispatch(ContinueDialogue(entityId, window, option, widget))
+        es.perform(entityId, ContinueDialogue(window, option, widget))
     }
 
 }

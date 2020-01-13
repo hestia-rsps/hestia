@@ -2,18 +2,18 @@ package worlds.gregs.hestia.content.display.windows.main
 
 import worlds.gregs.hestia.core.display.window.api.Variable
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.Emotes
-import worlds.gregs.hestia.core.display.window.model.events.SendVariable
+import worlds.gregs.hestia.core.display.window.model.events.variable.SendVariable
 import worlds.gregs.hestia.core.display.window.model.events.WindowOpened
 import worlds.gregs.hestia.core.display.window.model.variable.BitwiseVariable
-import worlds.gregs.hestia.core.display.window.model.variable.StringVariable
+import worlds.gregs.hestia.core.display.window.model.variable.StringMapVariable
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetSettings
 
-StringVariable(465, Variable.Type.VARP, true, "locked", mapOf(
+StringMapVariable(465, Variable.Type.VARP, true, mapOf(
         0 to "locked",
         7 to "unlocked"
 )).register("lost_tribe_emotes")
 
-StringVariable(1085, Variable.Type.VARP, true, "locked", mapOf(
+StringMapVariable(1085, Variable.Type.VARP, true, mapOf(
         0 to "locked",
         249852 to "unlocked"
 )).register("zombie_hand_emote")

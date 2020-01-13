@@ -5,5 +5,5 @@ import com.artemis.annotations.PooledWeaver
 
 @PooledWeaver
 class VariableStore : Component() {
-    val values = mutableMapOf<Int, Int>()
+    val values = mutableMapOf<Int, Any>()
 }

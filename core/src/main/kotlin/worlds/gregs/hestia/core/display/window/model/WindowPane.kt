@@ -19,6 +19,10 @@ import worlds.gregs.hestia.core.display.window.api.Windows.Companion.ClanChat
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.CombatStyles
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.ConfirmDestroy
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.ContainerContinue
+import worlds.gregs.hestia.core.display.window.api.Windows.Companion.DoubleChat1
+import worlds.gregs.hestia.core.display.window.api.Windows.Companion.DoubleChat2
+import worlds.gregs.hestia.core.display.window.api.Windows.Companion.DoubleChat3
+import worlds.gregs.hestia.core.display.window.api.Windows.Companion.DoubleChat4
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.DoubleObjBox
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.DungeoneeringSpellbook
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.Emotes
@@ -35,6 +39,7 @@ import worlds.gregs.hestia.core.display.window.api.Windows.Companion.Logout
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.LunarSpellbook
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.MacroMimeEmotes
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.MacroQuizShow
+import worlds.gregs.hestia.core.display.window.api.Windows.Companion.MakeAmount
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.Message1
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.Message2
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.Message3
@@ -92,10 +97,15 @@ import worlds.gregs.hestia.core.display.window.api.Windows.Companion.PrivateChat
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.QuestJournals
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.ResizableGameframe
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.Select2Models
+import worlds.gregs.hestia.core.display.window.api.Windows.Companion.SkillCreation
+import worlds.gregs.hestia.core.display.window.api.Windows.Companion.SkillCreationAmount
+import worlds.gregs.hestia.core.display.window.api.Windows.Companion.SmeltType
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.Stats
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.SummoningOrb
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.TaskSystem
+import worlds.gregs.hestia.core.display.window.api.Windows.Companion.TextBoxChat
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.TextBoxContinue
+import worlds.gregs.hestia.core.display.window.api.Windows.Companion.TextBoxContinue2
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.TextBoxContinueResizable
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.TextBoxModel
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.TextBoxModelSprite
@@ -141,9 +151,12 @@ enum class WindowPane(val fixed: Int = 0, val resizable: Int, val parent: Int, v
     WORN_EQUIPMENT(209, 95, -1, WornEquipment),
 
     //Main screen
-    DIALOGUE_BOX(13, 13, ChatBox, Multi4Offscreen, TextBoxModelSprite, CastleWarsScore, CastleWarsStatusOverlay, MobChatNp4u, MobChatNp3u, MobChatNp1u, MobChatNp2u, ConfirmDestroy, GardenQuiz, ChatBoth, Select2Models, TextBoxModel, MacroMimeEmotes, MacroQuizShow, ContainerContinue, PriceCheckBoxTitle, TutorialText, ObjDialog, PohHangman, TutorialText2, OpenUrl, Multi3OffCentre, PohHangmanGerman, Multi2Mes, PickAPuppy, MultiVar2Wide, PickAKitten, LevelUpDialog, TextBoxContinue, TextBoxContinueResizable, MobilisingArmies1, DoubleObjBox, ObjBox, Chat1, Chat2, Chat3, Chat4, ChatNp1, ChatNp2, ChatNp3, ChatNp4, Message1, Message2, Message3, Message4, Message5, MessageNp1, MessageNp2, MessageNp3, MessageNp4, MessageNp5, Multi2, Multi2Chat, Multi3, Multi3Chat, Multi4, Multi4Chat, Multi5, Multi5Chat, MultiVar2, MultiVar3, MultiVar4, MultiVar5, MobChat1, MobChat2, MobChat3, MobChat4, MobChatNp1, MobChatNp2, MobChatNp3, MobChatNp4),
+    DIALOGUE_BOX(13, 13, ChatBox, Multi4Offscreen, TextBoxModelSprite, CastleWarsScore, CastleWarsStatusOverlay, MobChatNp4u, MobChatNp3u, MobChatNp1u, MobChatNp2u, ConfirmDestroy, GardenQuiz, ChatBoth, Select2Models, TextBoxModel, MacroMimeEmotes, MacroQuizShow, ContainerContinue, PriceCheckBoxTitle, TutorialText, ObjDialog, PohHangman, TutorialText2, OpenUrl, Multi3OffCentre, PohHangmanGerman, Multi2Mes, PickAPuppy, MultiVar2Wide, PickAKitten, LevelUpDialog, TextBoxContinue, TextBoxContinueResizable, MobilisingArmies1, SkillCreation, SmeltType, MakeAmount, TextBoxChat, TextBoxContinue2, DoubleChat3, DoubleChat2, DoubleChat1, DoubleChat4, DoubleObjBox, ObjBox, Chat1, Chat2, Chat3, Chat4, ChatNp1, ChatNp2, ChatNp3, ChatNp4, Message1, Message2, Message3, Message4, Message5, MessageNp1, MessageNp2, MessageNp3, MessageNp4, MessageNp5, Multi2, Multi2Chat, Multi3, Multi3Chat, Multi4, Multi4Chat, Multi5, Multi5Chat, MultiVar2, MultiVar3, MultiVar4, MultiVar5, MobChat1, MobChat2, MobChat3, MobChat4, MobChatNp1, MobChatNp2, MobChatNp3, MobChatNp4),
     AREA(15, 15, -1, AreaStatusIcon),
     OVERLAY(9, 12, -1),
     MAIN_SCREEN(9, 12, -1),
-    FULL_SCREEN(0, 0, 0, ResizableGameframe, FixedGameframe, WorldMap);
+    FULL_SCREEN(0, 0, 0, ResizableGameframe, FixedGameframe, WorldMap),
+
+    SKILL_CREATION(4, 4, SkillCreation, SkillCreationAmount),
+
 }

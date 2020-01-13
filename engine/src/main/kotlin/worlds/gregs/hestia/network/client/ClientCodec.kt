@@ -65,6 +65,7 @@ class ClientCodec : MessageHandshakeCodec() {
         bind(VarpEncoder())
         bind(VarbitEncoder())
         bind(VarcEncoder())
+        bind(VarcStrEncoder())
         bind(FloorItemClearEncoder())
         bind(FloorItemPrivateEncoder())
         bind(FloorItemPublicEncoder())

@@ -5,7 +5,6 @@ import net.mostlyoriginal.api.event.common.Subscribe
 import net.mostlyoriginal.api.system.core.PassiveSystem
 import org.slf4j.LoggerFactory
 import worlds.gregs.hestia.core.display.dialogue.model.components.DialogueBox
-import worlds.gregs.hestia.core.display.dialogue.model.events.CloseDialogue
 import worlds.gregs.hestia.core.display.dialogue.model.events.ContinueDialogue
 import worlds.gregs.hestia.core.display.window.api.Windows
 
@@ -32,7 +31,7 @@ class DialogueBoxSystem : PassiveSystem() {
      */
     @Subscribe(priority = Int.MAX_VALUE)
     internal fun handleContinue(event: ContinueDialogue) {
-        val (entityId, window, _, _) = event
+        /*val (entityId, window, _, _) = event
         if (!dialogueBoxMapper.has(entityId)) {
             event.isCancelled = true
             return
@@ -45,17 +44,11 @@ class DialogueBoxSystem : PassiveSystem() {
             dialogueBoxMapper.remove(entityId)
             event.isCancelled = true
             return
-        }
+        }*/
     }
 
     /**
      * Closes dialogue
      */
-    @Subscribe
-    private fun closure(event: CloseDialogue) {
-        if(windows.hasWindow(event.entity, Windows.ChatBox)) {
-            windows.closeWindow(event.entity, Windows.ChatBox)
-        }
-    }
 
 }

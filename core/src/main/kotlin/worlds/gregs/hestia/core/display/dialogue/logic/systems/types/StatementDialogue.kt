@@ -39,7 +39,7 @@ class StatementDialogueSystem : DialogueBaseSystem() {
 
     @Subscribe(ignoreCancelledEvents = true)
     private fun handleContinue(event: ContinueDialogue) {
-        val (entityId, _, option, _) = event
+        /*val (entityId, _, option, _) = event
         val suspension = tasks.getSuspension(entityId)
         if (suspension is StatementDialogue) {
             //Verify button
@@ -51,7 +51,7 @@ class StatementDialogueSystem : DialogueBaseSystem() {
             //Continue
             tasks.resume(entityId, suspension, Unit)
             event.isCancelled = true
-        }
+        }*/
     }
 
 }

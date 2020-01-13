@@ -9,7 +9,7 @@ import worlds.gregs.hestia.game.plugin.Plugin
 class DialoguePlugin : Plugin {
 
     override fun setup(b: WorldConfigurationBuilder) {
-        b.with(DialogueBoxSystem(), DialogueSystem(), EntityDialogueSystem(), StringEntryDialogueSystem(), StatementDialogueSystem(), OptionsDialogueSystem(), IntegerEntryDialogueSystem())
+        b.with(DialogueSystem(), DialogueBoxSystem(), EntityDialogueSystem(), StringEntryDialogueSystem(), StatementDialogueSystem(), OptionsDialogueSystem(), IntegerEntryDialogueSystem())
     }
 
 }

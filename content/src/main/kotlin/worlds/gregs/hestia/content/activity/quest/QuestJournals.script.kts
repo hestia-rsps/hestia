@@ -2,14 +2,14 @@ package worlds.gregs.hestia.content.activity.quest
 
 import worlds.gregs.hestia.core.display.window.api.Variable
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.QuestJournals
-import worlds.gregs.hestia.core.display.window.model.events.SendVariable
+import worlds.gregs.hestia.core.display.window.model.events.variable.SendVariable
 import worlds.gregs.hestia.core.display.window.model.events.WindowOpened
 import worlds.gregs.hestia.core.display.window.model.variable.IntVariable
-import worlds.gregs.hestia.core.display.window.model.variable.StringVariable
+import worlds.gregs.hestia.core.display.window.model.variable.StringMapVariable
 
 IntVariable(101, Variable.Type.VARP, true, 0).register("quest_points")
 
-StringVariable(281, Variable.Type.VARP, true, "complete", mapOf(
+StringMapVariable(281, Variable.Type.VARP, true, defaultValue = "complete", values = mapOf(
         0 to "unstarted",
         1 to "incomplete",
         1000 to "complete"

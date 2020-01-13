@@ -8,10 +8,10 @@ import worlds.gregs.hestia.core.display.update.model.components.direction.Face
 import worlds.gregs.hestia.core.display.window.api.Variable
 import worlds.gregs.hestia.core.display.window.api.Variables
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.EnergyOrb
-import worlds.gregs.hestia.core.display.window.model.events.SendVariable
-import worlds.gregs.hestia.core.display.window.model.events.SetVariable
 import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
-import worlds.gregs.hestia.core.display.window.model.variable.StringVariable
+import worlds.gregs.hestia.core.display.window.model.events.variable.SendVariable
+import worlds.gregs.hestia.core.display.window.model.events.variable.SetVariable
+import worlds.gregs.hestia.core.display.window.model.variable.StringMapVariable
 import worlds.gregs.hestia.core.entity.entity.model.components.Blackboard
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.entity.model.events.Animation
@@ -22,7 +22,7 @@ import worlds.gregs.hestia.core.task.model.await.WithinRange
 import worlds.gregs.hestia.core.world.movement.model.components.RunToggled
 import worlds.gregs.hestia.core.world.movement.model.events.Follow
 
-StringVariable(173, Variable.Type.VARP, true, "walking", mapOf(
+StringMapVariable(173, Variable.Type.VARP, true, mapOf(
         0 to "walking",
         1 to "running",
         3 to "resting",

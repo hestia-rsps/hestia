@@ -5,13 +5,13 @@ import worlds.gregs.hestia.core.display.window.api.Windows.Companion.EnergyOrb
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.HealthOrb
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.PrayerOrb
 import worlds.gregs.hestia.core.display.window.api.Windows.Companion.SummoningOrb
-import worlds.gregs.hestia.core.display.window.model.events.SendVariable
-import worlds.gregs.hestia.core.display.window.model.events.ToggleVariable
+import worlds.gregs.hestia.core.display.window.model.events.variable.SendVariable
+import worlds.gregs.hestia.core.display.window.model.events.variable.ToggleVariable
 import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
 import worlds.gregs.hestia.core.display.window.model.events.WindowOpened
 import worlds.gregs.hestia.core.display.window.model.variable.BooleanVariable
 import worlds.gregs.hestia.core.display.window.model.variable.IntVariable
-import worlds.gregs.hestia.core.display.window.model.variable.StringVariable
+import worlds.gregs.hestia.core.display.window.model.variable.StringMapVariable
 import worlds.gregs.hestia.network.client.encoders.messages.RunEnergy
 import worlds.gregs.hestia.network.client.encoders.messages.Varp
 
@@ -21,7 +21,7 @@ BooleanVariable(181, Variable.Type.VARC).register("select_quick_prayers")
 BooleanVariable(182, Variable.Type.VARC).register("using_quick_prayers")
 
 
-StringVariable(1584, Variable.Type.VARP, true, "normal", mapOf(
+StringMapVariable(1584, Variable.Type.VARP, true, mapOf(
         0 to "normal",
         1 to "curses"
 )).register("prayer_list")
