@@ -1,5 +1,7 @@
 package world.gregs.hestia.tools.cache.definition
 
+import org.apache.commons.lang3.builder.ToStringBuilder
+import org.apache.commons.lang3.builder.ToStringStyle
 import world.gregs.hestia.core.Settings
 import world.gregs.hestia.core.cache.CacheStore
 import worlds.gregs.hestia.service.cache.definition.readers.WindowDefinitionReader
@@ -24,19 +26,16 @@ class WindowDefinitions {
             Settings.load()
             val store = CacheStore()
             val reader = WindowDefinitionReader(store)
-            repeat(reader.size) { id ->
-                val widget = reader.get(id)
-                if (widget.size > 1) {
+//            repeat(reader.size) { id ->
+                val window = reader.get(26)
+                if (window.size > 1) {
 //                    println("Widget $id")
-
-                    widget.filterNotNull().forEach { window ->
-                        if(window.params != null) {
-                            println(window.params)
-                        }
-//                            println(ToStringBuilder.reflectionToString(window, ToStringStyle.MULTI_LINE_STYLE))
+                    window.forEach { (index, widget) ->
+                        println("$index ${getName(widget.type)}")
+                        println(ToStringBuilder.reflectionToString(widget, ToStringStyle.MULTI_LINE_STYLE))
                     }
                 }
-            }
+//            }
         }
     }
 }

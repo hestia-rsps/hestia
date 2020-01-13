@@ -1,9 +1,10 @@
 package worlds.gregs.hestia.service.cache.definition.definitions
 
 import world.gregs.hestia.core.network.codec.packet.Packet
+import worlds.gregs.hestia.service.cache.Definition
 import java.util.*
 
-class WidgetDefinition {
+class WidgetDefinition : Definition {
     var mouseReleasedHandler: Array<Any?>? = null
     var spriteYaw: Int = 0
     var menuActions: Array<String?>? = null
@@ -123,250 +124,254 @@ class WidgetDefinition {
         return objects
     }
 
-    fun readValues(buffer: Packet) {
-        var i = buffer.readUnsignedByte()
+
+    override fun readValueLoop(packet: Packet, member: Boolean) {
+        var i = packet.readUnsignedByte()
         if (i == 255) {
             i = -1
         }
-        type = buffer.readUnsignedByte()
+        type = packet.readUnsignedByte()
         if (type and 0x80 != 0) {
             type = type and 0x7f
-            aString4765 = buffer.readString()
+            aString4765 = packet.readString()
         }
-        contentType = buffer.readShort()
-        basePositionX = buffer.readUnsignedShort()
-        basePositionY = buffer.readUnsignedShort()
-        baseWidth = buffer.readShort()
-        baseHeight = buffer.readShort()
-        horizontalSizeMode = buffer.readByte().toByte()
-        verticalSizeMode = buffer.readByte().toByte()
-        horizontalPositionMode = buffer.readByte().toByte()
-        verticalPositionMode = buffer.readByte().toByte()
-        parent = buffer.readShort()
+        contentType = packet.readShort()
+        basePositionX = packet.readUnsignedShort()
+        basePositionY = packet.readUnsignedShort()
+        baseWidth = packet.readShort()
+        baseHeight = packet.readShort()
+        horizontalSizeMode = packet.readByte().toByte()
+        verticalSizeMode = packet.readByte().toByte()
+        horizontalPositionMode = packet.readByte().toByte()
+        verticalPositionMode = packet.readByte().toByte()
+        parent = packet.readShort()
         parent = if (parent == 65535) {
             -1
         } else {
             parent + (id and -65536)
         }
-        val i_17_ = buffer.readUnsignedByte()
+        val i_17_ = packet.readUnsignedByte()
         hidden = 0x1 and i_17_ != 0
         if (i >= 0) {
             disableHover = i_17_ and 0x2 != 0
         }
         if (type == 0) {
-            scrollWidth = buffer.readShort()
-            scrollHeight = buffer.readShort()
+            scrollWidth = packet.readShort()
+            scrollHeight = packet.readShort()
             if (i < 0) {
-                disableHover = buffer.readUnsignedByte() == 1
+                disableHover = packet.readUnsignedByte() == 1
             }
         }
         if (type == 5) {
-            defaultImage = buffer.readInt()
-            imageRotation = buffer.readShort()
-            val i_18_ = buffer.readUnsignedByte()
+            defaultImage = packet.readInt()
+            imageRotation = packet.readShort()
+            val i_18_ = packet.readUnsignedByte()
             aBoolean4861 = i_18_ and 0x1 != 0
             imageRepeat = i_18_ and 0x2 != 0
-            alpha = buffer.readUnsignedByte()
-            rotation = buffer.readUnsignedByte()
-            backgroundColour = buffer.readInt()
-            flipVertical = buffer.readUnsignedByte() == 1
-            flipHorizontal = buffer.readUnsignedByte() == 1
-            colour = buffer.readInt()
+            alpha = packet.readUnsignedByte()
+            rotation = packet.readUnsignedByte()
+            backgroundColour = packet.readInt()
+            flipVertical = packet.readUnsignedByte() == 1
+            flipHorizontal = packet.readUnsignedByte() == 1
+            colour = packet.readInt()
             if (i >= 3) {
-                aBoolean4782 = buffer.readUnsignedByte() == 1
+                aBoolean4782 = packet.readUnsignedByte() == 1
             }
         }
         if (type == 6) {
             defaultMediaType = 1
-            defaultMediaId = buffer.readShort()
+            defaultMediaId = packet.readShort()
             if (defaultMediaId == 65535) {
                 defaultMediaId = -1
             }
-            val i_19_ = buffer.readUnsignedByte()
+            val i_19_ = packet.readUnsignedByte()
             aBoolean4707 = 0x4 and i_19_ == 4
             val bool = 0x1 and i_19_ == 1
             centreType = i_19_ and 0x2 == 2
             ignoreZBuffer = 0x8 and i_19_ == 8
             if (bool) {
-                viewportX = buffer.readUnsignedShort()
-                viewportY = buffer.readUnsignedShort()
-                spritePitch = buffer.readShort()
-                spriteRoll = buffer.readShort()
-                spriteYaw = buffer.readShort()
-                spriteScale = buffer.readShort()
+                viewportX = packet.readUnsignedShort()
+                viewportY = packet.readUnsignedShort()
+                spritePitch = packet.readShort()
+                spriteRoll = packet.readShort()
+                spriteYaw = packet.readShort()
+                spriteScale = packet.readShort()
             } else if (centreType) {
-                viewportX = buffer.readUnsignedShort()
-                viewportY = buffer.readUnsignedShort()
-                viewportZ = buffer.readUnsignedShort()
-                spritePitch = buffer.readShort()
-                spriteRoll = buffer.readShort()
-                spriteYaw = buffer.readShort()
-                spriteScale = buffer.readUnsignedShort()
+                viewportX = packet.readUnsignedShort()
+                viewportY = packet.readUnsignedShort()
+                viewportZ = packet.readUnsignedShort()
+                spritePitch = packet.readShort()
+                spriteRoll = packet.readShort()
+                spriteYaw = packet.readShort()
+                spriteScale = packet.readUnsignedShort()
             }
-            animation = buffer.readShort()
+            animation = packet.readShort()
             if (animation == 65535) {
                 animation = -1
             }
             if (horizontalSizeMode.toInt() != 0) {
-                viewportWidth = buffer.readShort()
+                viewportWidth = packet.readShort()
             }
             if (verticalSizeMode.toInt() != 0) {
-                viewportHeight = buffer.readShort()
+                viewportHeight = packet.readShort()
             }
         }
         if (type == 4) {
-            fontId = buffer.readShort()
+            fontId = packet.readShort()
             if (fontId == 65535) {
                 fontId = -1
             }
             if (i >= 2) {
-                monochrome = buffer.readUnsignedByte() == 1
+                monochrome = packet.readUnsignedByte() == 1
             }
-            text = buffer.readString()
-            lineHeight = buffer.readUnsignedByte()
-            horizontalTextAlign = buffer.readUnsignedByte()
-            verticalTextAlign = buffer.readUnsignedByte()
-            shaded = buffer.readUnsignedByte() == 1
-            colour = buffer.readInt()
-            alpha = buffer.readUnsignedByte()
+            text = packet.readString()
+            lineHeight = packet.readUnsignedByte()
+            horizontalTextAlign = packet.readUnsignedByte()
+            verticalTextAlign = packet.readUnsignedByte()
+            shaded = packet.readUnsignedByte() == 1
+            colour = packet.readInt()
+            alpha = packet.readUnsignedByte()
             if (i >= 0) {
-                lineCount = buffer.readUnsignedByte()
+                lineCount = packet.readUnsignedByte()
             }
         }
         if (type == 3) {
-            colour = buffer.readInt()
-            filled = buffer.readUnsignedByte() == 1
-            alpha = buffer.readUnsignedByte()
+            colour = packet.readInt()
+            filled = packet.readUnsignedByte() == 1
+            alpha = packet.readUnsignedByte()
         }
         if (type == 9) {
-            lineWidth = buffer.readUnsignedByte()
-            colour = buffer.readInt()
-            lineMirrored = buffer.readUnsignedByte() == 1
+            lineWidth = packet.readUnsignedByte()
+            colour = packet.readInt()
+            lineMirrored = packet.readUnsignedByte() == 1
         }
-        val setting = buffer.readMedium()
-        var i_21_ = buffer.readUnsignedByte()
+        val setting = packet.readMedium()
+        var i_21_ = packet.readUnsignedByte()
         if (i_21_ != 0) {
             keyRepeat = ByteArray(11)
             keyCodes = ByteArray(11)
             keyModifiers = IntArray(11)
             while ( /**/i_21_ != 0) {
                 val i_22_ = (i_21_ shr 4) - 1
-                i_21_ = buffer.readUnsignedByte() or i_21_ shl 8
+                i_21_ = packet.readUnsignedByte() or i_21_ shl 8
                 i_21_ = i_21_ and 0xfff
                 if (i_21_ == 4095) {
                     i_21_ = -1
                 }
-                val b_23_ = buffer.readByte().toByte()
+                val b_23_ = packet.readByte().toByte()
                 if (b_23_.toInt() != 0) {
                     aBoolean4802 = true
                 }
-                val b_24_ = buffer.readByte().toByte()
+                val b_24_ = packet.readByte().toByte()
                 keyModifiers!![i_22_] = i_21_
                 keyRepeat!![i_22_] = b_23_
                 keyCodes!![i_22_] = b_24_
-                i_21_ = buffer.readUnsignedByte()
+                i_21_ = packet.readUnsignedByte()
             }
         }
-        applyText = buffer.readString()
-        val i_25_ = buffer.readUnsignedByte()
+        applyText = packet.readString()
+        val i_25_ = packet.readUnsignedByte()
         val i_26_ = 0xf and i_25_
         if (i_26_ > 0) {
             menuActions = arrayOfNulls(i_26_)
             var i_27_ = 0
             while (i_26_ > i_27_) {
-                menuActions!![i_27_] = buffer.readString()
+                menuActions!![i_27_] = packet.readString()
                 i_27_++
             }
         }
         val i_28_ = i_25_ shr 4
         if (i_28_ > 0) {
-            val i_29_ = buffer.readUnsignedByte()
+            val i_29_ = packet.readUnsignedByte()
             anIntArray4863 = IntArray(i_29_ + 1)
             var i_30_ = 0
             while (anIntArray4863!!.size > i_30_) {
                 anIntArray4863!![i_30_] = -1
                 i_30_++
             }
-            anIntArray4863!![i_29_] = buffer.readShort()
+            anIntArray4863!![i_29_] = packet.readShort()
         }
         if (i_28_ > 1) {
-            val i_31_ = buffer.readUnsignedByte()
-            anIntArray4863!![i_31_] = buffer.readShort()
+            val i_31_ = packet.readUnsignedByte()
+            anIntArray4863!![i_31_] = packet.readShort()
         }
-        aString4784 = buffer.readString()
+        aString4784 = packet.readString()
         if (aString4784 == "") {
             aString4784 = null
         }
-        anInt4708 = buffer.readUnsignedByte()
-        anInt4795 = buffer.readUnsignedByte()
-        anInt4860 = buffer.readUnsignedByte()
-        aString4786 = buffer.readString()
+        anInt4708 = packet.readUnsignedByte()
+        anInt4795 = packet.readUnsignedByte()
+        anInt4860 = packet.readUnsignedByte()
+        aString4786 = packet.readString()
         var i_32_ = -1
         if (setting and 0x3fda8 shr 11 != 0) {
-            i_32_ = buffer.readShort()
+            i_32_ = packet.readShort()
             if (i_32_ == 65535) {
                 i_32_ = -1
             }
-            anInt4698 = buffer.readShort()
+            anInt4698 = packet.readShort()
             if (anInt4698 == 65535) {
                 anInt4698 = -1
             }
-            anInt4839 = buffer.readShort()
+            anInt4839 = packet.readShort()
             if (anInt4839 == 65535) {
                 anInt4839 = -1
             }
         }
         if (i >= 0) {
-            anInt4761 = buffer.readShort()
+            anInt4761 = packet.readShort()
             if (anInt4761 == 65535) {
                 anInt4761 = -1
             }
         }
         this.setting = WidgetSettingDefinition(setting, i_32_)
         if (i >= 0) {
-            val i_33_ = buffer.readUnsignedByte()
+            val i_33_ = packet.readUnsignedByte()
             var i_34_ = 0
             while (i_33_ > i_34_) {
-                val i_35_ = buffer.readMedium()
-                val i_36_ = buffer.readInt()
+                val i_35_ = packet.readMedium()
+                val i_36_ = packet.readInt()
                 params!![i_35_.toLong()] = i_36_
                 i_34_++
             }
-            val i_37_ = buffer.readUnsignedByte()
+            val i_37_ = packet.readUnsignedByte()
             for (i_38_ in 0 until i_37_) {
-                val i_39_ = buffer.readMedium()
-                val string = buffer.readString()
+                val i_39_ = packet.readMedium()
+                val string = packet.readString()
                 params!![i_39_.toLong()] = string
             }
         }
-        anObjectArray4758 = decodeScript(buffer)
-        mouseEnterHandler = decodeScript(buffer)
-        mouseExitHandler = decodeScript(buffer)
-        anObjectArray4771 = decodeScript(buffer)
-        anObjectArray4768 = decodeScript(buffer)
-        anObjectArray4807 = decodeScript(buffer)//State/value change
-        invUpdateHandler = decodeScript(buffer)
-        anObjectArray4788 = decodeScript(buffer)//Update/refresh
-        updateHandler = decodeScript(buffer)
-        anObjectArray4770 = decodeScript(buffer)
+        anObjectArray4758 = decodeScript(packet)
+        mouseEnterHandler = decodeScript(packet)
+        mouseExitHandler = decodeScript(packet)
+        anObjectArray4771 = decodeScript(packet)
+        anObjectArray4768 = decodeScript(packet)
+        anObjectArray4807 = decodeScript(packet)//State/value change
+        invUpdateHandler = decodeScript(packet)
+        anObjectArray4788 = decodeScript(packet)//Update/refresh
+        updateHandler = decodeScript(packet)
+        anObjectArray4770 = decodeScript(packet)
         if (i >= 0) {
-            anObjectArray4751 = decodeScript(buffer)
+            anObjectArray4751 = decodeScript(packet)
         }
-        mouseMotionHandler = decodeScript(buffer)
-        mousePressedHandler = decodeScript(buffer)
-        mouseDraggedHandler = decodeScript(buffer)
-        mouseReleasedHandler = decodeScript(buffer)
-        mouseDragPassHandler = decodeScript(buffer)
-        anObjectArray4852 = decodeScript(buffer)
-        anObjectArray4711 = decodeScript(buffer)
-        anObjectArray4753 = decodeScript(buffer)
-        anObjectArray4688 = decodeScript(buffer)
-        anObjectArray4775 = decodeScript(buffer)
-        clientVarp = method4150(107.toByte(), buffer)
-        monitoredInventories = method4150(101.toByte(), buffer)
-        anIntArray4789 = method4150(98.toByte(), buffer)
-        clientVarc = method4150(126.toByte(), buffer)
-        anIntArray4805 = method4150(117.toByte(), buffer)
+        mouseMotionHandler = decodeScript(packet)
+        mousePressedHandler = decodeScript(packet)
+        mouseDraggedHandler = decodeScript(packet)
+        mouseReleasedHandler = decodeScript(packet)
+        mouseDragPassHandler = decodeScript(packet)
+        anObjectArray4852 = decodeScript(packet)
+        anObjectArray4711 = decodeScript(packet)
+        anObjectArray4753 = decodeScript(packet)
+        anObjectArray4688 = decodeScript(packet)
+        anObjectArray4775 = decodeScript(packet)
+        clientVarp = method4150(107.toByte(), packet)
+        monitoredInventories = method4150(101.toByte(), packet)
+        anIntArray4789 = method4150(98.toByte(), packet)
+        clientVarc = method4150(126.toByte(), packet)
+        anIntArray4805 = method4150(117.toByte(), packet)
+    }
+
+    override fun readValues(opcode: Int, packet: Packet, member: Boolean) {
     }
 
     private fun method4150(b: Byte, buffer: Packet): IntArray? {

@@ -1,6 +1,7 @@
 package worlds.gregs.hestia.service.cache.definition.readers
 
 import world.gregs.hestia.core.cache.CacheStore
+import world.gregs.hestia.core.network.codec.packet.PacketReader
 import worlds.gregs.hestia.service.cache.DefinitionReader
 import worlds.gregs.hestia.service.cache.definition.definitions.WidgetDefinition
 import worlds.gregs.hestia.service.cache.definition.definitions.WindowDefinition
@@ -14,13 +15,15 @@ class WindowDefinitionReader(cacheStore: CacheStore) : DefinitionReader<WindowDe
 
     override fun create(id: Int, member: Boolean): WindowDefinition {
         val size = index.getLastFileId(id) + 1
-        return WindowDefinition(size).apply {
-            repeat(size) { index ->
-                add(index, WidgetDefinition().apply {
-                    this.id = index + (id shl 16)
-                    readData(id ushr 8, id and 0xff)
-                })
-            }
+        val widgets = (0 until size).map { i ->
+            Pair(i, WidgetDefinition().apply {
+                this.id = i + (id shl 16)
+                val data = index.getFile(id, i)
+                if (data != null) {
+                    readValueLoop(PacketReader(data), member)
+                }
+            })
         }
+        return WindowDefinition(widgets.toTypedArray())
     }
 }

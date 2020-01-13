@@ -60,12 +60,7 @@ class WindowSystem : Windows() {
         val gameFrame = gameFrameMapper.get(entityId)
 
         val pane = getPane(id)
-        val parent = when (pane) {
-            WindowPane.CHAT_BACKGROUND -> ChatBox
-            WindowPane.FULL_SCREEN -> 0
-            else -> if (gameFrame.resizable) ResizableGameframe else FixedGameframe
-        }
-
+        val parent = getParent(pane, gameFrame)
         val index = pane.getIndex(gameFrame.resizable)
         if (relationships.containsKey(parent)) {
             if (relationships[parent] == null) {
@@ -144,11 +139,10 @@ class WindowSystem : Windows() {
         val relationships = windowRelationships.relationships
         val gameFrame = gameFrameMapper.get(entityId)
 
-        val gameframe = if (gameFrame.resizable) ResizableGameframe else FixedGameframe
+        val paneParent = getParent(pane, gameFrame)
         val index = if (gameFrame.resizable) pane.resizable else pane.fixed
-
         return relationships.walk(0) { window, parent ->
-            parent == gameframe && getIndex(window, gameFrame.resizable) == index
+            parent == paneParent && getIndex(window, gameFrame.resizable) == index
         }
     }
 
@@ -180,7 +174,7 @@ class WindowSystem : Windows() {
     @Subscribe
     private fun openWindow(event: OpenWindow) {
         val result = openWindow(event.entity, event.target)
-        if(result is WindowResult.Issue) {
+        if (result is WindowResult.Issue) {
             logger.warn("Issue opening window $event $result")
         }
     }
@@ -254,8 +248,13 @@ class WindowSystem : Windows() {
         return child
     }
 
+    /**
+     * @return The parent id of a pane
+     */
+    private fun getParent(pane: WindowPane, gameFrame: GameFrame): Int =
+            if (pane.parent != -1) pane.parent else if (gameFrame.resizable) ResizableGameframe else FixedGameframe
+
     companion object {
         private val logger = LoggerFactory.getLogger(WindowSystem::class.java)!!
     }
-
 }

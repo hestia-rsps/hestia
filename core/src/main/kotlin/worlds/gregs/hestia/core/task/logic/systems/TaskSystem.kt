@@ -3,16 +3,18 @@ package worlds.gregs.hestia.core.task.logic.systems
 import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.event.common.Subscribe
+import worlds.gregs.hestia.core.action.model.Action
 import worlds.gregs.hestia.core.task.api.Task
 import worlds.gregs.hestia.core.task.api.TaskCancellation
 import worlds.gregs.hestia.core.task.api.TaskType
 import worlds.gregs.hestia.core.task.api.Tasks
 import worlds.gregs.hestia.core.task.model.InactiveTask
 import worlds.gregs.hestia.core.task.model.TaskContinuation
+import worlds.gregs.hestia.core.task.model.TaskDeque
+import worlds.gregs.hestia.core.task.model.await.Resendable
 import worlds.gregs.hestia.core.task.model.components.TaskQueue
 import worlds.gregs.hestia.core.task.model.events.ProcessTaskSuspension
 import worlds.gregs.hestia.core.task.model.events.StartTask
-import java.util.*
 import kotlin.coroutines.*
 
 class TaskSystem : Tasks() {
@@ -31,7 +33,7 @@ class TaskSystem : Tasks() {
             processTask(entityId, task, cont, Unit)
             //Queue
             if(!task.isCancelled && !task.isCompleted) {
-                val queue = taskQueue.active.getOrPut(priority) { LinkedList() }
+                val queue = taskQueue.active.getOrPut(priority) { TaskDeque() }
                 queue.push(task)
             }
         }
@@ -41,6 +43,7 @@ class TaskSystem : Tasks() {
         val component = taskQueueMapper.get(entityId) ?: return null
         val queue = purge(component.active) ?: return null
         val peek = queue.peek()
+        resend(queue, peek?.suspension)
         return peek?.suspension
     }
 
@@ -49,6 +52,7 @@ class TaskSystem : Tasks() {
         val queue = purge(taskQueue.active) ?: return false
         val task = queue.peek()
         val suspension = task?.suspension
+        resend(queue, suspension)
         return if (suspension != null) {
             processTask(entityId, task, type.continuation, result)
             true
@@ -57,7 +61,23 @@ class TaskSystem : Tasks() {
         }
     }
 
-    internal fun purge(map: MutableMap<Int, Deque<Task>>?): Deque<Task>? {
+    /**
+     * If [deque] was recently polled then resend the most up to date [suspension] if it's an [Action]
+     */
+    internal fun resend(deque: TaskDeque, suspension: TaskType<*>?) {
+        if(deque.needsUpdate) {
+            deque.needsUpdate = false
+            if(suspension is Resendable) {
+                (suspension as? Action)?.perform(suspension)
+            }
+        }
+    }
+
+    /**
+     *  Returns the [TaskDeque] of the top most active task
+     *  Removes empty [TaskDeque] and completed or cancelled [Task]'s in the process
+     */
+    internal fun purge(map: MutableMap<Int, TaskDeque>?): TaskDeque? {
         val iterator = map?.iterator() ?: return null
         while(iterator.hasNext()) {
             val queue = iterator.next().value

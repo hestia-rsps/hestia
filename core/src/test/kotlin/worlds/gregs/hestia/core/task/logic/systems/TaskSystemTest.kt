@@ -15,6 +15,7 @@ import worlds.gregs.hestia.core.task.api.Task
 import worlds.gregs.hestia.core.task.api.TaskCancellation
 import worlds.gregs.hestia.core.task.api.TaskType
 import worlds.gregs.hestia.core.task.model.InactiveTask
+import worlds.gregs.hestia.core.task.model.TaskDeque
 import worlds.gregs.hestia.core.task.model.components.TaskQueue
 import worlds.gregs.hestia.core.task.model.events.ProcessTaskSuspension
 import java.util.*
@@ -50,8 +51,8 @@ internal class TaskSystemTest : MockkGame() {
     fun `Process activates all suspended tasks`() {
         //Given
         val queue = mockk<SuspendableQueue>(relaxed = true)
-        val active = spyk(TreeMap<Int, Deque<Task>>(Collections.reverseOrder()))
-        val deque = spyk(LinkedList<Task>())
+        val active = spyk(TreeMap<Int, TaskDeque>(Collections.reverseOrder()))
+        val deque = spyk(TaskDeque())
         active[0] = deque
         every { component.active } returns active
         val inactive = spyk(LinkedList<InactiveTask>())
@@ -74,8 +75,8 @@ internal class TaskSystemTest : MockkGame() {
     @Test
     fun `Suspension returns first in queue`() {
         //Given
-        val deque = spyk(LinkedList<Task>())
-        val active = spyk(TreeMap<Int, Deque<Task>>(Collections.reverseOrder()))
+        val deque = spyk(TaskDeque())
+        val active = spyk(TreeMap<Int, TaskDeque>(Collections.reverseOrder()))
         active[0] = deque
         every { system.purge(any()) } returns deque
         every { component.active } returns active
@@ -94,8 +95,8 @@ internal class TaskSystemTest : MockkGame() {
     @Test
     fun `Suspension can return null`() {
         //Given
-        val deque = spyk(LinkedList<Task>())
-        val active = spyk(TreeMap<Int, Deque<Task>>(Collections.reverseOrder()))
+        val deque = spyk(TaskDeque())
+        val active = spyk(TreeMap<Int, TaskDeque>(Collections.reverseOrder()))
         active[0] = deque
         every { system.purge(any()) } returns deque
         every { component.active } returns active
@@ -160,9 +161,9 @@ internal class TaskSystemTest : MockkGame() {
     @Test
     fun `Cancel resumes with exception`() {
         //Given
-        val deque = spyk(LinkedList<Task>())
+        val deque = spyk(TaskDeque())
         deque.push(task)
-        val active = spyk(TreeMap<Int, Deque<Task>>(Collections.reverseOrder()))
+        val active = spyk(TreeMap<Int, TaskDeque>(Collections.reverseOrder()))
         active[0] = deque
         every { component.active } returns active
         val cancellation = TaskCancellation.Cancellation("Unit test")
@@ -178,9 +179,9 @@ internal class TaskSystemTest : MockkGame() {
     @Test
     fun `Cancel ignores wrong entity id`() {
         //Given
-        val deque = spyk(LinkedList<Task>())
+        val deque = spyk(TaskDeque())
         deque.push(task)
-        val active = spyk(TreeMap<Int, Deque<Task>>(Collections.reverseOrder()))
+        val active = spyk(TreeMap<Int, TaskDeque>(Collections.reverseOrder()))
         active[0] = deque
         every { component.active } returns active
         val cancellation = TaskCancellation.Cancellation("Unit test")
@@ -204,10 +205,10 @@ internal class TaskSystemTest : MockkGame() {
     @Test
     fun `Cancel all resumes with exception`() {
         //Given
-        val deque = spyk(LinkedList<Task>())
+        val deque = spyk(TaskDeque())
         deque.push(mockk(relaxed = true))
         deque.push(task)
-        val active = spyk(TreeMap<Int, Deque<Task>>(Collections.reverseOrder()))
+        val active = spyk(TreeMap<Int, TaskDeque>(Collections.reverseOrder()))
         active[0] = deque
         every { component.active } returns active
         val cancellation = TaskCancellation.Cancellation("Unit test")
@@ -223,9 +224,9 @@ internal class TaskSystemTest : MockkGame() {
     @Test
     fun `Cancel all ignores wrong entity id`() {
         //Given
-        val deque = spyk(LinkedList<Task>())
+        val deque = spyk(TaskDeque())
         deque.push(task)
-        val active = spyk(TreeMap<Int, Deque<Task>>(Collections.reverseOrder()))
+        val active = spyk(TreeMap<Int, TaskDeque>(Collections.reverseOrder()))
         active[0] = deque
         every { component.active } returns active
         val cancellation = TaskCancellation.Cancellation("Unit test")
@@ -249,9 +250,9 @@ internal class TaskSystemTest : MockkGame() {
     @Test
     fun `Cancel all ignores higher priority`() {
         //Given
-        val deque = spyk(LinkedList<Task>())
+        val deque = spyk(TaskDeque())
         deque.push(task)
-        val active = spyk(TreeMap<Int, Deque<Task>>(Collections.reverseOrder()))
+        val active = spyk(TreeMap<Int, TaskDeque>(Collections.reverseOrder()))
         active[1] = deque
         every { component.active } returns active
         val cancellation = TaskCancellation.Cancellation("Unit test")
@@ -264,9 +265,9 @@ internal class TaskSystemTest : MockkGame() {
     @Test
     fun `Cancel all removes equal priority`() {
         //Given
-        val deque = spyk(LinkedList<Task>())
+        val deque = spyk(TaskDeque())
         deque.push(task)
-        val active = spyk(TreeMap<Int, Deque<Task>>(Collections.reverseOrder()))
+        val active = spyk(TreeMap<Int, TaskDeque>(Collections.reverseOrder()))
         active[0] = deque
         every { component.active } returns active
         val cancellation = TaskCancellation.Cancellation("Unit test")
@@ -305,11 +306,11 @@ internal class TaskSystemTest : MockkGame() {
     @Test
     fun `Purge returns first queue`() {
         //Given
-        val active = spyk(TreeMap<Int, Deque<Task>>(Collections.reverseOrder()))
-        val deque = spyk(LinkedList<Task>())
+        val active = spyk(TreeMap<Int, TaskDeque>(Collections.reverseOrder()))
+        val deque = spyk(TaskDeque())
         deque.push(task)
         active[1] = deque
-        val deque2 = spyk(LinkedList<Task>())
+        val deque2 = spyk(TaskDeque())
         val task2 = mockk<Task>(relaxed = true)
         deque2.push(task2)
         active[0] = deque2
@@ -324,15 +325,15 @@ internal class TaskSystemTest : MockkGame() {
     @Test
     fun `Purge removes only top completed tasks`() {
         //Given
-        val active = spyk(TreeMap<Int, Deque<Task>>(Collections.reverseOrder()))
-        val deque2 = spyk(LinkedList<Task>())
+        val active = spyk(TreeMap<Int, TaskDeque>(Collections.reverseOrder()))
+        val deque2 = spyk(TaskDeque())
         val task2 = mockk<Task>(relaxed = true)
         deque2.push(task2)
         active[2] = deque2
-        val deque = spyk(LinkedList<Task>())
+        val deque = spyk(TaskDeque())
         deque.push(task)
         active[1] = deque
-        val deque3 = spyk(LinkedList<Task>())
+        val deque3 = spyk(TaskDeque())
         val task3 = mockk<Task>(relaxed = true)
         deque3.push(task3)
         active[0] = deque3

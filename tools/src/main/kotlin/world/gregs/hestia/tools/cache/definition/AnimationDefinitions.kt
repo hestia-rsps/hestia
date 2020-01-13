@@ -13,8 +13,9 @@ class AnimationDefinitions {
             Settings.load()
             val store = CacheStore()
             val reader = AnimationDefinitionReader(store)
-            val animation = reader.get(75)
+            val animation = reader.get(11788)
             println(ToStringBuilder.reflectionToString(animation, ToStringStyle.MULTI_LINE_STYLE))
+            println("Time: ${animation.getTime()} Cycles: ${animation.getClientCycles()}")
         }
     }
 }
