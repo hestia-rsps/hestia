@@ -73,6 +73,7 @@ class GameServer(worldDetails: Details) : Engine(), WorldChangeListener {
             //Connection
             add(WorldConnection(worldDetails))
         }
+        log.info("Listening for social server...")
         //Checks for social server connection every 10 seconds
         AutoConnection(pipeline, NetworkConstants.LOCALHOST, Settings.getInt("socialServerPort")!!)
     }
