@@ -9,8 +9,8 @@ import worlds.gregs.hestia.core.display.window.model.events.WindowOpened
 import worlds.gregs.hestia.core.display.window.model.events.WindowRefresh
 import worlds.gregs.hestia.core.display.window.model.events.WindowSwitch
 import worlds.gregs.hestia.core.entity.item.container.api.ItemResult
-import worlds.gregs.hestia.network.client.encoders.messages.WidgetItems
-import worlds.gregs.hestia.network.client.encoders.messages.WidgetSettings
+import worlds.gregs.hestia.network.client.encoders.messages.InterfaceItems
+import worlds.gregs.hestia.network.client.encoders.messages.InterfaceSettings
 
 val logger = LoggerFactory.getLogger(Inventory_script::class.java)!!
 
@@ -18,10 +18,10 @@ private typealias Inv = worlds.gregs.hestia.core.entity.item.container.model.Inv
 on<WindowOpened> {
     where { target == Inventory }
     then {
-        entity send WidgetSettings(Inventory, 0, 0, 27, 4554126)//Item slots
-        entity send WidgetSettings(Inventory, 0, 28, 55, 2097152)//Draggable slots
+        entity send InterfaceSettings(Inventory, 0, 0, 27, 4554126)//Item slots
+        entity send InterfaceSettings(Inventory, 0, 28, 55, 2097152)//Draggable slots
         val items = entity.get(Inv::class).items.map { if(it == null) Pair(-1, 0) else Pair(it.type, it.amount)}
-        entity send WidgetItems(93, items)
+        entity send InterfaceItems(93, items)
     }
 }
 
@@ -29,7 +29,7 @@ on<WindowRefresh> {
     where { target == Inventory }
     then {
         val items = entity.get(Inv::class).items.map { if(it == null) Pair(-1, 0) else Pair(it.type, it.amount)}
-        entity send WidgetItems(93, items)
+        entity send InterfaceItems(93, items)
     }
 }
 

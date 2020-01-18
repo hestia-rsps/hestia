@@ -6,7 +6,7 @@ import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
 import worlds.gregs.hestia.core.display.window.model.events.WindowOpened
 import worlds.gregs.hestia.core.display.window.model.events.variable.SendVariable
 import worlds.gregs.hestia.core.display.window.model.variable.StringMapVariable
-import worlds.gregs.hestia.network.client.encoders.messages.WidgetSettings
+import worlds.gregs.hestia.network.client.encoders.messages.InterfaceSettings
 
 
 StringMapVariable(1584, Variable.Type.VARP, true, mapOf(
@@ -20,7 +20,7 @@ on<WindowOpened> {
         val quickPrayers = false
         entity perform SendVariable("prayer_list")
         entity perform SendVariable("prayer_points")
-        entity send WidgetSettings(PrayerList, if (quickPrayers) 42 else 8, 0, 29, 2)
+        entity send InterfaceSettings(PrayerList, if (quickPrayers) 42 else 8, 0, 29, 2)
     }
 }
 

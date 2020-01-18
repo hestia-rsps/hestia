@@ -85,8 +85,8 @@ class DialogueSystem : PassiveSystem() {
         windows.openWindow(entityId, window)
 
         //Send model
-        es.send(entityId, WidgetHeadPlayer(window, if (action.large) 1 else 2))
-        es.send(entityId, WidgetAnimation(window, if (action.large) 1 else 2, action.animation))
+        es.send(entityId, InterfaceHeadPlayer(window, if (action.large) 1 else 2))
+        es.send(entityId, InterfaceAnimation(window, if (action.large) 1 else 2, action.animation))
         //Send title
         es.send(entityId, InterfaceComponentText(window, 3, displayNameMapper.get(entityId)?.name ?: ""))
         //Send lines
@@ -110,8 +110,8 @@ class DialogueSystem : PassiveSystem() {
         windows.closeWindows(entityId, WindowPane.DIALOGUE_BOX)
         windows.openWindow(entityId, window)
         //Send model
-        es.send(entityId, WidgetHeadMob(window, if (action.large) 1 else 2, action.mob))
-        es.send(entityId, WidgetAnimation(window, if (action.large) 1 else 2, action.animation))
+        es.send(entityId, InterfaceHeadMob(window, if (action.large) 1 else 2, action.mob))
+        es.send(entityId, InterfaceAnimation(window, if (action.large) 1 else 2, action.animation))
         //Send title
         es.send(entityId, InterfaceComponentText(window, 3, mobDefinitions.get(action.mob).name))
         //Send lines
@@ -181,8 +181,8 @@ class DialogueSystem : PassiveSystem() {
         if (action.title != null) {
             //Update sword locations
             val large = action.title.length > 30//Approximation
-            es.send(entityId, WidgetVisibility(window, if (multilineTitle) 3 + optionCount else 1 + optionCount + 3, large))
-            es.send(entityId, WidgetVisibility(window, if (multilineTitle) 4 + optionCount else 9 + optionCount.rem(2), !large))
+            es.send(entityId, InterfaceVisibility(window, if (multilineTitle) 3 + optionCount else 1 + optionCount + 3, large))
+            es.send(entityId, InterfaceVisibility(window, if (multilineTitle) 4 + optionCount else 9 + optionCount.rem(2), !large))
             //Send title
             es.send(entityId, InterfaceComponentText(window, startIndex, action.title))
         }
@@ -217,11 +217,11 @@ class DialogueSystem : PassiveSystem() {
         //Open
         windows.openWindow(entityId, window)
         //Send left model
-        es.send(entityId, WidgetHeadMob(window, 1, action.mob))
-        es.send(entityId, WidgetAnimation(window, 1, action.animation))
+        es.send(entityId, InterfaceHeadMob(window, 1, action.mob))
+        es.send(entityId, InterfaceAnimation(window, 1, action.animation))
         //Send right model
-        es.send(entityId, WidgetHeadPlayer(window, 2))
-        es.send(entityId, WidgetAnimation(window, 2, action.animation))
+        es.send(entityId, InterfaceHeadPlayer(window, 2))
+        es.send(entityId, InterfaceAnimation(window, 2, action.animation))
         //Send lines
         action.lines.forEachIndexed { index, line ->
             es.send(entityId, InterfaceComponentText(window, 3 + index, line))

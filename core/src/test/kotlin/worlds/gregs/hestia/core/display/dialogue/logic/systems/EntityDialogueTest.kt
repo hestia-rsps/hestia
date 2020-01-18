@@ -17,10 +17,10 @@ import worlds.gregs.hestia.core.display.window.api.Windows
 import worlds.gregs.hestia.core.task.api.TaskType
 import worlds.gregs.hestia.core.task.api.Tasks
 import worlds.gregs.hestia.core.task.model.events.ProcessTaskSuspension
-import worlds.gregs.hestia.network.client.encoders.messages.WidgetAnimation
-import worlds.gregs.hestia.network.client.encoders.messages.WidgetHeadMob
-import worlds.gregs.hestia.network.client.encoders.messages.WidgetHeadPlayer
-import worlds.gregs.hestia.network.client.encoders.messages.WidgetItem
+import worlds.gregs.hestia.network.client.encoders.messages.InterfaceAnimation
+import worlds.gregs.hestia.network.client.encoders.messages.InterfaceHeadMob
+import worlds.gregs.hestia.network.client.encoders.messages.InterfaceHeadPlayer
+import worlds.gregs.hestia.network.client.encoders.messages.InterfaceItem
 import worlds.gregs.hestia.service.cache.definition.definitions.ItemDefinition
 import worlds.gregs.hestia.service.cache.definition.definitions.MobDefinition
 import worlds.gregs.hestia.service.cache.definition.readers.ItemDefinitionReader
@@ -96,7 +96,7 @@ internal class EntityDialogueTest : MockkGame() {
         verifyOrder {
             system.getTitle(entityId, suspension)
             system.send(entityId,241, 3, "Title", listOf("Lines"))
-            es.send(entityId, WidgetItem(241, 2, item, -1))
+            es.send(entityId, InterfaceItem(241, 2, item, -1))
         }
     }
 
@@ -116,8 +116,8 @@ internal class EntityDialogueTest : MockkGame() {
         verifyOrder {
             system.getTitle(entityId, suspension)
             system.send(entityId,242, 3, "Title", listOf("Line one", "Line two"))
-            es.send(entityId, WidgetHeadMob(242, 2, mob))
-            es.send(entityId, WidgetAnimation(242, 2, animation))
+            es.send(entityId, InterfaceHeadMob(242, 2, mob))
+            es.send(entityId, InterfaceAnimation(242, 2, animation))
         }
     }
 
@@ -136,8 +136,8 @@ internal class EntityDialogueTest : MockkGame() {
         verifyOrder {
             system.getTitle(entityId, suspension)
             system.send(entityId,243, 3, "Title", listOf("Line one", "Line two", "Line three"))
-            es.send(entityId, WidgetHeadPlayer(243, 2))
-            es.send(entityId, WidgetAnimation(243, 2, animation))
+            es.send(entityId, InterfaceHeadPlayer(243, 2))
+            es.send(entityId, InterfaceAnimation(243, 2, animation))
         }
     }
 

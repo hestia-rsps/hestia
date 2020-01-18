@@ -28,7 +28,7 @@ import worlds.gregs.hestia.core.world.movement.model.MovementType
 import worlds.gregs.hestia.core.world.movement.model.components.types.Movement
 import worlds.gregs.hestia.core.world.movement.model.events.Moved
 import worlds.gregs.hestia.game.Engine
-import worlds.gregs.hestia.network.client.encoders.messages.WidgetVisibility
+import worlds.gregs.hestia.network.client.encoders.messages.InterfaceVisibility
 import worlds.gregs.hestia.script.ScriptTester
 import java.util.concurrent.TimeUnit
 
@@ -150,7 +150,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
         send(action)
         //Then
         with(action) {
-            verify { entityId.send(WidgetVisibility(Windows.AreaStatusIcon, 2, false)) }
+            verify { entityId.send(InterfaceVisibility(Windows.AreaStatusIcon, 2, false)) }
         }
         with(task) {
             coVerify { await(Ticks(2)) }
@@ -184,7 +184,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
             verify {
                 entityId.perform(any<Chat>())
                 entityId.perform(OpenWindow(Windows.AssistXP))
-                entityId.send(WidgetVisibility(Windows.AreaStatusIcon, 2, false))
+                entityId.send(InterfaceVisibility(Windows.AreaStatusIcon, 2, false))
                 entityId perform SendVariable("total_xp_earned")
                 entityId.perform(Animation(7299))
                 entityId.perform(Graphic(1247))

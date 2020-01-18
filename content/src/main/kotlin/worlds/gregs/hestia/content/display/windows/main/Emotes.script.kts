@@ -6,7 +6,7 @@ import worlds.gregs.hestia.core.display.window.model.events.variable.SendVariabl
 import worlds.gregs.hestia.core.display.window.model.events.WindowOpened
 import worlds.gregs.hestia.core.display.window.model.variable.BitwiseVariable
 import worlds.gregs.hestia.core.display.window.model.variable.StringMapVariable
-import worlds.gregs.hestia.network.client.encoders.messages.WidgetSettings
+import worlds.gregs.hestia.network.client.encoders.messages.InterfaceSettings
 
 StringMapVariable(465, Variable.Type.VARP, true, mapOf(
         0 to "locked",
@@ -48,7 +48,7 @@ on<WindowOpened> {
     where { target == Emotes }
     then {
         for (widget in 11..14) {
-            entity send WidgetSettings(Emotes, widget, -1, 190, 2150)
+            entity send InterfaceSettings(Emotes, widget, -1, 190, 2150)
         }
 
         entity perform SendVariable("lost_tribe_emotes")

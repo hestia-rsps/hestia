@@ -13,10 +13,10 @@ import worlds.gregs.hestia.core.display.update.model.components.DisplayName
 import worlds.gregs.hestia.core.task.api.Task
 import worlds.gregs.hestia.core.task.api.TaskType
 import worlds.gregs.hestia.core.task.model.events.ProcessTaskSuspension
-import worlds.gregs.hestia.network.client.encoders.messages.WidgetAnimation
-import worlds.gregs.hestia.network.client.encoders.messages.WidgetHeadMob
-import worlds.gregs.hestia.network.client.encoders.messages.WidgetHeadPlayer
-import worlds.gregs.hestia.network.client.encoders.messages.WidgetItem
+import worlds.gregs.hestia.network.client.encoders.messages.InterfaceAnimation
+import worlds.gregs.hestia.network.client.encoders.messages.InterfaceHeadMob
+import worlds.gregs.hestia.network.client.encoders.messages.InterfaceHeadPlayer
+import worlds.gregs.hestia.network.client.encoders.messages.InterfaceItem
 import worlds.gregs.hestia.service.cache.definition.systems.ItemDefinitionSystem
 import worlds.gregs.hestia.service.cache.definition.systems.MobDefinitionSystem
 
@@ -41,14 +41,14 @@ class EntityDialogueSystem : DialogueBaseSystem() {
             val title = getTitle(entityId, dialogue)
             send(entityId, window, 3, title, dialogue.lines)
             when (dialogue) {
-                is ItemDialogue -> es.send(entityId, WidgetItem(window, 2, dialogue.item, -1))
+                is ItemDialogue -> es.send(entityId, InterfaceItem(window, 2, dialogue.item, -1))
                 is MobDialogue -> {
-                    es.send(entityId, WidgetHeadMob(window, 2, dialogue.mob))
-                    es.send(entityId, WidgetAnimation(window, 2, dialogue.animation))
+                    es.send(entityId, InterfaceHeadMob(window, 2, dialogue.mob))
+                    es.send(entityId, InterfaceAnimation(window, 2, dialogue.animation))
                 }
                 is PlayerDialogue -> {
-                    es.send(entityId, WidgetHeadPlayer(window, 2))
-                    es.send(entityId, WidgetAnimation(window, 2, dialogue.animation))
+                    es.send(entityId, InterfaceHeadPlayer(window, 2))
+                    es.send(entityId, InterfaceAnimation(window, 2, dialogue.animation))
                 }
             }
             event.isCancelled = true

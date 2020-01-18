@@ -14,8 +14,8 @@ import worlds.gregs.hestia.core.display.window.model.events.variable.SetVariable
 import worlds.gregs.hestia.core.display.window.model.variable.IntVariable
 import worlds.gregs.hestia.core.display.window.model.variable.StringMapVariable
 import worlds.gregs.hestia.core.display.window.model.variable.StringVariable
-import worlds.gregs.hestia.network.client.encoders.messages.WidgetSettings
-import worlds.gregs.hestia.network.client.encoders.messages.WidgetVisibility
+import worlds.gregs.hestia.network.client.encoders.messages.InterfaceSettings
+import worlds.gregs.hestia.network.client.encoders.messages.InterfaceVisibility
 import worlds.gregs.hestia.service.cache.definition.systems.ItemDefinitionSystem
 
 IntVariable(8094, Variable.Type.VARBIT, true, 1).register("skill_creation_maximum")
@@ -75,8 +75,8 @@ on<SkillCreation> {
         entity perform OpenWindow(SkillCreationAmount)
         //Unlock "all" button
         if (type != "Make sets" && type != "Make2" && type != "Make sets2") {
-            entity send WidgetSettings(SkillCreationAmount, 8, -1, 0, 2)
-            entity send WidgetVisibility(SkillCreation, 6, true)//TODO custom amount entering
+            entity send InterfaceSettings(SkillCreationAmount, 8, -1, 0, 2)
+            entity send InterfaceVisibility(SkillCreation, 6, true)//TODO custom amount entering
         }
         //Send description
         entity send InterfaceComponentText(SkillCreationAmount, 1, "Choose how many you wish to make, then<br>click on the chosen item to begin.")

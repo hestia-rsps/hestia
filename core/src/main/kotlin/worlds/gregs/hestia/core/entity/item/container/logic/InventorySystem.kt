@@ -8,7 +8,7 @@ import worlds.gregs.hestia.core.entity.item.container.api.ItemResult
 import worlds.gregs.hestia.core.entity.item.container.model.Inventory
 import worlds.gregs.hestia.core.entity.item.container.model.ItemContainer
 import worlds.gregs.hestia.core.entity.item.container.model.StackType
-import worlds.gregs.hestia.network.client.encoders.messages.WidgetItems
+import worlds.gregs.hestia.network.client.encoders.messages.InterfaceItems
 import worlds.gregs.hestia.service.cache.definition.systems.ItemDefinitionSystem
 
 class InventorySystem : ContainerSystem(Inventory::class) {
@@ -21,7 +21,7 @@ class InventorySystem : ContainerSystem(Inventory::class) {
     override fun update(entityId: Int) {
 //        tab.open(entityId)
         val container = inventoryMapper.get(entityId)
-        es.send(entityId, WidgetItems(93, container.items.map { if(it == null) Pair(-1, 0) else Pair(it.type, it.amount)}))
+        es.send(entityId, InterfaceItems(93, container.items.map { if(it == null) Pair(-1, 0) else Pair(it.type, it.amount)}))
     }
 
     override fun getContainer(entityId: Int): ItemContainer {

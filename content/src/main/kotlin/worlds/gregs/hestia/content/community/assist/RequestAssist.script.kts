@@ -42,7 +42,7 @@ import worlds.gregs.hestia.core.world.movement.model.components.types.Movement
 import worlds.gregs.hestia.core.world.movement.model.events.Follow
 import worlds.gregs.hestia.core.world.movement.model.events.Moved
 import worlds.gregs.hestia.game.Engine
-import worlds.gregs.hestia.network.client.encoders.messages.WidgetVisibility
+import worlds.gregs.hestia.network.client.encoders.messages.InterfaceVisibility
 import java.util.concurrent.TimeUnit
 
 val skills = listOf(Skill.RUNECRAFTING, Skill.CRAFTING, Skill.FLETCHING, Skill.CONSTRUCTION, Skill.FARMING, Skill.MAGIC, Skill.SMITHING, Skill.COOKING, Skill.HERBLORE)
@@ -105,7 +105,7 @@ on<RequestResponse> {
         val assistance = entity create Assistance::class
         assistance.helper = target
         assistance.point.set(target get Position::class)
-        entity send WidgetVisibility(AreaStatusIcon, 2, false)
+        entity send InterfaceVisibility(AreaStatusIcon, 2, false)
         await(Ticks(2))
         entity perform Animation(7299)
     }
@@ -123,7 +123,7 @@ on<AcceptedRequest> {
         entity perform OpenWindow(AssistXP)
         entity send InterfaceComponentText(AssistXP, 10, "The Assist System is available for you to use.")
         entity send InterfaceComponentText(AssistXP, 73, "Assist System XP Display - You are assisting ${target.get(DisplayName::class).name}")//TODO there's probably a packet or config for replacing `<name>`
-        entity send WidgetVisibility(AreaStatusIcon, 2, false)
+        entity send InterfaceVisibility(AreaStatusIcon, 2, false)
         entity perform SendVariable("total_xp_earned")
         entity perform Animation(7299)
         entity perform Graphic(1247)
@@ -249,7 +249,7 @@ fun EntityAction.cancel(entity: Int, target: Int) {
     entity perform CloseWindow(AssistXP)
     entity perform Chat("You have stopped assisting ${target.get(DisplayName::class).name}.", GameAssist)
     target perform Chat("${entity.get(DisplayName::class).name} has stopped assisting you.", GameAssist)//Unconfirmed
-    entity send WidgetVisibility(AreaStatusIcon, 2, true)
-    target send WidgetVisibility(AreaStatusIcon, 2, true)
+    entity send InterfaceVisibility(AreaStatusIcon, 2, true)
+    target send InterfaceVisibility(AreaStatusIcon, 2, true)
     target remove Assistance::class
 }

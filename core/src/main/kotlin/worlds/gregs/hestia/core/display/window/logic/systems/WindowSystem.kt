@@ -15,7 +15,7 @@ import worlds.gregs.hestia.core.display.window.model.actions.RefreshWindow
 import worlds.gregs.hestia.core.display.window.model.components.GameFrame
 import worlds.gregs.hestia.core.display.window.model.components.WindowRelationships
 import worlds.gregs.hestia.core.display.window.model.events.*
-import worlds.gregs.hestia.network.client.encoders.messages.WidgetClose
+import worlds.gregs.hestia.network.client.encoders.messages.InterfaceClose
 import worlds.gregs.hestia.network.client.encoders.messages.WindowOpen
 import worlds.gregs.hestia.network.client.encoders.messages.WindowPaneUpdate
 import worlds.gregs.hestia.service.cache.definition.systems.WindowDefinitionSystem
@@ -104,7 +104,7 @@ class WindowSystem : Windows() {
             val gameFrame = gameFrameMapper.get(entityId)
             val index = getIndex(window, gameFrame.resizable)
             relationships[parent]!!.remove(window)
-            es.send(entityId, WidgetClose(parent, index))
+            es.send(entityId, InterfaceClose(parent, index))
             es.perform(entityId, WindowClosed(window, silent))
         } else {
             //Window not open

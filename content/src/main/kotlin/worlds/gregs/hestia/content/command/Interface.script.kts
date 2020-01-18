@@ -4,7 +4,7 @@ import world.gregs.hestia.core.network.protocol.encoders.messages.InterfaceCompo
 import worlds.gregs.hestia.core.display.client.model.events.Command
 import worlds.gregs.hestia.core.display.window.api.Windows
 import worlds.gregs.hestia.core.display.window.model.WindowPane.*
-import worlds.gregs.hestia.network.client.encoders.messages.WidgetVisibility
+import worlds.gregs.hestia.network.client.encoders.messages.InterfaceVisibility
 
 lateinit var windows: Windows
 
@@ -28,7 +28,7 @@ on<Command> {
         val id = part[0].toInt()
         val component = part[1].toInt()
         val hide = part[2].toInt() == 1
-        entity send WidgetVisibility(id, component, hide)
+        entity send InterfaceVisibility(id, component, hide)
         isCancelled = true
     }
 }

@@ -9,7 +9,7 @@ import worlds.gregs.hestia.core.display.window.model.actions.OpenWindow
 import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
 import worlds.gregs.hestia.core.display.window.model.events.WindowOpened
 import worlds.gregs.hestia.core.display.window.model.events.WindowRefresh
-import worlds.gregs.hestia.network.client.encoders.messages.WidgetItems
+import worlds.gregs.hestia.network.client.encoders.messages.InterfaceItems
 
 on<WindowOpened> {
     where { target == WornEquipment }
@@ -26,7 +26,7 @@ on<WindowRefresh> {
 }
 
 fun EntityAction.sendItems() {
-    entity send WidgetItems(94, (0 until 15).map { Pair(it, 1) })
+    entity send InterfaceItems(94, (0 until 15).map { Pair(it, 1) })
 }
 
 on<WindowInteraction> {
