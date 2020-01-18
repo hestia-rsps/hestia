@@ -17,7 +17,7 @@ import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.IntegerEntr
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.IntegerEntryDialogueSystem
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.intEntry
 import worlds.gregs.hestia.core.display.dialogue.model.events.IntegerEntered
-import worlds.gregs.hestia.core.display.window.api.Windows
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces
 import worlds.gregs.hestia.core.task.api.TaskType
 import worlds.gregs.hestia.core.task.api.Tasks
 import worlds.gregs.hestia.core.task.model.TaskContinuation
@@ -38,10 +38,10 @@ internal class IntegerEntryDialogueTest : MockkGame() {
     private lateinit var tasks: Tasks
 
     @RelaxedMockK
-    private lateinit var windows: Windows
+    private lateinit var interfaces: Interfaces
 
     override fun config(config: WorldConfigurationBuilder) {
-        config.with(system, tasks, DialogueBoxSystem(), windows)
+        config.with(system, tasks, DialogueBoxSystem(), interfaces)
     }
 
     @Test

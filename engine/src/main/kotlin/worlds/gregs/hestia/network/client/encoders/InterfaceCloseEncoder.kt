@@ -4,11 +4,11 @@ import world.gregs.hestia.core.network.codec.message.MessageEncoder
 import world.gregs.hestia.core.network.codec.packet.Endian
 import world.gregs.hestia.core.network.codec.packet.PacketBuilder
 import world.gregs.hestia.core.network.protocol.ClientOpcodes.INTERFACE_CLOSE
-import worlds.gregs.hestia.network.client.encoders.messages.InterfaceClose
+import worlds.gregs.hestia.network.client.encoders.messages.InterfaceCloseMessage
 
-class InterfaceCloseEncoder : MessageEncoder<InterfaceClose>() {
+class InterfaceCloseEncoder : MessageEncoder<InterfaceCloseMessage>() {
 
-    override fun encode(builder: PacketBuilder, message: InterfaceClose) {
+    override fun encode(builder: PacketBuilder, message: InterfaceCloseMessage) {
         val (id, component) = message
         builder.apply {
             writeOpcode(INTERFACE_CLOSE)

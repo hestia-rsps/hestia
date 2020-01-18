@@ -10,6 +10,6 @@ import world.gregs.hestia.core.network.codec.message.Message
  * @param hash The interface id & component spell id hash
  * @param slot The interface item slot
  * @param run Force run
- * @param item The item type of the widget item
+ * @param item The item type of the interface item
  */
 data class InterfaceOnFloorItem(val x: Int, val y: Int, val floorType: Int, val hash: Int, val slot: Int, val run: Boolean, val item: Int) : Message

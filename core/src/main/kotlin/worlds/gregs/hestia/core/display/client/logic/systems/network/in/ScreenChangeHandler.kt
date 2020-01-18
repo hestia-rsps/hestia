@@ -3,8 +3,8 @@ package worlds.gregs.hestia.core.display.client.logic.systems.network.`in`
 import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
 import worlds.gregs.hestia.GameServer
-import worlds.gregs.hestia.core.display.window.api.Windows
-import worlds.gregs.hestia.core.display.window.model.components.GameFrame
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces
+import worlds.gregs.hestia.core.display.interfaces.model.components.GameFrame
 import worlds.gregs.hestia.game.entity.MessageHandlerSystem
 import worlds.gregs.hestia.network.client.decoders.messages.ScreenChange
 
@@ -12,7 +12,7 @@ import worlds.gregs.hestia.network.client.decoders.messages.ScreenChange
 class ScreenChangeHandler : MessageHandlerSystem<ScreenChange>() {
 
     private lateinit var gameFrameMapper: ComponentMapper<GameFrame>
-    private lateinit var windows: Windows
+    private lateinit var interfaces: Interfaces
 
     override fun initialize() {
         super.initialize()
@@ -26,11 +26,11 @@ class ScreenChangeHandler : MessageHandlerSystem<ScreenChange>() {
             gameFrame.width = width
             gameFrame.height = height
 
-            if(gameFrame.displayMode == displayMode || !windows.hasWindow(entityId, Windows.GraphicsOptions)) {
+            if(gameFrame.displayMode == displayMode || !interfaces.hasInterface(entityId, Interfaces.GraphicsOptions)) {
                 return
             }
             gameFrame.displayMode = displayMode
-            windows.updateGameframe(entityId)
+            interfaces.updateGameframe(entityId)
         }
     }
 

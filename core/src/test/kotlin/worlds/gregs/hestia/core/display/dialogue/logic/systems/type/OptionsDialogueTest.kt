@@ -19,7 +19,7 @@ import worlds.gregs.hestia.core.display.dialogue.logic.systems.DialogueBoxSystem
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.OptionsDialogue
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.OptionsDialogueSystem
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.option
-import worlds.gregs.hestia.core.display.window.api.Windows
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces
 import worlds.gregs.hestia.core.task.api.Task
 import worlds.gregs.hestia.core.task.api.TaskType
 import worlds.gregs.hestia.core.task.api.Tasks
@@ -37,7 +37,7 @@ internal class OptionsDialogueTest : MockkGame() {
     private lateinit var task: Task
     private lateinit var continuation: CancellableContinuation<Int>
     @RelaxedMockK
-    private lateinit var windows: Windows
+    private lateinit var interfaces: Interfaces
 
     @BeforeEach
     override fun setup() {
@@ -49,7 +49,7 @@ internal class OptionsDialogueTest : MockkGame() {
     }
 
     override fun config(config: WorldConfigurationBuilder) {
-        config.with(system, mockk<Tasks>(relaxed = true), DialogueBoxSystem(), windows)
+        config.with(system, mockk<Tasks>(relaxed = true), DialogueBoxSystem(), interfaces)
     }
 
     @Test

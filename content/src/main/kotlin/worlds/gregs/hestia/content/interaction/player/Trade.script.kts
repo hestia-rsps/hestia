@@ -3,16 +3,16 @@ package worlds.gregs.hestia.content.interaction.player
 import worlds.gregs.hestia.core.action.model.EntityAction
 import worlds.gregs.hestia.core.display.client.model.events.Chat
 import worlds.gregs.hestia.core.display.dialogue.model.ChatType.GameTrade
-import worlds.gregs.hestia.core.display.window.api.Windows.Companion.TradeMain
-import worlds.gregs.hestia.core.display.window.logic.systems.RequestSystem
-import worlds.gregs.hestia.core.display.window.model.PlayerOptions.TRADE
-import worlds.gregs.hestia.core.display.window.model.Request
-import worlds.gregs.hestia.core.display.window.model.WindowPane
-import worlds.gregs.hestia.core.display.window.model.actions.CloseWindowPane
-import worlds.gregs.hestia.core.display.window.model.actions.OpenWindow
-import worlds.gregs.hestia.core.display.window.model.events.AcceptedRequest
-import worlds.gregs.hestia.core.display.window.model.events.PlayerOption
-import worlds.gregs.hestia.core.display.window.model.events.RequestResponse
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.TradeMain
+import worlds.gregs.hestia.core.display.request.logic.RequestSystem
+import worlds.gregs.hestia.core.display.interfaces.model.PlayerOptions.TRADE
+import worlds.gregs.hestia.core.display.request.model.Request
+import worlds.gregs.hestia.core.display.interfaces.model.Window
+import worlds.gregs.hestia.core.display.interfaces.model.events.request.CloseWindow
+import worlds.gregs.hestia.core.display.interfaces.model.events.request.OpenInterface
+import worlds.gregs.hestia.core.display.request.model.events.AcceptedRequest
+import worlds.gregs.hestia.core.display.interfaces.model.events.PlayerOption
+import worlds.gregs.hestia.core.display.request.model.events.RequestResponse
 import worlds.gregs.hestia.core.task.model.await.WithinRange
 import worlds.gregs.hestia.core.world.movement.model.events.Follow
 
@@ -52,10 +52,10 @@ on<AcceptedRequest> {
 
 fun EntityAction.trade(task: Task, target: Int) {
     task.onCancel {
-        entity perform CloseWindowPane(WindowPane.MAIN_SCREEN)
-        target perform CloseWindowPane(WindowPane.MAIN_SCREEN)
+        entity perform CloseWindow(Window.MAIN_SCREEN)
+        target perform CloseWindow(Window.MAIN_SCREEN)
         entity perform Chat("Trade declined.", GameTrade)
         target perform Chat("Other player declined trade.", GameTrade)
     }
-    entity perform OpenWindow(TradeMain)
+    entity perform OpenInterface(TradeMain)
 }

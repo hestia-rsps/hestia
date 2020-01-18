@@ -7,10 +7,10 @@ import worlds.gregs.hestia.core.display.client.model.components.Viewport
 import worlds.gregs.hestia.core.display.update.model.components.AppearanceData
 import worlds.gregs.hestia.core.display.update.model.components.DisplayName
 import worlds.gregs.hestia.core.display.update.model.components.Renderable
-import worlds.gregs.hestia.core.display.window.model.components.ContextMenu
-import worlds.gregs.hestia.core.display.window.model.components.RequestList
-import worlds.gregs.hestia.core.display.window.model.components.VariableStore
-import worlds.gregs.hestia.core.display.window.model.components.WindowRelationships
+import worlds.gregs.hestia.core.display.request.model.components.ContextMenu
+import worlds.gregs.hestia.core.display.request.model.components.RequestList
+import worlds.gregs.hestia.core.display.variable.model.VariableStore
+import worlds.gregs.hestia.core.display.interfaces.model.components.WindowRelationships
 import worlds.gregs.hestia.core.entity.entity.api.ArchetypeFactory
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.item.container.model.Inventory

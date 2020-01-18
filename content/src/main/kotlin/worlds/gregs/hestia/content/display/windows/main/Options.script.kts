@@ -1,17 +1,17 @@
 package worlds.gregs.hestia.content.display.windows.main
 
-import worlds.gregs.hestia.core.display.window.api.Windows.Companion.GraphicsOptions
-import worlds.gregs.hestia.core.display.window.api.Windows.Companion.Options
-import worlds.gregs.hestia.core.display.window.api.Windows.Companion.SoundOptions
-import worlds.gregs.hestia.core.display.window.model.actions.OpenWindow
-import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.GraphicsOptions
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.Options
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.SoundOptions
+import worlds.gregs.hestia.core.display.interfaces.model.events.request.OpenInterface
+import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceInteraction
 
-on<WindowInteraction> {
-    where { target == Options }
+on<InterfaceInteraction> {
+    where { id == Options }
     then {
-        when (widget) {
-            14 -> entity perform OpenWindow(GraphicsOptions)
-            16 -> entity perform OpenWindow(SoundOptions)
+        when (component) {
+            14 -> entity perform OpenInterface(GraphicsOptions)
+            16 -> entity perform OpenInterface(SoundOptions)
             6 -> {//Mouse buttons
             }
             3 -> {//Profanity filter

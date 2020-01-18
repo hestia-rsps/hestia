@@ -1,11 +1,11 @@
 package worlds.gregs.hestia.content.activity.quest
 
-import worlds.gregs.hestia.core.display.window.api.Variable
-import worlds.gregs.hestia.core.display.window.api.Windows.Companion.QuestJournals
-import worlds.gregs.hestia.core.display.window.model.events.variable.SendVariable
-import worlds.gregs.hestia.core.display.window.model.events.WindowOpened
-import worlds.gregs.hestia.core.display.window.model.variable.IntVariable
-import worlds.gregs.hestia.core.display.window.model.variable.StringMapVariable
+import worlds.gregs.hestia.core.display.variable.api.Variable
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.QuestJournals
+import worlds.gregs.hestia.core.display.interfaces.model.events.variable.SendVariable
+import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceOpened
+import worlds.gregs.hestia.core.display.variable.model.variable.IntVariable
+import worlds.gregs.hestia.core.display.variable.model.variable.StringMapVariable
 
 IntVariable(101, Variable.Type.VARP, true, 0).register("quest_points")
 
@@ -15,8 +15,8 @@ StringMapVariable(281, Variable.Type.VARP, true, defaultValue = "complete", valu
         1000 to "complete"
 )).register("unstable_foundations")
 
-on<WindowOpened> {
-    where { target == QuestJournals }
+on<InterfaceOpened> {
+    where { id == QuestJournals }
     then {
         entity perform SendVariable("quest_points")
         entity perform SendVariable("unstable_foundations")//Unlocks filter

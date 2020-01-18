@@ -19,8 +19,8 @@ class DialogueContinueHandler : MessageHandlerSystem<DialogueContinue>() {
     private lateinit var es: EventSystem
 
     override fun handle(entityId: Int, message: DialogueContinue) {
-        val (hash, widget) = message
-        val window = hash shr 16
+        val (hash, component) = message
+        val id = hash shr 16
         var option = hash and 0xFF
 
         //Exception for two-options pressing '1' key
@@ -28,7 +28,7 @@ class DialogueContinueHandler : MessageHandlerSystem<DialogueContinue>() {
             option -= 100
         }
 
-        es.perform(entityId, ContinueDialogue(window, option, widget))
+        es.perform(entityId, ContinueDialogue(id, option, component))
     }
 
 }

@@ -34,9 +34,9 @@ class OptionsDialogueSystem : DialogueBaseSystem() {
                 4 -> FOUR_OPTIONS_ID
                 else -> FIVE_OPTIONS_ID
             }
-            val widgetStart = if (dialogue.lines.size == 3) 1 else 0
+            val componentStart = if (dialogue.lines.size == 3) 1 else 0
             val title = dialogue.title ?: "Select an Option"
-            send(entityId, window, widgetStart, title, dialogue.lines)
+            send(entityId, window, componentStart, title, dialogue.lines)
             event.isCancelled = true
         }
     }

@@ -9,7 +9,11 @@ import worlds.gregs.hestia.core.display.update.model.components.AppearanceData
 import worlds.gregs.hestia.core.display.update.model.components.DisplayName
 import worlds.gregs.hestia.core.display.update.model.components.Renderable
 import worlds.gregs.hestia.core.display.update.model.components.direction.Facing
-import worlds.gregs.hestia.core.display.window.model.components.*
+import worlds.gregs.hestia.core.display.interfaces.model.components.*
+import worlds.gregs.hestia.core.display.request.model.components.Assisting
+import worlds.gregs.hestia.core.display.request.model.components.ContextMenu
+import worlds.gregs.hestia.core.display.request.model.components.RequestList
+import worlds.gregs.hestia.core.display.variable.model.VariableStore
 import worlds.gregs.hestia.core.entity.entity.api.ArchetypeFactory
 import worlds.gregs.hestia.core.entity.entity.model.components.Blackboard
 import worlds.gregs.hestia.core.entity.entity.model.components.Position

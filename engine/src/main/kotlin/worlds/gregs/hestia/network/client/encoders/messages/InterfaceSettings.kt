@@ -12,7 +12,7 @@ import world.gregs.hestia.core.network.codec.message.Message
  */
 data class InterfaceSettings(val id: Int, val component: Int, val fromSlot: Int, val toSlot: Int, val settings: Int) : Message {
 
-    constructor(id: Int, widget: Int, fromSlot: Int, toSlot: Int, vararg options: Int) : this(id, widget, fromSlot, toSlot, settings(*options))
+    constructor(id: Int, component: Int, fromSlot: Int, toSlot: Int, vararg options: Int) : this(id, component, fromSlot, toSlot, settings(*options))
 
     companion object {
         /**

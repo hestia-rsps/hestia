@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory
 import worlds.gregs.hestia.GameServer
 import worlds.gregs.hestia.core.action.model.perform
 import worlds.gregs.hestia.core.display.client.model.components.Viewport
-import worlds.gregs.hestia.core.display.window.api.Windows
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces
 import worlds.gregs.hestia.core.entity.item.container.model.Inventory
 import worlds.gregs.hestia.core.entity.item.floor.model.events.ItemOnPlayer
 import worlds.gregs.hestia.game.entity.MessageHandlerSystem
@@ -19,7 +19,7 @@ class InterfaceOnPlayerHandler : MessageHandlerSystem<InterfaceOnPlayer>() {
     private lateinit var inventoryMapper: ComponentMapper<Inventory>
     private val logger = LoggerFactory.getLogger(InterfaceOnPlayerHandler::class.java)!!
     private lateinit var viewportMapper: ComponentMapper<Viewport>
-    private lateinit var windows: Windows
+    private lateinit var interfaces: Interfaces
 
     override fun initialize() {
         super.initialize()
@@ -28,23 +28,23 @@ class InterfaceOnPlayerHandler : MessageHandlerSystem<InterfaceOnPlayer>() {
 
     override fun handle(entityId: Int, message: InterfaceOnPlayer) {
         val (playerIndex, hash, type, _, slot) = message
-        val inventory = inventoryMapper.get(entityId) ?: return logger.warn("Unhandled widget on player $message")
+        val inventory = inventoryMapper.get(entityId) ?: return logger.warn("Unhandled interface on player $message")
 
-        if(!windows.hasWindow(entityId, hash)) {
-            return logger.warn("Invalid widget on player hash $message")
+        if(!interfaces.hasInterface(entityId, hash)) {
+            return logger.warn("Invalid interface on player hash $message")
         }
 
         val inventoryItem = inventory.items.getOrNull(slot)
 
         if(inventoryItem == null || inventoryItem.type != type) {
-            return logger.warn("Invalid widget on player item $message")
+            return logger.warn("Invalid interface on player item $message")
         }
 
         //Find player
         val viewport = viewportMapper.get(entityId)
         val playerId = viewport.localPlayers().getEntity(playerIndex)
         if(playerId == -1) {
-            return logger.warn("Invalid widget on player index $message")
+            return logger.warn("Invalid interface on player index $message")
         }
 
         es.perform(entityId, ItemOnPlayer(playerId, hash, slot, type))

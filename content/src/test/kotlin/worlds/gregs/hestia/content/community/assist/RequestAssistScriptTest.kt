@@ -9,16 +9,16 @@ import worlds.gregs.hestia.core.action.model.EntityAction
 import worlds.gregs.hestia.core.display.client.model.events.Chat
 import worlds.gregs.hestia.core.display.dialogue.model.ChatType
 import worlds.gregs.hestia.core.display.update.model.components.DisplayName
-import worlds.gregs.hestia.core.display.window.api.Variables
-import worlds.gregs.hestia.core.display.window.api.Windows
-import worlds.gregs.hestia.core.display.window.logic.systems.RequestSystem
-import worlds.gregs.hestia.core.display.window.model.PlayerOptions.ASSIST
-import worlds.gregs.hestia.core.display.window.model.Request
-import worlds.gregs.hestia.core.display.window.model.actions.OpenWindow
-import worlds.gregs.hestia.core.display.window.model.components.Assistance
-import worlds.gregs.hestia.core.display.window.model.components.Assisting
-import worlds.gregs.hestia.core.display.window.model.events.*
-import worlds.gregs.hestia.core.display.window.model.events.variable.*
+import worlds.gregs.hestia.core.display.variable.api.Variables
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces
+import worlds.gregs.hestia.core.display.interfaces.logic.systems.RequestSystem
+import worlds.gregs.hestia.core.display.interfaces.model.PlayerOptions.ASSIST
+import worlds.gregs.hestia.core.display.interfaces.model.Request
+import worlds.gregs.hestia.core.display.interfaces.model.events.request.OpenInterface
+import worlds.gregs.hestia.core.display.interfaces.model.components.Assistance
+import worlds.gregs.hestia.core.display.interfaces.model.components.Assisting
+import worlds.gregs.hestia.core.display.interfaces.model.events.*
+import worlds.gregs.hestia.core.display.interfaces.model.events.variable.*
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.entity.model.events.Animation
 import worlds.gregs.hestia.core.entity.entity.model.events.Graphic
@@ -150,7 +150,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
         send(action)
         //Then
         with(action) {
-            verify { entityId.send(InterfaceVisibility(Windows.AreaStatusIcon, 2, false)) }
+            verify { entityId.send(InterfaceVisibility(Interfaces.AreaStatusIcon, 2, false)) }
         }
         with(task) {
             coVerify { await(Ticks(2)) }
@@ -183,8 +183,8 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
         with(action) {
             verify {
                 entityId.perform(any<Chat>())
-                entityId.perform(OpenWindow(Windows.AssistXP))
-                entityId.send(InterfaceVisibility(Windows.AreaStatusIcon, 2, false))
+                entityId.perform(OpenInterface(Interfaces.AssistXP))
+                entityId.send(InterfaceVisibility(Interfaces.AreaStatusIcon, 2, false))
                 entityId perform SendVariable("total_xp_earned")
                 entityId.perform(Animation(7299))
                 entityId.perform(Graphic(1247))
@@ -193,11 +193,11 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
     }
 
     @Test
-    fun `Window interaction`() {
+    fun `Interface interaction`() {
         //Given
-        val action = mockAction<WindowInteraction>()
-        every { action.target } returns Windows.AssistXP
-        every { action.widget } returns 82
+        val action = mockAction<InterfaceInteraction>()
+        every { action.id } returns Interfaces.AssistXP
+        every { action.component } returns 82
         //When
         send(action)
         //Then
@@ -209,11 +209,11 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
     }
 
     @Test
-    fun `Invalid window interaction`() {
+    fun `Invalid interface interaction`() {
         //Given
-        val action = mockAction<WindowInteraction>()
-        every { action.target } returns Windows.AssistXP
-        every { action.widget } returns 83
+        val action = mockAction<InterfaceInteraction>()
+        every { action.id } returns Interfaces.AssistXP
+        every { action.component } returns 83
         //When
         send(action)
         //Then
@@ -321,9 +321,9 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
     fun `Xp time greater than max`() {
         //Given
         val hours = 4L
-        val action = mockAction<WindowInteraction>()
-        every { action.target } returns Windows.FilterButtons
-        every { action.widget } returns 16
+        val action = mockAction<InterfaceInteraction>()
+        every { action.id } returns Interfaces.FilterButtons
+        every { action.component } returns 16
         every { action.option } returns 9
         val assisting = mockk<Assisting>(relaxed = true)
         every { variables.get(entityId, "total_xp_earned", 0) } returns 35000
@@ -346,9 +346,9 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
     fun `Xp time exactly max`() {
         //Given
         val hours = 4L
-        val action = mockAction<WindowInteraction>()
-        every { action.target } returns Windows.FilterButtons
-        every { action.widget } returns 16
+        val action = mockAction<InterfaceInteraction>()
+        every { action.id } returns Interfaces.FilterButtons
+        every { action.component } returns 16
         every { action.option } returns 9
         val assisting = mockk<Assisting>(relaxed = true)
         every { variables.get(entityId, "total_xp_earned", 0) } returns 30000
@@ -371,9 +371,9 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
     fun `Xp time less than max`() {
         //Given
         val hours = 4
-        val action = mockAction<WindowInteraction>()
-        every { action.target } returns Windows.FilterButtons
-        every { action.widget } returns 16
+        val action = mockAction<InterfaceInteraction>()
+        every { action.id } returns Interfaces.FilterButtons
+        every { action.component } returns 16
         every { action.option } returns 9
         val assisting = mockk<Assisting>(relaxed = true)
         every { variables.get(entityId, "total_xp_earned", 0) } returns 10000

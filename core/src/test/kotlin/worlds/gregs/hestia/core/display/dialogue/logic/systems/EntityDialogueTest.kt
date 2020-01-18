@@ -13,7 +13,7 @@ import worlds.gregs.hestia.artemis.send
 import worlds.gregs.hestia.core.action.model.perform
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.*
 import worlds.gregs.hestia.core.display.dialogue.model.events.ContinueDialogue
-import worlds.gregs.hestia.core.display.window.api.Windows
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces
 import worlds.gregs.hestia.core.task.api.TaskType
 import worlds.gregs.hestia.core.task.api.Tasks
 import worlds.gregs.hestia.core.task.model.events.ProcessTaskSuspension
@@ -41,7 +41,7 @@ internal class EntityDialogueTest : MockkGame() {
     private lateinit var tasks: Tasks
 
     @RelaxedMockK
-    private lateinit var windows: Windows
+    private lateinit var interfaces: Interfaces
 
     @RelaxedMockK
     private lateinit var itemReader: ItemDefinitionReader
@@ -49,7 +49,7 @@ internal class EntityDialogueTest : MockkGame() {
     private lateinit var mobReader: MobDefinitionReader
 
     override fun config(config: WorldConfigurationBuilder) {
-        config.with(system, tasks, boxSystem, windows, ItemDefinitionSystem(itemReader), MobDefinitionSystem(mobReader))
+        config.with(system, tasks, boxSystem, interfaces, ItemDefinitionSystem(itemReader), MobDefinitionSystem(mobReader))
     }
 
     @Test

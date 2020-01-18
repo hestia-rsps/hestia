@@ -5,13 +5,13 @@ import worlds.gregs.hestia.core.action.model.EntityAction
 import worlds.gregs.hestia.core.display.client.model.events.Chat
 import worlds.gregs.hestia.core.display.update.model.components.UpdateMovement
 import worlds.gregs.hestia.core.display.update.model.components.direction.Face
-import worlds.gregs.hestia.core.display.window.api.Variable
-import worlds.gregs.hestia.core.display.window.api.Variables
-import worlds.gregs.hestia.core.display.window.api.Windows.Companion.EnergyOrb
-import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
-import worlds.gregs.hestia.core.display.window.model.events.variable.SendVariable
-import worlds.gregs.hestia.core.display.window.model.events.variable.SetVariable
-import worlds.gregs.hestia.core.display.window.model.variable.StringMapVariable
+import worlds.gregs.hestia.core.display.variable.api.Variable
+import worlds.gregs.hestia.core.display.variable.api.Variables
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.EnergyOrb
+import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceInteraction
+import worlds.gregs.hestia.core.display.interfaces.model.events.variable.SendVariable
+import worlds.gregs.hestia.core.display.interfaces.model.events.variable.SetVariable
+import worlds.gregs.hestia.core.display.variable.model.variable.StringMapVariable
 import worlds.gregs.hestia.core.entity.entity.model.components.Blackboard
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.entity.model.events.Animation
@@ -59,8 +59,8 @@ on<MobOption> {
     then(MobOption::task)
 }
 
-on<WindowInteraction> {
-    where { target == EnergyOrb && widget == 1 }
+on<InterfaceInteraction> {
+    where { id == EnergyOrb && component == 1 }
     then {
         val blackboard = entity get Blackboard::class
         val current = variables.get(entity, "energy_orb", "walking")

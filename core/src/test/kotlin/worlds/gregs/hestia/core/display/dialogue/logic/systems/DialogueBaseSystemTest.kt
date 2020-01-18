@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory
 import world.gregs.hestia.core.network.protocol.encoders.messages.WidgetComponentText
 import worlds.gregs.hestia.MockkGame
 import worlds.gregs.hestia.artemis.send
-import worlds.gregs.hestia.core.display.window.api.Windows
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces
 import worlds.gregs.hestia.core.task.api.Tasks
 import worlds.gregs.hestia.core.task.model.components.TaskQueue
 
@@ -29,7 +29,7 @@ internal class DialogueBaseSystemTest : MockkGame() {
     @RelaxedMockK
     private lateinit var tasks: Tasks
     @RelaxedMockK
-    private lateinit var windows: Windows
+    private lateinit var interfaces: Interfaces
 
     @SpyK
     var boxSystem = DialogueBoxSystem()
@@ -38,7 +38,7 @@ internal class DialogueBaseSystemTest : MockkGame() {
     var component = TaskQueue()
 
     override fun config(config: WorldConfigurationBuilder) {
-        config.with(system, tasks, boxSystem, windows)
+        config.with(system, tasks, boxSystem, interfaces)
     }
 
     @BeforeEach
@@ -52,20 +52,20 @@ internal class DialogueBaseSystemTest : MockkGame() {
     fun `Send opens chat and dispatches packets`() {
         //Given
         val entityId = 0
-        val window = 250
-        val widgetStart = 3
+        val id = 250
+        val componentStart = 3
         val title = "Title"
         val lines = listOf("Line one", "Line two")
         mockkStatic("worlds.gregs.hestia.artemis.ExtensionFunctionsKt")
-        every { boxSystem.openChat(entityId, window) } answers {}
+        every { boxSystem.openChat(entityId, id) } answers {}
         //When
-        system.send(entityId, window, widgetStart, title, lines)
+        system.send(entityId, id, componentStart, title, lines)
         //Then
         verifyOrder {
-            boxSystem.openChat(entityId, window)
-            es.send(entityId, WidgetComponentText(window, widgetStart, title))
-            es.send(entityId, WidgetComponentText(window, widgetStart + 1, "Line one"))
-            es.send(entityId, WidgetComponentText(window, widgetStart + 2, "Line two"))
+            boxSystem.openChat(entityId, id)
+            es.send(entityId, WidgetComponentText(id, componentStart, title))
+            es.send(entityId, WidgetComponentText(id, componentStart + 1, "Line one"))
+            es.send(entityId, WidgetComponentText(id, componentStart + 2, "Line two"))
         }
     }
 }

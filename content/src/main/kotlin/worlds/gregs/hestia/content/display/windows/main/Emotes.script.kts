@@ -1,11 +1,11 @@
 package worlds.gregs.hestia.content.display.windows.main
 
-import worlds.gregs.hestia.core.display.window.api.Variable
-import worlds.gregs.hestia.core.display.window.api.Windows.Companion.Emotes
-import worlds.gregs.hestia.core.display.window.model.events.variable.SendVariable
-import worlds.gregs.hestia.core.display.window.model.events.WindowOpened
-import worlds.gregs.hestia.core.display.window.model.variable.BitwiseVariable
-import worlds.gregs.hestia.core.display.window.model.variable.StringMapVariable
+import worlds.gregs.hestia.core.display.variable.api.Variable
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.Emotes
+import worlds.gregs.hestia.core.display.interfaces.model.events.variable.SendVariable
+import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceOpened
+import worlds.gregs.hestia.core.display.variable.model.variable.BitwiseVariable
+import worlds.gregs.hestia.core.display.variable.model.variable.StringMapVariable
 import worlds.gregs.hestia.network.client.encoders.messages.InterfaceSettings
 
 StringMapVariable(465, Variable.Type.VARP, true, mapOf(
@@ -44,11 +44,11 @@ BitwiseVariable(313, Variable.Type.VARP, true, values = listOf(
         "Freeze"
 )).register("event_emotes")
 
-on<WindowOpened> {
-    where { target == Emotes }
+on<InterfaceOpened> {
+    where { id == Emotes }
     then {
-        for (widget in 11..14) {
-            entity send InterfaceSettings(Emotes, widget, -1, 190, 2150)
+        for (index in 11..14) {
+            entity send InterfaceSettings(Emotes, index, -1, 190, 2150)
         }
 
         entity perform SendVariable("lost_tribe_emotes")

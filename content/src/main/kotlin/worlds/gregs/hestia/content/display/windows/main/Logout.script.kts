@@ -2,13 +2,13 @@ package worlds.gregs.hestia.content.display.windows.main
 
 import worlds.gregs.hestia.artemis.events.Disconnect
 import worlds.gregs.hestia.core.display.client.model.components.ExitLobby
-import worlds.gregs.hestia.core.display.window.api.Windows.Companion.Logout
-import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.Logout
+import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceInteraction
 
-on<WindowInteraction> {
-    where { target == Logout }
+on<InterfaceInteraction> {
+    where { id == Logout }
     then {
-        when (widget) {
+        when (component) {
             6 -> {//Lobby
                 entity create ExitLobby::class
                 dispatch(Disconnect(entity))

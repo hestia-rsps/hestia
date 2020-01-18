@@ -4,7 +4,7 @@ import com.artemis.Entity
 import com.artemis.WorldConfigurationBuilder
 import org.junit.jupiter.api.Test
 import worlds.gregs.hestia.artemis.getSystem
-import worlds.gregs.hestia.core.display.window.model.components.WindowRelationships
+import worlds.gregs.hestia.core.display.interfaces.model.components.WindowRelationships
 import worlds.gregs.hestia.network.client.decoders.messages.ScreenClose
 import worlds.gregs.hestia.tools.InterfaceTester
 

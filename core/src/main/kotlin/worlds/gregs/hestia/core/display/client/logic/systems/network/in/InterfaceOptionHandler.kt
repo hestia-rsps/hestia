@@ -2,7 +2,7 @@ package worlds.gregs.hestia.core.display.client.logic.systems.network.`in`
 
 import net.mostlyoriginal.api.event.common.EventSystem
 import worlds.gregs.hestia.GameServer
-import worlds.gregs.hestia.core.display.window.model.events.ButtonClick
+import worlds.gregs.hestia.core.display.interfaces.model.events.ButtonClick
 import worlds.gregs.hestia.game.entity.MessageHandlerSystem
 import worlds.gregs.hestia.network.client.decoders.messages.InterfaceOption
 

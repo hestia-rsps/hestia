@@ -13,14 +13,14 @@ abstract class DialogueBaseSystem : PassiveSystem() {
     internal lateinit var tasks: Tasks
     private lateinit var dialogueBoxSystem: DialogueBoxSystem
 
-    internal fun send(entityId: Int, window: Int, widgetStart: Int, title: String?, lines: List<String>) {
+    internal fun send(entityId: Int, id: Int, componentId: Int, title: String?, lines: List<String>) {
         //Open
-        dialogueBoxSystem.openChat(entityId, window)
+        dialogueBoxSystem.openChat(entityId, id)
         //Title
-        es.send(entityId, InterfaceComponentText(window, widgetStart, title ?: ""))
+        es.send(entityId, InterfaceComponentText(id, componentId, title ?: ""))
         //Lines
         lines.forEachIndexed { index, text ->
-            es.send(entityId, InterfaceComponentText(window, widgetStart + index + 1, text))
+            es.send(entityId, InterfaceComponentText(id, componentId + index + 1, text))
         }
     }
 

@@ -1,17 +1,17 @@
 package worlds.gregs.hestia.content.display.windows
 
-import worlds.gregs.hestia.core.display.window.api.Variable
-import worlds.gregs.hestia.core.display.window.api.Windows.Companion.EnergyOrb
-import worlds.gregs.hestia.core.display.window.api.Windows.Companion.HealthOrb
-import worlds.gregs.hestia.core.display.window.api.Windows.Companion.PrayerOrb
-import worlds.gregs.hestia.core.display.window.api.Windows.Companion.SummoningOrb
-import worlds.gregs.hestia.core.display.window.model.events.variable.SendVariable
-import worlds.gregs.hestia.core.display.window.model.events.variable.ToggleVariable
-import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
-import worlds.gregs.hestia.core.display.window.model.events.WindowOpened
-import worlds.gregs.hestia.core.display.window.model.variable.BooleanVariable
-import worlds.gregs.hestia.core.display.window.model.variable.IntVariable
-import worlds.gregs.hestia.core.display.window.model.variable.StringMapVariable
+import worlds.gregs.hestia.core.display.variable.api.Variable
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.EnergyOrb
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.HealthOrb
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.PrayerOrb
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.SummoningOrb
+import worlds.gregs.hestia.core.display.interfaces.model.events.variable.SendVariable
+import worlds.gregs.hestia.core.display.interfaces.model.events.variable.ToggleVariable
+import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceInteraction
+import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceOpened
+import worlds.gregs.hestia.core.display.variable.model.variable.BooleanVariable
+import worlds.gregs.hestia.core.display.variable.model.variable.IntVariable
+import worlds.gregs.hestia.core.display.variable.model.variable.StringMapVariable
 import worlds.gregs.hestia.network.client.encoders.messages.RunEnergy
 import worlds.gregs.hestia.network.client.encoders.messages.Varp
 
@@ -27,16 +27,16 @@ StringMapVariable(1584, Variable.Type.VARP, true, mapOf(
 )).register("prayer_list")
 BooleanVariable(102, Variable.Type.VARP).register("poisoned")
 
-on<WindowOpened> {
-    where { target == HealthOrb }
+on<InterfaceOpened> {
+    where { id == HealthOrb }
     then {
         entity perform SendVariable("life_points")
         entity perform SendVariable("poisoned")
     }
 }
 
-on<WindowInteraction> {
-    where { target == HealthOrb && widget == 1 }
+on<InterfaceInteraction> {
+    where { id == HealthOrb && component == 1 }
     then {
         when(option) {
             1 -> {//Use cure (p)
@@ -45,16 +45,16 @@ on<WindowInteraction> {
     }
 }
 
-on<WindowOpened> {
-    where { target == PrayerOrb }
+on<InterfaceOpened> {
+    where { id == PrayerOrb }
     then {
         entity perform SendVariable("select_quick_prayers")
         entity perform SendVariable("using_quick_prayers")
     }
 }
 
-on<WindowInteraction> {
-    where { target == PrayerOrb && widget == 1 }
+on<InterfaceInteraction> {
+    where { id == PrayerOrb && component == 1 }
     then {
         when(option) {
             1 -> entity perform ToggleVariable("using_quick_prayers")
@@ -63,16 +63,16 @@ on<WindowInteraction> {
     }
 }
 
-on<WindowOpened> {
-    where { target == EnergyOrb }
+on<InterfaceOpened> {
+    where { id == EnergyOrb }
     then {
         entity perform SendVariable("energy_orb")
         entity send RunEnergy(100)
     }
 }
 
-on<WindowOpened> {
-    where { target == SummoningOrb }
+on<InterfaceOpened> {
+    where { id == SummoningOrb }
     then {
         entity send Varp(1160, -1)
     }

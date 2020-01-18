@@ -21,7 +21,7 @@ class CachePlugin : Plugin {
                 ObjectDefinitionSystem(),
                 QuickChatOptionDefinitionSystem(),
                 VarBitDefinitionSystem(),
-                WindowDefinitionSystem(),
+                InterfaceDefinitionSystem(),
                 WorldMapDefinitionSystem()
         )
         //Configs

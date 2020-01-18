@@ -1,12 +1,12 @@
 package worlds.gregs.hestia.content.interaction.item
 
-import worlds.gregs.hestia.core.display.window.api.Windows.Companion.ItemsKeptOnDeath
-import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.ItemsKeptOnDeath
+import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceInteraction
 
-on<WindowInteraction> {
-    where { target == ItemsKeptOnDeath }
+on<InterfaceInteraction> {
+    where { id == ItemsKeptOnDeath }
     then {
-        when(widget) {
+        when(component) {
             28 -> {//What if I enter the wilderness?
             }
         }

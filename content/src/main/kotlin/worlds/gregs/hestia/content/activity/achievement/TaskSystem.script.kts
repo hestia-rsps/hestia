@@ -1,18 +1,18 @@
 package worlds.gregs.hestia.content.activity.achievement
 
-import worlds.gregs.hestia.core.display.window.api.Windows.Companion.TaskList
-import worlds.gregs.hestia.core.display.window.api.Windows.Companion.TaskSystem
-import worlds.gregs.hestia.core.display.window.model.actions.OpenWindow
-import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.TaskList
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.TaskSystem
+import worlds.gregs.hestia.core.display.interfaces.model.events.request.OpenInterface
+import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceInteraction
 
-on<WindowInteraction> {
-    where { target == TaskSystem }
+on<InterfaceInteraction> {
+    where { id == TaskSystem }
     then {
-        when(widget) {
+        when(component) {
             99, 142, 147, 152, 157, 162 -> {//Select task
-                val index = if(widget == 99) 0 else (widget - 137)/5
+                val index = if(component == 99) 0 else (component - 137)/5
             }
-            102 -> entity perform OpenWindow(TaskList)
+            102 -> entity perform OpenInterface(TaskList)
         }
     }
 }

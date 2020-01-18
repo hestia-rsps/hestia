@@ -2,27 +2,28 @@ package worlds.gregs.hestia.core.task.logic.systems
 
 import net.mostlyoriginal.api.event.common.Subscribe
 import net.mostlyoriginal.api.system.core.PassiveSystem
-import worlds.gregs.hestia.core.display.window.api.Windows
-import worlds.gregs.hestia.core.display.window.model.events.WindowClosed
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces
+import worlds.gregs.hestia.core.display.interfaces.model.Window
+import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceClosed
 import worlds.gregs.hestia.core.task.api.Task
 import worlds.gregs.hestia.core.task.api.Tasks
 import worlds.gregs.hestia.core.task.model.await.WindowClose
 import worlds.gregs.hestia.core.task.model.events.ProcessTaskSuspension
 
 /**
- * A [Task] suspension which waits for a window to close before resuming
+ * A [Task] suspension which waits for any window in a given [Window] to close before resuming
  */
 class WindowCloseSystem : PassiveSystem() {
 
     private lateinit var tasks: Tasks
-    private lateinit var windows: Windows
+    private lateinit var interfaces: Interfaces
 
     @Subscribe
-    private fun handle(event: WindowClosed) {
-        val (window) = event
+    private fun handle(event: InterfaceClosed) {
+        val ( window) = event
         val suspension = tasks.getSuspension(event.entity)
         if(suspension is WindowClose) {
-            if(suspension.window == window) {
+            if(suspension.window == interfaces.getWindow(window)) {
                 tasks.resume(event.entity, suspension, Unit)
             }
         }
@@ -32,9 +33,8 @@ class WindowCloseSystem : PassiveSystem() {
     private fun handleSuspend(event: ProcessTaskSuspension) {
         val (entityId, suspension) = event
         if(suspension is WindowClose) {
-            val window = suspension.window
-            //If no screen open skip
-            if(!windows.hasWindow(entityId, window)) {
+            //If no pane open skip
+            if(!interfaces.hasInterface(entityId, suspension.window)) {
                 tasks.resume(entityId, suspension, Unit)
             }
             event.isCancelled = true

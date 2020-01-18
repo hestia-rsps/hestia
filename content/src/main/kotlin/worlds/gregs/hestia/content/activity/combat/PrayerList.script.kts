@@ -1,11 +1,11 @@
 package worlds.gregs.hestia.content.activity.combat
 
-import worlds.gregs.hestia.core.display.window.api.Variable
-import worlds.gregs.hestia.core.display.window.api.Windows.Companion.PrayerList
-import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
-import worlds.gregs.hestia.core.display.window.model.events.WindowOpened
-import worlds.gregs.hestia.core.display.window.model.events.variable.SendVariable
-import worlds.gregs.hestia.core.display.window.model.variable.StringMapVariable
+import worlds.gregs.hestia.core.display.variable.api.Variable
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.PrayerList
+import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceInteraction
+import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceOpened
+import worlds.gregs.hestia.core.display.interfaces.model.events.variable.SendVariable
+import worlds.gregs.hestia.core.display.variable.model.variable.StringMapVariable
 import worlds.gregs.hestia.network.client.encoders.messages.InterfaceSettings
 
 
@@ -14,8 +14,8 @@ StringMapVariable(1584, Variable.Type.VARP, true, mapOf(
         1 to "curses"
 )).register("prayer_list")
 
-on<WindowOpened> {
-    where { target == PrayerList }
+on<InterfaceOpened> {
+    where { id == PrayerList }
     then {
         val quickPrayers = false
         entity perform SendVariable("prayer_list")
@@ -24,10 +24,10 @@ on<WindowOpened> {
     }
 }
 
-on<WindowInteraction> {
-    where { target == PrayerList }
+on<InterfaceInteraction> {
+    where { id == PrayerList }
     then {
-        when(widget) {
+        when(component) {
             12 -> {}//Show/Hide stat adjustments
         }
     }

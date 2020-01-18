@@ -1,13 +1,13 @@
 package worlds.gregs.hestia.content.display.windows.fullscreen
 
-import worlds.gregs.hestia.core.display.window.api.Windows.Companion.WorldMap
-import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
-import worlds.gregs.hestia.core.display.window.model.events.WindowOpened
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.WorldMap
+import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceInteraction
+import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceOpened
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.network.client.encoders.messages.Varc
 
-on<WindowOpened> {
-    where { target == WorldMap }
+on<InterfaceOpened> {
+    where { id == WorldMap }
     then {
         val position = entity get Position::class
         val posHash = position.x shl 14 or position.y
@@ -16,10 +16,10 @@ on<WindowOpened> {
     }
 }
 
-on<WindowInteraction> {
-    where { target == WorldMap }
+on<InterfaceInteraction> {
+    where { id == WorldMap }
     then {
-        if(widget == 44) {
+        if(component == 44) {
             //Close button
         }
     }

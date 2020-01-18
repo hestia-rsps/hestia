@@ -6,9 +6,9 @@ import org.slf4j.LoggerFactory
 import worlds.gregs.hestia.GameServer
 import worlds.gregs.hestia.core.action.model.perform
 import worlds.gregs.hestia.core.display.client.model.components.Viewport
-import worlds.gregs.hestia.core.display.window.model.PlayerOptions
-import worlds.gregs.hestia.core.display.window.model.Request
-import worlds.gregs.hestia.core.display.window.model.events.PlayerOption
+import worlds.gregs.hestia.core.display.interfaces.model.PlayerOptions
+import worlds.gregs.hestia.core.display.request.model.Request
+import worlds.gregs.hestia.core.display.interfaces.model.events.PlayerOption
 import worlds.gregs.hestia.game.entity.MessageHandlerSystem
 import worlds.gregs.hestia.network.client.decoders.messages.PlayerOptionMessage
 

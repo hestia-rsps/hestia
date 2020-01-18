@@ -2,18 +2,18 @@ package worlds.gregs.hestia.content.activity.skill
 
 import world.gregs.hestia.core.network.protocol.encoders.messages.InterfaceComponentText
 import worlds.gregs.hestia.core.display.dialogue.model.events.ContinueDialogue
-import worlds.gregs.hestia.core.display.window.api.Variable
-import worlds.gregs.hestia.core.display.window.api.Variables
-import worlds.gregs.hestia.core.display.window.api.Windows.Companion.SkillCreation
-import worlds.gregs.hestia.core.display.window.api.Windows.Companion.SkillCreationAmount
-import worlds.gregs.hestia.core.display.window.model.WindowPane.DIALOGUE_BOX
-import worlds.gregs.hestia.core.display.window.model.actions.CloseWindowPane
-import worlds.gregs.hestia.core.display.window.model.actions.OpenWindow
-import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
-import worlds.gregs.hestia.core.display.window.model.events.variable.SetVariable
-import worlds.gregs.hestia.core.display.window.model.variable.IntVariable
-import worlds.gregs.hestia.core.display.window.model.variable.StringMapVariable
-import worlds.gregs.hestia.core.display.window.model.variable.StringVariable
+import worlds.gregs.hestia.core.display.variable.api.Variable
+import worlds.gregs.hestia.core.display.variable.api.Variables
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.SkillCreation
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.SkillCreationAmount
+import worlds.gregs.hestia.core.display.interfaces.model.Window.DIALOGUE_BOX
+import worlds.gregs.hestia.core.display.interfaces.model.events.request.CloseWindow
+import worlds.gregs.hestia.core.display.interfaces.model.events.request.OpenInterface
+import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceInteraction
+import worlds.gregs.hestia.core.display.interfaces.model.events.variable.SetVariable
+import worlds.gregs.hestia.core.display.variable.model.variable.IntVariable
+import worlds.gregs.hestia.core.display.variable.model.variable.StringMapVariable
+import worlds.gregs.hestia.core.display.variable.model.variable.StringVariable
 import worlds.gregs.hestia.network.client.encoders.messages.InterfaceSettings
 import worlds.gregs.hestia.network.client.encoders.messages.InterfaceVisibility
 import worlds.gregs.hestia.service.cache.definition.systems.ItemDefinitionSystem
@@ -70,9 +70,9 @@ lateinit var tasks: Tasks
 //Open creation dialogue
 on<SkillCreation> {
     then {
-        //Open window
-        entity perform OpenWindow(SkillCreation)
-        entity perform OpenWindow(SkillCreationAmount)
+        //Open interface
+        entity perform OpenInterface(SkillCreation)
+        entity perform OpenInterface(SkillCreationAmount)
         //Unlock "all" button
         if (type != "Make sets" && type != "Make2" && type != "Make sets2") {
             entity send InterfaceSettings(SkillCreationAmount, 8, -1, 0, 2)
@@ -98,11 +98,11 @@ on<SkillCreation> {
     }
 }
 
-//Amount window buttons
-on<WindowInteraction> {
-    where { target == SkillCreationAmount }
+//Amount interface buttons
+on<InterfaceInteraction> {
+    where { id == SkillCreationAmount }
     then {
-        when (widget) {
+        when (component) {
             5 -> entity perform SetVariable("skill_creation_amount", 1, false)
             6 -> entity perform SetVariable("skill_creation_amount", 5, false)
             7 -> entity perform SetVariable("skill_creation_amount", 10, false)
@@ -128,7 +128,7 @@ on<WindowInteraction> {
 
 //When selected close and return result
 on<ContinueDialogue> {
-    where { window == SkillCreation && option in 14..23 }
+    where { id == SkillCreation && option in 14..23 }
     then {
         val choice = option - 14
         val suspension = tasks.getSuspension(entity)
@@ -143,6 +143,6 @@ on<ContinueDialogue> {
         } else {
             log("Invalid skill suspension $suspension")
         }
-        entity perform CloseWindowPane(DIALOGUE_BOX)
+        entity perform CloseWindow(DIALOGUE_BOX)
     }
 }

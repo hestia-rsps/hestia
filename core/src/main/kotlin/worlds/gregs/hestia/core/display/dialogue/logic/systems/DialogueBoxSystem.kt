@@ -6,14 +6,14 @@ import net.mostlyoriginal.api.system.core.PassiveSystem
 import org.slf4j.LoggerFactory
 import worlds.gregs.hestia.core.display.dialogue.model.components.DialogueBox
 import worlds.gregs.hestia.core.display.dialogue.model.events.ContinueDialogue
-import worlds.gregs.hestia.core.display.window.api.Windows
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces
 
 class DialogueBoxSystem : PassiveSystem() {
 
     private lateinit var dialogueBoxMapper: ComponentMapper<DialogueBox>
     private val logger = LoggerFactory.getLogger(DialogueBoxSystem::class.java)!!
 
-    private lateinit var windows: Windows
+    private lateinit var interfaces: Interfaces
 
     fun openChat(entityId: Int, windowId: Int) {
         val existed = dialogueBoxMapper.has(entityId)
@@ -21,7 +21,7 @@ class DialogueBoxSystem : PassiveSystem() {
         dialogueBox.id = windowId
         if(existed) {
             //Refresh
-            windows.refreshWindow(entityId, windowId)
+            interfaces.refreshInterface(entityId, windowId)
         }
     }
 

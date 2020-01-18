@@ -2,21 +2,21 @@ package worlds.gregs.hestia.content.command
 
 import world.gregs.hestia.core.network.protocol.encoders.messages.InterfaceComponentText
 import worlds.gregs.hestia.core.display.client.model.events.Command
-import worlds.gregs.hestia.core.display.window.api.Windows
-import worlds.gregs.hestia.core.display.window.model.WindowPane.*
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces
+import worlds.gregs.hestia.core.display.interfaces.model.Window.*
 import worlds.gregs.hestia.network.client.encoders.messages.InterfaceVisibility
 
-lateinit var windows: Windows
+lateinit var interfaces: Interfaces
 
 on<Command> {
     where { prefix == "inter" }
     then {
         val id = content.toInt()
-        windows.closeWindows(entity, MAIN_SCREEN, true)
-        windows.closeWindows(entity, OVERLAY, true)
-        windows.closeWindows(entity, DIALOGUE_BOX, true)
+        interfaces.closeWindow(entity, MAIN_SCREEN, true)
+        interfaces.closeWindow(entity, OVERLAY, true)
+        interfaces.closeWindow(entity, DIALOGUE_BOX, true)
         if(id != -1) {
-            windows.openWindow(entity, id)
+            interfaces.openInterface(entity, id)
         }
         isCancelled = true
     }

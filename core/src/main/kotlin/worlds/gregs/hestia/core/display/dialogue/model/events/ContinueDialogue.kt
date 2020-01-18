@@ -4,8 +4,8 @@ import worlds.gregs.hestia.core.action.model.EntityAction
 
 /**
  * Event notifying the continuation of a dialogue chain
- * @param window The window id
+ * @param id The interface id
  * @param option The selection option
- * @param widget The selected widget
+ * @param component The selected component
  */
-data class ContinueDialogue(val window: Int, val option: Int, val widget: Int) : EntityAction()
+data class ContinueDialogue(val id: Int, val option: Int, val component: Int) : EntityAction()

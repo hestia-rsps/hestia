@@ -1,12 +1,12 @@
 package worlds.gregs.hestia.content.display.windows.main
 
-import worlds.gregs.hestia.core.display.window.api.Windows.Companion.FilterButtons
-import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.FilterButtons
+import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceInteraction
 
-on<WindowInteraction> {
-    where { target == FilterButtons }
+on<InterfaceInteraction> {
+    where { id == FilterButtons }
     then {
-        when(widget) {
+        when(component) {
             31 -> {//Regular chat
             when(option) {
                 1 -> {//View

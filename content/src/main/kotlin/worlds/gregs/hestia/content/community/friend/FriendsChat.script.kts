@@ -1,13 +1,13 @@
 package worlds.gregs.hestia.content.community.friend
 
 import world.gregs.hestia.core.network.protocol.messages.FriendsChatSetupRequest
-import worlds.gregs.hestia.core.display.window.api.Windows.Companion.FriendsChat
-import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.FriendsChat
+import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceInteraction
 
-on<WindowInteraction> {
-    where { target == FriendsChat }
+on<InterfaceInteraction> {
+    where { id == FriendsChat }
     then {
-        when(widget) {
+        when(component) {
             27 -> {//Join/Leave
             }
             33 -> {//Settings

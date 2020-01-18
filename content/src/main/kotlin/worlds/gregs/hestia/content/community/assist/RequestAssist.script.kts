@@ -8,34 +8,27 @@ import worlds.gregs.hestia.core.action.model.EntityAction
 import worlds.gregs.hestia.core.display.client.model.events.Chat
 import worlds.gregs.hestia.core.display.dialogue.model.ChatType.GameAssist
 import worlds.gregs.hestia.core.display.update.model.components.DisplayName
-import worlds.gregs.hestia.core.display.window.api.Variable
-import worlds.gregs.hestia.core.display.window.api.Variables
-import worlds.gregs.hestia.core.display.window.api.Windows.Companion.AreaStatusIcon
-import worlds.gregs.hestia.core.display.window.api.Windows.Companion.AssistXP
-import worlds.gregs.hestia.core.display.window.api.Windows.Companion.FilterButtons
-import worlds.gregs.hestia.core.display.window.logic.systems.RequestSystem
-import worlds.gregs.hestia.core.display.window.logic.systems.WindowSystem
-import worlds.gregs.hestia.core.display.window.model.FilterMode
-import worlds.gregs.hestia.core.display.window.model.PlayerOptions.ASSIST
-import worlds.gregs.hestia.core.display.window.model.Request
-import worlds.gregs.hestia.core.display.window.model.actions.CloseWindow
-import worlds.gregs.hestia.core.display.window.model.actions.OpenWindow
-import worlds.gregs.hestia.core.display.window.model.components.Assistance
-import worlds.gregs.hestia.core.display.window.model.components.Assisting
-import worlds.gregs.hestia.core.display.window.model.events.AcceptedRequest
-import worlds.gregs.hestia.core.display.window.model.events.PlayerOption
-import worlds.gregs.hestia.core.display.window.model.events.RequestResponse
-import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
-import worlds.gregs.hestia.core.display.window.model.events.variable.SendVariable
-import worlds.gregs.hestia.core.display.window.model.events.variable.SetVariable
-import worlds.gregs.hestia.core.display.window.model.events.variable.ToggleVariable
-import worlds.gregs.hestia.core.display.window.model.variable.BooleanVariable
-import worlds.gregs.hestia.core.display.window.model.variable.IntVariable
+import worlds.gregs.hestia.core.display.variable.api.Variable
+import worlds.gregs.hestia.core.display.variable.api.Variables
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.AreaStatusIcon
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.AssistXP
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.FilterButtons
+import worlds.gregs.hestia.core.display.request.logic.RequestSystem
+import worlds.gregs.hestia.core.display.request.model.FilterMode
+import worlds.gregs.hestia.core.display.interfaces.model.PlayerOptions.ASSIST
+import worlds.gregs.hestia.core.display.request.model.Request
+import worlds.gregs.hestia.core.display.interfaces.model.events.request.CloseInterface
+import worlds.gregs.hestia.core.display.request.model.components.Assistance
+import worlds.gregs.hestia.core.display.request.model.components.Assisting
+import worlds.gregs.hestia.core.display.request.model.events.AcceptedRequest
+import worlds.gregs.hestia.core.display.interfaces.model.events.PlayerOption
+import worlds.gregs.hestia.core.display.request.model.events.RequestResponse
+import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceInteraction
+import worlds.gregs.hestia.core.display.interfaces.model.events.variable.SetVariable
+import worlds.gregs.hestia.core.display.interfaces.model.events.variable.ToggleVariable
+import worlds.gregs.hestia.core.display.variable.model.variable.BooleanVariable
+import worlds.gregs.hestia.core.display.variable.model.variable.IntVariable
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
-import worlds.gregs.hestia.core.entity.entity.model.events.Animation
-import worlds.gregs.hestia.core.entity.entity.model.events.Graphic
-import worlds.gregs.hestia.core.task.model.await.Ticks
-import worlds.gregs.hestia.core.task.model.await.WindowClose
 import worlds.gregs.hestia.core.task.model.await.WithinRange
 import worlds.gregs.hestia.core.world.movement.model.MovementType
 import worlds.gregs.hestia.core.world.movement.model.components.types.Movement
@@ -44,6 +37,13 @@ import worlds.gregs.hestia.core.world.movement.model.events.Moved
 import worlds.gregs.hestia.game.Engine
 import worlds.gregs.hestia.network.client.encoders.messages.InterfaceVisibility
 import java.util.concurrent.TimeUnit
+import worlds.gregs.hestia.core.task.model.await.Ticks
+import worlds.gregs.hestia.core.entity.entity.model.events.Animation
+import worlds.gregs.hestia.core.entity.entity.model.events.Graphic
+import worlds.gregs.hestia.core.display.interfaces.model.events.request.OpenInterface
+import worlds.gregs.hestia.core.task.model.await.InterfaceClose
+import worlds.gregs.hestia.core.display.interfaces.logic.systems.InterfaceSystem
+import worlds.gregs.hestia.core.display.interfaces.model.events.variable.SendVariable
 
 val skills = listOf(Skill.RUNECRAFTING, Skill.CRAFTING, Skill.FLETCHING, Skill.CONSTRUCTION, Skill.FARMING, Skill.MAGIC, Skill.SMITHING, Skill.COOKING, Skill.HERBLORE)
 val maximumExperience = 30000
@@ -120,7 +120,7 @@ on<AcceptedRequest> {
         entity perform Chat("You are assisting ${target.get(DisplayName::class).name}.", GameAssist)
         val assisting = entity get Assisting::class
         update(assisting)
-        entity perform OpenWindow(AssistXP)
+        entity perform OpenInterface(AssistXP)
         entity send InterfaceComponentText(AssistXP, 10, "The Assist System is available for you to use.")
         entity send InterfaceComponentText(AssistXP, 73, "Assist System XP Display - You are assisting ${target.get(DisplayName::class).name}")//TODO there's probably a packet or config for replacing `<name>`
         entity send InterfaceVisibility(AreaStatusIcon, 2, false)
@@ -128,8 +128,8 @@ on<AcceptedRequest> {
         entity perform Animation(7299)
         entity perform Graphic(1247)
         //TODO disable inventory
-        await(WindowClose(AssistXP))
-        if (system(WindowSystem::class).hasWindow(entity, AssistXP)) {
+        await(InterfaceClose(AssistXP))
+        if (system(InterfaceSystem::class).hasInterface(entity, AssistXP)) {
             cancel(entity, target)
         }
     }
@@ -137,10 +137,10 @@ on<AcceptedRequest> {
 }
 
 //Handle skill toggling
-on<WindowInteraction> {
-    where { target == AssistXP && widget in 74..82 }
+on<InterfaceInteraction> {
+    where { id == AssistXP && component in 74..82 }
     then {
-        val index = widget - 74
+        val index = component - 74
         entity perform ToggleVariable("assist_toggle_$index")
     }
 }
@@ -165,8 +165,8 @@ on<Moved> {
 }
 
 //Filter button handling
-on<WindowInteraction> {
-    where { target == FilterButtons && widget == 16 }
+on<InterfaceInteraction> {
+    where { id == FilterButtons && component == 16 }
     then {
         val assisting = entity get Assisting::class
         when (option) {
@@ -241,12 +241,12 @@ fun EntityAction.update(assisting: Assisting) {
 
 /**
  * Cancels the current assistance
- * Caused by either giver closing/interrupted window or requester moving over 20 tiles away
+ * Caused by either giver closing/interrupted interface or requester moving over 20 tiles away
  * @param entity The helper
  * @param target The assisted
  */
 fun EntityAction.cancel(entity: Int, target: Int) {
-    entity perform CloseWindow(AssistXP)
+    entity perform CloseInterface(AssistXP)
     entity perform Chat("You have stopped assisting ${target.get(DisplayName::class).name}.", GameAssist)
     target perform Chat("${entity.get(DisplayName::class).name} has stopped assisting you.", GameAssist)//Unconfirmed
     entity send InterfaceVisibility(AreaStatusIcon, 2, true)

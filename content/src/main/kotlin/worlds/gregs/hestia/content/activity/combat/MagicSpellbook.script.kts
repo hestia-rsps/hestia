@@ -1,16 +1,16 @@
 package worlds.gregs.hestia.content.activity.combat
 
-import worlds.gregs.hestia.core.display.window.api.Windows.Companion.AncientSpellbook
-import worlds.gregs.hestia.core.display.window.api.Windows.Companion.DungeoneeringSpellbook
-import worlds.gregs.hestia.core.display.window.api.Windows.Companion.LunarSpellbook
-import worlds.gregs.hestia.core.display.window.api.Windows.Companion.ModernSpellbook
-import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.AncientSpellbook
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.DungeoneeringSpellbook
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.LunarSpellbook
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.ModernSpellbook
+import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceInteraction
 
-on<WindowInteraction> {
-    where { target == ModernSpellbook || target == LunarSpellbook || target == AncientSpellbook || target == DungeoneeringSpellbook }
+on<InterfaceInteraction> {
+    where { id == ModernSpellbook || id == LunarSpellbook || id == AncientSpellbook || id == DungeoneeringSpellbook }
     then {
         //TODO test these are all the same regardless of spellbook type
-        when (widget) {
+        when (component) {
             2 -> {//Defensive casting
             }
             7 -> {//Combat spells

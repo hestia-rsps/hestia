@@ -1,42 +1,39 @@
 package worlds.gregs.hestia.content.display.windows.fullscreen
 
-import worlds.gregs.hestia.core.display.window.api.Windows.Companion.FixedGameframe
-import worlds.gregs.hestia.core.display.window.api.Windows.Companion.Logout
-import worlds.gregs.hestia.core.display.window.api.Windows.Companion.ResizableGameframe
-import worlds.gregs.hestia.core.display.window.api.Windows.Companion.WorldMap
-import worlds.gregs.hestia.core.display.window.model.events.WindowInteraction
-import worlds.gregs.hestia.core.display.window.model.events.WindowOpened
-import worlds.gregs.hestia.core.display.window.model.PlayerOptions
-import worlds.gregs.hestia.network.client.encoders.messages.PlayerContextMenuOption
-import worlds.gregs.hestia.core.display.window.model.actions.OpenWindow
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.FixedGameframe
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.Logout
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.ResizableGameframe
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.WorldMap
+import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceInteraction
+import worlds.gregs.hestia.core.display.interfaces.model.events.request.OpenInterface
 
-on<WindowInteraction> {
-    where { target == FixedGameframe || target == ResizableGameframe }
+on<InterfaceInteraction> {
+    where { id == FixedGameframe || id == ResizableGameframe }
     then {
-        val resizable = target == ResizableGameframe
+        val resizable = id == ResizableGameframe
         when {
-            resizable && widget == 176 || !resizable && widget == 182 ->//Logout
-                entity perform OpenWindow(Logout)
-            resizable && widget == 175 || !resizable && widget == 184 -> {//Adviser button
+            resizable && component == 176 || !resizable && component == 182 ->//Logout
+                entity perform OpenInterface(Logout)
+            resizable && component == 175 || !resizable && component == 184 -> {//Adviser button
             }
-            resizable && widget == 174 || !resizable && widget == 178 -> {//Compass
+            resizable && component == 174 || !resizable && component == 178 -> {//Compass
             }
-            resizable && widget == 182 || !resizable && widget == 180 ->//World map
-                entity perform OpenWindow(WorldMap)
-            resizable && widget == 229 || !resizable && widget == 0 -> {//XP orb
+            resizable && component == 182 || !resizable && component == 180 ->//World map
+                entity perform OpenInterface(WorldMap)
+            resizable && component == 229 || !resizable && component == 0 -> {//XP orb
                 when(option) {
                     1 -> {}//Toggle
                     7 -> {}//Reset
                 }
             }
-            resizable && widget in 39..54 -> {//All tabs
-                println("Open Tab ${widget - 39}")
+            resizable && component in 39..54 -> {//All tabs
+                println("Open Tab ${component - 39}")
             }
-            !resizable && widget in 129..136 -> {//Top row tabs
-                println("Open Tab ${widget - 129}")
+            !resizable && component in 129..136 -> {//Top row tabs
+                println("Open Tab ${component - 129}")
             }
-            !resizable && widget in 99..106 -> {//Bottom row tabs
-                println("Open Tab ${widget - 91}")//99 - 8
+            !resizable && component in 99..106 -> {//Bottom row tabs
+                println("Open Tab ${component - 91}")//99 - 8
             }
         }
     }

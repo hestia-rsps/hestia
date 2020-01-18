@@ -2,7 +2,9 @@ package worlds.gregs.hestia.core
 
 import worlds.gregs.hestia.core.display.client.ClientPlugin
 import worlds.gregs.hestia.core.display.dialogue.DialoguePlugin
-import worlds.gregs.hestia.core.display.window.WindowPlugin
+import worlds.gregs.hestia.core.display.interfaces.InterfacePlugin
+import worlds.gregs.hestia.core.display.request.RequestPlugin
+import worlds.gregs.hestia.core.display.variable.VariablePlugin
 import worlds.gregs.hestia.core.entity.`object`.ObjectPlugin
 import worlds.gregs.hestia.core.entity.bot.BotPlugin
 import worlds.gregs.hestia.core.entity.entity.EntityPlugin
@@ -27,7 +29,9 @@ setup {
     dependsOn(CachePlugin::class.java)
     dependsOn(DialoguePlugin::class.java)
     dependsOn(EntityPlugin::class.java)
-    dependsOn(WindowPlugin::class.java)
+    dependsOn(InterfacePlugin::class.java)
+    dependsOn(RequestPlugin::class.java)
+    dependsOn(VariablePlugin::class.java)
     dependsOn(LandPlugin::class.java)
     dependsOn(MapPlugin::class.java)
     dependsOn(MobPlugin::class.java)

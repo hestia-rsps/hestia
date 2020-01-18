@@ -6,7 +6,7 @@ import org.slf4j.LoggerFactory
 import worlds.gregs.hestia.GameServer
 import worlds.gregs.hestia.core.action.model.perform
 import worlds.gregs.hestia.core.display.client.model.components.Viewport
-import worlds.gregs.hestia.core.display.window.api.Windows
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces
 import worlds.gregs.hestia.core.entity.item.container.model.Inventory
 import worlds.gregs.hestia.core.entity.item.container.model.events.ItemOnMob
 import worlds.gregs.hestia.game.entity.MessageHandlerSystem
@@ -19,7 +19,7 @@ class InterfaceOnMobHandler : MessageHandlerSystem<InterfaceOnMob>() {
     private lateinit var inventoryMapper: ComponentMapper<Inventory>
     private val logger = LoggerFactory.getLogger(InterfaceOnMobHandler::class.java)!!
     private lateinit var viewportMapper: ComponentMapper<Viewport>
-    private lateinit var windows: Windows
+    private lateinit var interfaces: Interfaces
 
     override fun initialize() {
         super.initialize()
@@ -28,23 +28,23 @@ class InterfaceOnMobHandler : MessageHandlerSystem<InterfaceOnMob>() {
 
     override fun handle(entityId: Int, message: InterfaceOnMob) {
         val (slot, type, mobIndex, hash, _) = message
-        val inventory = inventoryMapper.get(entityId) ?: return logger.warn("Unhandled widget on mob $message")
+        val inventory = inventoryMapper.get(entityId) ?: return logger.warn("Unhandled interface on mob $message")
 
-        if(!windows.hasWindow(entityId, hash)) {
-            return logger.warn("Invalid widget on mob hash $message")
+        if(!interfaces.hasInterface(entityId, hash)) {
+            return logger.warn("Invalid interface on mob hash $message")
         }
 
         val inventoryItem = inventory.items.getOrNull(slot)
 
         if(inventoryItem == null || inventoryItem.type != type) {
-            return logger.warn("Invalid widget on mob item $message")
+            return logger.warn("Invalid interface on mob item $message")
         }
 
         //Find mob
         val viewport = viewportMapper.get(entityId)
         val mobId = viewport.localMobs().getEntity(mobIndex)
         if(mobId == -1) {
-            return logger.warn("Invalid widget on mob message $message")
+            return logger.warn("Invalid interface on mob message $message")
         }
 
         es.perform(entityId, ItemOnMob(mobId, slot, type))
