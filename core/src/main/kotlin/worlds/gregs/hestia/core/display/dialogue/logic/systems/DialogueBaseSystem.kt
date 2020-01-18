@@ -3,7 +3,7 @@ package worlds.gregs.hestia.core.display.dialogue.logic.systems
 import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.system.core.PassiveSystem
 import org.slf4j.Logger
-import world.gregs.hestia.core.network.protocol.encoders.messages.WidgetComponentText
+import world.gregs.hestia.core.network.protocol.encoders.messages.InterfaceComponentText
 import worlds.gregs.hestia.artemis.send
 import worlds.gregs.hestia.core.task.api.Tasks
 
@@ -17,10 +17,10 @@ abstract class DialogueBaseSystem : PassiveSystem() {
         //Open
         dialogueBoxSystem.openChat(entityId, window)
         //Title
-        es.send(entityId, WidgetComponentText(window, widgetStart, title ?: ""))
+        es.send(entityId, InterfaceComponentText(window, widgetStart, title ?: ""))
         //Lines
         lines.forEachIndexed { index, text ->
-            es.send(entityId, WidgetComponentText(window, widgetStart + index + 1, text))
+            es.send(entityId, InterfaceComponentText(window, widgetStart + index + 1, text))
         }
     }
 

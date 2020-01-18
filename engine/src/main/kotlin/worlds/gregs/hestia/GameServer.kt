@@ -74,7 +74,7 @@ class GameServer(worldDetails: Details) : Engine(), WorldChangeListener {
             add(WorldConnection(worldDetails))
         }
         //Checks for social server connection every 10 seconds
-        AutoConnection(pipeline, NetworkConstants.LOCALHOST, NetworkConstants.BASE_PORT - 1)
+        AutoConnection(pipeline, NetworkConstants.LOCALHOST, Settings.getInt("socialServerPort")!!)
     }
 
     override fun init(id: Int) {
@@ -142,7 +142,7 @@ class GameServer(worldDetails: Details) : Engine(), WorldChangeListener {
 
         fun start(args: Array<String>) {
             val id = if (args.isNotEmpty()) args[0].toInt() else -1
-            Settings.load()
+            Settings.load("./settings.yml")
             Xteas
             val worldDetails = WorldDetails(NetworkConstants.LOCALHOST, "UK", WorldDetails.Country.UK, 0, "Main World", WorldDetails.Setting.MEMBERS)
             server = GameServer(worldDetails)

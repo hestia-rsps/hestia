@@ -5,7 +5,7 @@ import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.event.common.Subscribe
 import net.mostlyoriginal.api.system.core.PassiveSystem
 import org.slf4j.LoggerFactory
-import world.gregs.hestia.core.network.protocol.encoders.messages.WidgetComponentText
+import world.gregs.hestia.core.network.protocol.encoders.messages.InterfaceComponentText
 import worlds.gregs.hestia.artemis.send
 import worlds.gregs.hestia.core.display.dialogue.model.events.CloseDialogue
 import worlds.gregs.hestia.core.display.dialogue.model.events.ContinueDialogue
@@ -88,10 +88,10 @@ class DialogueSystem : PassiveSystem() {
         es.send(entityId, WidgetHeadPlayer(window, if (action.large) 1 else 2))
         es.send(entityId, WidgetAnimation(window, if (action.large) 1 else 2, action.animation))
         //Send title
-        es.send(entityId, WidgetComponentText(window, 3, displayNameMapper.get(entityId)?.name ?: ""))
+        es.send(entityId, InterfaceComponentText(window, 3, displayNameMapper.get(entityId)?.name ?: ""))
         //Send lines
         action.lines.forEachIndexed { index, line ->
-            es.send(entityId, WidgetComponentText(window, 4 + index, line))
+            es.send(entityId, InterfaceComponentText(window, 4 + index, line))
         }
     }
 
@@ -113,10 +113,10 @@ class DialogueSystem : PassiveSystem() {
         es.send(entityId, WidgetHeadMob(window, if (action.large) 1 else 2, action.mob))
         es.send(entityId, WidgetAnimation(window, if (action.large) 1 else 2, action.animation))
         //Send title
-        es.send(entityId, WidgetComponentText(window, 3, mobDefinitions.get(action.mob).name))
+        es.send(entityId, InterfaceComponentText(window, 3, mobDefinitions.get(action.mob).name))
         //Send lines
         action.lines.forEachIndexed { index, line ->
-            es.send(entityId, WidgetComponentText(window, 4 + index, line))
+            es.send(entityId, InterfaceComponentText(window, 4 + index, line))
         }
     }
 
@@ -136,7 +136,7 @@ class DialogueSystem : PassiveSystem() {
         windows.openWindow(entityId, window)
         //Send lines
         action.lines.forEachIndexed { index, line ->
-            es.send(entityId, WidgetComponentText(window, 1 + index, line))
+            es.send(entityId, InterfaceComponentText(window, 1 + index, line))
         }
     }
 
@@ -147,7 +147,7 @@ class DialogueSystem : PassiveSystem() {
         windows.openWindow(entityId, window)
 
         es.send(entityId, Script(3449, action.model, action.zoom))//TODO test script packet
-        es.send(entityId, WidgetComponentText(window, 1, action.lines))
+        es.send(entityId, InterfaceComponentText(window, 1, action.lines))
     }
 
     @Subscribe
@@ -158,7 +158,7 @@ class DialogueSystem : PassiveSystem() {
         windows.openWindow(entityId, window)
 
         //TODO WidgetSprite widget index - 3
-        es.send(entityId, WidgetComponentText(window, 1, action.lines))
+        es.send(entityId, InterfaceComponentText(window, 1, action.lines))
     }
 
     @Subscribe
@@ -184,11 +184,11 @@ class DialogueSystem : PassiveSystem() {
             es.send(entityId, WidgetVisibility(window, if (multilineTitle) 3 + optionCount else 1 + optionCount + 3, large))
             es.send(entityId, WidgetVisibility(window, if (multilineTitle) 4 + optionCount else 9 + optionCount.rem(2), !large))
             //Send title
-            es.send(entityId, WidgetComponentText(window, startIndex, action.title))
+            es.send(entityId, InterfaceComponentText(window, startIndex, action.title))
         }
         //Send options
         action.options.forEachIndexed { index, option ->
-            es.send(entityId, WidgetComponentText(window, startIndex + 1 + index, option))
+            es.send(entityId, InterfaceComponentText(window, startIndex + 1 + index, option))
         }
     }
 
@@ -198,8 +198,8 @@ class DialogueSystem : PassiveSystem() {
         val window = Windows.ConfirmDestroy
         windows.openWindow(entityId, window)
 
-        es.send(entityId, WidgetComponentText(window, 7, action.text))
-        es.send(entityId, WidgetComponentText(window, 8, itemDefinitions.get(action.item).name))
+        es.send(entityId, InterfaceComponentText(window, 7, action.text))
+        es.send(entityId, InterfaceComponentText(window, 8, itemDefinitions.get(action.item).name))
         //TODO WidgetSprite widget index - 9
     }
 
@@ -224,7 +224,7 @@ class DialogueSystem : PassiveSystem() {
         es.send(entityId, WidgetAnimation(window, 2, action.animation))
         //Send lines
         action.lines.forEachIndexed { index, line ->
-            es.send(entityId, WidgetComponentText(window, 3 + index, line))
+            es.send(entityId, InterfaceComponentText(window, 3 + index, line))
         }
     }
 

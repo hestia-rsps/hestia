@@ -1,6 +1,6 @@
 package worlds.gregs.hestia.content.command
 
-import world.gregs.hestia.core.network.protocol.encoders.messages.WidgetComponentText
+import world.gregs.hestia.core.network.protocol.encoders.messages.InterfaceComponentText
 import worlds.gregs.hestia.core.display.client.model.events.Command
 import worlds.gregs.hestia.core.display.window.api.Windows
 import worlds.gregs.hestia.core.display.window.model.WindowPane.*
@@ -41,7 +41,7 @@ on<Command> {
         val component = part[1].toInt()
         val used = part[0].length + part[1].length + 2
         val text = content.substring(used).replace(" br ", "<br>")
-        entity send WidgetComponentText(id, component, text)
+        entity send InterfaceComponentText(id, component, text)
         isCancelled = true
     }
 }

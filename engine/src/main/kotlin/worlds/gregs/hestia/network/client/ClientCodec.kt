@@ -81,7 +81,7 @@ class ClientCodec : MessageHandshakeCodec() {
         bind(SkillLevelEncoder())
         bind(WidgetCloseEncoder())
         bind(WidgetAnimationEncoder())
-        bind(WidgetComponentTextEncoder())
+        bind(InterfaceComponentTextEncoder())
         bind(WidgetHeadMobEncoder())
         bind(WidgetHeadPlayerEncoder())
         bind(WidgetItemEncoder())

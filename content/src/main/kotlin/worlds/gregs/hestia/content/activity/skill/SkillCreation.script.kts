@@ -1,6 +1,6 @@
 package worlds.gregs.hestia.content.activity.skill
 
-import world.gregs.hestia.core.network.protocol.encoders.messages.WidgetComponentText
+import world.gregs.hestia.core.network.protocol.encoders.messages.InterfaceComponentText
 import worlds.gregs.hestia.core.display.dialogue.model.events.ContinueDialogue
 import worlds.gregs.hestia.core.display.window.api.Variable
 import worlds.gregs.hestia.core.display.window.api.Variables
@@ -79,7 +79,7 @@ on<SkillCreation> {
             entity send WidgetVisibility(SkillCreation, 6, true)//TODO custom amount entering
         }
         //Send description
-        entity send WidgetComponentText(SkillCreationAmount, 1, "Choose how many you wish to make, then<br>click on the chosen item to begin.")
+        entity send InterfaceComponentText(SkillCreationAmount, 1, "Choose how many you wish to make, then<br>click on the chosen item to begin.")
         //Send right click type
         entity perform SetVariable("skill_creation_type", "Test")
 

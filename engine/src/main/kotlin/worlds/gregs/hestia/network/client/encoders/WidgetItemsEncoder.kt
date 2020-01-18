@@ -4,7 +4,7 @@ import world.gregs.hestia.core.network.codec.message.MessageEncoder
 import world.gregs.hestia.core.network.codec.packet.Endian
 import world.gregs.hestia.core.network.codec.packet.Packet
 import world.gregs.hestia.core.network.codec.packet.PacketBuilder
-import world.gregs.hestia.core.network.protocol.ClientOpcodes.WIDGET_ITEMS
+import world.gregs.hestia.core.network.protocol.ClientOpcodes.INTERFACE_ITEMS
 import worlds.gregs.hestia.network.client.encoders.messages.WidgetItems
 
 class WidgetItemsEncoder : MessageEncoder<WidgetItems>() {
@@ -12,7 +12,7 @@ class WidgetItemsEncoder : MessageEncoder<WidgetItems>() {
     override fun encode(builder: PacketBuilder, message: WidgetItems) {
         val (key, items, negativeKey) = message
         builder.apply {
-            writeOpcode(WIDGET_ITEMS, Packet.Type.VAR_SHORT)
+            writeOpcode(INTERFACE_ITEMS, Packet.Type.VAR_SHORT)
             writeShort(if (negativeKey) key else key)
             writeByte(negativeKey)
             writeShort(items.size)

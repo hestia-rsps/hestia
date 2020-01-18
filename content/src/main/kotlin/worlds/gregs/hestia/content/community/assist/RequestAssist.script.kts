@@ -1,6 +1,6 @@
 package worlds.gregs.hestia.content.community.assist
 
-import world.gregs.hestia.core.network.protocol.encoders.messages.WidgetComponentText
+import world.gregs.hestia.core.network.protocol.encoders.messages.InterfaceComponentText
 import world.gregs.hestia.core.services.plural
 import worlds.gregs.hestia.content.activity.skill.Experience
 import worlds.gregs.hestia.content.activity.skill.Skill
@@ -121,8 +121,8 @@ on<AcceptedRequest> {
         val assisting = entity get Assisting::class
         update(assisting)
         entity perform OpenWindow(AssistXP)
-        entity send WidgetComponentText(AssistXP, 10, "The Assist System is available for you to use.")
-        entity send WidgetComponentText(AssistXP, 73, "Assist System XP Display - You are assisting ${target.get(DisplayName::class).name}")//TODO there's probably a packet or config for replacing `<name>`
+        entity send InterfaceComponentText(AssistXP, 10, "The Assist System is available for you to use.")
+        entity send InterfaceComponentText(AssistXP, 73, "Assist System XP Display - You are assisting ${target.get(DisplayName::class).name}")//TODO there's probably a packet or config for replacing `<name>`
         entity send WidgetVisibility(AreaStatusIcon, 2, false)
         entity perform SendVariable("total_xp_earned")
         entity perform Animation(7299)
@@ -204,7 +204,7 @@ on<Experience>(1) {
         if (index != -1 && active && gained < maximumExperience) {
             gained += increase * 10//TODO decide how to handle experience
             if (gained >= maximumExperience) {
-                target send WidgetComponentText(AssistXP, 10, "You've earned the maximum XP from the Assist System with a 24-hour period.\nYou can assist again in 24 hours.")
+                target send InterfaceComponentText(AssistXP, 10, "You've earned the maximum XP from the Assist System with a 24-hour period.\nYou can assist again in 24 hours.")
                 assisting.timeout = System.currentTimeMillis() + TimeUnit.HOURS.toMillis(24)
             }
             //TODO what if increase > maximum or entity level > targets

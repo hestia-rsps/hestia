@@ -18,6 +18,7 @@ import worlds.gregs.hestia.core.display.window.model.actions.OpenWindow
 import worlds.gregs.hestia.core.display.window.model.components.Assistance
 import worlds.gregs.hestia.core.display.window.model.components.Assisting
 import worlds.gregs.hestia.core.display.window.model.events.*
+import worlds.gregs.hestia.core.display.window.model.events.variable.*
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.entity.model.events.Animation
 import worlds.gregs.hestia.core.entity.entity.model.events.Graphic
