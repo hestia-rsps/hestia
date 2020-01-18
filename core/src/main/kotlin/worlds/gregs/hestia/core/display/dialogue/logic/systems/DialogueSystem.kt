@@ -7,6 +7,8 @@ import net.mostlyoriginal.api.system.core.PassiveSystem
 import org.slf4j.LoggerFactory
 import world.gregs.hestia.core.network.protocol.encoders.messages.InterfaceComponentText
 import worlds.gregs.hestia.artemis.send
+import worlds.gregs.hestia.core.display.dialogue.api.Dialogue
+import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.IntegerEntryDialogue
 import worlds.gregs.hestia.core.display.dialogue.model.events.CloseDialogue
 import worlds.gregs.hestia.core.display.dialogue.model.events.ContinueDialogue
 import worlds.gregs.hestia.core.display.dialogue.model.type.*
@@ -55,7 +57,9 @@ import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.Mult
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.MultiVar4
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.MultiVar5
 import worlds.gregs.hestia.core.display.interfaces.model.Window
+import worlds.gregs.hestia.core.entity.entity.model.components.Type
 import worlds.gregs.hestia.core.task.api.Tasks
+import worlds.gregs.hestia.core.task.model.events.ProcessTaskSuspension
 import worlds.gregs.hestia.network.client.encoders.messages.*
 import worlds.gregs.hestia.service.cache.definition.systems.ItemDefinitionSystem
 import worlds.gregs.hestia.service.cache.definition.systems.MobDefinitionSystem
@@ -68,6 +72,12 @@ class DialogueSystem : PassiveSystem() {
     private lateinit var displayNameMapper: ComponentMapper<DisplayName>
     private lateinit var mobDefinitions: MobDefinitionSystem
     private lateinit var itemDefinitions: ItemDefinitionSystem
+    private lateinit var typeMapper: ComponentMapper<Type>
+
+    private fun openDialogue(entityId: Int, id: Int) {
+        interfaces.closeWindow(entityId, Window.DIALOGUE_BOX)
+        interfaces.openInterface(entityId, id)
+    }
 
     @Subscribe
     private fun playerChat(action: PlayerChat) {
@@ -81,8 +91,7 @@ class DialogueSystem : PassiveSystem() {
             else -> return logger.warn("Invalid player chat $action")
         }
         //Open
-        interfaces.closeWindow(entityId, Window.DIALOGUE_BOX)
-        interfaces.openInterface(entityId, id)
+        openDialogue(entityId, id)
 
         //Send model
         es.send(entityId, InterfaceHeadPlayer(id, if (action.large) 1 else 2))
@@ -98,6 +107,7 @@ class DialogueSystem : PassiveSystem() {
     @Subscribe
     private fun mobChat(action: MobChat) {
         val entityId = action.entity
+        val mobType = typeMapper.get(action.mob).id
         //Choose window
         val id = when (action.lines.size) {
             1 -> if (action.`continue`) MobChat1 else MobChatNp1
@@ -107,13 +117,12 @@ class DialogueSystem : PassiveSystem() {
             else -> return logger.warn("Invalid mob chat $action")
         }
         //Open
-        interfaces.closeWindow(entityId, Window.DIALOGUE_BOX)
-        interfaces.openInterface(entityId, id)
+        openDialogue(entityId, id)
         //Send model
-        es.send(entityId, InterfaceHeadMob(id, if (action.large) 1 else 2, action.mob))
+        es.send(entityId, InterfaceHeadMob(id, if (action.large) 1 else 2, mobType))
         es.send(entityId, InterfaceAnimation(id, if (action.large) 1 else 2, action.animation))
         //Send title
-        es.send(entityId, InterfaceComponentText(id, 3, mobDefinitions.get(action.mob).name))
+        es.send(entityId, InterfaceComponentText(id, 3, mobDefinitions.get(mobType).name))
         //Send lines
         action.lines.forEachIndexed { index, line ->
             es.send(entityId, InterfaceComponentText(id, 4 + index, line))
@@ -133,7 +142,7 @@ class DialogueSystem : PassiveSystem() {
             else -> return logger.warn("Invalid statement $action")
         }
         //Open
-        interfaces.openInterface(entityId, id)
+        openDialogue(entityId, id)
         //Send lines
         action.lines.forEachIndexed { index, line ->
             es.send(entityId, InterfaceComponentText(id, 1 + index, line))
@@ -144,7 +153,7 @@ class DialogueSystem : PassiveSystem() {
     private fun itemBox(action: ItemBox) {
         val entityId = action.entity
         val id = Interfaces.ObjBox
-        interfaces.openInterface(entityId, id)
+        openDialogue(entityId, id)
 
         es.send(entityId, Script(3449, action.model, action.zoom))//TODO test script packet
         es.send(entityId, InterfaceComponentText(id, 1, action.lines))
@@ -155,7 +164,7 @@ class DialogueSystem : PassiveSystem() {
         val entityId = action.entity
         val id = Interfaces.ObjBox
         //Open
-        interfaces.openInterface(entityId, id)
+        openDialogue(entityId, id)
 
         //TODO Sprite index - 3
         es.send(entityId, InterfaceComponentText(id, 1, action.lines))
@@ -176,7 +185,7 @@ class DialogueSystem : PassiveSystem() {
             else -> return logger.warn("Invalid multi option $action")
         }
         //Open
-        interfaces.openInterface(entityId, id)
+        openDialogue(entityId, id)
         val startIndex = if (multilineTitle) 0 else 1
         if (action.title != null) {
             //Update sword locations
@@ -196,7 +205,8 @@ class DialogueSystem : PassiveSystem() {
     private fun confirmDestroy(action: Destroy) {
         val entityId = action.entity
         val id = Interfaces.ConfirmDestroy
-        interfaces.openInterface(entityId, id)
+        //Open
+        openDialogue(entityId, id)
 
         es.send(entityId, InterfaceComponentText(id, 7, action.text))
         es.send(entityId, InterfaceComponentText(id, 8, itemDefinitions.get(action.item).name))
@@ -206,6 +216,7 @@ class DialogueSystem : PassiveSystem() {
     @Subscribe
     private fun doubleChat(action: DoubleChat) {
         val entityId = action.entity
+        val mobType = typeMapper.get(action.mob).id
         //Choose interface
         val id = when (action.lines.size) {
             1 -> DoubleChat1
@@ -215,9 +226,9 @@ class DialogueSystem : PassiveSystem() {
             else -> return logger.warn("Invalid double chat $action")
         }
         //Open
-        interfaces.openInterface(entityId, id)
+        openDialogue(entityId, id)
         //Send left model
-        es.send(entityId, InterfaceHeadMob(id, 1, action.mob))
+        es.send(entityId, InterfaceHeadMob(id, 1, mobType))
         es.send(entityId, InterfaceAnimation(id, 1, action.animation))
         //Send right model
         es.send(entityId, InterfaceHeadPlayer(id, 2))
@@ -237,9 +248,14 @@ class DialogueSystem : PassiveSystem() {
 
     @Subscribe
     private fun onContinue(action: ContinueDialogue) {
-        when(val suspension = tasks.getSuspension(action.entity)) {
+        when (val suspension = tasks.getSuspension(action.entity)) {
             is MobChat -> tasks.resume(action.entity, suspension, Unit)
             is PlayerChat -> tasks.resume(action.entity, suspension, Unit)
+            is Statement -> tasks.resume(action.entity, suspension, Unit)
+            is MultiOption -> if(action.option in Dialogue.FIRST..Dialogue.FIFTH) tasks.resume(action.entity, suspension, action.option)
+            else -> {
+                logger.warn("Unhandled continue $action")
+            }
         }
     }
 }

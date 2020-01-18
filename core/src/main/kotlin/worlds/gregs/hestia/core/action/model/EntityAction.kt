@@ -7,6 +7,8 @@ import world.gregs.hestia.core.services.plural
 import worlds.gregs.hestia.core.action.logic.dispatch
 import worlds.gregs.hestia.core.display.client.model.components.ClientIndex
 import worlds.gregs.hestia.core.display.client.model.events.Chat
+import worlds.gregs.hestia.core.display.dialogue.api.Dialogue
+import worlds.gregs.hestia.core.display.dialogue.model.events.CloseDialogue
 import worlds.gregs.hestia.core.display.update.model.components.DisplayName
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.item.container.api.Composition
@@ -35,13 +37,27 @@ abstract class EntityAction : WorldAction(), Cancellable {
 
     var entity: Int = -1
 
+    /**
+     * Ideal solution here would be `infix fun (Int, Task).awaitPerform(action: A)`
+     * Using [Compound extensions](https://github.com/Kotlin/KEEP/pull/176)
+     */
+    suspend infix fun <T, A> Await.perform(action: A) where A : EntityAction, A : TaskType<T> = suspendCancellableCoroutine<T> {
+        action.continuation = it
+        task.suspension = action
+        entity.perform(action)
+    }
+
+    data class Await(val entity: Int, val task: Task)
+
+    infix fun Int.await(task: Task) = Await(entity, task)
+
     infix fun Int.perform(action: EntityAction) {
         action.entity = this
         super.perform(action)
     }
 
     override fun perform(action: Action) {
-        if(action is EntityAction) {
+        if (action is EntityAction) {
             action.entity = entity
         }
         super.perform(action)
@@ -59,16 +75,11 @@ abstract class EntityAction : WorldAction(), Cancellable {
         entity perform strongTask(priority, action)
     }
 
-    /**
-     * Ideal solution here would be `infix fun (Int, Task).awaitPerform(action: A)`
-     * Using [Compound extensions](https://github.com/Kotlin/KEEP/pull/176)
-     */
-    suspend fun <T, A> Task.awaitPerform(entity: Int, action: A) where A: EntityAction, A: TaskType<T> = suspendCancellableCoroutine<T> {
-        action.continuation = it
-        suspension = action
-        entity.perform(action)
+    suspend fun Task.dialogue(block: suspend Dialogue.() -> Unit) {
+        onCancel { entity perform CloseDialogue() }
+        block(Dialogue(this@EntityAction, this))
+        entity perform CloseDialogue()
     }
-
 
     /*
         Containers

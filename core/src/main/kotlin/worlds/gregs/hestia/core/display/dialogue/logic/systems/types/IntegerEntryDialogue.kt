@@ -3,27 +3,30 @@ package worlds.gregs.hestia.core.display.dialogue.logic.systems.types
 import com.artemis.annotations.Wire
 import kotlinx.coroutines.CancellableContinuation
 import kotlinx.coroutines.suspendCancellableCoroutine
+import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.event.common.Subscribe
+import net.mostlyoriginal.api.system.core.PassiveSystem
 import org.slf4j.LoggerFactory
 import worlds.gregs.hestia.artemis.send
-import worlds.gregs.hestia.core.display.dialogue.api.Dialogue
-import worlds.gregs.hestia.core.display.dialogue.logic.systems.DialogueBaseSystem
 import worlds.gregs.hestia.core.display.dialogue.model.events.IntegerEntered
 import worlds.gregs.hestia.core.task.api.Task
 import worlds.gregs.hestia.core.task.api.TaskType
+import worlds.gregs.hestia.core.task.api.Tasks
 import worlds.gregs.hestia.core.task.model.events.ProcessTaskSuspension
 import worlds.gregs.hestia.network.client.encoders.messages.Script
 
-data class IntegerEntryDialogue(val title: String, override var continuation: CancellableContinuation<Int>) : TaskType<Int>, Dialogue
+data class IntegerEntryDialogue(val title: String, override var continuation: CancellableContinuation<Int>) : TaskType<Int>
 
 suspend fun Task.intEntry(title: String) = suspendCancellableCoroutine<Int> {
     suspension = IntegerEntryDialogue(title, it)
 }
 
 @Wire(injectInherited = true)
-class IntegerEntryDialogueSystem : DialogueBaseSystem() {
+class IntegerEntryDialogueSystem : PassiveSystem() {
 
-    override val logger = LoggerFactory.getLogger(IntegerEntryDialogueSystem::class.java)!!
+    private lateinit var tasks: Tasks
+    private lateinit var es: EventSystem
+    private val logger = LoggerFactory.getLogger(IntegerEntryDialogueSystem::class.java)!!
 
     @Subscribe(ignoreCancelledEvents = true)
     private fun handleSuspend(event: ProcessTaskSuspension) {

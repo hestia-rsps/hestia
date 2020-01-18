@@ -6,10 +6,10 @@ import worlds.gregs.hestia.GameServer
 import worlds.gregs.hestia.core.action.model.perform
 import worlds.gregs.hestia.core.display.dialogue.model.events.ContinueDialogue
 import worlds.gregs.hestia.game.entity.MessageHandlerSystem
-import worlds.gregs.hestia.network.client.decoders.messages.DialogueContinue
+import worlds.gregs.hestia.network.client.decoders.messages.DialogueContinueMessage
 
 @Wire(failOnNull = false)
-class DialogueContinueHandler : MessageHandlerSystem<DialogueContinue>() {
+class DialogueContinueHandler : MessageHandlerSystem<DialogueContinueMessage>() {
 
     override fun initialize() {
         super.initialize()
@@ -18,7 +18,7 @@ class DialogueContinueHandler : MessageHandlerSystem<DialogueContinue>() {
 
     private lateinit var es: EventSystem
 
-    override fun handle(entityId: Int, message: DialogueContinue) {
+    override fun handle(entityId: Int, message: DialogueContinueMessage) {
         val (hash, component) = message
         val id = hash shr 16
         var option = hash and 0xFF

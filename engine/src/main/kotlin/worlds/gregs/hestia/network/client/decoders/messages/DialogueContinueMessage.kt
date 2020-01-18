@@ -7,4 +7,4 @@ import world.gregs.hestia.core.network.codec.message.Message
  * @param hash The interface and component id combined
  * @param index The index of the interface select
  */
-data class DialogueContinue(val hash: Int, val index: Int) : Message
+data class DialogueContinueMessage(val hash: Int, val index: Int) : Message

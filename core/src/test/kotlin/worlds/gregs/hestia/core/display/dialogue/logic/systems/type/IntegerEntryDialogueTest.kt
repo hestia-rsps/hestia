@@ -12,7 +12,6 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import worlds.gregs.hestia.MockkGame
 import worlds.gregs.hestia.artemis.send
-import worlds.gregs.hestia.core.display.dialogue.logic.systems.DialogueBoxSystem
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.IntegerEntryDialogue
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.IntegerEntryDialogueSystem
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.intEntry

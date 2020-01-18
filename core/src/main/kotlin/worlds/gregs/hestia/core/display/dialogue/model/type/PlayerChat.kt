@@ -14,6 +14,11 @@ import worlds.gregs.hestia.core.task.model.await.Resendable
  * @param continue Whether to show "Click here to continue" button or not
  */
 data class PlayerChat(val lines: List<String>, val animation: Int, val large: Boolean = false, val `continue`: Boolean = true) : EntityAction(), TaskType<Unit>, Resendable {
+
+    constructor(animation: Int = Expression.Talking, large: Boolean = false, `continue`: Boolean = true, text: String) : this(text.trimIndent().lines(), animation, large, `continue`)
+
+    constructor(text: String) : this(text.trimIndent().lines(), Expression.Talking, false, true)
+
     init {
         check(lines.size <= 4) { "Maximum player dialogue lines 4" }
     }

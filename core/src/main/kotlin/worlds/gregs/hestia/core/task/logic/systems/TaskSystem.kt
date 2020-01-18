@@ -10,11 +10,11 @@ import worlds.gregs.hestia.core.task.api.TaskType
 import worlds.gregs.hestia.core.task.api.Tasks
 import worlds.gregs.hestia.core.task.model.InactiveTask
 import worlds.gregs.hestia.core.task.model.TaskContinuation
-import worlds.gregs.hestia.core.task.model.TaskDeque
 import worlds.gregs.hestia.core.task.model.await.Resendable
 import worlds.gregs.hestia.core.task.model.components.TaskQueue
 import worlds.gregs.hestia.core.task.model.events.ProcessTaskSuspension
 import worlds.gregs.hestia.core.task.model.events.StartTask
+import java.util.*
 import kotlin.coroutines.*
 
 class TaskSystem : Tasks() {
@@ -33,28 +33,31 @@ class TaskSystem : Tasks() {
             processTask(entityId, task, cont, Unit)
             //Queue
             if(!task.isCancelled && !task.isCompleted) {
-                val queue = taskQueue.active.getOrPut(priority) { TaskDeque() }
+                val queue = taskQueue.active.getOrPut(priority) { LinkedList() }
                 queue.push(task)
             }
         }
     }
 
     override fun getSuspension(entityId: Int): TaskType<*>? {
-        val component = taskQueueMapper.get(entityId) ?: return null
-        val queue = purge(component.active) ?: return null
+        val taskQueue = taskQueueMapper.get(entityId) ?: return null
+        val queue = purge(taskQueue) ?: return null
         val peek = queue.peek()
-        resend(queue, peek?.suspension)
+        resend(taskQueue, peek?.suspension)
         return peek?.suspension
     }
 
     override fun <T> resume(entityId: Int, type: TaskType<T>, result: T): Boolean {
         val taskQueue = taskQueueMapper.get(entityId) ?: return false
-        val queue = purge(taskQueue.active) ?: return false
+        val queue = purge(taskQueue) ?: return false
         val task = queue.peek()
         val suspension = task?.suspension
-        resend(queue, suspension)
         return if (suspension != null) {
             processTask(entityId, task, type.continuation, result)
+            if(task.isCancelled || task.isCompleted) {
+                val deque = purge(taskQueue) ?: return true
+                resend(taskQueue, deque.peek().suspension)
+            }
             true
         } else {
             false
@@ -62,11 +65,11 @@ class TaskSystem : Tasks() {
     }
 
     /**
-     * If [deque] was recently polled then resend the most up to date [suspension] if it's an [Action]
+     * If [TaskQueue] was recently polled then resend the most up to date [suspension] if it's an [Action]
      */
-    internal fun resend(deque: TaskDeque, suspension: TaskType<*>?) {
-        if(deque.needsUpdate) {
-            deque.needsUpdate = false
+    internal fun resend(taskQueue: TaskQueue, suspension: TaskType<*>?) {
+        if(taskQueue.needsUpdate) {
+            taskQueue.needsUpdate = false
             if(suspension is Resendable) {
                 (suspension as? Action)?.perform(suspension)
             }
@@ -74,16 +77,17 @@ class TaskSystem : Tasks() {
     }
 
     /**
-     *  Returns the [TaskDeque] of the top most active task
-     *  Removes empty [TaskDeque] and completed or cancelled [Task]'s in the process
+     *  Returns the [Deque<Task>] of the top most active task
+     *  Removes empty [Deque<Task>] and completed or cancelled [Task]'s in the process
      */
-    internal fun purge(map: MutableMap<Int, TaskDeque>?): TaskDeque? {
-        val iterator = map?.iterator() ?: return null
+    internal fun purge(taskQueue: TaskQueue?): Deque<Task>? {
+        val iterator = taskQueue?.active?.iterator() ?: return null
         while(iterator.hasNext()) {
             val queue = iterator.next().value
             var peek = queue.peek()
             while(queue.isNotEmpty()) {
                 if (peek.isCompleted || peek.isCancelled) {//Purge
+                    taskQueue.needsUpdate = true
                     queue.poll()
                     peek = queue.peek()
                 } else {//Valid value
@@ -104,7 +108,7 @@ class TaskSystem : Tasks() {
 
     override fun cancel(entityId: Int, cause: TaskCancellation) {
         val component = taskQueueMapper.get(entityId)
-        val poll = purge(component?.active)?.poll() ?: return
+        val poll = purge(component)?.poll() ?: return
         poll.resumeWithException(cause)
     }
 

@@ -15,7 +15,6 @@ import worlds.gregs.hestia.core.task.api.Task
 import worlds.gregs.hestia.core.task.api.TaskCancellation
 import worlds.gregs.hestia.core.task.api.TaskType
 import worlds.gregs.hestia.core.task.model.InactiveTask
-import worlds.gregs.hestia.core.task.model.TaskDeque
 import worlds.gregs.hestia.core.task.model.components.TaskQueue
 import worlds.gregs.hestia.core.task.model.events.ProcessTaskSuspension
 import java.util.*

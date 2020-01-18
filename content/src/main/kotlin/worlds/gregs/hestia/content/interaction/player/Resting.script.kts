@@ -118,7 +118,7 @@ fun EntityAction.standUp(slowly: Boolean) = task(2) {
     val blackboard = entity get Blackboard::class
     //Perform stand up animation
     val animation = blackboard.getInt("stand_up_anim")
-    awaitPerform(entity, Animation(animation))
+    entity await this perform Animation(animation)
     //Cancel animation quickly or slowly
     if(slowly) {
         await(Ticks(1))

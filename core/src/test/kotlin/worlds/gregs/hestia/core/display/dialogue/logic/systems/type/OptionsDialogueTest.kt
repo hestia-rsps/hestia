@@ -15,7 +15,6 @@ import org.junit.jupiter.api.assertThrows
 import org.junit.jupiter.api.extension.ExtendWith
 import worlds.gregs.hestia.MockkGame
 import worlds.gregs.hestia.artemis.send
-import worlds.gregs.hestia.core.display.dialogue.logic.systems.DialogueBoxSystem
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.OptionsDialogue
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.OptionsDialogueSystem
 import worlds.gregs.hestia.core.display.dialogue.logic.systems.types.option
