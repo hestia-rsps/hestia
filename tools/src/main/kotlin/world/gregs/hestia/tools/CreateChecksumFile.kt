@@ -10,7 +10,7 @@ object CreateChecksumFile {
     @JvmStatic
     fun main(args: Array<String>) {
         //Load necessary files
-        Settings.load()
+        Settings.load("./settings.yml")
         val cache = CacheStore()
         //Create buffer
         val count = cache.indexCount()

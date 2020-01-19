@@ -1,4 +1,0 @@
-dependencies {
-    compile project(":engine")
-    testCompile project(":engine")
-}

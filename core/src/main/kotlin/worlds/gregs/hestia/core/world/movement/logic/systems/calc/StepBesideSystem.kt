@@ -3,8 +3,9 @@ package worlds.gregs.hestia.core.world.movement.logic.systems.calc
 import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
 import world.gregs.hestia.core.services.int
-import worlds.gregs.hestia.core.world.movement.model.components.calc.Beside
 import worlds.gregs.hestia.core.display.update.logic.DirectionUtils.Companion.getOffset
+import worlds.gregs.hestia.core.entity.entity.model.components.Position
+import worlds.gregs.hestia.core.world.movement.model.components.calc.Beside
 
 /**
  * StepBesideSystem
@@ -121,6 +122,9 @@ class StepBesideSystem : BaseMovementSystem(Beside::class) {
             }
             return false
         }
+
+        fun isNear(position: Position, destination: Position, sizeX: Int, sizeY: Int, beside: Boolean)
+                = isNear(position.x, position.y, destination.x, destination.y, sizeX, sizeY, beside)
 
         fun isNear(myX: Int, myY: Int, destX: Int, destY: Int, sizeX: Int, sizeY: Int, beside: Boolean): Boolean {
             //Offset by +/- 1 to include corners if not beside

@@ -1,16 +1,12 @@
 package worlds.gregs.hestia.core.display.dialogue.model.events
 
-import net.mostlyoriginal.api.event.common.Cancellable
-import net.mostlyoriginal.api.event.common.Event
+import worlds.gregs.hestia.artemis.InstantEvent
+import worlds.gregs.hestia.core.action.model.EntityAction
 
-data class ContinueDialogue(val entityId: Int, val interfaceId: Int, val buttonId: Int, val component: Int) : Event, Cancellable {
-
-    private var cancelled = false
-
-    override fun setCancelled(value: Boolean) {
-        cancelled = value
-    }
-
-    override fun isCancelled() = cancelled
-
-}
+/**
+ * Event notifying the continuation of a dialogue chain
+ * @param id The interface id
+ * @param option The selection option
+ * @param component The selected component
+ */
+data class ContinueDialogue(val id: Int, val option: Int, val component: Int) : EntityAction(), InstantEvent

@@ -9,7 +9,7 @@ import worlds.gregs.hestia.game.update.blocks.DelayedTile
 import worlds.gregs.hestia.game.update.blocks.ForceMovementBlock
 import worlds.gregs.hestia.artemis.Aspect
 
-open class ForceMovementBlockFactory(flag: Int, mob: Boolean = false) : BlockFactory<ForceMovementBlock>(Aspect.all(Renderable::class, Position::class, ForceMovement::class), flag = flag, mob = mob) {
+open class ForceMovementBlockFactory(flag: Int, npc: Boolean = false) : BlockFactory<ForceMovementBlock>(Aspect.all(Renderable::class, Position::class, ForceMovement::class), flag = flag, npc = npc) {
 
     private lateinit var positionMapper: ComponentMapper<Position>
     private lateinit var forceMovementMapper: ComponentMapper<ForceMovement>

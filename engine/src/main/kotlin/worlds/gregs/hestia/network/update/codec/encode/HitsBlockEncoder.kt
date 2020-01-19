@@ -6,12 +6,12 @@ import worlds.gregs.hestia.game.update.blocks.HitsBlock
 import worlds.gregs.hestia.game.update.blocks.Marker
 import worlds.gregs.hestia.network.update.codec.UpdateBlockEncoder
 
-class HitsBlockEncoder(private val mob: Boolean) : UpdateBlockEncoder<HitsBlock> {
+class HitsBlockEncoder(private val npc: Boolean) : UpdateBlockEncoder<HitsBlock> {
 
     override fun encode(builder: PacketBuilder, block: HitsBlock) {
         val (_, damage, player, other) = block
         builder.apply {
-            if (mob) {
+            if (npc) {
                 writeByte(damage.size, Modifier.INVERSE)
             } else {
                 writeByte(damage.size)
@@ -38,7 +38,7 @@ class HitsBlockEncoder(private val mob: Boolean) : UpdateBlockEncoder<HitsBlock>
                 }
 
                 writeSmart(hit.delay)
-                if(mob) {
+                if(npc) {
                     writeByte(percentage)
                 } else {
                     writeByte(percentage, Modifier.INVERSE)

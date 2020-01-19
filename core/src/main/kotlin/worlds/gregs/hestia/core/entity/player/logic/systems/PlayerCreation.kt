@@ -8,7 +8,7 @@ import net.mostlyoriginal.api.system.core.PassiveSystem
 import worlds.gregs.hestia.artemis.events.CreatePlayer
 import worlds.gregs.hestia.core.display.client.api.ClientNetwork
 import worlds.gregs.hestia.core.display.update.model.components.DisplayName
-import worlds.gregs.hestia.core.display.widget.api.GameFrame
+import worlds.gregs.hestia.core.display.interfaces.model.components.GameFrame
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.player.logic.PlayerFactory
 import java.util.concurrent.atomic.AtomicInteger

@@ -40,14 +40,14 @@ class DirectionUtils {
         private val MOVE_X = intArrayOf(0, 1, 1, 1, 0, -1, -1, -1)
         private val MOVE_Y = intArrayOf(1, 1, 0, -1, -1, -1, 0, 1)
 
-        fun getMobMoveDirection(direction: Direction): Int {
+        fun getNpcMoveDirection(direction: Direction): Int {
             return if (direction == Direction.NONE) {
                 -1
             } else {
-                getMobMoveDirection(direction.deltaX, direction.deltaY)
+                getNpcMoveDirection(direction.deltaX, direction.deltaY)
             }
         }
-        private fun getMobMoveDirection(dx: Int, dy: Int): Int {
+        private fun getNpcMoveDirection(dx: Int, dy: Int): Int {
             MOVE_X.forEachIndexed { i, x ->
                 if (close(x, dx) && close(MOVE_Y[i], dy)) {
                     return i

@@ -2,6 +2,7 @@ package worlds.gregs.hestia.core.display.client.logic.systems.network.`in`
 
 import net.mostlyoriginal.api.event.common.EventSystem
 import worlds.gregs.hestia.GameServer
+import worlds.gregs.hestia.core.action.model.perform
 import worlds.gregs.hestia.core.display.client.model.events.Command
 import worlds.gregs.hestia.game.entity.MessageHandlerSystem
 import worlds.gregs.hestia.network.client.decoders.messages.ConsoleCommand
@@ -24,9 +25,9 @@ class ConsoleCommandHandler : MessageHandlerSystem<ConsoleCommand>() {
         if(command.contains(" ")) {
             val prefix = parts[0]
             val content = command.removePrefix("$prefix ")
-            es.dispatch(Command(entityId, prefix, content))
+            es.perform(entityId, Command(prefix, content))
         } else {
-            es.dispatch(Command(entityId, command, command))
+            es.perform(entityId, Command(command, command))
         }
     }
 }

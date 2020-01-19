@@ -8,15 +8,7 @@ import worlds.gregs.hestia.network.update.codec.UpdateBlockEncoder
 class MoveTypeBlockEncoder : UpdateBlockEncoder<MoveTypeBlock> {
 
     override fun encode(builder: PacketBuilder, block: MoveTypeBlock) {
-        val (_, moving, walking, running) = block
-        builder.writeByte(
-                when {
-                    moving -> 127
-                    walking -> 1
-                    running -> 2
-                    else -> 0
-                }, Modifier.INVERSE
-        )
+        builder.writeByte(block.movementType, Modifier.INVERSE)
     }
 
 }

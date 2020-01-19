@@ -1,11 +1,14 @@
 package worlds.gregs.hestia.core.task.model
 
 import kotlinx.coroutines.CompletionHandler
-import worlds.gregs.hestia.core.task.api.*
+import worlds.gregs.hestia.core.task.api.Task
+import worlds.gregs.hestia.core.task.api.TaskCancellation
+import worlds.gregs.hestia.core.task.api.TaskSuspension
+import kotlin.coroutines.CoroutineContext
 
-class TaskContinuation(override val context: TaskContext) : Task {
+class TaskContinuation(override val context: CoroutineContext) : Task {
     private var onCancel: CompletionHandler? = null
-    override var suspension: TaskType<*>? = null
+    override var suspension: TaskSuspension<*>? = null
 
     override fun onCancel(handler: CompletionHandler) {
         this.onCancel = handler
@@ -14,9 +17,8 @@ class TaskContinuation(override val context: TaskContext) : Task {
     override fun resumeWith(result: Result<Any>) {
         if (result.isFailure) {
             val exception = result.exceptionOrNull()!!
-            if(exception is TaskCancellation) {
-                onCancel?.invoke(exception)
-            } else {
+            onCancel?.invoke(exception)
+            if(exception !is TaskCancellation || exception is TaskCancellation.Cancellation) {
                 exception.printStackTrace()
             }
         }

@@ -1,3 +1,5 @@
 package worlds.gregs.hestia.core.task.model
 
-data class InactiveTask<T : Any>(val task: ReusableTask, val param: T? = null)
+import worlds.gregs.hestia.core.task.api.SuspendableQueue
+
+data class InactiveTask(val priority: Int, val task: SuspendableQueue)

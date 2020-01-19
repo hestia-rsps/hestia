@@ -1,5 +1,6 @@
 package worlds.gregs.hestia.core.display.dialogue.model.events
 
-import net.mostlyoriginal.api.event.common.Event
+import worlds.gregs.hestia.artemis.InstantEvent
+import worlds.gregs.hestia.core.action.model.EntityAction
 
-data class IntegerEntered(val entityId: Int, val integer: Int): Event
+data class IntegerEntered(val integer: Int): EntityAction(), InstantEvent

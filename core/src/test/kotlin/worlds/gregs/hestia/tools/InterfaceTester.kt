@@ -3,14 +3,11 @@ package worlds.gregs.hestia.tools
 import com.artemis.WorldConfigurationBuilder
 import com.nhaarman.mockitokotlin2.*
 import worlds.gregs.hestia.GameTest
-import worlds.gregs.hestia.core.display.widget.api.UserInterface
-import worlds.gregs.hestia.core.display.widget.api.Widget
-import worlds.gregs.hestia.core.display.widget.model.components.ScreenWidget
-import kotlin.reflect.KClass
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces
 
 abstract class InterfaceTester(config: WorldConfigurationBuilder) : GameTest(config) {
 
-    internal open val ui = mock<UserInterface>()
+    internal open val ui = mock<Interfaces>()
 
     override fun config(config: WorldConfigurationBuilder) {
         config.with(ui)
@@ -18,35 +15,31 @@ abstract class InterfaceTester(config: WorldConfigurationBuilder) : GameTest(con
 
     /**
      * Mocks [UserInterface] to think an interface is open
-     * @param widget The interface to "open"
+     * @param id The interface to "open"
      */
-    internal fun open(widget: KClass<out Widget>) {
-        whenever(ui.contains(any(), eq(widget))).thenReturn(true)
+    internal fun open(id: Int) {
+        whenever(ui.hasInterface(any(), eq(id))).thenReturn(true)
     }
     /**
      * Mocks [UserInterface] to think an interface is open
-     * @param widget The interface to "close"
+     * @param id The interface to "close"
      */
-    internal fun close(widget: KClass<out Widget>) {
-        whenever(ui.contains(any(), eq(widget))).thenReturn(false)
+    internal fun close(id: Int) {
+        whenever(ui.hasInterface(any(), eq(id))).thenReturn(false)
     }
 
 
     internal fun assertReloaded(times: Int, entity: Int) {
-        verify(ui, times(times)).reload(entity)
+        verify(ui, times(times)).refreshInterface(eq(entity), any())
     }
 
 
-    internal fun assertOpened(times: Int, entity: Int, widget: ScreenWidget) {
-        verify(ui, times(times)).open(entity, widget)
+    internal fun assertOpened(times: Int, entity: Int, id: Int) {
+        verify(ui, times(times)).openInterface(eq(entity), eq(id))
     }
 
     internal fun assertClosed(times: Int, entity: Int) {
-        verify(ui, times(times)).close(entity)
-    }
-
-    internal fun assertClicked(times: Int, entity: Int, widget: Int, component: Int, option: Int) {
-        verify(ui, times(times)).click(entity, 0, widget, component, 0, 0, option)
+        verify(ui, times(times)).closeWindow(eq(entity), any())
     }
 
 }

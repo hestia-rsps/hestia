@@ -1,5 +1,5 @@
 package worlds.gregs.hestia.core.display.update.model.components.anim
 
-import worlds.gregs.hestia.core.display.update.model.components.Animation
+import worlds.gregs.hestia.core.display.update.model.components.ActiveAnimation
 
-class SecondAnimation : Animation()
+class SecondAnimation : ActiveAnimation()

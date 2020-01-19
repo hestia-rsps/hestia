@@ -1,5 +1,8 @@
 package worlds.gregs.hestia.core.display.dialogue.model
 
+/**
+ * Dialogue chat animations
+ */
 object Expression {
 
     /*

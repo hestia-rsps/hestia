@@ -6,12 +6,12 @@ import world.gregs.hestia.core.network.codec.packet.Endian
 import world.gregs.hestia.core.network.codec.packet.Modifier
 import world.gregs.hestia.core.network.codec.packet.Packet
 import world.gregs.hestia.core.network.protocol.ClientOpcodes.DIALOGUE_CONTINUE
-import worlds.gregs.hestia.network.client.decoders.messages.DialogueContinue
+import worlds.gregs.hestia.network.client.decoders.messages.DialogueContinueMessage
 
-class DialogueContinueDecoder : MessageDecoder<DialogueContinue>(6, DIALOGUE_CONTINUE) {
+class DialogueContinueDecoder : MessageDecoder<DialogueContinueMessage>(6, DIALOGUE_CONTINUE) {
 
-    override fun decode(ctx: ChannelHandlerContext, packet: Packet): DialogueContinue? {
-        return DialogueContinue(packet.readInt(Modifier.INVERSE, Endian.MIDDLE), packet.readShort(Modifier.ADD, Endian.LITTLE))
+    override fun decode(ctx: ChannelHandlerContext, packet: Packet): DialogueContinueMessage? {
+        return DialogueContinueMessage(packet.readInt(Modifier.INVERSE, Endian.MIDDLE), packet.readShort(Modifier.ADD, Endian.LITTLE))
     }
 
 }

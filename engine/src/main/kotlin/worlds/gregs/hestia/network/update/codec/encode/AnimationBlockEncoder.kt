@@ -6,12 +6,12 @@ import world.gregs.hestia.core.network.codec.packet.PacketBuilder
 import worlds.gregs.hestia.game.update.blocks.AnimationBlock
 import worlds.gregs.hestia.network.update.codec.UpdateBlockEncoder
 
-class AnimationBlockEncoder(private val mob: Boolean) : UpdateBlockEncoder<AnimationBlock> {
+class AnimationBlockEncoder(private val npc: Boolean) : UpdateBlockEncoder<AnimationBlock> {
 
     override fun encode(builder: PacketBuilder, block: AnimationBlock) {
         val (_, first, second, third, fourth, speed) = block
         builder.apply {
-            if(mob) {
+            if(npc) {
                 writeShort(first)
                 writeShort(second)
                 writeShort(third)

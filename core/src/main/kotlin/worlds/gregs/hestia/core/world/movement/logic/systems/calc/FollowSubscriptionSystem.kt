@@ -1,32 +1,53 @@
 package worlds.gregs.hestia.core.world.movement.logic.systems.calc
 
 import com.artemis.ComponentMapper
+import net.mostlyoriginal.api.event.common.EventSystem
+import net.mostlyoriginal.api.event.common.Subscribe
 import worlds.gregs.hestia.artemis.Aspect
 import worlds.gregs.hestia.artemis.SubscriptionSystem
+import worlds.gregs.hestia.core.action.model.perform
 import worlds.gregs.hestia.core.display.update.model.components.direction.Watch
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.entity.model.components.Size
 import worlds.gregs.hestia.core.entity.entity.model.components.height
 import worlds.gregs.hestia.core.entity.entity.model.components.width
+import worlds.gregs.hestia.core.world.movement.api.Mobile
 import worlds.gregs.hestia.core.world.movement.logic.systems.calc.StepBesideSystem.Companion.withinContact
 import worlds.gregs.hestia.core.world.movement.model.components.calc.Beside
-import worlds.gregs.hestia.core.world.movement.model.components.calc.Follow
+import worlds.gregs.hestia.core.world.movement.model.components.calc.Following
+import worlds.gregs.hestia.core.world.movement.model.events.Follow
 
 /**
  * FollowSubscriptionSystem
- * Adds/removes watching the entity being followed when [Follow] is inserted/removed
+ * Adds/removes watching the entity being followed when [Following] is inserted/removed
  */
-class FollowSubscriptionSystem : SubscriptionSystem(Aspect.all(Position::class, Follow::class)) {
-    private lateinit var followMapper: ComponentMapper<Follow>
-    private lateinit var watchMapper: ComponentMapper<Watch>
+class FollowSubscriptionSystem : SubscriptionSystem(Aspect.all(Position::class, Following::class)) {
+    private lateinit var followingMapper: ComponentMapper<Following>
     private lateinit var besideMapper: ComponentMapper<Beside>
     private lateinit var positionMapper: ComponentMapper<Position>
     private lateinit var sizeMapper: ComponentMapper<Size>
+    private lateinit var mobileMapper: ComponentMapper<Mobile>
+    private lateinit var es: EventSystem
+
+    @Subscribe
+    fun follow(action: Follow) {
+        val entityId = action.entity
+        if(entityId == -1) {
+            followingMapper.remove(entityId)
+        } else if(mobileMapper.has(entityId)) {
+            val following = followingMapper.create(entityId)
+            following.entity = action.target
+        }
+    }
 
     override fun inserted(entityId: Int) {
         //Watch
-        val follow = followMapper.get(entityId)
-        watchMapper.create(entityId).entity = follow.entity
+        val follow = followingMapper.get(entityId)
+        es.perform(entityId, Watch(follow.entity))
+
+        if(follow.entity <= -1) {
+            return
+        }
 
         val position = positionMapper.get(entityId)
         val targetPosition = positionMapper.get(follow.entity)
@@ -50,6 +71,6 @@ class FollowSubscriptionSystem : SubscriptionSystem(Aspect.all(Position::class, 
     }
 
     override fun removed(entityId: Int) {
-        watchMapper.create(entityId).entity = -1
+        es.perform(entityId, Watch(-1))
     }
 }

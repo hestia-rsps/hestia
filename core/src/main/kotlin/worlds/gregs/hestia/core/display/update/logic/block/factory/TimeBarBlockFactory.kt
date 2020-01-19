@@ -2,13 +2,13 @@ package worlds.gregs.hestia.core.display.update.logic.block.factory
 
 import com.artemis.ComponentMapper
 import world.gregs.hestia.core.services.int
+import worlds.gregs.hestia.artemis.Aspect
 import worlds.gregs.hestia.core.display.update.api.BlockFactory
 import worlds.gregs.hestia.core.display.update.model.components.Renderable
 import worlds.gregs.hestia.core.display.update.model.components.TimeBar
 import worlds.gregs.hestia.game.update.blocks.TimeBarBlock
-import worlds.gregs.hestia.artemis.Aspect
 
-open class TimeBarBlockFactory(flag: Int, mob: Boolean = false) : BlockFactory<TimeBarBlock>(Aspect.all(Renderable::class, TimeBar::class), flag = flag, mob = mob) {
+open class TimeBarBlockFactory(flag: Int, npc: Boolean = false) : BlockFactory<TimeBarBlock>(Aspect.all(Renderable::class, TimeBar::class), flag = flag, npc = npc) {
 
     private lateinit var timeBarMapper: ComponentMapper<TimeBar>
 

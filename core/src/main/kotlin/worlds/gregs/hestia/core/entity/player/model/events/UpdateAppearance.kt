@@ -1,5 +1,6 @@
 package worlds.gregs.hestia.core.entity.player.model.events
 
-import net.mostlyoriginal.api.event.common.Event
+import worlds.gregs.hestia.artemis.InstantEvent
+import worlds.gregs.hestia.core.action.model.EntityAction
 
-data class UpdateAppearance(val entityId: Int): Event
+class UpdateAppearance : EntityAction(), InstantEvent

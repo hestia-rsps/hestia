@@ -10,7 +10,7 @@ class ClientVariableParameterDefinitions {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            Settings.load()
+            Settings.load("./settings.yml")
             val store = CacheStore()
             val reader = ClientVariableParameterDefinitionReader(store)
             val size = reader.size

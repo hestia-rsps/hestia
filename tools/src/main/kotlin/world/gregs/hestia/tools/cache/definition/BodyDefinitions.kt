@@ -10,7 +10,7 @@ class BodyDefinitions {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            Settings.load()
+            Settings.load("./settings.yml")
             val store = CacheStore()
             val reader = BodyDefinitionReader(store)
             val body = reader.get(-1)

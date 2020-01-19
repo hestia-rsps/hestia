@@ -1,28 +1,49 @@
 package worlds.gregs.hestia.content.command
 
-import com.artemis.ComponentMapper
+import world.gregs.hestia.core.network.protocol.encoders.messages.InterfaceComponentText
 import worlds.gregs.hestia.core.display.client.model.events.Command
-import worlds.gregs.hestia.core.display.widget.logic.systems.screen.CustomScreenWidgetSystem
-import worlds.gregs.hestia.core.display.widget.model.components.screen.CustomScreenWidget
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces
+import worlds.gregs.hestia.core.display.interfaces.model.Window.*
+import worlds.gregs.hestia.network.client.encoders.messages.InterfaceVisibility
 
-lateinit var customScreenWidgetMapper: ComponentMapper<CustomScreenWidget>
-lateinit var customScreenWidgetSystem: CustomScreenWidgetSystem
+lateinit var interfaces: Interfaces
 
 on<Command> {
     where { prefix == "inter" }
-    then { (entityId, _, content) ->
+    then {
         val id = content.toInt()
-        val component = customScreenWidgetMapper.get(entityId)
-        if(component == null) {
-            customScreenWidgetMapper.create(entityId).id = id
+        if(id != -1) {
+            interfaces.closeWindow(entity, interfaces.getWindow(id))
+            interfaces.openInterface(entity, id)
         } else {
-            if(id == -1) {
-                customScreenWidgetMapper.remove(entityId)
-            } else {
-                component.id = id
-                customScreenWidgetSystem.open(entityId)
-            }
+            interfaces.closeWindow(entity, MAIN_SCREEN)
+            interfaces.closeWindow(entity, OVERLAY)
+            interfaces.closeWindow(entity, DIALOGUE_BOX)
         }
+        isCancelled = true
+    }
+}
+on<Command> {
+    where { prefix == "hidec" }
+    then {
+        val part = content.split(" ")
+        val id = part[0].toInt()
+        val component = part[1].toInt()
+        val hide = part[2].toInt() == 1
+        entity send InterfaceVisibility(id, component, hide)
+        isCancelled = true
+    }
+}
+
+on<Command> {
+    where { prefix == "itext" }
+    then {
+        val part = content.split(" ")
+        val id = part[0].toInt()
+        val component = part[1].toInt()
+        val used = part[0].length + part[1].length + 2
+        val text = content.substring(used).replace(" br ", "<br>")
+        entity send InterfaceComponentText(id, component, text)
         isCancelled = true
     }
 }

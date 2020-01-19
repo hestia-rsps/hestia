@@ -7,7 +7,7 @@ import worlds.gregs.hestia.core.world.movement.model.components.Shift
 import worlds.gregs.hestia.core.world.movement.api.Mobile
 import worlds.gregs.hestia.core.world.movement.model.components.RandomWalk
 import worlds.gregs.hestia.core.world.movement.model.components.Steps
-import worlds.gregs.hestia.core.world.movement.model.components.calc.Follow
+import worlds.gregs.hestia.core.world.movement.model.components.calc.Following
 import worlds.gregs.hestia.core.world.movement.model.components.calc.Path
 import worlds.gregs.hestia.core.world.movement.logic.strategies.FixedTileStrategy
 import worlds.gregs.hestia.artemis.Aspect
@@ -18,7 +18,7 @@ class RandomWalkSystem : IntervalIteratingSystem(Aspect.all(Position::class, Mob
     private lateinit var pathMapper: ComponentMapper<Path>
     private lateinit var positionMapper: ComponentMapper<Position>
     private lateinit var stepsMapper: ComponentMapper<Steps>
-    private lateinit var followMapper: ComponentMapper<Follow>
+    private lateinit var followingMapper: ComponentMapper<Following>
     private lateinit var shiftMapper: ComponentMapper<Shift>
 
     override fun process(entityId: Int) {
@@ -27,7 +27,7 @@ class RandomWalkSystem : IntervalIteratingSystem(Aspect.all(Position::class, Mob
         stepsMapper.get(entityId)?.clear()
 
         //Clear follow
-        followMapper.remove(entityId)
+        followingMapper.remove(entityId)
 
         //Clear any movement
         shiftMapper.remove(entityId)

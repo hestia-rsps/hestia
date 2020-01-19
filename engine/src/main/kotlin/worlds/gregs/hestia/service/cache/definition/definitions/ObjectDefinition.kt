@@ -69,7 +69,7 @@ class ObjectDefinition : Definition {
     var offsetZ: Int = 0
     var anInt3038: Int = -1
     var rotated: Boolean = false
-    var plane: Int = 0
+    var blockFlag: Int = 0
     var brightness: Int = 0
     var originalModelTextures: ShortArray? = null
     var aByte3045: Byte = 0
@@ -156,7 +156,7 @@ class ObjectDefinition : Definition {
             65 -> modelSizeX = packet.readShort()
             66 -> modelSizeZ = packet.readShort()
             67 -> modelSizeY = packet.readShort()
-            69 -> plane = packet.readUnsignedByte()
+            69 -> blockFlag = packet.readUnsignedByte()
             70 -> offsetX = packet.readUnsignedShort() shl 2
             71 -> offsetZ = packet.readUnsignedShort() shl 2
             72 -> offsetY = packet.readUnsignedShort() shl 2

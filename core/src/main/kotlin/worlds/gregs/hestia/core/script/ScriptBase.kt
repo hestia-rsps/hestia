@@ -4,20 +4,10 @@ import com.artemis.Aspect
 import com.artemis.World
 import com.artemis.WorldConfigurationBuilder
 import com.artemis.annotations.Wire
-import net.mostlyoriginal.api.event.common.Event
-import net.mostlyoriginal.api.event.common.EventSystem
-import worlds.gregs.hestia.artemis.dsl.ArtemisEventListener
 import worlds.gregs.hestia.artemis.event.ExtendedEventDispatchStrategy
-import worlds.gregs.hestia.core.display.dialogue.api.DialogueBase
+import worlds.gregs.hestia.artemis.event.ExtendedEventListener
+import worlds.gregs.hestia.core.action.model.Action
 import worlds.gregs.hestia.core.script.dsl.artemis.*
-import worlds.gregs.hestia.core.task.api.SuspendableQueue
-import worlds.gregs.hestia.core.task.api.TaskPriority
-import worlds.gregs.hestia.core.task.api.closeDialogue
-import worlds.gregs.hestia.core.task.api.event.EntityEvent
-import worlds.gregs.hestia.core.task.logic.systems.awaitScreen
-import worlds.gregs.hestia.core.task.model.InactiveTask
-import worlds.gregs.hestia.core.task.model.ReusableTask
-import worlds.gregs.hestia.core.task.model.events.StartTask
 import kotlin.script.experimental.annotations.KotlinScript
 
 @KotlinScript(displayName = "Hestia Script", fileExtension = "script.kts", compilationConfiguration = ScriptConfiguration::class)
@@ -32,15 +22,7 @@ abstract class ScriptBase : ScriptBuilder() {
     /**
      * List of entity event listeners
      */
-    val listeners = mutableListOf<ArtemisEventListener>()
-    /**
-     * List of dialogue coroutines
-     */
-    val dialogues = mutableMapOf<String, ReusableTask>()
-
-    internal var dialogueBase: DialogueBase? = null
-
-    internal var eventSystem: EventSystem? = null
+    val listeners = mutableListOf<ExtendedEventListener>()
 
     /**
      * Alternative as [world] returns [NoSuchMethodError] if outside of a system
@@ -53,7 +35,7 @@ abstract class ScriptBase : ScriptBuilder() {
      * @param action The action to take when conditions are met
      * @param setup Alternative builder setup
      */
-    inline fun <reified E : Event> on(priority: Int = 0, skipCancelledEvents: Boolean = true, noinline conditional: (E.(E) -> Boolean)? = null, noinline action: (Event.(event: Event) -> Unit)? = null, setup: EventListenerBuilder<E>.() -> Unit = {}) {
+    inline fun <reified E : Action> on(priority: Int = 0, skipCancelledEvents: Boolean = true, noinline conditional: (E.() -> Boolean)? = null, noinline action: (E.() -> Unit)? = null, setup: EventListenerBuilder<E>.() -> Unit = {}) {
         val builder = EventListenerBuilder(E::class, priority, skipCancelledEvents, conditional, action)
         builder.setup()
         listeners += builder.build() ?: return
@@ -100,47 +82,5 @@ abstract class ScriptBase : ScriptBuilder() {
         listeners.forEach {
             dispatcher.register(it)
         }
-        dialogues.forEach { (name, task) ->
-            dialogueBase?.addDialogue(name, task)
-        }
-    }
-
-    fun dialogue(name: String, priority: TaskPriority = TaskPriority.Normal, action: SuspendableQueue): String {
-        check(!dialogues.containsKey(name)) { "Dialogue '$name' already exists." }
-        dialogues[name] = ReusableTask(priority) {
-            onCancel {
-                closeDialogue()
-            }
-
-            if(priority == TaskPriority.Low) {
-                awaitScreen()
-            }
-            action()
-            closeDialogue()
-        }
-        return name
-    }
-
-    private fun extension(action: SuspendableQueue) = action
-
-    /**
-     * If [priority] is [TaskPriority.Low] then wait for screen to close before continuing
-     * @param priority The rule to start the task
-     * @param action The suspendable queue to process
-     */
-    fun queue(priority: TaskPriority = TaskPriority.Normal, action: SuspendableQueue): SuspendableQueue = if (priority == TaskPriority.Low) extension { awaitScreen(); action() } else action
-
-    fun task(entityId: Int, priority: TaskPriority = TaskPriority.Normal, action: SuspendableQueue) =
-            task(entityId, priority, Unit, action)
-
-    fun <T : Any> task(entityId: Int, priority: TaskPriority = TaskPriority.Normal, param: T, action: SuspendableQueue) {
-        eventSystem?.dispatch(StartTask(entityId, InactiveTask(ReusableTask(priority, queue(priority, action)), param)))
-    }
-
-    fun <E : EntityEvent> EventListenerBuilder<E>.task(priority: TaskPriority = TaskPriority.Normal, action: SuspendableQueue) : EventListenerBuilder<E> {
-        then {
-            task(it.entity, priority, it, action)
-        }
-        return this
     }
 }

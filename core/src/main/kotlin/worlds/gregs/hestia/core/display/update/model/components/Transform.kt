@@ -4,4 +4,4 @@ import com.artemis.Component
 import com.artemis.annotations.PooledWeaver
 
 @PooledWeaver
-data class Transform(var mobId: Int = -1) : Component()
+data class Transform(var npcId: Int = -1) : Component()

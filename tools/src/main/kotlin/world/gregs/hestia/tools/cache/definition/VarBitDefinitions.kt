@@ -10,10 +10,10 @@ class VarBitDefinitions {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            Settings.load()
+            Settings.load("./settings.yml")
             val store = CacheStore()
             val reader = VarBitDefinitionReader(store)
-            val varBit = reader.get(75)
+            val varBit = reader.get(313)
             println(ToStringBuilder.reflectionToString(varBit, ToStringStyle.MULTI_LINE_STYLE))
         }
     }

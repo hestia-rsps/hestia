@@ -1,27 +1,32 @@
 package worlds.gregs.hestia.core.display.dialogue.logic.systems
 
-import net.mostlyoriginal.api.event.common.EventSystem
+import net.mostlyoriginal.api.event.common.Subscribe
+import net.mostlyoriginal.api.system.core.PassiveSystem
 import org.slf4j.LoggerFactory
-import worlds.gregs.hestia.core.display.dialogue.api.DialogueBase
-import worlds.gregs.hestia.core.task.model.InactiveTask
-import worlds.gregs.hestia.core.task.model.ReusableTask
-import worlds.gregs.hestia.core.task.model.events.StartTask
+import worlds.gregs.hestia.core.display.dialogue.api.Dialogue
+import worlds.gregs.hestia.core.display.dialogue.model.events.ContinueDialogue
+import worlds.gregs.hestia.core.display.dialogue.model.type.*
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.ConfirmDestroy
+import worlds.gregs.hestia.core.task.api.Tasks
 
-class DialogueSystem : DialogueBase() {
+class DialogueSystem : PassiveSystem() {
 
-    private val logger = LoggerFactory.getLogger(DialogueSystem::class.java)
-    val scripts = mutableMapOf<String, ReusableTask>()
+    private val logger = LoggerFactory.getLogger(DialogueSystem::class.java)!!
+    private lateinit var tasks: Tasks
 
-    private lateinit var es: EventSystem
-
-    override fun addDialogue(name: String, task: ReusableTask) {
-        scripts[name] = task
+    @Subscribe
+    private fun onContinue(action: ContinueDialogue) {
+        when (val suspension = tasks.getSuspension(action.entity)) {
+            is Destroy -> if(action.id == ConfirmDestroy) tasks.resume(action.entity, suspension, action.option == 3)
+            is ItemBox -> tasks.resume(action.entity, suspension, Unit)
+            is NpcChat -> tasks.resume(action.entity, suspension, Unit)
+            is Options -> if(action.option in Dialogue.FIRST..Dialogue.FIFTH) tasks.resume(action.entity, suspension, action.option)
+            is PlayerChat -> tasks.resume(action.entity, suspension, Unit)
+            is Statement -> tasks.resume(action.entity, suspension, Unit)
+            else -> {
+                logger.warn("Unhandled continue $action")
+            }
+        }
     }
 
-    override fun startDialogue(entityId: Int, name: String, targetId: Int?) {
-        //Find base dialogue in the script
-        val task = scripts[name] ?: return logger.debug("Could not find dialogue '$name'")
-        //Queue the task
-        es.dispatch(StartTask(entityId, InactiveTask(task, targetId)))
-    }
 }

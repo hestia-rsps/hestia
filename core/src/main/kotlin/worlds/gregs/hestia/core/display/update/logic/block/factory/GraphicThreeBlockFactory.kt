@@ -2,13 +2,13 @@ package worlds.gregs.hestia.core.display.update.logic.block.factory
 
 import com.artemis.ComponentMapper
 import world.gregs.hestia.core.services.int
+import worlds.gregs.hestia.artemis.Aspect
 import worlds.gregs.hestia.core.display.update.api.BlockFactory
 import worlds.gregs.hestia.core.display.update.model.components.Renderable
 import worlds.gregs.hestia.core.display.update.model.components.gfx.ThirdGraphic
 import worlds.gregs.hestia.game.update.blocks.GraphicBlock
-import worlds.gregs.hestia.artemis.Aspect
 
-open class GraphicThreeBlockFactory(flag: Int, mob: Boolean = false) : BlockFactory<GraphicBlock>(Aspect.all(Renderable::class, ThirdGraphic::class), flag = flag, mob = mob) {
+open class GraphicThreeBlockFactory(flag: Int, npc: Boolean = false) : BlockFactory<GraphicBlock>(Aspect.all(Renderable::class, ThirdGraphic::class), flag = flag, npc = npc) {
 
     private lateinit var thirdGraphicMapper: ComponentMapper<ThirdGraphic>
 

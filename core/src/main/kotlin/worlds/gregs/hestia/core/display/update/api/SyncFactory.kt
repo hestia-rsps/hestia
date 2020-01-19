@@ -12,9 +12,9 @@ import worlds.gregs.hestia.game.update.SyncStage
 /**
  * A passive system used to create [SyncStage]s
  * @param local Whether factory creates local stages
- * @param mob Whether factory creates mob stages
+ * @param npc Whether factory creates npc stages
  */
-abstract class SyncFactory<T : SyncStage>(open val local: Boolean, open val mob: Boolean, open val active: Boolean) : PassiveSystem() {
+abstract class SyncFactory<T : SyncStage>(open val local: Boolean, open val npc: Boolean, open val active: Boolean) : PassiveSystem() {
 
     /**
      * Checks whether the [other] has changed within view of [bag]

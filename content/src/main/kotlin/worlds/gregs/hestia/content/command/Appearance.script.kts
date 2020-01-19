@@ -1,52 +1,47 @@
 package worlds.gregs.hestia.content.command
 
 import worlds.gregs.hestia.core.display.client.model.events.Command
-import worlds.gregs.hestia.core.task.model.context.event
-
-lateinit var es: EventSystem
+import worlds.gregs.hestia.core.display.update.model.components.Transform
+import worlds.gregs.hestia.core.entity.entity.model.events.Animation
+import worlds.gregs.hestia.core.entity.entity.model.events.Graphic
+import worlds.gregs.hestia.core.entity.entity.model.events.Hit
+import worlds.gregs.hestia.core.entity.player.model.events.UpdateAppearance
+import worlds.gregs.hestia.game.update.blocks.Marker
 
 on<Command> {
     where { prefix == "anim" }
-    task {//863
-        event(this) {
-            entity animate content.toInt()
-            isCancelled = true
-        }
+    then {
+        entity perform Animation(content.toInt())//863
+        isCancelled = true
     }
 }
 
 on<Command> {
     where { prefix == "gfx" || prefix == "graphic" }
-    task {//93
-        event(this) {
-            entity graphic content.toInt()
-            isCancelled = true
-        }
+    then {
+        entity perform Graphic(content.toInt())//93
+        isCancelled = true
     }
 }
 
 on<Command> {
-    where { prefix == "transform" || prefix == "pnpc" }
-    task {
-        event(this) {
-            val id = content.toInt()
-            if(id < 0) {
-                entity transform id
-            }
-            entity.updateAppearance()
-            isCancelled = true
+    where { prefix == "transform" || prefix == "pnpc" || prefix == "morph" }
+    then {
+        val id = content.toInt()
+        if (id > 0) {
+            (entity create Transform::class).npcId = id
         }
+        entity perform UpdateAppearance()
+        isCancelled = true
     }
 }
 
 on<Command> {
     where { prefix == "hit" }
-    task {
-        event(this) {
-            repeat(5) {
-                entity hit 10
-            }
-            isCancelled = true
+    then {
+        repeat(5) {
+            entity perform Hit(10, Marker.MELEE)
         }
+        isCancelled = true
     }
 }

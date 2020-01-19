@@ -2,12 +2,10 @@ package worlds.gregs.hestia.core.display.client.logic.systems.network.`in`
 
 import com.artemis.Entity
 import com.artemis.WorldConfigurationBuilder
-import com.nhaarman.mockitokotlin2.mock
 import org.junit.jupiter.api.Test
-import worlds.gregs.hestia.core.display.widget.model.components.ScreenWidget
-import worlds.gregs.hestia.core.display.widget.logic.systems.screen.CustomScreenWidgetSystem
-import worlds.gregs.hestia.network.client.decoders.messages.ScreenClose
 import worlds.gregs.hestia.artemis.getSystem
+import worlds.gregs.hestia.core.display.interfaces.model.components.InterfaceRelationships
+import worlds.gregs.hestia.network.client.decoders.messages.ScreenClose
 import worlds.gregs.hestia.tools.InterfaceTester
 
 internal class CloseWidgetOptionHandlerTest : InterfaceTester(WorldConfigurationBuilder().with(ScreenCloseHandler())) {
@@ -16,13 +14,13 @@ internal class CloseWidgetOptionHandlerTest : InterfaceTester(WorldConfiguration
 
     override fun start() {
         entity = world.createEntity()
-        entity.edit().add(mock<ScreenWidget>())
+        entity.edit().add(InterfaceRelationships())
     }
 
     @Test
     fun `Close an open screen widget`() {
         //Given
-        open(CustomScreenWidgetSystem::class)
+        open(750)
         //When
         sendClose()
         tick()
@@ -33,7 +31,7 @@ internal class CloseWidgetOptionHandlerTest : InterfaceTester(WorldConfiguration
     @Test
     fun `Close another entities`() {
         //Given
-        open(CustomScreenWidgetSystem::class)
+        open(750)
         //When
         sendClose(1)
         //Then

@@ -1,5 +1,0 @@
-dependencies {
-    compile project(':core')
-    testCompile project(":core")
-    runtimeClasspath project(":core")
-}

@@ -17,11 +17,11 @@ class CachePlugin : Plugin {
                 EnumDefinitionSystem(),
                 GraphicDefinitionSystem(),
                 ItemDefinitionSystem(),
-                MobDefinitionSystem(),
+                NpcDefinitionSystem(),
                 ObjectDefinitionSystem(),
                 QuickChatOptionDefinitionSystem(),
                 VarBitDefinitionSystem(),
-                WindowDefinitionSystem(),
+                InterfaceDefinitionSystem(),
                 WorldMapDefinitionSystem()
         )
         //Configs

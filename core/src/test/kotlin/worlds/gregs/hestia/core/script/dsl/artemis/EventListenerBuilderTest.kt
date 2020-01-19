@@ -12,7 +12,7 @@ internal class EventListenerBuilderTest {
         //Given
         val builder = EventListenerBuilder(Event::class, 0, false, null, action = {})
         //When
-        val function: Event.(Event) -> Boolean = { true }
+        val function: Event.() -> Boolean = { true }
         builder.where(function)
         //Then
         assertThat(builder.build()!!.conditional.hashCode()).isEqualTo(function.hashCode())//Not directly equal due to generics
@@ -35,7 +35,7 @@ internal class EventListenerBuilderTest {
         //Given
         val builder = EventListenerBuilder(Event::class, 0, false, null, null)
         //When
-        val function: Event.(Event) -> Unit = { }
+        val function: Event.() -> Unit = { }
         builder.then(function)
         //Then
         assertThat(builder.build()!!.action).isEqualTo(function)

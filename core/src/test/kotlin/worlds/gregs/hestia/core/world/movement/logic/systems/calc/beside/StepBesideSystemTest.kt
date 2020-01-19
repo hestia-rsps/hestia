@@ -156,7 +156,7 @@ internal class StepBesideSystemTest : PathTester(false, StepBesideSystem()) {
     fun `No step above tall target`() {
         /*
             FIXME do we want to keep beside a target already beside walking onto the target or not?
-            Won't affect mobs & stalking as they can't walk on the target anyway
+            Won't affect npcs & stalking as they can't walk on the target anyway
             Player following doesn't use beside anymore
             Initial player follow does use beside, but not if already beside (early check), if it were changed, we could remove this check
             TODO What about player combat?

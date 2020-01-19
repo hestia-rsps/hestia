@@ -1,98 +1,141 @@
 package worlds.gregs.hestia.core.display.dialogue.logic.systems
 
 import com.artemis.WorldConfigurationBuilder
+import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.impl.annotations.SpyK
 import io.mockk.junit5.MockKExtension
+import io.mockk.mockk
 import io.mockk.verify
-import org.junit.jupiter.api.Assertions.assertEquals
-import org.junit.jupiter.api.Assertions.assertTrue
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import worlds.gregs.hestia.MockkGame
-import worlds.gregs.hestia.core.display.dialogue.api.Dialogue
-import worlds.gregs.hestia.core.display.widget.api.UserInterface
-import worlds.gregs.hestia.core.display.widget.logic.systems.frame.chat.DialogueBoxSystem
-import worlds.gregs.hestia.core.task.api.SuspendableQueue
-import worlds.gregs.hestia.core.task.api.Task
-import worlds.gregs.hestia.core.task.api.TaskPriority
+import worlds.gregs.hestia.core.action.model.perform
+import worlds.gregs.hestia.core.display.dialogue.model.events.ContinueDialogue
+import worlds.gregs.hestia.core.display.dialogue.model.type.*
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.ConfirmDestroy
 import worlds.gregs.hestia.core.task.api.Tasks
-import worlds.gregs.hestia.core.task.model.ReusableTask
-import worlds.gregs.hestia.core.task.model.components.TaskQueue
-import worlds.gregs.hestia.core.task.model.events.StartTask
 
 @ExtendWith(MockKExtension::class)
 internal class DialogueSystemTest : MockkGame() {
 
     @SpyK
-    var system = DialogueSystem()
+    private var system = DialogueSystem()
 
     @RelaxedMockK
     lateinit var tasks: Tasks
 
-    @SpyK
-    var component = TaskQueue()
-
-    @SpyK
-    var queue: SuspendableQueue = {}
-
-    @SpyK
-    var boxSystem = DialogueBoxSystem()
-
-    @RelaxedMockK
-    lateinit var ui: UserInterface
-
-    @RelaxedMockK
-    lateinit var task: Task
-
-    @RelaxedMockK
-    lateinit var dialogue: Dialogue
-
-    @BeforeEach
-    override fun setup() {
-        super.setup()
-        world.createEntity().edit().add(component)
-    }
-
     override fun config(config: WorldConfigurationBuilder) {
-        config.with(ui, system, boxSystem, tasks)
+        config.with(tasks, system)
     }
 
     @Test
-    fun `Add dialogue`() {
+    fun `Destroy confirm`() {
         //Given
-        val id = "script"
+        val suspension = mockk<Destroy>()
+        every { tasks.getSuspension(0) } returns suspension
         //When
-        system.addDialogue(id, ReusableTask(TaskPriority.Low, queue))
+        es.perform(0, ContinueDialogue(ConfirmDestroy, 3, -1))
         //Then
-        assertEquals(1, system.scripts.size)
-        assertTrue(system.scripts.containsKey(id))
-        assertEquals(queue, system.scripts[id]!!.block)
-        assertEquals(TaskPriority.Low, system.scripts[id]!!.priority)
+        verify { tasks.resume(0, suspension, true) }
     }
 
     @Test
-    fun `Start dialogue dispatches`() {
+    fun `Destroy decline`() {
         //Given
-        val entityId = 0
-        val name = "name"
-        system.scripts[name] = ReusableTask(TaskPriority.Low, queue)
+        val suspension = mockk<Destroy>()
+        every { tasks.getSuspension(0) } returns suspension
         //When
-        system.startDialogue(entityId, name)
+        es.perform(0, ContinueDialogue(ConfirmDestroy, 2, -1))
         //Then
-        verify { es.dispatch(any()) }
+        verify { tasks.resume(0, suspension, false) }
     }
 
     @Test
-    fun `Non existent script start is ignored`() {
+    fun `Destroy wrong interface`() {
         //Given
-        val entityId = 0
-        val name = "name"
+        val suspension = mockk<Destroy>()
+        every { tasks.getSuspension(0) } returns suspension
         //When
-        system.startDialogue(entityId, name)
+        es.perform(0, ContinueDialogue(0, 3, -1))
         //Then
-        verify(exactly = 0) { es.dispatch(any<StartTask>()) }
+        verify(exactly = 0) { tasks.resume(0, suspension, true) }
     }
 
+    @Test
+    fun `Continue item box`() {
+        //Given
+        val suspension = mockk<ItemBox>()
+        every { tasks.getSuspension(0) } returns suspension
+        //When
+        es.perform(0, ContinueDialogue(0, 0, 0))
+        //Then
+        verify { tasks.resume(0, suspension, Unit) }
+    }
+
+    @Test
+    fun `Continue npc chat`() {
+        //Given
+        val suspension = mockk<NpcChat>()
+        every { tasks.getSuspension(0) } returns suspension
+        //When
+        es.perform(0, ContinueDialogue(0, 0, 0))
+        //Then
+        verify { tasks.resume(0, suspension, Unit) }
+    }
+
+    @Test
+    fun `Continue options`() {
+        //Given
+        val suspension = mockk<Options>()
+        every { tasks.getSuspension(0) } returns suspension
+        //When
+        es.perform(0, ContinueDialogue(0, 2, 0))
+        //Then
+        verify { tasks.resume(0, suspension, 2) }
+    }
+
+    @Test
+    fun `Continue options below minimum option`() {
+        //Given
+        val suspension = mockk<Options>()
+        every { tasks.getSuspension(0) } returns suspension
+        //When
+        es.perform(0, ContinueDialogue(0, 1, 0))
+        //Then
+        verify(exactly = 0) { tasks.resume(0, suspension, 1) }
+    }
+
+    @Test
+    fun `Continue options above maximum option`() {
+        //Given
+        val suspension = mockk<Options>()
+        every { tasks.getSuspension(0) } returns suspension
+        //When
+        es.perform(0, ContinueDialogue(0, 7, 0))
+        //Then
+        verify(exactly = 0) { tasks.resume(0, suspension, 7) }
+    }
+
+    @Test
+    fun `Continue player chat`() {
+        //Given
+        val suspension = mockk<PlayerChat>()
+        every { tasks.getSuspension(0) } returns suspension
+        //When
+        es.perform(0, ContinueDialogue(0, 0, 0))
+        //Then
+        verify { tasks.resume(0, suspension, Unit) }
+    }
+
+    @Test
+    fun `Continue statement`() {
+        //Given
+        val suspension = mockk<Statement>()
+        every { tasks.getSuspension(0) } returns suspension
+        //When
+        es.perform(0, ContinueDialogue(0, 0, 0))
+        //Then
+        verify { tasks.resume(0, suspension, Unit) }
+    }
 }

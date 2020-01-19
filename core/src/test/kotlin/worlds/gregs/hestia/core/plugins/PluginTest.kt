@@ -9,9 +9,8 @@ import org.junit.jupiter.api.assertThrows
 import worlds.gregs.hestia.GameTest
 import worlds.gregs.hestia.core.display.client.ClientPlugin
 import worlds.gregs.hestia.core.entity.entity.EntityPlugin
-import worlds.gregs.hestia.core.entity.mob.MobPlugin
+import worlds.gregs.hestia.core.entity.npc.NpcPlugin
 import worlds.gregs.hestia.core.entity.player.PlayerPlugin
-import worlds.gregs.hestia.core.task.tick.TickPlugin
 import worlds.gregs.hestia.core.world.land.LandPlugin
 import worlds.gregs.hestia.core.world.map.MapPlugin
 import worlds.gregs.hestia.core.world.movement.MovementPlugin
@@ -28,7 +27,6 @@ internal class PluginTest : GameTest(WorldConfigurationBuilder()) {
     fun testClient() {
         build(WorldConfigurationBuilder().with(ClientPlugin()), false)
         build(WorldConfigurationBuilder().with(EntityPlugin()), false)
-        build(WorldConfigurationBuilder().with(TickPlugin()), false)
     }
 
 
@@ -51,11 +49,11 @@ internal class PluginTest : GameTest(WorldConfigurationBuilder()) {
     }
 
     @Test
-    fun testMob() {
+    fun testNpc() {
         assertThrows<MundaneWireException> {
-            build(WorldConfigurationBuilder().with(MobPlugin()))
+            build(WorldConfigurationBuilder().with(NpcPlugin()))
         }
-        build(WorldConfigurationBuilder().with(MobPlugin(), EntityPlugin()))
+        build(WorldConfigurationBuilder().with(NpcPlugin(), EntityPlugin()))
     }
 
     @Test

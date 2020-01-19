@@ -14,7 +14,7 @@ import worlds.gregs.hestia.core.display.update.logic.sync.ViewportSystem.Compani
 import worlds.gregs.hestia.core.entity.entity.model.components.Created
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.world.map.api.container.EntityMap
-import worlds.gregs.hestia.core.world.map.api.container.MobMap
+import worlds.gregs.hestia.core.world.map.api.container.NpcMap
 import worlds.gregs.hestia.core.world.map.api.container.PlayerMap
 import worlds.gregs.hestia.core.world.map.logic.Spiral
 
@@ -29,7 +29,7 @@ class ViewportSystem : ParallelSystem(Aspect.all(Viewport::class, Position::clas
     private lateinit var positionMapper: ComponentMapper<Position>
     private lateinit var clientIndexMapper: ComponentMapper<ClientIndex>
     private lateinit var createdMapper: ComponentMapper<Created>
-    private lateinit var mobMap: MobMap
+    private lateinit var npcMap: NpcMap
     private lateinit var playerMap: PlayerMap
     private val bags = arrayOfNulls<BitBag>(PLAYERS_LIMIT)//Concurrency; could be improved
 
@@ -55,7 +55,7 @@ class ViewportSystem : ParallelSystem(Aspect.all(Viewport::class, Position::clas
         val bag = bags[clientIndex]!!
 
         processEntities(bag, playerMap, position, players, entityId)
-        processEntities(bag, mobMap, position, viewport.localMobs())
+        processEntities(bag, npcMap, position, viewport.localNpcs())
     }
 
     private fun processEntities(bag: BitBag, map: EntityMap, position: Position, entities: EntitySyncBag, entityId: Int? = null) {

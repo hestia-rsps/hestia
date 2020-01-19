@@ -12,7 +12,7 @@ class DamageSystem : PassiveSystem() {
 
     @Subscribe
     private fun hit(event: Hit) {
-        val entityId = event.entityId
+        val entityId = event.entity
         val damage = damageMapper.create(entityId)
         //TODO soak damage change
         damage.hits.add(Marker(event.source, event.amount, event.mark, event.delay, event.critical, event.soak))

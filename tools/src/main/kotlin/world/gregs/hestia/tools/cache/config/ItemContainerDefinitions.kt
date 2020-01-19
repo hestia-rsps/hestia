@@ -11,8 +11,8 @@ class ItemContainerDefinitions {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            Settings.load()
-            val store = CacheStore("C:\\Users\\Greg\\Downloads\\rs718_cache\\")//667 doesn't have this data natively
+            Settings.load("./settings.yml")
+            val store = CacheStore("${System.getProperty("user.home")}\\Downloads\\rs718_cache\\")//667 doesn't have this data natively
             val reader = ItemContainerDefinitionReader(store)
             repeat(reader.size) {
                 val container = reader.get(it)
