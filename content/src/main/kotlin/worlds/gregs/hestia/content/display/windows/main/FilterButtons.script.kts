@@ -6,25 +6,25 @@ import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceInterac
 on<InterfaceInteraction> {
     where { id == FilterButtons }
     then {
-        when(component) {
+        when (component) {
             31 -> {//Regular chat
-            when(option) {
-                1 -> {//View
-                }
-                2 -> {//All game
-                }
-                4 -> {//Filter game
+                when (option) {
+                    1 -> {//View
+                    }
+                    2 -> {//All game
+                    }
+                    4 -> {//Filter game
+                    }
                 }
             }
-        }
             25 -> {//Private chat
-        }
+            }
             19 -> {//Trade chat
-        }
+            }
             16 -> {//Assist chat
-        }
+            }
             13 -> {//Report abuse
-        }
+            }
         }
     }
 }

@@ -1,6 +1,10 @@
+import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
+import net.onedaybeard.gradle.ArtemisWeavingTask
+
 plugins {
     kotlin("jvm") version "1.3.61"
     kotlin("kapt") version "1.3.61"
+    id("com.github.johnrengelman.shadow") version "5.2.0"
     idea
 }
 
@@ -27,8 +31,21 @@ dependencies {
     implementation(project(":engine"))
 }
 
-tasks.getByName<Test>("test") {
-    useJUnitPlatform()
+tasks {
+    getByName<Test>("test") {
+        useJUnitPlatform()
+    }
+    named<ShadowJar>("shadowJar") {
+        archiveBaseName.set("hestia")
+        mergeServiceFiles()
+        manifest {
+            attributes(mapOf("Main-Class" to "LauncherKt"))
+        }
+    }
+
+    build {
+        dependsOn(shadowJar)
+    }
 }
 
 allprojects {
@@ -71,12 +88,12 @@ allprojects {
         implementation("ch.qos.logback:logback-classic:1.2.3")
 
         //Utilities
-        implementation( "com.google.guava:guava:28.2-jre")
-        implementation( "com.google.code.gson:gson:2.8.6")
-        implementation( "commons-io:commons-io:2.6")
-        implementation( "org.apache.commons:commons-text:1.8")
-        implementation( "org.apache.commons:commons-lang3:3.9")
-        implementation( "org.apache.commons:commons-collections4:4.4")
+        implementation("com.google.guava:guava:28.2-jre")
+        implementation("com.google.code.gson:gson:2.8.6")
+        implementation("commons-io:commons-io:2.6")
+        implementation("org.apache.commons:commons-text:1.8")
+        implementation("org.apache.commons:commons-lang3:3.9")
+        implementation("org.apache.commons:commons-collections4:4.4")
 
         //Testing
         testImplementation("org.junit.jupiter:junit-jupiter-api:5.5.2")
@@ -87,7 +104,7 @@ allprojects {
     }
 
     tasks {
-        getByName<net.onedaybeard.gradle.ArtemisWeavingTask>("weave") {
+        getByName<ArtemisWeavingTask>("weave") {
             isEnableArtemisPlugin = true
             isEnablePooledWeaving = true
             isGenerateLinkMutators = true

@@ -6,6 +6,6 @@ cachePath: "./data/cache/"
 connectionLimit: 2
 serverName: "Hestia"
 pluginRootPackage:
-  - "worlds.gregs.hestia.core.Root_plugin"
+  - "worlds.gregs.hestia.core.RootPlugin"
   - "worlds.gregs.hestia.content.Scripts_plugin"
 socialServerPort: 43593

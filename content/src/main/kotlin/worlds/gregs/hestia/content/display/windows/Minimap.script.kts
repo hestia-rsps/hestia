@@ -20,7 +20,6 @@ IntVariable(2382, Variable.Type.VARP, true, 990).register("prayer_points")
 BooleanVariable(181, Variable.Type.VARC).register("select_quick_prayers")
 BooleanVariable(182, Variable.Type.VARC).register("using_quick_prayers")
 
-
 StringMapVariable(1584, Variable.Type.VARP, true, mapOf(
         0 to "normal",
         1 to "curses"
