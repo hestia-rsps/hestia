@@ -20,10 +20,9 @@ class WindowCloseSystem : PassiveSystem() {
 
     @Subscribe
     private fun handle(event: InterfaceClosed) {
-        val ( window) = event
         val suspension = tasks.getSuspension(event.entity)
         if(suspension is WindowClose) {
-            if(suspension.window == interfaces.getWindow(window)) {
+            if(suspension.window == interfaces.getWindow(event.id)) {
                 tasks.resume(event.entity, suspension, Unit)
             }
         }
@@ -31,11 +30,11 @@ class WindowCloseSystem : PassiveSystem() {
 
     @Subscribe(ignoreCancelledEvents = true)
     private fun handleSuspend(event: ProcessTaskSuspension) {
-        val (entityId, suspension) = event
+        val (suspension) = event
         if(suspension is WindowClose) {
             //If no pane open skip
-            if(!interfaces.hasInterface(entityId, suspension.window)) {
-                tasks.resume(entityId, suspension, Unit)
+            if(!interfaces.hasInterface(event.entity, suspension.window)) {
+                tasks.resume(event.entity, suspension, Unit)
             }
             event.isCancelled = true
         }

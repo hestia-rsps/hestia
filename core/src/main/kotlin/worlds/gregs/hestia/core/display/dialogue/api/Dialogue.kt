@@ -3,14 +3,12 @@ package worlds.gregs.hestia.core.display.dialogue.api
 import worlds.gregs.hestia.core.action.model.EntityAction
 import worlds.gregs.hestia.core.display.dialogue.model.DialogueBuilder
 import worlds.gregs.hestia.core.display.dialogue.model.Expression
-import worlds.gregs.hestia.core.display.dialogue.model.type.MobChat
-import worlds.gregs.hestia.core.display.dialogue.model.type.MultiOption
-import worlds.gregs.hestia.core.display.dialogue.model.type.PlayerChat
-import worlds.gregs.hestia.core.display.dialogue.model.type.Statement
+import worlds.gregs.hestia.core.display.dialogue.model.type.*
 import worlds.gregs.hestia.core.task.api.Task
 
 /**
  * A DSL for readable dialogues
+ * This is a work around, a proper extensions solution would require [compound extensions](https://github.com/Kotlin/KEEP/pull/176/commits).
  */
 class Dialogue(private val action: EntityAction, private val delegate: Task) : Task by delegate {
 
@@ -38,13 +36,31 @@ class Dialogue(private val action: EntityAction, private val delegate: Task) : T
 
     suspend fun options(title: String? = null, text: String) : Int {
         with(action) {
-            return entity await delegate perform MultiOption(text, title)
+            return entity await delegate perform Options(text, title)
         }
     }
 
     suspend fun statement(text: String, `continue`: Boolean = true) {
         with(action) {
             entity await delegate perform Statement(text, `continue`)
+        }
+    }
+
+    suspend fun stringEntry(title: String): String {
+        with(action) {
+            return entity await delegate perform StringEntry(title)
+        }
+    }
+
+    suspend fun intEntry(title: String): Int {
+        with(action) {
+            return entity await delegate perform IntEntry(title)
+        }
+    }
+
+    suspend fun destroy(text: String, item: Int): Boolean {
+        with(action) {
+            return entity await delegate perform Destroy(text, item)
         }
     }
 

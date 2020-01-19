@@ -1,10 +1,11 @@
 package worlds.gregs.hestia.core.display.dialogue.model.type
 
 import kotlinx.coroutines.CancellableContinuation
+import worlds.gregs.hestia.artemis.InstantEvent
 import worlds.gregs.hestia.core.action.model.EntityAction
 import worlds.gregs.hestia.core.display.dialogue.model.Expression
-import worlds.gregs.hestia.core.task.api.TaskType
-import worlds.gregs.hestia.core.task.model.await.Resendable
+import worlds.gregs.hestia.core.task.api.Resendable
+import worlds.gregs.hestia.core.task.api.TaskSuspension
 
 /**
  * Sends a chat box dialogue with the players head scaled [large] performing [animation] with the option to [continue] or not.
@@ -13,7 +14,7 @@ import worlds.gregs.hestia.core.task.model.await.Resendable
  * @param large Whether to display the player head as a giant or not
  * @param continue Whether to show "Click here to continue" button or not
  */
-data class PlayerChat(val lines: List<String>, val animation: Int, val large: Boolean = false, val `continue`: Boolean = true) : EntityAction(), TaskType<Unit>, Resendable {
+data class PlayerChat(val lines: List<String>, val animation: Int, val large: Boolean = false, val `continue`: Boolean = true) : EntityAction(), TaskSuspension<Unit>, Resendable, InstantEvent {
 
     constructor(animation: Int = Expression.Talking, large: Boolean = false, `continue`: Boolean = true, text: String) : this(text.trimIndent().lines(), animation, large, `continue`)
 

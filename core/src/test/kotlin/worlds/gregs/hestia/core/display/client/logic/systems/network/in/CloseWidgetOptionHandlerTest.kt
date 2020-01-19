@@ -4,7 +4,7 @@ import com.artemis.Entity
 import com.artemis.WorldConfigurationBuilder
 import org.junit.jupiter.api.Test
 import worlds.gregs.hestia.artemis.getSystem
-import worlds.gregs.hestia.core.display.interfaces.model.components.WindowRelationships
+import worlds.gregs.hestia.core.display.interfaces.model.components.InterfaceRelationships
 import worlds.gregs.hestia.network.client.decoders.messages.ScreenClose
 import worlds.gregs.hestia.tools.InterfaceTester
 
@@ -14,7 +14,7 @@ internal class CloseWidgetOptionHandlerTest : InterfaceTester(WorldConfiguration
 
     override fun start() {
         entity = world.createEntity()
-        entity.edit().add(WindowRelationships())
+        entity.edit().add(InterfaceRelationships())
     }
 
     @Test

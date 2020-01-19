@@ -3,7 +3,7 @@ package worlds.gregs.hestia.content.activity.combat
 import worlds.gregs.hestia.core.action.model.EntityAction
 import worlds.gregs.hestia.core.display.variable.api.Variable
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.CombatStyles
-import worlds.gregs.hestia.core.display.interfaces.model.events.variable.SetVariable
+import worlds.gregs.hestia.core.display.variable.model.events.SetVariable
 import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceInteraction
 import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceOpened
 import worlds.gregs.hestia.core.display.variable.model.variable.IntVariable

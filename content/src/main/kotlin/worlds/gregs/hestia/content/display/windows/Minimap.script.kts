@@ -5,8 +5,8 @@ import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.Ener
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.HealthOrb
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.PrayerOrb
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.SummoningOrb
-import worlds.gregs.hestia.core.display.interfaces.model.events.variable.SendVariable
-import worlds.gregs.hestia.core.display.interfaces.model.events.variable.ToggleVariable
+import worlds.gregs.hestia.core.display.variable.model.events.SendVariable
+import worlds.gregs.hestia.core.display.variable.model.events.ToggleVariable
 import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceInteraction
 import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceOpened
 import worlds.gregs.hestia.core.display.variable.model.variable.BooleanVariable

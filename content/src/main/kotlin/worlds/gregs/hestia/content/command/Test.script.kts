@@ -1,11 +1,7 @@
 package worlds.gregs.hestia.content.command
 
 import worlds.gregs.hestia.core.display.client.model.events.Command
-import worlds.gregs.hestia.core.display.dialogue.model.Expression.Agree
-import worlds.gregs.hestia.core.display.dialogue.model.events.CloseDialogue
-import worlds.gregs.hestia.core.display.dialogue.model.type.MobChat
-import worlds.gregs.hestia.core.display.dialogue.model.type.PlayerChat
-import worlds.gregs.hestia.core.task.model.await.Ticks
+import worlds.gregs.hestia.core.display.dialogue.model.type.Destroy
 
 on<Command> {
     where { prefix == "test" }

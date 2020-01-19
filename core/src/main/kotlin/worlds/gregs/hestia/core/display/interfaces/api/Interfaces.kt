@@ -4,9 +4,9 @@ import worlds.gregs.hestia.artemis.Aspect
 import worlds.gregs.hestia.artemis.SubscriptionSystem
 import worlds.gregs.hestia.core.display.interfaces.model.Window
 import worlds.gregs.hestia.core.display.interfaces.model.components.GameFrame
-import worlds.gregs.hestia.core.display.interfaces.model.components.WindowRelationships
+import worlds.gregs.hestia.core.display.interfaces.model.components.InterfaceRelationships
 
-abstract class Interfaces : SubscriptionSystem(Aspect.all(WindowRelationships::class, GameFrame::class)) {
+abstract class Interfaces : SubscriptionSystem(Aspect.all(InterfaceRelationships::class, GameFrame::class)) {
 
     sealed class InterfaceResult {
         object Opened : InterfaceResult()
@@ -17,26 +17,85 @@ abstract class Interfaces : SubscriptionSystem(Aspect.all(WindowRelationships::c
         }
     }
 
+    /**
+     * Links an interface id with a window
+     * @param id The interface id
+     * @param window The window to link it with
+     */
     abstract fun setWindow(id: Int, window: Window)
 
+    /**
+     * Opens an interface so long as it's [Window] parent exists and isn't already in use
+     * @param entityId The entity to open the interface for
+     * @param id The id of the interface to open
+     * @return [InterfaceResult]
+     */
     abstract fun openInterface(entityId: Int, id: Int): InterfaceResult
 
+    /**
+     * Resends an interface and it's data
+     * @param entityId The id of the entity who's interface to refresh
+     * @param id The id of the interface to refresh
+     */
     abstract fun refreshInterface(entityId: Int, id: Int)
 
-    abstract fun closeInterface(entityId: Int, id: Int, silent: Boolean = false)
+    /**
+     * Closes an interface
+     * @param entityId The id of the entity who's interface to close
+     * @param id The id of the interface to close
+     */
+    abstract fun closeInterface(entityId: Int, id: Int)
 
-    abstract fun closeWindow(entityId: Int, window: Window, silent: Boolean = false)
+    /**
+     * Closes the interface open on a [Window]
+     * @param entityId The id of the entity who's interface to close
+     * @param window The window who's interface should be closed
+     */
+    abstract fun closeWindow(entityId: Int, window: Window)
 
+    /**
+     * Returns the id of the interface open on [Window]
+     * @param entityId The id of the entity who's interface to find
+     * @param window The window who's interface to return
+     * @return The interface id or null if none
+     */
     abstract fun getInterface(entityId: Int, window: Window): Int?
 
+    /**
+     * Updates gameframe after a switch refreshing all children
+     * @param entityId The id of the entity who's gameframe to update
+     */
     abstract fun updateGameframe(entityId: Int)
 
+    /**
+     * Checks if an entity has an interface open on a [Window]
+     * @param entityId The id of the entity who's window to check
+     * @param window The window to check for an interface
+     * @return Whether [window] has an interface open or not
+     */
     abstract fun hasInterface(entityId: Int, window: Window): Boolean
 
+    /**
+     * Checks if an entity has an interface open
+     * @param entityId The id of the entity to check
+     * @param id The interface id to check for open
+     * @return Whether entity has an interface [id] open or not
+     */
     abstract fun hasInterface(entityId: Int, id: Int): Boolean
 
+    /**
+     * Verifies an interface hash is a valid interface and component pair and is open
+     * @param entityId The id of the entity to check
+     * @param hash The interface and component id hashes
+     * @return Whether entity has an [hash] open or not
+     */
     abstract fun verify(entityId: Int, hash: Int): Boolean
 
+    /**
+     * Returns the window for an interface
+     * @param id The interface id to get the parent window for
+     * @return The interfaces parent window or by default [Window.MAIN_SCREEN]
+     */
     abstract fun getWindow(id: Int): Window
 
     companion object {

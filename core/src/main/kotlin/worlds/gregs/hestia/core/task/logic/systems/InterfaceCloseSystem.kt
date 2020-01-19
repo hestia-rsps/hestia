@@ -19,10 +19,9 @@ class InterfaceCloseSystem : PassiveSystem() {
 
     @Subscribe
     private fun handle(event: InterfaceClosed) {
-        val (id) = event
         val suspension = tasks.getSuspension(event.entity)
         if(suspension is InterfaceClose) {
-            if(suspension.id == id) {
+            if(suspension.id == event.id) {
                 tasks.resume(event.entity, suspension, Unit)
             }
         }
@@ -30,12 +29,12 @@ class InterfaceCloseSystem : PassiveSystem() {
 
     @Subscribe(ignoreCancelledEvents = true)
     private fun handleSuspend(event: ProcessTaskSuspension) {
-        val (entityId, suspension) = event
+        val (suspension) = event
         if(suspension is InterfaceClose) {
-            val window = suspension.id
+            val id = suspension.id
             //If no screen open skip
-            if(!interfaces.hasInterface(entityId, window)) {
-                tasks.resume(entityId, suspension, Unit)
+            if(!interfaces.hasInterface(event.entity, id)) {
+                tasks.resume(event.entity, suspension, Unit)
             }
             event.isCancelled = true
         }

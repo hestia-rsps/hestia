@@ -49,8 +49,7 @@ allprojects {
         implementation(kotlin("script-runtime"))
         implementation(kotlin("scripting-compiler-embeddable"))
         implementation(kotlin("compiler-embeddable"))
-        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.0.1")
-        implementation("net.onedaybeard.artemis:artemis-odb-serializer:2.2.0")
+        implementation("net.onedaybeard.artemis:artemis-odb-serializer:2.3.0")
         implementation("net.mostlyoriginal.artemis-odb:contrib-eventbus:2.4.0")
         implementation("net.mostlyoriginal.artemis-odb:contrib-core:2.4.0")
         implementation("net.fbridault.eeel:artemis-odb-eeel:1.2.1")
@@ -64,28 +63,27 @@ allprojects {
 
         implementation(kotlin("stdlib-jdk8"))
         implementation(kotlin("reflect"))
-        implementation("io.netty:netty-all:4.1.29.Final")
-        implementation("org.yaml:snakeyaml:1.23")
+        implementation("io.netty:netty-all:4.1.44.Final")
+        implementation("org.yaml:snakeyaml:1.25")
 
         //Logging
-        implementation("org.slf4j:slf4j-api:1.7.25")
+        implementation("org.slf4j:slf4j-api:1.7.30")
         implementation("ch.qos.logback:logback-classic:1.2.3")
 
         //Utilities
-        implementation( "com.google.guava:guava:27.1-jre")
-        implementation( "com.google.code.gson:gson:2.8.5")
+        implementation( "com.google.guava:guava:28.2-jre")
+        implementation( "com.google.code.gson:gson:2.8.6")
         implementation( "commons-io:commons-io:2.6")
-        implementation( "org.apache.commons:commons-text:1.5")
-        implementation( "org.apache.commons:commons-lang3:3.8.1")
-        implementation( "org.apache.commons:commons-collections4:4.3")
-        implementation( "io.github.classgraph:classgraph:4.8.30")
+        implementation( "org.apache.commons:commons-text:1.8")
+        implementation( "org.apache.commons:commons-lang3:3.9")
+        implementation( "org.apache.commons:commons-collections4:4.4")
 
         //Testing
         testImplementation("org.junit.jupiter:junit-jupiter-api:5.5.2")
         testImplementation("org.assertj:assertj-core:3.14.0")
         testImplementation("io.mockk:mockk:1.9.3")
         testImplementation("org.mockito:mockito-all:2.0.2-beta")
-        testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.0.0-RC3")
+        testImplementation("com.nhaarman.mockitokotlin2:mockito-kotlin:2.2.0")
     }
 
     tasks {

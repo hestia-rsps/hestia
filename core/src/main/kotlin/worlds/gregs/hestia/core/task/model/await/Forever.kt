@@ -1,8 +1,8 @@
 package worlds.gregs.hestia.core.task.model.await
 
 import kotlinx.coroutines.CancellableContinuation
-import worlds.gregs.hestia.core.task.api.TaskType
+import worlds.gregs.hestia.core.task.api.TaskSuspension
 
-object Forever : TaskType<Unit> {
+object Forever : TaskSuspension<Unit> {
     override lateinit var continuation: CancellableContinuation<Unit>
 }

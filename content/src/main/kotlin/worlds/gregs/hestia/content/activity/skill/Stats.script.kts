@@ -9,9 +9,9 @@ import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.Stat
 import worlds.gregs.hestia.core.display.interfaces.model.events.request.OpenInterface
 import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceInteraction
 import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceOpened
-import worlds.gregs.hestia.core.display.interfaces.model.events.variable.RemoveVariable
-import worlds.gregs.hestia.core.display.interfaces.model.events.variable.SendVariable
-import worlds.gregs.hestia.core.display.interfaces.model.events.variable.SetVariable
+import worlds.gregs.hestia.core.display.variable.model.events.RemoveVariable
+import worlds.gregs.hestia.core.display.variable.model.events.SendVariable
+import worlds.gregs.hestia.core.display.variable.model.events.SetVariable
 import worlds.gregs.hestia.core.display.variable.model.variable.BitwiseVariable
 import worlds.gregs.hestia.core.display.variable.model.variable.IntVariable
 import worlds.gregs.hestia.network.client.encoders.messages.SkillLevel

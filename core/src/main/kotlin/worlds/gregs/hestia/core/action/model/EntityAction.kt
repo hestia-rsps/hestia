@@ -8,7 +8,8 @@ import worlds.gregs.hestia.core.action.logic.dispatch
 import worlds.gregs.hestia.core.display.client.model.components.ClientIndex
 import worlds.gregs.hestia.core.display.client.model.events.Chat
 import worlds.gregs.hestia.core.display.dialogue.api.Dialogue
-import worlds.gregs.hestia.core.display.dialogue.model.events.CloseDialogue
+import worlds.gregs.hestia.core.display.interfaces.model.Window
+import worlds.gregs.hestia.core.display.interfaces.model.events.request.CloseWindow
 import worlds.gregs.hestia.core.display.update.model.components.DisplayName
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.item.container.api.Composition
@@ -20,7 +21,7 @@ import worlds.gregs.hestia.core.entity.item.container.model.Item
 import worlds.gregs.hestia.core.entity.item.floor.model.events.CreateFloorItem
 import worlds.gregs.hestia.core.task.api.SuspendableQueue
 import worlds.gregs.hestia.core.task.api.Task
-import worlds.gregs.hestia.core.task.api.TaskType
+import worlds.gregs.hestia.core.task.api.TaskSuspension
 import worlds.gregs.hestia.service.cache.definition.definitions.ItemDefinition
 import worlds.gregs.hestia.service.cache.definition.systems.ItemDefinitionSystem
 
@@ -41,7 +42,7 @@ abstract class EntityAction : WorldAction(), Cancellable {
      * Ideal solution here would be `infix fun (Int, Task).awaitPerform(action: A)`
      * Using [Compound extensions](https://github.com/Kotlin/KEEP/pull/176)
      */
-    suspend infix fun <T, A> Await.perform(action: A) where A : EntityAction, A : TaskType<T> = suspendCancellableCoroutine<T> {
+    suspend infix fun <T, A> Await.perform(action: A) where A : EntityAction, A : TaskSuspension<T> = suspendCancellableCoroutine<T> {
         action.continuation = it
         task.suspension = action
         entity.perform(action)
@@ -76,9 +77,9 @@ abstract class EntityAction : WorldAction(), Cancellable {
     }
 
     suspend fun Task.dialogue(block: suspend Dialogue.() -> Unit) {
-        onCancel { entity perform CloseDialogue() }
+        onCancel { entity perform CloseWindow(Window.DIALOGUE_BOX) }
         block(Dialogue(this@EntityAction, this))
-        entity perform CloseDialogue()
+        entity perform CloseWindow(Window.DIALOGUE_BOX)
     }
 
     /*

@@ -2,7 +2,7 @@ package worlds.gregs.hestia.content.display.windows.main
 
 import worlds.gregs.hestia.core.display.variable.api.Variable
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.Emotes
-import worlds.gregs.hestia.core.display.interfaces.model.events.variable.SendVariable
+import worlds.gregs.hestia.core.display.variable.model.events.SendVariable
 import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceOpened
 import worlds.gregs.hestia.core.display.variable.model.variable.BitwiseVariable
 import worlds.gregs.hestia.core.display.variable.model.variable.StringMapVariable

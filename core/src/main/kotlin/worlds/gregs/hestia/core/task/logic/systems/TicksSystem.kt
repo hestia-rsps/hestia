@@ -3,8 +3,8 @@ package worlds.gregs.hestia.core.task.logic.systems
 import com.artemis.systems.IteratingSystem
 import worlds.gregs.hestia.artemis.Aspect
 import worlds.gregs.hestia.core.task.api.Tasks
+import worlds.gregs.hestia.core.task.api.Tickable
 import worlds.gregs.hestia.core.task.model.TaskContinuation
-import worlds.gregs.hestia.core.task.model.await.Tickable
 import worlds.gregs.hestia.core.task.model.await.Ticks
 import worlds.gregs.hestia.core.task.model.components.TaskQueue
 import worlds.gregs.hestia.core.task.model.events.ProcessTaskSuspension

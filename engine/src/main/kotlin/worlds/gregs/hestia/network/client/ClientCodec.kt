@@ -62,6 +62,7 @@ class ClientCodec : MessageHandshakeCodec() {
         bind(ClientResponseEncoder())
         bind(InterfaceSettingsEncoder())
         bind(InterfaceVisibilityEncoder())
+        bind(InterfaceSpriteEncoder())
         bind(VarpEncoder())
         bind(VarbitEncoder())
         bind(VarcEncoder())

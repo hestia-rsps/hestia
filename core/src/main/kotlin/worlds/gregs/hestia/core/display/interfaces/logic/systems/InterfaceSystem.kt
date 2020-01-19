@@ -8,13 +8,13 @@ import worlds.gregs.hestia.artemis.send
 import worlds.gregs.hestia.core.action.model.perform
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces
 import worlds.gregs.hestia.core.display.interfaces.model.Window
+import worlds.gregs.hestia.core.display.interfaces.model.components.GameFrame
+import worlds.gregs.hestia.core.display.interfaces.model.components.InterfaceRelationships
+import worlds.gregs.hestia.core.display.interfaces.model.events.*
 import worlds.gregs.hestia.core.display.interfaces.model.events.request.CloseInterface
 import worlds.gregs.hestia.core.display.interfaces.model.events.request.CloseWindow
 import worlds.gregs.hestia.core.display.interfaces.model.events.request.OpenInterface
 import worlds.gregs.hestia.core.display.interfaces.model.events.request.RefreshInterface
-import worlds.gregs.hestia.core.display.interfaces.model.components.GameFrame
-import worlds.gregs.hestia.core.display.interfaces.model.components.WindowRelationships
-import worlds.gregs.hestia.core.display.interfaces.model.events.*
 import worlds.gregs.hestia.network.client.encoders.messages.InterfaceCloseMessage
 import worlds.gregs.hestia.network.client.encoders.messages.InterfaceOpenMessage
 import worlds.gregs.hestia.network.client.encoders.messages.WindowUpdate
@@ -22,31 +22,26 @@ import worlds.gregs.hestia.service.cache.definition.systems.InterfaceDefinitionS
 
 class InterfaceSystem : Interfaces() {
 
-    private lateinit var windowRelationshipsMapper: ComponentMapper<WindowRelationships>
+    private lateinit var interfaceRelationshipsMapper: ComponentMapper<InterfaceRelationships>
     private lateinit var gameFrameMapper: ComponentMapper<GameFrame>
-    private val windows = mutableMapOf<Int, Window>()
-    private lateinit var es: EventSystem
     private lateinit var definitions: InterfaceDefinitionSystem
-    private val components = listOf(
-            ChatBox, ChatBackground, FilterButtons, PrivateChat,//Chat box
-            HealthOrb, PrayerOrb, EnergyOrb, SummoningOrb,//Minimap
-            CombatStyles, TaskSystem, Stats, QuestJournals, Inventory, WornEquipment, PrayerList, ModernSpellbook,//Tabs
-            FriendsList, FriendsChat, ClanChat, Options, Emotes, MusicPlayer, Notes,
-            AreaStatusIcon
-    )
+    private lateinit var es: EventSystem
+
+    private val windows = mutableMapOf<Int, Window>()
 
     override fun initialize() {
         super.initialize()
         Window.values().forEach { window ->
             window.ids.forEach { id ->
-                windows[id] = window
+                setWindow(id, window)
             }
         }
     }
 
     override fun inserted(entityId: Int) {
         val gameFrame = gameFrameMapper.get(entityId)
-        openInterface(entityId, if (gameFrame.resizable) ResizableGameframe else FixedGameframe)//Gameframe
+        //Gameframe
+        openInterface(entityId, if (gameFrame.resizable) ResizableGameframe else FixedGameframe)
         //Gameframe components
         components.forEach {
             openInterface(entityId, it)
@@ -58,8 +53,7 @@ class InterfaceSystem : Interfaces() {
     }
 
     override fun openInterface(entityId: Int, id: Int): InterfaceResult {
-        val windowRelationships = windowRelationshipsMapper.get(entityId)
-        val relationships = windowRelationships.relationships
+        val relationships = interfaceRelationshipsMapper.get(entityId).relationships
         val gameFrame = gameFrameMapper.get(entityId)
 
         val window = getWindow(id)
@@ -97,30 +91,29 @@ class InterfaceSystem : Interfaces() {
         es.perform(entityId, InterfaceOpened(id))
     }
 
-    override fun closeInterface(entityId: Int, id: Int, silent: Boolean) {
-        val windowRelationships = windowRelationshipsMapper.get(entityId)
-        val relationships = windowRelationships.relationships
+    override fun closeInterface(entityId: Int, id: Int) {
+        val interfaceRelationships = interfaceRelationshipsMapper.get(entityId)
+        val relationships = interfaceRelationships.relationships
         val parent = relationships.getParent(id)
         if (parent != id) {
             val gameFrame = gameFrameMapper.get(entityId)
             val index = getIndex(id, gameFrame.resizable)
             relationships[parent]!!.remove(id)
             es.send(entityId, InterfaceCloseMessage(parent, index))
-            es.perform(entityId, InterfaceClosed(id, silent))
+            es.perform(entityId, InterfaceClosed(id))
         }
         //Otherwise interface not open
     }
 
-    override fun closeWindow(entityId: Int, window: Window, silent: Boolean) {
+    override fun closeWindow(entityId: Int, window: Window) {
         val id = getInterface(entityId, window)
         if (id != null) {
-            closeInterface(entityId, id, silent)
+            closeInterface(entityId, id)
         }
     }
 
     override fun updateGameframe(entityId: Int) {
-        val windowRelationships = windowRelationshipsMapper.get(entityId)
-        val relationships = windowRelationships.relationships
+        val relationships = interfaceRelationshipsMapper.get(entityId).relationships
         val gameFrame = gameFrameMapper.get(entityId)
         val previous = if (gameFrame.resizable) FixedGameframe else ResizableGameframe
         val current = if (gameFrame.resizable) ResizableGameframe else FixedGameframe
@@ -137,8 +130,7 @@ class InterfaceSystem : Interfaces() {
     }
 
     override fun getInterface(entityId: Int, window: Window): Int? {
-        val windowRelationships = windowRelationshipsMapper.get(entityId)
-        val relationships = windowRelationships.relationships
+        val relationships = interfaceRelationshipsMapper.get(entityId).relationships
         val gameFrame = gameFrameMapper.get(entityId)
 
         val paneParent = getParent(window, gameFrame)
@@ -153,18 +145,19 @@ class InterfaceSystem : Interfaces() {
     }
 
     override fun hasInterface(entityId: Int, id: Int): Boolean {
-        val windowRelationships = windowRelationshipsMapper.get(entityId)
-        val relationships = windowRelationships.relationships
+        val relationships = interfaceRelationshipsMapper.get(entityId).relationships
         return relationships.containsKey(id)
     }
 
     override fun verify(entityId: Int, hash: Int): Boolean {
-        val relationships = windowRelationshipsMapper.get(entityId)?.relationships ?: return false
+        val relationships = interfaceRelationshipsMapper.get(entityId)?.relationships ?: return false
+        //Check entity has interface open
         val id = hash shr 16
         if (!relationships.containsKey(id)) {
             return false//Interface not open
         }
 
+        //Check component is real
         val componentId = hash - (id shl 16)
         val definition = definitions.get(id)
         if (!definition.containsKey(componentId)) {
@@ -175,7 +168,7 @@ class InterfaceSystem : Interfaces() {
     }
 
     override fun refreshInterface(entityId: Int, id: Int) {
-        val relationships = windowRelationshipsMapper.get(entityId).relationships
+        val relationships = interfaceRelationshipsMapper.get(entityId).relationships
         relationships.walk(id) { interfaceId, _ ->
             es.perform(entityId, InterfaceRefresh(interfaceId))
             false
@@ -217,57 +210,67 @@ class InterfaceSystem : Interfaces() {
         return getWindow(id).getIndex(resizeable)
     }
 
-    private fun Window.getIndex(resizeable: Boolean): Int {
-        return if (resizeable) resizable else fixed
-    }
-
-    private fun isPermanent(window: Window): Boolean {
-        return window != Window.MAIN_SCREEN
-    }
-
-    /**
-     * Walks recursively through [root] and all of it's children calling [predicate] each time
-     * @param root The interface to walk down
-     * @param parent The [root]'s parent id
-     * @param predicate If true then walk returns the found id
-     * @return The id of the first interface when [predicate] returns true
-     */
-    private fun Map<Int, List<Int>?>.walk(root: Int, parent: Int = getParent(root), predicate: (id: Int, parent: Int) -> Boolean): Int? {
-        if (predicate.invoke(root, parent)) {
-            return root
+    companion object {
+        private fun Window.getIndex(resizeable: Boolean): Int {
+            return if (resizeable) resizable else fixed
         }
 
-        if (containsKey(root)) {
-            for (child in getValue(root) ?: return null) {
-                val result = walk(child, root, predicate)
-                if (result != null) {
-                    return result
+        private fun isPermanent(window: Window): Boolean {
+            return window != Window.MAIN_SCREEN
+        }
+
+        /**
+         * Walks recursively through [root] and all of it's children calling [predicate] each time
+         * @param root The interface to walk down
+         * @param parent The [root]'s parent id
+         * @param predicate If true then walk returns the found id
+         * @return The id of the first interface when [predicate] returns true
+         */
+        private fun Map<Int, List<Int>?>.walk(root: Int, parent: Int = getParent(root), predicate: (id: Int, parent: Int) -> Boolean): Int? {
+            if (predicate.invoke(root, parent)) {
+                return root
+            }
+
+            if (containsKey(root)) {
+                for (child in getValue(root) ?: return null) {
+                    val result = walk(child, root, predicate)
+                    if (result != null) {
+                        return result
+                    }
                 }
             }
+            return null
         }
-        return null
-    }
 
-    /**
-     * Finds the parent of a interface
-     * @return The parent id OR the child's id
-     */
-    private fun Map<Int, List<Int>?>.getParent(child: Int): Int {
-        for ((parentId, children) in this) {
-            if (children != null && children.contains(child)) {
-                return parentId
+        /**
+         * Finds the parent of a interface
+         * @return The parent id OR the child's id
+         */
+        private fun Map<Int, List<Int>?>.getParent(child: Int): Int {
+            for ((parentId, children) in this) {
+                if (children != null && children.contains(child)) {
+                    return parentId
+                }
             }
+            return child
         }
-        return child
-    }
 
-    /**
-     * @return The parent id of a window
-     */
-    private fun getParent(window: Window, gameFrame: GameFrame): Int =
-            if (window.parent != -1) window.parent else if (gameFrame.resizable) ResizableGameframe else FixedGameframe
+        /**
+         * Returns the true parent interface id for a [Window]
+         * @param window The window who's parent to get
+         * @param gameFrame The gameframe information
+         * @return The parent id of the window
+         */
+        private fun getParent(window: Window, gameFrame: GameFrame): Int =
+                if (window.parent != -1) window.parent else if (gameFrame.resizable) ResizableGameframe else FixedGameframe
 
-    companion object {
         private val logger = LoggerFactory.getLogger(InterfaceSystem::class.java)!!
+        private val components = listOf(
+                ChatBox, ChatBackground, FilterButtons, PrivateChat,//Chat box
+                HealthOrb, PrayerOrb, EnergyOrb, SummoningOrb,//Minimap
+                CombatStyles, TaskSystem, Stats, QuestJournals, Inventory, WornEquipment, PrayerList, ModernSpellbook,//Tabs
+                FriendsList, FriendsChat, ClanChat, Options, Emotes, MusicPlayer, Notes,
+                AreaStatusIcon
+        )
     }
 }

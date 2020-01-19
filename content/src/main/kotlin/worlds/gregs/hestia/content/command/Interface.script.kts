@@ -12,11 +12,13 @@ on<Command> {
     where { prefix == "inter" }
     then {
         val id = content.toInt()
-        interfaces.closeWindow(entity, MAIN_SCREEN, true)
-        interfaces.closeWindow(entity, OVERLAY, true)
-        interfaces.closeWindow(entity, DIALOGUE_BOX, true)
         if(id != -1) {
+            interfaces.closeWindow(entity, interfaces.getWindow(id))
             interfaces.openInterface(entity, id)
+        } else {
+            interfaces.closeWindow(entity, MAIN_SCREEN)
+            interfaces.closeWindow(entity, OVERLAY)
+            interfaces.closeWindow(entity, DIALOGUE_BOX)
         }
         isCancelled = true
     }

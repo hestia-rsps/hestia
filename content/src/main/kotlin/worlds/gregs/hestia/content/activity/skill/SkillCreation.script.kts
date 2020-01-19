@@ -10,7 +10,7 @@ import worlds.gregs.hestia.core.display.interfaces.model.Window.DIALOGUE_BOX
 import worlds.gregs.hestia.core.display.interfaces.model.events.request.CloseWindow
 import worlds.gregs.hestia.core.display.interfaces.model.events.request.OpenInterface
 import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceInteraction
-import worlds.gregs.hestia.core.display.interfaces.model.events.variable.SetVariable
+import worlds.gregs.hestia.core.display.variable.model.events.SetVariable
 import worlds.gregs.hestia.core.display.variable.model.variable.IntVariable
 import worlds.gregs.hestia.core.display.variable.model.variable.StringMapVariable
 import worlds.gregs.hestia.core.display.variable.model.variable.StringVariable

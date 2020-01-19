@@ -24,8 +24,8 @@ import worlds.gregs.hestia.core.display.request.model.events.AcceptedRequest
 import worlds.gregs.hestia.core.display.interfaces.model.events.PlayerOption
 import worlds.gregs.hestia.core.display.request.model.events.RequestResponse
 import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceInteraction
-import worlds.gregs.hestia.core.display.interfaces.model.events.variable.SetVariable
-import worlds.gregs.hestia.core.display.interfaces.model.events.variable.ToggleVariable
+import worlds.gregs.hestia.core.display.variable.model.events.SetVariable
+import worlds.gregs.hestia.core.display.variable.model.events.ToggleVariable
 import worlds.gregs.hestia.core.display.variable.model.variable.BooleanVariable
 import worlds.gregs.hestia.core.display.variable.model.variable.IntVariable
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
@@ -43,7 +43,7 @@ import worlds.gregs.hestia.core.entity.entity.model.events.Graphic
 import worlds.gregs.hestia.core.display.interfaces.model.events.request.OpenInterface
 import worlds.gregs.hestia.core.task.model.await.InterfaceClose
 import worlds.gregs.hestia.core.display.interfaces.logic.systems.InterfaceSystem
-import worlds.gregs.hestia.core.display.interfaces.model.events.variable.SendVariable
+import worlds.gregs.hestia.core.display.variable.model.events.SendVariable
 
 val skills = listOf(Skill.RUNECRAFTING, Skill.CRAFTING, Skill.FLETCHING, Skill.CONSTRUCTION, Skill.FARMING, Skill.MAGIC, Skill.SMITHING, Skill.COOKING, Skill.HERBLORE)
 val maximumExperience = 30000

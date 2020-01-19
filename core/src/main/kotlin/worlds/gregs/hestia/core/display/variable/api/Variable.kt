@@ -9,24 +9,34 @@ interface Variable<T : Any> {
     val type: Type
     val persistent: Boolean
 
+    /**
+     * Combined hash of the variable id and type
+     * @see toHash
+     */
     val hash: Int
         get() = toHash(id, type)
 
+    /**
+     * Converts value to an integer for sending to the client
+     * @param value The value to convert
+     * @return integer value
+     */
     open fun toInt(value: T): Int {
         return -1
     }
 
+    /**
+     * The variable client type
+     */
     enum class Type {
         VARBIT, VARP, VARC, VARCSTR
     }
 
+    /**
+     * Registers the variable into the global list [variables] with identifier [name]
+     */
     fun register(name: String) {
         names[name] = hash
-        register()
-    }
-
-
-    fun register() {
         variables[hash] = this
     }
 
@@ -36,10 +46,20 @@ interface Variable<T : Any> {
             return type.ordinal + (id shl 2)
         }
 
+        /**
+         * Returns the variable id from a hash
+         * @param hash The id and type combined
+         * @return the unique variable id
+         */
         fun idFrom(hash: Int): Int {
             return hash shr 2
         }
 
+        /**
+         * Returns the [Variable.Type] from a hash
+         * @param hash The id and type combined
+         * @return the variable [Type]
+         */
         fun typeFrom(hash: Int): Type {
             return Type.values()[hash and 0x4]
         }

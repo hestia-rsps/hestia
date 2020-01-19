@@ -10,7 +10,7 @@ import worlds.gregs.hestia.core.display.update.model.components.Renderable
 import worlds.gregs.hestia.core.display.request.model.components.ContextMenu
 import worlds.gregs.hestia.core.display.request.model.components.RequestList
 import worlds.gregs.hestia.core.display.variable.model.VariableStore
-import worlds.gregs.hestia.core.display.interfaces.model.components.WindowRelationships
+import worlds.gregs.hestia.core.display.interfaces.model.components.InterfaceRelationships
 import worlds.gregs.hestia.core.entity.entity.api.ArchetypeFactory
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.item.container.model.Inventory
@@ -23,7 +23,7 @@ import worlds.gregs.hestia.game.entity.Player
 class BotFactory : ArchetypeFactory {
 
     override fun getBuilder(): ArchetypeBuilder {
-        return ArchetypeBuilder().add(Player::class, ClientIndex::class, Renderable::class, Position::class, AppearanceData::class, DisplayName::class, Mobile::class, Ghost::class, TaskQueue::class, Viewport::class, Inventory::class, WindowRelationships::class,
+        return ArchetypeBuilder().add(Player::class, ClientIndex::class, Renderable::class, Position::class, AppearanceData::class, DisplayName::class, Mobile::class, Ghost::class, TaskQueue::class, Viewport::class, Inventory::class, InterfaceRelationships::class,
                 ContextMenu::class, RequestList::class, Movement::class, VariableStore::class)
     }
 }

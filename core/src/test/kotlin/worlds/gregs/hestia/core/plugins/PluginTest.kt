@@ -11,7 +11,6 @@ import worlds.gregs.hestia.core.display.client.ClientPlugin
 import worlds.gregs.hestia.core.entity.entity.EntityPlugin
 import worlds.gregs.hestia.core.entity.mob.MobPlugin
 import worlds.gregs.hestia.core.entity.player.PlayerPlugin
-import worlds.gregs.hestia.core.task.tick.TickPlugin
 import worlds.gregs.hestia.core.world.land.LandPlugin
 import worlds.gregs.hestia.core.world.map.MapPlugin
 import worlds.gregs.hestia.core.world.movement.MovementPlugin
@@ -28,7 +27,6 @@ internal class PluginTest : GameTest(WorldConfigurationBuilder()) {
     fun testClient() {
         build(WorldConfigurationBuilder().with(ClientPlugin()), false)
         build(WorldConfigurationBuilder().with(EntityPlugin()), false)
-        build(WorldConfigurationBuilder().with(TickPlugin()), false)
     }
 
 

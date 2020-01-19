@@ -21,13 +21,14 @@ class ContextMenuSystem : ContextMenus() {
 
     override fun setOption(entityId: Int, option: PlayerOptions): ContextMenuResult {
         val contextMenu = contextMenuMapper.get(entityId)
-        val current = contextMenu.options[option.slot]
-        return if(current != null && current != option) {
-            ContextMenuResult.SlotInUse
-        } else {
+        val current = contextMenu.options.getOrNull(option.slot)
+        //If empty slot or slot matches
+        return if (current == null && option.slot in contextMenu.options.indices || current == option) {
             contextMenu.options[option.slot] = option
             es.send(entityId, PlayerContextMenuOption(option.string, option.slot, option.top))
             ContextMenuResult.Success
+        } else {
+            ContextMenuResult.SlotInUse
         }
     }
 
@@ -38,6 +39,6 @@ class ContextMenuSystem : ContextMenus() {
 
     override fun hasOption(entityId: Int, option: PlayerOptions): Boolean {
         val contextMenu = contextMenuMapper.get(entityId)
-        return contextMenu.options[option.slot] != null
+        return contextMenu.options[option.slot] == option
     }
 }

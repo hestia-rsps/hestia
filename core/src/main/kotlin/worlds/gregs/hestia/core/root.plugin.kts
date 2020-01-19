@@ -12,7 +12,6 @@ import worlds.gregs.hestia.core.entity.item.ItemPlugin
 import worlds.gregs.hestia.core.entity.mob.MobPlugin
 import worlds.gregs.hestia.core.entity.player.PlayerPlugin
 import worlds.gregs.hestia.core.task.Task_plugin
-import worlds.gregs.hestia.core.task.tick.TickPlugin
 import worlds.gregs.hestia.core.world.collision.CollisionPlugin
 import worlds.gregs.hestia.core.world.land.LandPlugin
 import worlds.gregs.hestia.core.world.map.MapPlugin
@@ -25,7 +24,6 @@ setup {
     dependsOn(BotPlugin::class.java)
     dependsOn(ClientPlugin::class.java)
     dependsOn(CollisionPlugin::class.java)
-    dependsOn(TickPlugin::class.java)
     dependsOn(CachePlugin::class.java)
     dependsOn(DialoguePlugin::class.java)
     dependsOn(EntityPlugin::class.java)

@@ -4,13 +4,10 @@ import com.artemis.ComponentMapper
 import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.event.common.Subscribe
 import worlds.gregs.hestia.core.action.model.Action
-import worlds.gregs.hestia.core.task.api.Task
-import worlds.gregs.hestia.core.task.api.TaskCancellation
-import worlds.gregs.hestia.core.task.api.TaskType
-import worlds.gregs.hestia.core.task.api.Tasks
+import worlds.gregs.hestia.core.action.model.perform
+import worlds.gregs.hestia.core.task.api.*
 import worlds.gregs.hestia.core.task.model.InactiveTask
 import worlds.gregs.hestia.core.task.model.TaskContinuation
-import worlds.gregs.hestia.core.task.model.await.Resendable
 import worlds.gregs.hestia.core.task.model.components.TaskQueue
 import worlds.gregs.hestia.core.task.model.events.ProcessTaskSuspension
 import worlds.gregs.hestia.core.task.model.events.StartTask
@@ -39,7 +36,7 @@ class TaskSystem : Tasks() {
         }
     }
 
-    override fun getSuspension(entityId: Int): TaskType<*>? {
+    override fun getSuspension(entityId: Int): TaskSuspension<*>? {
         val taskQueue = taskQueueMapper.get(entityId) ?: return null
         val queue = purge(taskQueue) ?: return null
         val peek = queue.peek()
@@ -47,7 +44,7 @@ class TaskSystem : Tasks() {
         return peek?.suspension
     }
 
-    override fun <T> resume(entityId: Int, type: TaskType<T>, result: T): Boolean {
+    override fun <T> resume(entityId: Int, type: TaskSuspension<T>, result: T): Boolean {
         val taskQueue = taskQueueMapper.get(entityId) ?: return false
         val queue = purge(taskQueue) ?: return false
         val task = queue.peek()
@@ -67,7 +64,7 @@ class TaskSystem : Tasks() {
     /**
      * If [TaskQueue] was recently polled then resend the most up to date [suspension] if it's an [Action]
      */
-    internal fun resend(taskQueue: TaskQueue, suspension: TaskType<*>?) {
+    internal fun resend(taskQueue: TaskQueue, suspension: TaskSuspension<*>?) {
         if(taskQueue.needsUpdate) {
             taskQueue.needsUpdate = false
             if(suspension is Resendable) {
@@ -102,7 +99,7 @@ class TaskSystem : Tasks() {
     internal fun <T> processTask(entityId: Int, task: Task, continuation: Continuation<T>, result: T) {
         continuation.resume(result)
         if(task.isActive) {
-            es.dispatch(ProcessTaskSuspension(entityId, task.suspension ?: return))
+            es.perform(entityId, ProcessTaskSuspension(task.suspension ?: return))
         }
     }
 

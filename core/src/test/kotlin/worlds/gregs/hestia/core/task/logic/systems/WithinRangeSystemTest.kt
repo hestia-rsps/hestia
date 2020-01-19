@@ -12,7 +12,7 @@ import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import worlds.gregs.hestia.MockkGame
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
-import worlds.gregs.hestia.core.task.api.TaskType
+import worlds.gregs.hestia.core.task.api.TaskSuspension
 import worlds.gregs.hestia.core.task.api.Tasks
 import worlds.gregs.hestia.core.task.model.await.WithinRange
 import worlds.gregs.hestia.core.task.model.components.TaskQueue
@@ -48,7 +48,7 @@ internal class WithinRangeSystemTest : MockkGame() {
     fun `Non-distance suspend ignored`() {
         //Given
         val entityId = 0
-        val suspension: TaskType<*> = mockk()
+        val suspension: TaskSuspension<*> = mockk()
         every { tasks.getSuspension(entityId) } returns suspension
         //When
         tick()

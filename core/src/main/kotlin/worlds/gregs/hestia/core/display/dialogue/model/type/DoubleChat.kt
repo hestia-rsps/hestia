@@ -1,10 +1,11 @@
 package worlds.gregs.hestia.core.display.dialogue.model.type
 
 import kotlinx.coroutines.CancellableContinuation
+import worlds.gregs.hestia.artemis.InstantEvent
 import worlds.gregs.hestia.core.action.model.EntityAction
 import worlds.gregs.hestia.core.display.dialogue.model.Expression
-import worlds.gregs.hestia.core.task.api.TaskType
-import worlds.gregs.hestia.core.task.model.await.Resendable
+import worlds.gregs.hestia.core.task.api.Resendable
+import worlds.gregs.hestia.core.task.api.TaskSuspension
 
 /**
  * Sends a chat box dialogue with both the players head and [mob] head performing [animation] and [playerAnimation] respectively.
@@ -13,7 +14,7 @@ import worlds.gregs.hestia.core.task.model.await.Resendable
  * @param animation The animation for the mobs head to perform @see [Expression]
  * @param playerAnimation The animation for the players head to perform @see [Expression]
  */
-data class DoubleChat(val lines: List<String>, val mob: Int, val animation: Int, val playerAnimation: Int) : EntityAction(), TaskType<Unit>, Resendable {
+data class DoubleChat(val lines: List<String>, val mob: Int, val animation: Int, val playerAnimation: Int) : EntityAction(), TaskSuspension<Unit>, Resendable, InstantEvent {
     init {
         check(lines.size <= 4) { "Maximum double dialogue lines 4" }
     }

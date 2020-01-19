@@ -8,7 +8,7 @@ import worlds.gregs.hestia.artemis.send
 import worlds.gregs.hestia.core.display.variable.api.Variable
 import worlds.gregs.hestia.core.display.variable.api.Variables
 import worlds.gregs.hestia.core.display.variable.model.VariableStore
-import worlds.gregs.hestia.core.display.interfaces.model.events.variable.*
+import worlds.gregs.hestia.core.display.variable.model.events.*
 import worlds.gregs.hestia.core.display.variable.model.variable.BitwiseVariable
 import worlds.gregs.hestia.network.client.encoders.messages.Varbit
 import worlds.gregs.hestia.network.client.encoders.messages.Varc
@@ -39,7 +39,7 @@ class VariableSystem : Variables() {
         val variable = variables[key] as? Variable<T> ?: return logger.warn("Cannot variable for key '$key'")
         store.set(variable, value)
         if (refresh) {
-            variable.send(entityId, store)
+            send(entityId, key)
         }
     }
 
@@ -65,7 +65,7 @@ class VariableSystem : Variables() {
         if (!value.has(power)) {//If isn't already added
             store.set(variable, value + power)//Add
             if (refresh) {
-                variable.send(entityId, store)
+                send(entityId, key)
             }
         }
     }
@@ -80,7 +80,7 @@ class VariableSystem : Variables() {
         if (value.has(power)) {//If is added
             store.set(variable, value - power)//Remove
             if (refresh) {
-                variable.send(entityId, store)
+                send(entityId, key)
             }
         }
     }
@@ -120,7 +120,7 @@ class VariableSystem : Variables() {
         set(action.entity, action.key, !get(action.entity, action.key, false), action.refresh)
     }
 
-    private fun <T : Any> Variable<T>.send(entityId: Int, store: VariableStore) {
+    internal fun <T : Any> Variable<T>.send(entityId: Int, store: VariableStore) {
         val value = store.get(this)
         es.send(entityId, when (type) {
             Variable.Type.VARP -> Varp(id, toInt(value))

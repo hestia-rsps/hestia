@@ -1,5 +1,6 @@
 package worlds.gregs.hestia.core.display.dialogue.model.events
 
+import worlds.gregs.hestia.artemis.InstantEvent
 import worlds.gregs.hestia.core.action.model.EntityAction
 
 /**
@@ -8,4 +9,4 @@ import worlds.gregs.hestia.core.action.model.EntityAction
  * @param option The selection option
  * @param component The selected component
  */
-data class ContinueDialogue(val id: Int, val option: Int, val component: Int) : EntityAction()
+data class ContinueDialogue(val id: Int, val option: Int, val component: Int) : EntityAction(), InstantEvent
