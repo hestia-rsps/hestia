@@ -8,7 +8,7 @@ class DialoguePlugin : Plugin {
 
     override fun setup(b: WorldConfigurationBuilder) {
         b.with(DialogueSystem())
-        b.with(ConfirmDestroySystem(), DoubleChatSystem(), IntEntrySystem(), ItemBoxSystem(), MobChatSystem(), OptionsSystem(), PlayerChatSystem(), StatementSystem(), StringEntrySystem())
+        b.with(ConfirmDestroySystem(), DoubleChatSystem(), IntEntrySystem(), ItemBoxSystem(), NpcChatSystem(), OptionsSystem(), PlayerChatSystem(), StatementSystem(), StringEntrySystem())
     }
 
 }

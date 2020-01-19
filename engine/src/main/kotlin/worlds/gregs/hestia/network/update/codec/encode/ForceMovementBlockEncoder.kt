@@ -6,13 +6,13 @@ import world.gregs.hestia.core.network.codec.packet.PacketBuilder
 import worlds.gregs.hestia.game.update.blocks.ForceMovementBlock
 import worlds.gregs.hestia.network.update.codec.UpdateBlockEncoder
 
-class ForceMovementBlockEncoder(private val mob: Boolean) : UpdateBlockEncoder<ForceMovementBlock> {
+class ForceMovementBlockEncoder(private val npc: Boolean) : UpdateBlockEncoder<ForceMovementBlock> {
 
     override fun encode(builder: PacketBuilder, block: ForceMovementBlock) {
         val (_, first, second, direction) = block
         builder.apply {
             writeByte(first.deltaX, Modifier.SUBTRACT)
-            if(mob) {
+            if(npc) {
                 writeByte(first.deltaY, Modifier.SUBTRACT)
                 writeByte(second.deltaX, Modifier.INVERSE)
                 writeByte(second.deltaY, Modifier.INVERSE)
@@ -24,7 +24,7 @@ class ForceMovementBlockEncoder(private val mob: Boolean) : UpdateBlockEncoder<F
                 writeShort(first.delay, order = Endian.LITTLE)
             }
             writeShort(second.delay, Modifier.ADD, Endian.LITTLE)
-            if(mob) {
+            if(npc) {
                 writeByte(direction, Modifier.SUBTRACT)
             } else {
                 writeByte(direction, Modifier.ADD)

@@ -7,9 +7,9 @@ import worlds.gregs.hestia.core.display.update.api.SyncFactory
 import worlds.gregs.hestia.core.display.update.logic.sync.SynchronizeTest
 import worlds.gregs.hestia.core.display.update.logic.sync.player.stages.AddPlayerSync
 import worlds.gregs.hestia.core.display.update.logic.sync.player.stages.RemovePlayerSync
+import worlds.gregs.hestia.core.display.update.model.sync.SkipStage
 import worlds.gregs.hestia.game.entity.Player
 import worlds.gregs.hestia.network.client.encoders.messages.PlayerUpdate
-import worlds.gregs.hestia.core.display.update.model.sync.SkipStage
 
 /**
  * Tests single and multiple sync stages are added for local & global players
@@ -33,7 +33,7 @@ class PlayerSynchronizeTest : SynchronizeTest<PlayerUpdate, PlayerSynchronize>()
     @Test
     fun `Add single player`() {
         //Given
-        val factory = factory<AddPlayerSync>(local = false, mob = false)
+        val factory = factory<AddPlayerSync>(local = false, npc = false)
         this.factory = factory
         world(factory, index<Player>())
         val player = indexEntity(world.create())
@@ -53,7 +53,7 @@ class PlayerSynchronizeTest : SynchronizeTest<PlayerUpdate, PlayerSynchronize>()
     @Test
     fun `Can add more than cycle limit`() {//Cycle limit now handled by viewport
         //Given
-        val factory = factory<AddPlayerSync>(local = false, mob = false)
+        val factory = factory<AddPlayerSync>(local = false, npc = false)
         this.factory = factory
         world(factory, index<Player>())
         repeat(41) {
@@ -75,7 +75,7 @@ class PlayerSynchronizeTest : SynchronizeTest<PlayerUpdate, PlayerSynchronize>()
     @Test
     fun `Remove single player`() {
         //Given
-        val factory = factory<RemovePlayerSync>(local = true, mob = false)
+        val factory = factory<RemovePlayerSync>(local = true, npc = false)
         world(factory, index<Player>())
         val player = indexEntity(world.create())
         addPlayers(true, player)
@@ -95,7 +95,7 @@ class PlayerSynchronizeTest : SynchronizeTest<PlayerUpdate, PlayerSynchronize>()
     @Test
     fun `Remove lots of players`() {
         //Given
-        val factory = factory<RemovePlayerSync>(local = true, mob = false)
+        val factory = factory<RemovePlayerSync>(local = true, npc = false)
         world(factory, index<Player>())
         repeat(256) {
             addPlayers(true, indexEntity(world.create()))
@@ -116,7 +116,7 @@ class PlayerSynchronizeTest : SynchronizeTest<PlayerUpdate, PlayerSynchronize>()
     @Test
     fun `Global skip adds up`() {
         //Given
-        val factory = factory<AddPlayerSync>(local = false, mob = false)
+        val factory = factory<AddPlayerSync>(local = false, npc = false)
         this.factory = factory
         world(factory, index<Player>())
         indexEntity(world.create())

@@ -19,7 +19,7 @@ class DialogueSystem : PassiveSystem() {
         when (val suspension = tasks.getSuspension(action.entity)) {
             is Destroy -> if(action.id == ConfirmDestroy) tasks.resume(action.entity, suspension, action.option == 3)
             is ItemBox -> tasks.resume(action.entity, suspension, Unit)
-            is MobChat -> tasks.resume(action.entity, suspension, Unit)
+            is NpcChat -> tasks.resume(action.entity, suspension, Unit)
             is Options -> if(action.option in Dialogue.FIRST..Dialogue.FIFTH) tasks.resume(action.entity, suspension, action.option)
             is PlayerChat -> tasks.resume(action.entity, suspension, Unit)
             is Statement -> tasks.resume(action.entity, suspension, Unit)

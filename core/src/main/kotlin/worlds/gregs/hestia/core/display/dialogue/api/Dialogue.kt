@@ -18,9 +18,9 @@ class Dialogue(private val action: EntityAction, private val delegate: Task) : T
         }
     }
 
-    private suspend fun mob(mob: Int, text: String, animation: Int, large: Boolean, `continue`: Boolean) {
+    private suspend fun npc(npc: Int, text: String, animation: Int, large: Boolean, `continue`: Boolean) {
         with(action) {
-            entity await delegate perform MobChat(mob, animation, large, `continue`, text)
+            entity await delegate perform NpcChat(npc, animation, large, `continue`, text)
         }
     }
 
@@ -29,7 +29,7 @@ class Dialogue(private val action: EntityAction, private val delegate: Task) : T
             if (this.entity == entity) {
                 player(text, animation, large, `continue`)
             } else {
-                mob(entity, text, animation, large, `continue`)
+                npc(entity, text, animation, large, `continue`)
             }
         }
     }

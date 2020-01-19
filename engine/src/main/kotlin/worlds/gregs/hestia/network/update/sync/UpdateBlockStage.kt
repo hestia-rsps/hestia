@@ -4,7 +4,7 @@ import world.gregs.hestia.core.network.codec.packet.PacketBuilder
 import worlds.gregs.hestia.artemis.ConcurrentObjectPool
 import worlds.gregs.hestia.game.update.SyncStage
 import worlds.gregs.hestia.game.update.UpdateBlock
-import worlds.gregs.hestia.network.update.codec.MobEncoders
+import worlds.gregs.hestia.network.update.codec.NpcEncoders
 import worlds.gregs.hestia.network.update.codec.PlayerEncoders
 import worlds.gregs.hestia.network.update.codec.UpdateBlockEncoder
 
@@ -14,7 +14,7 @@ import worlds.gregs.hestia.network.update.codec.UpdateBlockEncoder
 class UpdateBlockStage : SyncStage {
 
     val blocks = ArrayList<UpdateBlock>()
-    var mob: Boolean = false
+    var npc: Boolean = false
 
     override fun encode(builder: PacketBuilder) {
         var maskData = 0
@@ -27,7 +27,7 @@ class UpdateBlockStage : SyncStage {
             maskData = maskData or 0x80
         }
         if (maskData >= 65536) {
-            maskData = maskData or if(mob) 0x8000 else 0x800
+            maskData = maskData or if(npc) 0x8000 else 0x800
         }
 
         builder.writeByte(maskData)
@@ -41,7 +41,7 @@ class UpdateBlockStage : SyncStage {
 
         //Write all of the update data
         blocks.forEach {
-            encode(builder, it, mob)
+            encode(builder, it, npc)
         }
     }
 
@@ -52,20 +52,20 @@ class UpdateBlockStage : SyncStage {
 
     companion object {
         private val pool = ConcurrentObjectPool(UpdateBlockStage::class.java)
-        private val mobEncoders = MobEncoders()
+        private val npcEncoders = NpcEncoders()
         private val playerEncoders = PlayerEncoders()
 
-        fun create(mob: Boolean): UpdateBlockStage {
+        fun create(npc: Boolean): UpdateBlockStage {
             val obj = pool.obtain()
             obj.blocks.clear()
-            obj.mob = mob
+            obj.npc = npc
             return obj
         }
 
         @Suppress("UNCHECKED_CAST")
-        fun encode(builder: PacketBuilder, block: UpdateBlock, mob: Boolean) {
-            if(mob) {
-                (mobEncoders.get(block::class) as? UpdateBlockEncoder<UpdateBlock>)?.encode(builder, block) ?: throw IllegalStateException()
+        fun encode(builder: PacketBuilder, block: UpdateBlock, npc: Boolean) {
+            if(npc) {
+                (npcEncoders.get(block::class) as? UpdateBlockEncoder<UpdateBlock>)?.encode(builder, block) ?: throw IllegalStateException()
             } else {
                 (playerEncoders.get(block::class) as? UpdateBlockEncoder<UpdateBlock>)?.encode(builder, block) ?: throw IllegalStateException()
             }

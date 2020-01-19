@@ -13,14 +13,14 @@ import worlds.gregs.hestia.artemis.send
 import worlds.gregs.hestia.core.display.update.api.BlockFactory
 import worlds.gregs.hestia.core.display.update.api.SyncFactory
 import worlds.gregs.hestia.core.display.update.api.Synchronize
-import worlds.gregs.hestia.core.display.update.logic.sync.mob.factories.global.AddMobSyncFactory
+import worlds.gregs.hestia.core.display.update.logic.sync.npc.factories.global.AddNpcSyncFactory
 import worlds.gregs.hestia.core.display.update.logic.sync.player.factories.global.AddPlayerSyncFactory
 import worlds.gregs.hestia.core.entity.entity.model.components.Created
-import worlds.gregs.hestia.core.mobs
+import worlds.gregs.hestia.core.npcs
 import worlds.gregs.hestia.network.update.sync.Update
 import worlds.gregs.hestia.network.update.sync.UpdateBlockStage
 
-abstract class SynchronizeSystem<T : Message>(private val mob: Boolean) : Synchronize<T>() {
+abstract class SynchronizeSystem<T : Message>(private val npc: Boolean) : Synchronize<T>() {
 
     private lateinit var blocks: List<BlockFactory<*>>
     private lateinit var localChanges: List<SyncFactory<*>>
@@ -38,14 +38,14 @@ abstract class SynchronizeSystem<T : Message>(private val mob: Boolean) : Synchr
         //Add all the correct sync & block factories for this type of sync
         val sync = world.systems.filterIsInstance<SyncFactory<*>>().filter { it.active }
         val block = world.systems.filterIsInstance<BlockFactory<*>>()
-        if (mob) {
-            blocks = block.filter { it.mob }
-            localChanges = sync.filter { it.local && it.mob }
-            globalChange = sync.firstOrNull { !it.local && it.mob }
+        if (npc) {
+            blocks = block.filter { it.npc }
+            localChanges = sync.filter { it.local && it.npc }
+            globalChange = sync.firstOrNull { !it.local && it.npc }
         } else {
-            blocks = block.filter { !it.mob }
-            localChanges = sync.filter { it.local && !it.mob }
-            globalChange = sync.firstOrNull { !it.local && !it.mob }
+            blocks = block.filter { !it.npc }
+            localChanges = sync.filter { it.local && !it.npc }
+            globalChange = sync.firstOrNull { !it.local && !it.npc }
         }
 
         //Create list of `added` update blocks
@@ -58,7 +58,7 @@ abstract class SynchronizeSystem<T : Message>(private val mob: Boolean) : Synchr
     }
 
     open fun isAddFactory(factory: SyncFactory<*>): Boolean {
-        return if (mob) factory is AddMobSyncFactory else factory is AddPlayerSyncFactory
+        return if (npc) factory is AddNpcSyncFactory else factory is AddPlayerSyncFactory
     }
 
     override fun begin() {
@@ -67,7 +67,7 @@ abstract class SynchronizeSystem<T : Message>(private val mob: Boolean) : Synchr
         entityUpdates.clear()
         activeUpdates.clear()
         //Check all entities for block updates
-        val all = if (mob) world.mobs() else world.players()
+        val all = if (npc) world.npcs() else world.players()
         all.forEach { id ->
             var vector: BitVector? = null
             for ((index, block) in blocks.withIndex()) {
@@ -130,7 +130,7 @@ abstract class SynchronizeSystem<T : Message>(private val mob: Boolean) : Synchr
             return
         }
         //Create the stage
-        val stage = UpdateBlockStage.create(mob)
+        val stage = UpdateBlockStage.create(npc)
         //Add block updates
         applyBlocks(stage, updates, entity, local, created)
         //Add to update

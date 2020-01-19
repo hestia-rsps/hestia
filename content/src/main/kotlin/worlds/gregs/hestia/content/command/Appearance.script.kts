@@ -29,7 +29,7 @@ on<Command> {
     then {
         val id = content.toInt()
         if (id > 0) {
-            (entity create Transform::class).mobId = id
+            (entity create Transform::class).npcId = id
         }
         entity perform UpdateAppearance()
         isCancelled = true

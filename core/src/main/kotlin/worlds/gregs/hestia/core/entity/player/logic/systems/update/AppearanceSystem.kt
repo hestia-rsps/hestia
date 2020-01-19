@@ -66,7 +66,7 @@ class AppearanceSystem : SubscriptionSystem(Aspect.all(Player::class)) {
             if (transformMapper.has(entityId)) {
                 val transform = transformMapper.get(entityId)
                 writeShort(-1)
-                writeShort(transform.mobId)
+                writeShort(transform.npcId)
                 writeByte(0)
             } else {
                 for (index in 0 until 4) {
@@ -103,7 +103,7 @@ class AppearanceSystem : SubscriptionSystem(Aspect.all(Player::class)) {
                 writeByte(summoningCombatLevelMapper.get(entityId)?.level ?: 0)//Combat level + summoning
                 writeByte(-1)//Skill level? or player height priority toggle
             }
-            writeByte(transformMapper.has(entityId))//Mob morph
+            writeByte(transformMapper.has(entityId))//Npc morph
             //Morph details
             if (transformMapper.has(entityId)) {
                 writeShort(-1)

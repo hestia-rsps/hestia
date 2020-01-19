@@ -3,16 +3,16 @@ package worlds.gregs.hestia.core.world.collision.logic.systems
 import com.artemis.ComponentMapper
 import com.artemis.annotations.Wire
 import world.gregs.hestia.core.services.int
-import worlds.gregs.hestia.core.world.collision.api.EntityCollision
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.entity.model.components.Size
 import worlds.gregs.hestia.core.entity.entity.model.components.height
 import worlds.gregs.hestia.core.entity.entity.model.components.width
-import worlds.gregs.hestia.core.entity.mob.api.MobChunk
-import worlds.gregs.hestia.core.world.movement.model.components.Shift
+import worlds.gregs.hestia.core.entity.npc.api.NpcChunk
 import worlds.gregs.hestia.core.entity.player.api.PlayerChunk
+import worlds.gregs.hestia.core.world.collision.api.EntityCollision
 import worlds.gregs.hestia.core.world.collision.model.components.Ghost
 import worlds.gregs.hestia.core.world.collision.model.components.Permeable
+import worlds.gregs.hestia.core.world.movement.model.components.Shift
 import worlds.gregs.hestia.core.world.movement.model.components.Steps
 
 @Wire(failOnNull = false)
@@ -26,7 +26,7 @@ class EntityCollisionSystem : EntityCollision() {
     private lateinit var permeableMapper: ComponentMapper<Permeable>
 
     private var playerChunk: PlayerChunk? = null
-    private var mobChunk: MobChunk? = null
+    private var npcChunk: NpcChunk? = null
 
     private val array = Array(MAP_SIZE) { BooleanArray(MAP_SIZE) }
     private var ghost = false
@@ -58,9 +58,9 @@ class EntityCollisionSystem : EntityCollision() {
         if (players != null) {
             apply(entityId, players)
         }
-        val mobs = mobChunk?.get(position, CHUNK_RADIUS)
-        if (mobs != null) {
-            apply(entityId, mobs)
+        val npcs = npcChunk?.get(position, CHUNK_RADIUS)
+        if (npcs != null) {
+            apply(entityId, npcs)
         }
     }
 

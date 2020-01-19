@@ -8,10 +8,10 @@ import worlds.gregs.hestia.game.update.UpdateBlock
  *  A passive system used to create [UpdateBlock]s
  *  @param aspect The aspect which an entity must have to update this block
  *  @param added Whether the block should be updated immediately when added
- *  @param mob Whether the factory is for a mob or player block
+ *  @param npc Whether the factory is for a npc or player block
  *  @param flag The block encode flag
  */
-abstract class BlockFactory<T : UpdateBlock>(aspect: Aspect.Builder, open val added: Boolean = false, open val mob: Boolean = false, internal open val flag: Int) : BaseEntitySystem(aspect) {
+abstract class BlockFactory<T : UpdateBlock>(aspect: Aspect.Builder, open val added: Boolean = false, open val npc: Boolean = false, internal open val flag: Int) : BaseEntitySystem(aspect) {
 
     /**
      * Creates update data block

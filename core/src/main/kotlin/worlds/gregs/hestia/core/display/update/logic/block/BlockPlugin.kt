@@ -2,7 +2,7 @@ package worlds.gregs.hestia.core.display.update.logic.block
 
 import com.artemis.WorldConfigurationBuilder
 import worlds.gregs.hestia.core.display.update.logic.block.factory.*
-import worlds.gregs.hestia.core.display.update.logic.block.factory.mob.*
+import worlds.gregs.hestia.core.display.update.logic.block.factory.npc.*
 import worlds.gregs.hestia.core.display.update.logic.block.factory.player.*
 import worlds.gregs.hestia.game.plugin.Plugin
 
@@ -32,23 +32,23 @@ class BlockPlugin : Plugin {
                 GraphicTwoBlockFactory(0x100)
         )
 
-        //Mob update blocks
+        //Npc update blocks
         b.with(
                 object : GraphicThreeBlockFactory(0x100000, true) {},
                 object : WatchEntityBlockFactory(0x1, true) {},
                 object : GraphicFourBlockFactory(0x20000, true) {},
                 object : HitsBlockFactory(0x40, true) {},
                 object : TimeBarBlockFactory(0x100, true) {},
-                NameMobBlockFactory(0x40000),
-                TransformMobBlockFactory(0x20),
+                NameNpcBlockFactory(0x40000),
+                TransformNpcBlockFactory(0x20),
                 object : ForceChatBlockFactory(0x2, true) {},
-                FaceDirectionMobBlockFactory(0x8),
-                CombatLevelMobBlockFactory(0x80000),
+                FaceDirectionNpcBlockFactory(0x8),
+                CombatLevelNpcBlockFactory(0x80000),
                 //0x2000 - Weapon hidden/rotation
                 //0x10000 - Model change (not sure it actually does anything)
                 object : ForceMovementBlockFactory(0x400, true) {},
                 object : AnimationBlockFactory(0x10, true) {},
-                ModelChangeMobBlockFactory(0x800),
+                ModelChangeNpcBlockFactory(0x800),
                 object : BatchAnimationBlockFactory(0x4000, true) {},
                 object : GraphicTwoBlockFactory(0x1000, true) {},
                 object : GraphicOneBlockFactory(0x4, true) {},

@@ -8,7 +8,7 @@ import worlds.gregs.hestia.core.display.update.model.components.gfx.FourthGraphi
 import worlds.gregs.hestia.game.update.blocks.GraphicBlock
 import worlds.gregs.hestia.artemis.Aspect
 
-open class GraphicFourBlockFactory(flag: Int, mob: Boolean = false) : BlockFactory<GraphicBlock>(Aspect.all(Renderable::class, FourthGraphic::class), flag = flag, mob = mob) {
+open class GraphicFourBlockFactory(flag: Int, npc: Boolean = false) : BlockFactory<GraphicBlock>(Aspect.all(Renderable::class, FourthGraphic::class), flag = flag, npc = npc) {
 
     private lateinit var fourthGraphicMapper: ComponentMapper<FourthGraphic>
 

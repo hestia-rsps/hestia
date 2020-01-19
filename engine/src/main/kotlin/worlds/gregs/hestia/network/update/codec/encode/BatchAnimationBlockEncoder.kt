@@ -6,13 +6,13 @@ import world.gregs.hestia.core.network.codec.packet.PacketBuilder
 import worlds.gregs.hestia.game.update.blocks.BatchAnimationBlock
 import worlds.gregs.hestia.network.update.codec.UpdateBlockEncoder
 
-class BatchAnimationBlockEncoder(private val mob: Boolean) : UpdateBlockEncoder<BatchAnimationBlock> {
+class BatchAnimationBlockEncoder(private val npc: Boolean) : UpdateBlockEncoder<BatchAnimationBlock> {
 
     override fun encode(builder: PacketBuilder, block: BatchAnimationBlock) {
         builder.apply {
             writeByte(4)//Size
             for (i in 0 until 4) {
-                if (mob) {
+                if (npc) {
                     writeShort(if (i == 1) 867 else 866, order = Endian.LITTLE)//Animation id
                     writeByte(1, Modifier.ADD)//Some kind of count down/delay before checking for end of animation
                     writeShort(1)//Boolean

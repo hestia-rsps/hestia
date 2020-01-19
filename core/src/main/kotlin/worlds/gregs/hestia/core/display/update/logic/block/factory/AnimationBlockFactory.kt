@@ -11,7 +11,7 @@ import worlds.gregs.hestia.core.display.update.model.components.anim.SecondAnima
 import worlds.gregs.hestia.core.display.update.model.components.anim.ThirdAnimation
 import worlds.gregs.hestia.game.update.blocks.AnimationBlock
 
-open class AnimationBlockFactory(flag: Int, mob: Boolean = false) : BlockFactory<AnimationBlock>(Aspect.all(Renderable::class).one(FirstAnimation::class, SecondAnimation::class, ThirdAnimation::class, FourthAnimation::class), flag = flag, mob = mob) {
+open class AnimationBlockFactory(flag: Int, npc: Boolean = false) : BlockFactory<AnimationBlock>(Aspect.all(Renderable::class).one(FirstAnimation::class, SecondAnimation::class, ThirdAnimation::class, FourthAnimation::class), flag = flag, npc = npc) {
 
     private lateinit var firstAnimationMapper: ComponentMapper<FirstAnimation>
     private lateinit var secondAnimationMapper: ComponentMapper<SecondAnimation>

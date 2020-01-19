@@ -39,7 +39,7 @@ class PlayerBlockUpdateTest : SynchronizeTest<PlayerUpdate, PlayerSynchronize>()
     @Test
     fun `Add player updates blocks`() {
         //Given
-        val factory = factory<AddPlayerSync>(local = false, mob = false)
+        val factory = factory<AddPlayerSync>(local = false, npc = false)
         this.factory = factory
         val block = block<TestBlock>(true, false, 0x200)
         block.active(true)
@@ -59,7 +59,7 @@ class PlayerBlockUpdateTest : SynchronizeTest<PlayerUpdate, PlayerSynchronize>()
     @Test
     fun `Global moving player doesn't update blocks`() {
         //Given
-        val factory = factory<MoveGlobalPlayerSync>(local = false, mob = false)
+        val factory = factory<MoveGlobalPlayerSync>(local = false, npc = false)
         val block = block<TestBlock>(true, false, 0x200)
         block.active(true)
         world(factory, block, index<Player>())
@@ -76,7 +76,7 @@ class PlayerBlockUpdateTest : SynchronizeTest<PlayerUpdate, PlayerSynchronize>()
     @Test
     fun `Move local does update blocks`() {
         //Given
-        val factory = factory<MovementPlayerSync>(local = true, mob = false)
+        val factory = factory<MovementPlayerSync>(local = true, npc = false)
         val block = block<TestBlock>(true, false, 0x200)
         block.active(true)
         world(factory, block, index<Player>())
@@ -94,7 +94,7 @@ class PlayerBlockUpdateTest : SynchronizeTest<PlayerUpdate, PlayerSynchronize>()
     @Test
     fun `Remove local doesn't update blocks`() {
         //Given
-        val factory = factory<RemovePlayerSync>(local = true, mob = false)
+        val factory = factory<RemovePlayerSync>(local = true, npc = false)
         val block = block<TestBlock>(true, false, 0x200)
         block.active(true)
         world(factory, block, index<Player>())

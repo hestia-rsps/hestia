@@ -12,7 +12,7 @@ import worlds.gregs.hestia.core.entity.entity.model.components.height
 import worlds.gregs.hestia.core.entity.entity.model.components.width
 import worlds.gregs.hestia.core.entity.item.floor.model.components.Private
 import worlds.gregs.hestia.core.entity.item.floor.model.components.Public
-import worlds.gregs.hestia.core.entity.mob.api.Mob
+import worlds.gregs.hestia.core.entity.npc.api.Npc
 import worlds.gregs.hestia.core.world.movement.api.RouteStrategy
 import worlds.gregs.hestia.core.world.movement.logic.strategies.EntityStrategy
 import worlds.gregs.hestia.core.world.movement.logic.strategies.FixedTileStrategy
@@ -33,7 +33,7 @@ class InteractSystem : PassiveSystem() {
     private lateinit var objectTypeMapper: ComponentMapper<ObjectType>
     private lateinit var rotationMapper: ComponentMapper<Rotation>
     private lateinit var playerMapper: ComponentMapper<Player>
-    private lateinit var mobMapper: ComponentMapper<Mob>
+    private lateinit var npcMapper: ComponentMapper<Npc>
     private lateinit var positionMapper: ComponentMapper<Position>
     private lateinit var pathMapper: ComponentMapper<Path>
     private lateinit var sizeMapper: ComponentMapper<Size>
@@ -48,7 +48,7 @@ class InteractSystem : PassiveSystem() {
 
         //Choose strategy
         val strategy = when {
-            playerMapper.has(targetId) || mobMapper.has(targetId) ->
+            playerMapper.has(targetId) || npcMapper.has(targetId) ->
                 EntityStrategy(targetPosition.x, targetPosition.y, sizeMapper.width(targetId), sizeMapper.height(targetId), 0)
             objectMapper.has(targetId) -> {
                 val id = objectMapper.get(targetId)

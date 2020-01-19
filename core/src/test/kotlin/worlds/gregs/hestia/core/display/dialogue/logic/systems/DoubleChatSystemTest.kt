@@ -18,7 +18,7 @@ import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.Doub
 import worlds.gregs.hestia.core.display.interfaces.model.Window
 import worlds.gregs.hestia.core.entity.entity.model.components.Type
 import worlds.gregs.hestia.network.client.encoders.messages.InterfaceAnimation
-import worlds.gregs.hestia.network.client.encoders.messages.InterfaceHeadMob
+import worlds.gregs.hestia.network.client.encoders.messages.InterfaceHeadNpc
 import worlds.gregs.hestia.network.client.encoders.messages.InterfaceHeadPlayer
 
 @ExtendWith(MockKExtension::class)
@@ -44,7 +44,7 @@ internal class DoubleChatSystemTest : MockkGame() {
         verifyOrder {
             interfaces.closeWindow(0, Window.DIALOGUE_BOX)
             interfaces.openInterface(0, DoubleChat2)
-            es.send(0, InterfaceHeadMob(DoubleChat2, 1, 1))
+            es.send(0, InterfaceHeadNpc(DoubleChat2, 1, 1))
             es.send(0, InterfaceAnimation(DoubleChat2, 1, Expression.Sad))
 
             es.send(0, InterfaceHeadPlayer(DoubleChat2, 2))

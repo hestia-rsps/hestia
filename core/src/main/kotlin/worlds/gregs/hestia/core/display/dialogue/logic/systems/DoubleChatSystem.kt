@@ -11,7 +11,7 @@ import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.Doub
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.DoubleChat4
 import worlds.gregs.hestia.core.entity.entity.model.components.Type
 import worlds.gregs.hestia.network.client.encoders.messages.InterfaceAnimation
-import worlds.gregs.hestia.network.client.encoders.messages.InterfaceHeadMob
+import worlds.gregs.hestia.network.client.encoders.messages.InterfaceHeadNpc
 import worlds.gregs.hestia.network.client.encoders.messages.InterfaceHeadPlayer
 
 class DoubleChatSystem : DialogueBaseSystem() {
@@ -21,7 +21,7 @@ class DoubleChatSystem : DialogueBaseSystem() {
     @Subscribe
     private fun doubleChat(action: DoubleChat) {
         val entityId = action.entity
-        val mobType = typeMapper.get(action.mob).id
+        val npcType = typeMapper.get(action.npc).id
         //Choose interface
         val id = when (action.lines.size) {
             1 -> DoubleChat1
@@ -33,7 +33,7 @@ class DoubleChatSystem : DialogueBaseSystem() {
         //Open
         openDialogue(entityId, id)
         //Send left model
-        es.send(entityId, InterfaceHeadMob(id, 1, mobType))
+        es.send(entityId, InterfaceHeadNpc(id, 1, npcType))
         es.send(entityId, InterfaceAnimation(id, 1, action.animation))
         //Send right model
         es.send(entityId, InterfaceHeadPlayer(id, 2))

@@ -6,10 +6,10 @@ import world.gregs.hestia.core.network.codec.packet.PacketBuilder
 import worlds.gregs.hestia.game.update.blocks.WatchEntityBlock
 import worlds.gregs.hestia.network.update.codec.UpdateBlockEncoder
 
-class WatchEntityBlockEncoder(private val mob: Boolean) : UpdateBlockEncoder<WatchEntityBlock> {
+class WatchEntityBlockEncoder(private val npc: Boolean) : UpdateBlockEncoder<WatchEntityBlock> {
 
     override fun encode(builder: PacketBuilder, block: WatchEntityBlock) {
-        if(mob) {
+        if(npc) {
             builder.writeShort(block.entityIndex, order = Endian.LITTLE)
         } else {
             builder.writeShort(block.entityIndex, Modifier.ADD)

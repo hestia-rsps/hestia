@@ -74,9 +74,9 @@ internal class DialogueSystemTest : MockkGame() {
     }
 
     @Test
-    fun `Continue mob chat`() {
+    fun `Continue npc chat`() {
         //Given
-        val suspension = mockk<MobChat>()
+        val suspension = mockk<NpcChat>()
         every { tasks.getSuspension(0) } returns suspension
         //When
         es.perform(0, ContinueDialogue(0, 0, 0))

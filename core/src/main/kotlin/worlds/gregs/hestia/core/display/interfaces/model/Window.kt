@@ -50,18 +50,18 @@ import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.Mess
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.MessageNp3
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.MessageNp4
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.MessageNp5
-import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.MobChat1
-import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.MobChat2
-import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.MobChat3
-import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.MobChat4
-import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.MobChatNp1
-import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.MobChatNp1u
-import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.MobChatNp2
-import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.MobChatNp2u
-import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.MobChatNp3
-import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.MobChatNp3u
-import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.MobChatNp4
-import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.MobChatNp4u
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.NpcChat1
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.NpcChat2
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.NpcChat3
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.NpcChat4
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.NpcChatNp1
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.NpcChatNp1u
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.NpcChatNp2
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.NpcChatNp2u
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.NpcChatNp3
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.NpcChatNp3u
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.NpcChatNp4
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.NpcChatNp4u
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.MobilisingArmies1
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.ModernSpellbook
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.Multi2
@@ -154,7 +154,7 @@ enum class Window(val parent: Int, val fixed: Int, val resizable: Int, vararg va
     WORN_EQUIPMENT(-1, 209, 95, WornEquipment),
 
     //Main screen
-    DIALOGUE_BOX(ChatBox, 13, 13, Multi4Offscreen, TextBoxModelSprite, CastleWarsScore, CastleWarsStatusOverlay, MobChatNp4u, MobChatNp3u, MobChatNp1u, MobChatNp2u, ConfirmDestroy, GardenQuiz, ChatBoth, Select2Models, TextBoxModel, MacroMimeEmotes, MacroQuizShow, ContainerContinue, PriceCheckBoxTitle, TutorialText, ObjDialog, PohHangman, TutorialText2, OpenUrl, Multi3OffCentre, PohHangmanGerman, Multi2Mes, PickAPuppy, MultiVar2Wide, PickAKitten, LevelUpDialog, TextBoxContinue, TextBoxContinueResizable, MobilisingArmies1, SkillCreation, SmeltType, MakeAmount, TextBoxChat, TextBoxContinue2, DoubleChat3, DoubleChat2, DoubleChat1, DoubleChat4, DoubleObjBox, ObjBox, Chat1, Chat2, Chat3, Chat4, ChatNp1, ChatNp2, ChatNp3, ChatNp4, Message1, Message2, Message3, Message4, Message5, MessageNp1, MessageNp2, MessageNp3, MessageNp4, MessageNp5, Multi2, Multi2Chat, Multi3, Multi3Chat, Multi4, Multi4Chat, Multi5, Multi5Chat, MultiVar2, MultiVar3, MultiVar4, MultiVar5, MobChat1, MobChat2, MobChat3, MobChat4, MobChatNp1, MobChatNp2, MobChatNp3, MobChatNp4),
+    DIALOGUE_BOX(ChatBox, 13, 13, Multi4Offscreen, TextBoxModelSprite, CastleWarsScore, CastleWarsStatusOverlay, NpcChatNp4u, NpcChatNp3u, NpcChatNp1u, NpcChatNp2u, ConfirmDestroy, GardenQuiz, ChatBoth, Select2Models, TextBoxModel, MacroMimeEmotes, MacroQuizShow, ContainerContinue, PriceCheckBoxTitle, TutorialText, ObjDialog, PohHangman, TutorialText2, OpenUrl, Multi3OffCentre, PohHangmanGerman, Multi2Mes, PickAPuppy, MultiVar2Wide, PickAKitten, LevelUpDialog, TextBoxContinue, TextBoxContinueResizable, MobilisingArmies1, SkillCreation, SmeltType, MakeAmount, TextBoxChat, TextBoxContinue2, DoubleChat3, DoubleChat2, DoubleChat1, DoubleChat4, DoubleObjBox, ObjBox, Chat1, Chat2, Chat3, Chat4, ChatNp1, ChatNp2, ChatNp3, ChatNp4, Message1, Message2, Message3, Message4, Message5, MessageNp1, MessageNp2, MessageNp3, MessageNp4, MessageNp5, Multi2, Multi2Chat, Multi3, Multi3Chat, Multi4, Multi4Chat, Multi5, Multi5Chat, MultiVar2, MultiVar3, MultiVar4, MultiVar5, NpcChat1, NpcChat2, NpcChat3, NpcChat4, NpcChatNp1, NpcChatNp2, NpcChatNp3, NpcChatNp4),
     AREA(-1, 15, 15, AreaStatusIcon),
     OVERLAY(-1, 9, 12),
     MAIN_SCREEN(-1, 9, 12),

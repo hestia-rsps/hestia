@@ -2,7 +2,7 @@ package worlds.gregs.hestia.content.command
 
 import worlds.gregs.hestia.artemis.players
 import worlds.gregs.hestia.core.display.client.model.events.Command
-import worlds.gregs.hestia.core.mobs
+import worlds.gregs.hestia.core.npcs
 
 on<Command> {
     where { prefix == "players" }
@@ -13,9 +13,9 @@ on<Command> {
 }
 
 on<Command> {
-    where { prefix == "mobs" }
+    where { prefix == "npcs" }
     then {
-        println(world.mobs().size())
+        println(world.npcs().size())
         isCancelled = true
     }
 }

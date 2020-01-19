@@ -16,8 +16,8 @@ import worlds.gregs.hestia.content.interaction.`object`.Counter_script
 import worlds.gregs.hestia.content.interaction.item.Inventory_script
 import worlds.gregs.hestia.content.interaction.item.Pickup_script
 import worlds.gregs.hestia.content.interaction.item.WornEquipment_script
-import worlds.gregs.hestia.content.interaction.mob.Banker_script
-import worlds.gregs.hestia.content.interaction.mob.Hans_script
+import worlds.gregs.hestia.content.interaction.npc.Banker_script
+import worlds.gregs.hestia.content.interaction.npc.Hans_script
 import worlds.gregs.hestia.content.interaction.player.Follow_script
 import worlds.gregs.hestia.content.interaction.player.Resting_script
 import worlds.gregs.hestia.content.interaction.player.Trade_script

@@ -64,25 +64,25 @@ abstract class SynchronizeTest<M : Update, T : SynchronizeSystem<M>> {
     internal fun emptyFactory(): SyncFactory<*> {
         val factory = mock<SyncFactory<SyncStage>>()
         whenever(factory.local).thenReturn(false)
-        whenever(factory.mob).thenReturn(false)
+        whenever(factory.npc).thenReturn(false)
         whenever(factory.active).thenReturn(false)
         return factory
     }
 
-    internal inline fun <reified T : SyncStage> factory(local: Boolean, mob: Boolean): SyncFactory<T> {
+    internal inline fun <reified T : SyncStage> factory(local: Boolean, npc: Boolean): SyncFactory<T> {
         val factory = mock<SyncFactory<T>>()
         whenever(factory.local).thenReturn(local)
-        whenever(factory.mob).thenReturn(mob)
+        whenever(factory.npc).thenReturn(npc)
         whenever(factory.active).thenReturn(true)
         factory.change(false)
         whenever(factory.create(anyInt(), anyInt(), anyBoolean())).thenReturn(if (T::class.objectInstance != null) T::class.objectInstance else T::class.java.getConstructor().newInstance())
         return factory
     }
 
-    internal inline fun <reified T : UpdateBlock> block(added: Boolean, mob: Boolean, flag: Int): BlockFactory<T> {
+    internal inline fun <reified T : UpdateBlock> block(added: Boolean, npc: Boolean, flag: Int): BlockFactory<T> {
         val factory = mock<BlockFactory<T>>()
         whenever(factory.added).thenReturn(added)
-        whenever(factory.mob).thenReturn(mob)
+        whenever(factory.npc).thenReturn(npc)
         whenever(factory.flag).thenReturn(flag)
         whenever(factory.create(anyInt(), anyInt())).thenReturn(T::class.java.getConstructor().newInstance())
         return factory
@@ -104,8 +104,8 @@ abstract class SynchronizeTest<M : Update, T : SynchronizeSystem<M>> {
         addEntities(viewport.localPlayers(), direct, *players)
     }
 
-    internal fun addMobs(direct: Boolean, vararg players: Int) {
-        addEntities(viewport.localMobs(), direct, *players)
+    internal fun addNpcs(direct: Boolean, vararg players: Int) {
+        addEntities(viewport.localNpcs(), direct, *players)
     }
 
     private fun addEntities(bag: EntitySyncBag, direct: Boolean, vararg entities: Int) {
@@ -127,8 +127,8 @@ abstract class SynchronizeTest<M : Update, T : SynchronizeSystem<M>> {
         removeEntities(viewport.localPlayers(), direct, *players)
     }
 
-    internal fun removeMobs(direct: Boolean, vararg players: Int) {
-        removeEntities(viewport.localMobs(), direct, *players)
+    internal fun removeNpcs(direct: Boolean, vararg players: Int) {
+        removeEntities(viewport.localNpcs(), direct, *players)
     }
 
     private fun removeEntities(bag: EntitySyncBag, direct: Boolean, vararg entities: Int) {

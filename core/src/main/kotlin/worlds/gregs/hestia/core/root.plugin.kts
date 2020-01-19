@@ -9,7 +9,7 @@ import worlds.gregs.hestia.core.entity.`object`.ObjectPlugin
 import worlds.gregs.hestia.core.entity.bot.BotPlugin
 import worlds.gregs.hestia.core.entity.entity.EntityPlugin
 import worlds.gregs.hestia.core.entity.item.ItemPlugin
-import worlds.gregs.hestia.core.entity.mob.MobPlugin
+import worlds.gregs.hestia.core.entity.npc.NpcPlugin
 import worlds.gregs.hestia.core.entity.player.PlayerPlugin
 import worlds.gregs.hestia.core.task.Task_plugin
 import worlds.gregs.hestia.core.world.collision.CollisionPlugin
@@ -32,7 +32,7 @@ setup {
     dependsOn(VariablePlugin::class.java)
     dependsOn(LandPlugin::class.java)
     dependsOn(MapPlugin::class.java)
-    dependsOn(MobPlugin::class.java)
+    dependsOn(NpcPlugin::class.java)
     dependsOn(ItemPlugin::class.java)
     dependsOn(ActionPlugin::class.java)
     dependsOn(MovementPlugin::class.java)

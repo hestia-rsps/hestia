@@ -55,7 +55,7 @@ class FollowSystemTest : PlayerTester(WorldConfigurationBuilder().dependsOn(Move
         assertPosition(partner, 0, 0)
     }
     /*
-    Only mobs follow beside
+    Only npcs follow beside
         Steps to last position
         Unless step is towards the follower then the follower steps backwards (the same direction as the followee)
      */

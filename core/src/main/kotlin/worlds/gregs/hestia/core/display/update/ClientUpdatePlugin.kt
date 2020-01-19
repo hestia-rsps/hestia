@@ -4,7 +4,7 @@ import com.artemis.WorldConfigurationBuilder
 import worlds.gregs.hestia.core.display.update.logic.block.BlockPlugin
 import worlds.gregs.hestia.core.display.update.logic.sync.SynchronizePlugin
 import worlds.gregs.hestia.core.display.update.logic.sync.ViewportSystem
-import worlds.gregs.hestia.core.display.update.logic.sync.mob.MobSynchronize
+import worlds.gregs.hestia.core.display.update.logic.sync.npc.NpcSynchronize
 import worlds.gregs.hestia.core.display.update.logic.sync.player.PlayerSynchronize
 import worlds.gregs.hestia.core.display.update.logic.systems.PlayerIndexSystem
 import worlds.gregs.hestia.core.display.update.logic.systems.PostEntitySyncSystem
@@ -16,7 +16,7 @@ class ClientUpdatePlugin : Plugin {
 
     override fun setup(b: WorldConfigurationBuilder) {
         b.with(PRE_SYNC_PRIORITY, ViewportSystem())
-        b.with(UPDATE_SYNC_PRIORITY, PlayerSynchronize(), MobSynchronize())
+        b.with(UPDATE_SYNC_PRIORITY, PlayerSynchronize(), NpcSynchronize())
         b.with(Plugin.PLAYER_INDEX_PRIORITY, PlayerIndexSystem())
         b.with(Plugin.UPDATE_FINISH_PRIORITY, PostEntitySyncSystem())
 

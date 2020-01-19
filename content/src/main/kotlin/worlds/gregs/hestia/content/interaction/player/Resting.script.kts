@@ -15,7 +15,7 @@ import worlds.gregs.hestia.core.display.variable.model.variable.StringMapVariabl
 import worlds.gregs.hestia.core.entity.entity.model.components.Blackboard
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.entity.model.events.Animation
-import worlds.gregs.hestia.core.entity.mob.model.events.MobOption
+import worlds.gregs.hestia.core.entity.npc.model.events.NpcOption
 import worlds.gregs.hestia.core.task.model.await.Forever
 import worlds.gregs.hestia.core.task.model.await.Ticks
 import worlds.gregs.hestia.core.task.model.await.WithinRange
@@ -39,13 +39,13 @@ enum class RestType(val sit: Int, val stand: Int) {
     LEGS_STRAIGHT(2716, 2921)
 }
 
-on<MobOption> {
+on<NpcOption> {
     where { option == "Listen-to" }
-    fun MobOption.task() = strongQueue {
-        entity perform Follow(target)
-        val within = await(WithinRange(target, 1))
+    fun NpcOption.task() = strongQueue {
+        entity perform Follow(npc)
+        val within = await(WithinRange(npc, 1))
         entity perform Follow(-1)
-        entity perform Face(target get Position::class)
+        entity perform Face(npc get Position::class)
 
         if(!within) {
             entity perform Chat("You can't reach that.")
@@ -56,7 +56,7 @@ on<MobOption> {
         blackboard["unrest_state"] = current
         entity perform rest(true)
     }
-    then(MobOption::task)
+    then(NpcOption::task)
 }
 
 on<InterfaceInteraction> {

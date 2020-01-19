@@ -195,10 +195,10 @@ abstract class Interfaces : SubscriptionSystem(Aspect.all(InterfaceRelationships
         const val TextBoxModelSprite = 26
         const val CastleWarsScore = 55
         const val CastleWarsStatusOverlay = 57
-        const val MobChatNp4u = 90//Un-contained
-        const val MobChatNp3u = 91
-        const val MobChatNp1u = 92
-        const val MobChatNp2u = 93
+        const val NpcChatNp4u = 90//Un-contained
+        const val NpcChatNp3u = 91
+        const val NpcChatNp1u = 92
+        const val NpcChatNp2u = 93
         const val ConfirmDestroy = 94
         const val GardenQuiz = 133
         const val ChatBoth = 136
@@ -271,15 +271,15 @@ abstract class Interfaces : SubscriptionSystem(Aspect.all(InterfaceRelationships
         const val MultiVar4 = 237
         const val MultiVar5 = 238
 
-        //Mob
-        const val MobChat1 = 241
-        const val MobChat2 = 242
-        const val MobChat3 = 243
-        const val MobChat4 = 244
-        const val MobChatNp1 = 245
-        const val MobChatNp2 = 246
-        const val MobChatNp3 = 247
-        const val MobChatNp4 = 248
+        //Npc
+        const val NpcChat1 = 241
+        const val NpcChat2 = 242
+        const val NpcChat3 = 243
+        const val NpcChat4 = 244
+        const val NpcChatNp1 = 245
+        const val NpcChatNp2 = 246
+        const val NpcChatNp3 = 247
+        const val NpcChatNp4 = 248
 
         //Item
         const val DoubleObjBox = 131

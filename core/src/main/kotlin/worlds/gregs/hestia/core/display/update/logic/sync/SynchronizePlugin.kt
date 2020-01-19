@@ -1,10 +1,10 @@
 package worlds.gregs.hestia.core.display.update.logic.sync
 
 import com.artemis.WorldConfigurationBuilder
-import worlds.gregs.hestia.core.display.update.logic.sync.mob.factories.global.AddMobSyncFactory
-import worlds.gregs.hestia.core.display.update.logic.sync.mob.factories.local.MobMovementSyncFactory
-import worlds.gregs.hestia.core.display.update.logic.sync.mob.factories.local.RemoveMobSyncFactory
-import worlds.gregs.hestia.core.display.update.logic.sync.mob.factories.local.UpdateMobSyncFactory
+import worlds.gregs.hestia.core.display.update.logic.sync.npc.factories.global.AddNpcSyncFactory
+import worlds.gregs.hestia.core.display.update.logic.sync.npc.factories.local.NpcMovementSyncFactory
+import worlds.gregs.hestia.core.display.update.logic.sync.npc.factories.local.RemoveNpcSyncFactory
+import worlds.gregs.hestia.core.display.update.logic.sync.npc.factories.local.UpdateNpcSyncFactory
 import worlds.gregs.hestia.core.display.update.logic.sync.player.factories.global.AddPlayerSyncFactory
 import worlds.gregs.hestia.core.display.update.logic.sync.player.factories.global.HeightSyncFactory
 import worlds.gregs.hestia.core.display.update.logic.sync.player.factories.global.MoveGlobalSyncFactory
@@ -23,10 +23,10 @@ class SynchronizePlugin : Plugin {
         //Global player view changes
         b.with(AddPlayerSyncFactory(), HeightSyncFactory(), RegionSyncFactory(), MoveGlobalSyncFactory())
 
-        //Local mob view changes
-        b.with(MobMovementSyncFactory(), UpdateMobSyncFactory(), RemoveMobSyncFactory())
-        //Global mob view changes
-        b.with(AddMobSyncFactory())
+        //Local npc view changes
+        b.with(NpcMovementSyncFactory(), UpdateNpcSyncFactory(), RemoveNpcSyncFactory())
+        //Global npc view changes
+        b.with(AddNpcSyncFactory())
     }
 
 }

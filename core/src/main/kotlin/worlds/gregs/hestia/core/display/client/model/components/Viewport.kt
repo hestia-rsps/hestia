@@ -10,7 +10,7 @@ import worlds.gregs.hestia.core.entity.entity.model.components.Position
 
 class Viewport : Component() {
 
-    private val localMobs = LinkedSyncBag(MAX_ENTITIES_PER_TICK)
+    private val localNpcs = LinkedSyncBag(MAX_ENTITIES_PER_TICK)
 
     private val localPlayers = OrderedSyncBag(PLAYERS_LIMIT, MAX_ENTITIES_PER_TICK)
 
@@ -36,8 +36,8 @@ class Viewport : Component() {
         }
     }
 
-    fun localMobs(): EntitySyncBag {
-        return localMobs
+    fun localNpcs(): EntitySyncBag {
+        return localNpcs
     }
 
     fun localPlayers(): EntitySyncBag {

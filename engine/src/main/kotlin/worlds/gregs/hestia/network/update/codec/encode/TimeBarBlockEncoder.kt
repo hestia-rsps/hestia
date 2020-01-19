@@ -6,7 +6,7 @@ import world.gregs.hestia.core.network.codec.packet.PacketBuilder
 import worlds.gregs.hestia.game.update.blocks.TimeBarBlock
 import worlds.gregs.hestia.network.update.codec.UpdateBlockEncoder
 
-class TimeBarBlockEncoder(private val mob: Boolean) : UpdateBlockEncoder<TimeBarBlock> {
+class TimeBarBlockEncoder(private val npc: Boolean) : UpdateBlockEncoder<TimeBarBlock> {
 
     override fun encode(builder: PacketBuilder, block: TimeBarBlock) {
         val (_, details, delay, increment) = block
@@ -27,7 +27,7 @@ class TimeBarBlockEncoder(private val mob: Boolean) : UpdateBlockEncoder<TimeBar
 
         builder.apply {
             writeShort(details, Modifier.ADD, Endian.LITTLE)
-            if(mob) {
+            if(npc) {
                 writeByte(delay, Modifier.INVERSE)
             } else {
                 writeByte(delay)
