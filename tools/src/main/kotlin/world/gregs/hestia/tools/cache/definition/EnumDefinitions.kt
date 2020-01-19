@@ -56,7 +56,7 @@ class EnumDefinitions {
 
         @JvmStatic
         fun main(args: Array<String>) {
-            Settings.load()
+            Settings.load("./settings.yml")
             val store = CacheStore()
             val reader = EnumDefinitionReader(store)
 //            val enum = reader.get(75)

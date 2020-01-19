@@ -10,7 +10,7 @@ class NpcDefinitions {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            Settings.load()
+            Settings.load("./settings.yml")
             val store = CacheStore()
             val reader = NpcDefinitionReader(store)
             val npc = reader.get(0)

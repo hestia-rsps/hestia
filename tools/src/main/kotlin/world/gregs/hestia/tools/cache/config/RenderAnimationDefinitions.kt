@@ -11,7 +11,7 @@ class RenderAnimationDefinitions {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            Settings.load()
+            Settings.load("./settings.yml")
             val store = CacheStore()
             val reader = RenderAnimationDefinitionReader(store)
             val npcReader = NpcDefinitionReader(store)

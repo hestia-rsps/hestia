@@ -10,7 +10,7 @@ class ObjectDefinitions {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            Settings.load()
+            Settings.load("./settings.yml")
             val store = CacheStore()
             val reader = ObjectDefinitionReader(store)
             val obj = reader.get(2213)

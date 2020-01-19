@@ -10,7 +10,7 @@ class GraphicDefinitions {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            Settings.load()
+            Settings.load("./settings.yml")
             val store = CacheStore()
             val reader = GraphicDefinitionReader(store)
             val graphic = reader.get(75)

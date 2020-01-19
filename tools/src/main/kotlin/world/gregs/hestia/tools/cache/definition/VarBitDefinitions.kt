@@ -10,7 +10,7 @@ class VarBitDefinitions {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            Settings.load()
+            Settings.load("./settings.yml")
             val store = CacheStore()
             val reader = VarBitDefinitionReader(store)
             val varBit = reader.get(313)

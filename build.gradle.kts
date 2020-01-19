@@ -43,7 +43,7 @@ allprojects {
 
     dependencies {
         //Systems
-        implementation("world.gregs.hestia:hestia-server-core:0.4.4")
+        implementation("world.gregs.hestia:hestia-server-core:0.4.5")
         implementation(kotlin("scripting-jvm"))
         implementation(kotlin("scripting-common"))
         implementation(kotlin("script-runtime"))

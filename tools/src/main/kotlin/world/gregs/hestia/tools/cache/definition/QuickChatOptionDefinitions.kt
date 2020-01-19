@@ -10,7 +10,7 @@ class QuickChatOptionDefinitions {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            Settings.load()
+            Settings.load("./settings.yml")
             val store = CacheStore()
             val reader = QuickChatOptionDefinitionReader(store)
             val size = reader.size
