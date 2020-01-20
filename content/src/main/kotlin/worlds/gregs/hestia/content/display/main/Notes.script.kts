@@ -1,4 +1,4 @@
-package worlds.gregs.hestia.content.display.windows.main
+package worlds.gregs.hestia.content.display.main
 
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.Notes
 import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceOpened

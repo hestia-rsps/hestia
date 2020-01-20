@@ -1,4 +1,4 @@
-package worlds.gregs.hestia.content.display.windows
+package worlds.gregs.hestia.content.display
 
 import worlds.gregs.hestia.core.display.variable.api.Variable
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.EnergyOrb

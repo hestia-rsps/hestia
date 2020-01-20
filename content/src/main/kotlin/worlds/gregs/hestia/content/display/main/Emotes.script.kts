@@ -1,4 +1,4 @@
-package worlds.gregs.hestia.content.display.windows.main
+package worlds.gregs.hestia.content.display.main
 
 import worlds.gregs.hestia.core.display.variable.api.Variable
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.Emotes

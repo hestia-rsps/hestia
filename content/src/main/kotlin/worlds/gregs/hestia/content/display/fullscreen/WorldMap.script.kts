@@ -1,4 +1,4 @@
-package worlds.gregs.hestia.content.display.windows.fullscreen
+package worlds.gregs.hestia.content.display.fullscreen
 
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.WorldMap
 import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceInteraction

@@ -8,10 +8,10 @@ import worlds.gregs.hestia.content.activity.skill.Experience_script
 import worlds.gregs.hestia.content.activity.skill.Stats_script
 import worlds.gregs.hestia.content.command.*
 import worlds.gregs.hestia.content.community.assist.RequestAssist_script
-import worlds.gregs.hestia.content.display.windows.Minimap_script
-import worlds.gregs.hestia.content.display.windows.fullscreen.Gameframe_script
-import worlds.gregs.hestia.content.display.windows.fullscreen.WorldMap_script
-import worlds.gregs.hestia.content.display.windows.main.*
+import worlds.gregs.hestia.content.display.Minimap_script
+import worlds.gregs.hestia.content.display.fullscreen.Gameframe_script
+import worlds.gregs.hestia.content.display.fullscreen.WorldMap_script
+import worlds.gregs.hestia.content.display.main.*
 import worlds.gregs.hestia.content.interaction.`object`.Counter_script
 import worlds.gregs.hestia.content.interaction.item.Inventory_script
 import worlds.gregs.hestia.content.interaction.item.Pickup_script

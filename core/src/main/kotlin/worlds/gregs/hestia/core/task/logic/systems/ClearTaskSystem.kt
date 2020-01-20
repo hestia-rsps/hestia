@@ -1,35 +1,27 @@
 package worlds.gregs.hestia.core.task.logic.systems
 
-import com.artemis.BaseSystem
+import com.artemis.systems.IteratingSystem
 import net.mostlyoriginal.api.event.common.Subscribe
+import worlds.gregs.hestia.artemis.Aspect
 import worlds.gregs.hestia.core.task.api.TaskCancellation
 import worlds.gregs.hestia.core.task.api.Tasks
 import worlds.gregs.hestia.core.task.model.await.ClearTasks
-import java.util.*
+import worlds.gregs.hestia.core.task.model.components.TaskQueue
 
-class ClearTaskSystem : BaseSystem() {
+class ClearTaskSystem :  IteratingSystem(Aspect.all(TaskQueue::class)) {
 
     private lateinit var tasks: Tasks
-    private val list = LinkedList<Int>()
 
     @Subscribe
     private fun clearTasks(action: ClearTasks) {
         val entityId = action.entity
         tasks.cancelAll(entityId, action.cause ?: TaskCancellation.Priority, action.priority)
-        list.addLast(entityId)
     }
 
-    override fun checkProcessing(): Boolean {
-        return list.isNotEmpty()
-    }
-
-    override fun processSystem() {
-        while(list.isNotEmpty()) {
-            val entityId = list.poll()
-            val suspension = tasks.getSuspension(entityId)
-            if(suspension is ClearTasks) {
-                tasks.resume(entityId, suspension, Unit)
-            }
+    override fun process(entityId: Int) {
+        val suspension = tasks.getSuspension(entityId)
+        if(suspension is ClearTasks) {
+            tasks.resume(entityId, suspension, Unit)
         }
     }
 

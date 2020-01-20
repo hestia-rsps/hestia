@@ -3,12 +3,12 @@ package worlds.gregs.hestia.content.interaction.player
 import com.artemis.ComponentMapper
 import worlds.gregs.hestia.core.action.model.EntityAction
 import worlds.gregs.hestia.core.display.client.model.events.Chat
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.EnergyOrb
+import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceInteraction
 import worlds.gregs.hestia.core.display.update.model.components.UpdateMovement
 import worlds.gregs.hestia.core.display.update.model.components.direction.Face
 import worlds.gregs.hestia.core.display.variable.api.Variable
 import worlds.gregs.hestia.core.display.variable.api.Variables
-import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.EnergyOrb
-import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceInteraction
 import worlds.gregs.hestia.core.display.variable.model.events.SendVariable
 import worlds.gregs.hestia.core.display.variable.model.events.SetVariable
 import worlds.gregs.hestia.core.display.variable.model.variable.StringMapVariable
@@ -96,11 +96,7 @@ fun EntityAction.rest(musician: Boolean) = strongTask {
     //If cancelled then stand up
     onCancel {
         //If next task movement type is walking
-        val slowly = if(it is TaskCancellation.Walk) {
-            blackboard.getString("unrest_state") == "walking" || entity.get(Position::class).getDistance(Position(it.x, it.y)) <= 1
-        } else {
-            false
-        }
+        val slowly = blackboard.getString("unrest_state") == "walking" || if(it is TaskCancellation.Walk) entity.get(Position::class).getDistance(Position(it.x, it.y)) <= 1 else false
         entity perform standUp(slowly)
     }
     //Choose a rest animation
