@@ -188,6 +188,7 @@ abstract class Interfaces : SubscriptionSystem(Aspect.all(InterfaceRelationships
         const val TradeMain = 335
         const val AssistXP = 301
         const val AreaStatusIcon = 745
+        const val Shop = 620
 
         /*
             Dialogue chat boxes

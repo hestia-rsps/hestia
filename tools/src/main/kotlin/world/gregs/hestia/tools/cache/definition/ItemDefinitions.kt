@@ -19,7 +19,6 @@ class ItemDefinitions {
 
             val list = mutableListOf<String>()
 
-
             val replacements = mapOf(
                     "4_5ths" to "Four_Fifths",
                     "3_5ths" to "Three_Fifths",

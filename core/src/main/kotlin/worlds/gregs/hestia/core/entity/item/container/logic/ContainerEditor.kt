@@ -5,16 +5,17 @@ import arrow.fx.IO
 import world.gregs.hestia.cache.definition.DefinitionReader
 import world.gregs.hestia.cache.definition.definitions.ItemDefinition
 import worlds.gregs.hestia.core.action.model.EntityAction
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces
 import worlds.gregs.hestia.core.entity.item.container.api.*
 import worlds.gregs.hestia.core.entity.item.container.logic.ContainerEditor.addEmptySlot
 import worlds.gregs.hestia.core.entity.item.container.logic.ContainerEditor.canStack
 import worlds.gregs.hestia.core.entity.item.container.logic.ContainerEditor.indexOf
 import worlds.gregs.hestia.core.entity.item.container.logic.ContainerEditor.unfold
 import worlds.gregs.hestia.core.entity.item.container.logic.ContainerEditor.unfoldRight
-import worlds.gregs.hestia.core.entity.item.container.model.Inventory
 import worlds.gregs.hestia.core.entity.item.container.model.Item
-import worlds.gregs.hestia.core.entity.item.container.model.ItemContainer
 import worlds.gregs.hestia.core.entity.item.container.model.StackType
+import worlds.gregs.hestia.service.cache.DefinitionReader
+import worlds.gregs.hestia.service.cache.definition.definitions.ItemDefinition
 import worlds.gregs.hestia.service.cache.definition.systems.ItemDefinitionSystem
 import java.lang.Math.addExact
 import java.lang.Math.subtractExact
@@ -32,37 +33,8 @@ data class ContainerTransformBuilder(val overflow: Boolean = true) {
 }
 
 fun EntityAction.transform(builder: ContainerTransformBuilder): ItemResult {
-    val definitions = system(ItemDefinitionSystem::class).reader
-    val stackType = system(InventorySystem::class).stackType
-    val container = entity.get(Inventory::class)
-    return container.transform(definitions, stackType, builder.function, builder.overflow)
-}
-
-/**
- * Applies one or many changes to an [ItemContainer], stops if one fails.
- * Note: changes only apply if returns [ItemResult.Success]
- * @param definitions Item definitions
- * @param function The container modifications to make.
- * @param overflow Whether addition overflows should be applied or not (returns [ItemResult.Issue.Full] instead)
- * @return [ItemResult] success (with params) or failure
- */
-@Suppress("RemoveExplicitTypeArguments")
-fun ItemContainer.transform(definitions: DefinitionReader<ItemDefinition>, stackType: StackType, function: Composition, overflow: Boolean = true): ItemResult {
-    val modification = ContainerModificationDetails(items.clone().right(), definitions, mutableListOf(), stackType)
-    val (result, _, overflows) = function.invoke(modification)
-    return result.fold<ItemResult>({ it }, {
-        if (!overflow && overflows.isNotEmpty()) {
-            return@fold ItemResult.Issue.Full
-        }
-        if (setItems(it)) {
-            if (overflows.isNotEmpty()) {
-                return@fold ItemResult.Success.Overflow(overflows)
-            }
-            ItemResult.Success.Success
-        } else {
-            ItemResult.Issue.Invalid
-        }
-    })
+    val containers = system(ContainerSystem::class)
+    return containers.modify(entity, Interfaces.Inventory, builder.function, builder.overflow)
 }
 
 /**

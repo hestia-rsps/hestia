@@ -11,6 +11,8 @@ import worlds.gregs.hestia.core.display.interfaces.model.events.ComponentSwitch
 import worlds.gregs.hestia.core.entity.item.container.api.ItemResult
 import worlds.gregs.hestia.network.client.encoders.messages.InterfaceItems
 import worlds.gregs.hestia.network.client.encoders.messages.InterfaceSettings
+import worlds.gregs.hestia.core.entity.item.container.api.validateItem
+import worlds.gregs.hestia.core.entity.item.container.api.validateSlot
 
 val logger = LoggerFactory.getLogger(Inventory_script::class.java)!!
 
@@ -38,7 +40,7 @@ on<InterfaceInteraction> {
     fun InterfaceInteraction.task() = queue {
         val (_, _, type, slot, option) = this@task
         val inventory = entity.get(Inv::class)
-        val item = inventory.validateItem(slot, type) ?: return@queue logger.warn("Invalid item slot $slot $type $option")
+        val item = inventory.items.validateItem(slot, type) ?: return@queue logger.warn("Invalid item slot $slot $type $option")
 
         val choice = item.definition().options.getOrNull(option - 1)
 
@@ -68,8 +70,8 @@ on<ComponentSwitch> {
         val toSlot = toIndex - 28
 
         val inventory = entity.inventory()
-        inventory.validateSlot(fromSlot)//fromType is always -1
-        inventory.validateItem(toSlot, toType)
+        inventory.items.validateSlot(fromSlot)//fromType is always -1
+        inventory.items.validateItem(toSlot, toType)
 
         inventory transform switch(fromSlot, toSlot)
         //Ignore results
