@@ -38,6 +38,7 @@ tasks {
     named<ShadowJar>("shadowJar") {
         archiveBaseName.set("hestia")
         mergeServiceFiles()
+        archiveClassifier.set(null as String?)
         manifest {
             attributes(mapOf("Main-Class" to "LauncherKt"))
         }
@@ -60,12 +61,7 @@ allprojects {
 
     dependencies {
         //Systems
-        implementation("world.gregs.hestia:hestia-server-core:0.4.5")
-        implementation(kotlin("scripting-jvm"))
-        implementation(kotlin("scripting-common"))
-        implementation(kotlin("script-runtime"))
-        implementation(kotlin("scripting-compiler-embeddable"))
-        implementation(kotlin("compiler-embeddable"))
+        implementation("world.gregs.hestia:hestia-server-core:0.4.7")
         implementation("net.onedaybeard.artemis:artemis-odb-serializer:2.3.0")
         implementation("net.mostlyoriginal.artemis-odb:contrib-eventbus:2.4.0")
         implementation("net.mostlyoriginal.artemis-odb:contrib-core:2.4.0")
@@ -77,9 +73,9 @@ allprojects {
         kapt("io.arrow-kt:arrow-meta:0.10.4")
 
         //Main
-
         implementation(kotlin("stdlib-jdk8"))
-        implementation(kotlin("reflect"))
+        implementation(kotlin("scripting-jvm"))
+        implementation(kotlin("scripting-common"))
         implementation("io.netty:netty-all:4.1.44.Final")
         implementation("org.yaml:snakeyaml:1.25")
 
@@ -90,10 +86,7 @@ allprojects {
         //Utilities
         implementation("com.google.guava:guava:28.2-jre")
         implementation("com.google.code.gson:gson:2.8.6")
-        implementation("commons-io:commons-io:2.6")
         implementation("org.apache.commons:commons-text:1.8")
-        implementation("org.apache.commons:commons-lang3:3.9")
-        implementation("org.apache.commons:commons-collections4:4.4")
 
         //Testing
         testImplementation("org.junit.jupiter:junit-jupiter-api:5.5.2")
