@@ -26,7 +26,8 @@ on<InterfaceRefresh> {
 }
 
 fun EntityAction.sendItems() {
-    entity send InterfaceItems(94, (0 until 15).map { Pair(it, 1) })
+    val items = entity.get(Equipment::class).items.map { if(it == null) Pair(-1, 0) else Pair(it.type, it.amount)}
+    entity send InterfaceItems(94, items)
 }
 
 on<InterfaceInteraction> {
