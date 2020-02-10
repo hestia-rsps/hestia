@@ -19,7 +19,7 @@ on<InterfaceInteraction> {
             resizable && component == 174 || !resizable && component == 178 -> {//Compass
             }
             resizable && component == 182 || !resizable && component == 180 ->//World map
-                entity perform OpenInterface(WorldMap)
+                entity perform OpenInterface(WorldMap, true)
             resizable && component == 229 || !resizable && component == 0 -> {//XP orb
                 when(option) {
                     1 -> {}//Toggle

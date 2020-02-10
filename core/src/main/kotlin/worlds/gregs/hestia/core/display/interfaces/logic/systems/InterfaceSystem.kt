@@ -52,7 +52,7 @@ class InterfaceSystem : Interfaces() {
         windows[id] = window
     }
 
-    override fun openInterface(entityId: Int, id: Int): InterfaceResult {
+    override fun openInterface(entityId: Int, id: Int, force: Boolean): InterfaceResult {
         val relationships = interfaceRelationshipsMapper.get(entityId).relationships
         val gameFrame = gameFrameMapper.get(entityId)
 
@@ -69,7 +69,7 @@ class InterfaceSystem : Interfaces() {
             }
 
             //If the slot is already in use
-            if (relationships[parent]!!.any { getIndex(it, gameFrame.resizable) == index }) {
+            if (!force && relationships[parent]!!.any { getIndex(it, gameFrame.resizable) == index }) {
                 return InterfaceResult.Issue.AnotherOpen
             }
 
@@ -179,7 +179,7 @@ class InterfaceSystem : Interfaces() {
 
     @Subscribe
     private fun openInterface(event: OpenInterface) {
-        val result = openInterface(event.entity, event.id)
+        val result = openInterface(event.entity, event.id, event.force)
         if (result is InterfaceResult.Issue) {
             logger.warn("Issue opening interface $event $result")
         }

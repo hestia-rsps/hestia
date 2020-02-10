@@ -7,4 +7,4 @@ import worlds.gregs.hestia.core.action.model.EntityAction
  * Request to open an interface
  * @param id The interface id to open
  */
-data class OpenInterface(val id: Int): EntityAction(), InstantEvent
+data class OpenInterface(val id: Int, val force: Boolean = false): EntityAction(), InstantEvent

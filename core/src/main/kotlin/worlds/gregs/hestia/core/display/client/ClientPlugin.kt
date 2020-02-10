@@ -20,7 +20,7 @@ import worlds.gregs.hestia.game.plugin.Plugin.Companion.PRE_SYNC_PRIORITY
 class ClientPlugin : Plugin {
 
     override fun setup(b: WorldConfigurationBuilder) {
-        b.with(PlayerOptionMessageHandler(), InterfaceSwitchComponentsHandler(), InterfaceOnPlayerHandler(), InterfaceOnObjectHandler(), InterfaceOnNpcHandler(), InterfaceOnFloorItemHandler(), InterfaceOnInterfaceHandler(), NpcOptionHandler(), ObjectOptionHandler(), FloorItemOptionHandler(), ConsoleCommandHandler(), InterfaceOptionHandler(), WalkTargetHandler(), ScreenChangeHandler(), ScreenCloseHandler(), WorldMapOpenHandler(), DialogueContinueHandler(), StringEntryHandler(), IntegerEntryHandler())
+        b.with(PlayerOptionMessageHandler(), InterfaceSwitchComponentsHandler(), InterfaceOnPlayerHandler(), InterfaceOnObjectHandler(), InterfaceOnNpcHandler(), InterfaceOnFloorItemHandler(), InterfaceOnInterfaceHandler(), NpcOptionHandler(), ObjectOptionHandler(), FloorItemOptionHandler(), ConsoleCommandHandler(), InterfaceOptionHandler(), WalkTargetHandler(), ScreenChangeHandler(), ScreenCloseHandler(), WorldMapCloseHandler(), DialogueContinueHandler(), StringEntryHandler(), IntegerEntryHandler())
         b.with(RegionLoadHandler())
         b.with(LOGIN_DETAILS_PRIORITY, ClientConnectSystem())
         b.with(ClientDisconnectSystem(), ClientNetworkSystem())

@@ -28,9 +28,10 @@ abstract class Interfaces : SubscriptionSystem(Aspect.all(InterfaceRelationships
      * Opens an interface so long as it's [Window] parent exists and isn't already in use
      * @param entityId The entity to open the interface for
      * @param id The id of the interface to open
+     * @param force Whether the result should ignore [InterfaceResult.Issue.AnotherOpen]
      * @return [InterfaceResult]
      */
-    abstract fun openInterface(entityId: Int, id: Int): InterfaceResult
+    abstract fun openInterface(entityId: Int, id: Int, force: Boolean = false): InterfaceResult
 
     /**
      * Resends an interface and it's data
