@@ -6,5 +6,4 @@ import java.util.*
 
 class ContainerList : Component() {
     val containers = mutableMapOf<Int, Container>()
-    val refreshes = LinkedList<Int>()
 }

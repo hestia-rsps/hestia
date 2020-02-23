@@ -32,7 +32,7 @@ on<FloorItemOption> {
         val type = target get Type::class
 
         //Attempt to add to inventory
-        when(entity overflow false transform add(type.id, amount.amount)) {
+        when(entity inventory add(type.id, amount.amount)) {
             is ItemResult.Success -> {
                 if (!entity.get(Position::class).same(target.get(Position::class))) {
                     entity perform Animation(832)//or 3864

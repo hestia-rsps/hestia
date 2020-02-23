@@ -1,68 +1,75 @@
 package world.gregs.hestia.tools.cache.definition
 
+import org.apache.commons.lang3.builder.ToStringBuilder
+import org.apache.commons.lang3.builder.ToStringStyle
 import world.gregs.hestia.core.Settings
 import world.gregs.hestia.core.cache.CacheStore
+import worlds.gregs.hestia.service.cache.CacheSystem
+import worlds.gregs.hestia.service.cache.config.readers.StrutDefinitionReader
 import worlds.gregs.hestia.service.cache.definition.definitions.ItemDefinition
 import worlds.gregs.hestia.service.cache.definition.readers.EnumDefinitionReader
 import worlds.gregs.hestia.service.cache.definition.readers.ItemDefinitionReader
 import kotlin.collections.set
-
 
 class ItemDefinitions {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
             Settings.load("./settings.yml")
-            val store = CacheStore()
+            val store = CacheStore()//"${System.getProperty("user.home")}\\Downloads\\rs718_cache\\")
             val reader = ItemDefinitionReader(store)
-            val enumReader = EnumDefinitionReader(store)
+            ItemDefinition.sevenEighteen = false
+            val itemCount = reader.size
 
-            val list = mutableListOf<String>()
+            println(ToStringBuilder.reflectionToString(reader.get(20769), ToStringStyle.MULTI_LINE_STYLE))
 
-            val replacements = mapOf(
-                    "4_5ths" to "Four_Fifths",
-                    "3_5ths" to "Three_Fifths",
-                    "2_5ths" to "Two_Fifths",
-                    "1_5ths" to "One_Fifth",
-                    "2_3rds" to "Two_Thirds",
-                    "2_3" to "Two_Thirds",
-                    "1_3rds" to "One_Third",
-                    "10th" to "Tenth"
-            )
-            repeat(reader.size) {
-                val item = reader.get(it)
 
-                if(!item.options.contentEquals(ItemDefinitionReader.defaultOptions)) {
-                    if(item.name != "null") {
-                        var formatted = item.name
-                                .replace("(", "").replace(")", "").replace(".", "")
-                                .replace("-", " ").replace("'", " ").replace("+", "Plus").replace("/", " ")
-                                .replace("&", "and")
-                                .replace("\uFFEF", "i")
-                                .replace(" ", "")
-                        replacements.forEach { (find, replace) ->
-                            if (formatted.startsWith(find)) {
-                                formatted = formatted.replace(find, replace)
-                            }
-                        }
-                        formatted = formatted.split(" ").map { it.capitalize() }.joinToString(" ")
-                        if(list.contains(formatted)) {
-                            return@repeat
-                        }
-                        println("object $formatted : Items(${item.id})")
-                        list.add(formatted)
-                    }
-                }
-                /*val createRequirements = item.getCreateItemRequirements()
-                if(!createRequirements.isNullOrEmpty()) {
-                    println("$it ${item.name} Requirements:")
-                    createRequirements.forEach { (id, amount) ->
-                        println("    $id $amount")
-                        val enum = enumReader.get(id)
-                        println(ToStringBuilder.reflectionToString(enum, ToStringStyle.MULTI_LINE_STYLE))
-                    }
-                }*/
-            }
+//            val list = mutableListOf<String>()
+//
+//            val replacements = mapOf(
+//                    "4_5ths" to "Four_Fifths",
+//                    "3_5ths" to "Three_Fifths",
+//                    "2_5ths" to "Two_Fifths",
+//                    "1_5ths" to "One_Fifth",
+//                    "2_3rds" to "Two_Thirds",
+//                    "2_3" to "Two_Thirds",
+//                    "1_3rds" to "One_Third",
+//                    "10th" to "Tenth"
+//            )
+//            repeat(reader.size) {
+//                val item = reader.get(it)
+//
+//                if(!item.options.contentEquals(ItemDefinitionReader.defaultOptions)) {
+//                    if(item.name != "null") {
+//                        var formatted = item.name
+//                                .replace("(", "").replace(")", "").replace(".", "")
+//                                .replace("-", " ").replace("'", " ").replace("+", "Plus").replace("/", " ")
+//                                .replace("&", "and")
+//                                .replace("\uFFEF", "i")
+//                                .replace(" ", "")
+//                        replacements.forEach { (find, replace) ->
+//                            if (formatted.startsWith(find)) {
+//                                formatted = formatted.replace(find, replace)
+//                            }
+//                        }
+//                        formatted = formatted.split(" ").map { it.capitalize() }.joinToString(" ")
+//                        if(list.contains(formatted)) {
+//                            return@repeat
+//                        }
+//                        println("object $formatted : Items(${item.id})")
+//                        list.add(formatted)
+//                    }
+//                }
+//                /*val createRequirements = item.getCreateItemRequirements()
+//                if(!createRequirements.isNullOrEmpty()) {
+//                    println("$it ${item.name} Requirements:")
+//                    createRequirements.forEach { (id, amount) ->
+//                        println("    $id $amount")
+//                        val enum = enumReader.get(id)
+//                        println(ToStringBuilder.reflectionToString(enum, ToStringStyle.MULTI_LINE_STYLE))
+//                    }
+//                }*/
+//            }
 //            val item = reader.get(11694)
 //            Param.values().forEach {
 //                if(it.defaultValue is Int) {

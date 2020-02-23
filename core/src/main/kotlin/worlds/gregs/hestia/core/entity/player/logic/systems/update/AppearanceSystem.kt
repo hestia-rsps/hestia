@@ -8,9 +8,25 @@ import world.gregs.hestia.core.network.packet.PacketWriter
 import worlds.gregs.hestia.artemis.Aspect
 import worlds.gregs.hestia.artemis.SubscriptionSystem
 import worlds.gregs.hestia.core.display.update.model.components.*
+import worlds.gregs.hestia.core.entity.item.container.logic.ContainerSystem
+import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem
+import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.SLOT_AURA
+import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.SLOT_CHEST
+import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.SLOT_FEET
+import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.SLOT_HANDS
+import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.SLOT_HAT
+import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.SLOT_LEGS
+import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.SLOT_SHIELD
+import worlds.gregs.hestia.core.entity.item.container.model.ContainerType
+import worlds.gregs.hestia.core.entity.item.container.model.EquipConstants.isFullBody
+import worlds.gregs.hestia.core.entity.item.container.model.EquipConstants.isFullHat
+import worlds.gregs.hestia.core.entity.item.container.model.EquipConstants.isFullMask
+import worlds.gregs.hestia.core.entity.item.container.model.Item
 import worlds.gregs.hestia.core.entity.player.model.components.update.*
 import worlds.gregs.hestia.core.entity.player.model.events.UpdateAppearance
 import worlds.gregs.hestia.game.entity.Player
+import worlds.gregs.hestia.service.cache.definition.definitions.ItemDefinition
+import worlds.gregs.hestia.service.cache.definition.systems.ItemDefinitionSystem
 
 class AppearanceSystem : SubscriptionSystem(Aspect.all(Player::class)) {
 
@@ -28,6 +44,9 @@ class AppearanceSystem : SubscriptionSystem(Aspect.all(Player::class)) {
     private lateinit var emoteMapper: ComponentMapper<Emote>
     private lateinit var combatLevelMapper: ComponentMapper<CombatLevel>
     private lateinit var summoningCombatLevelMapper: ComponentMapper<SummoningCombatLevel>
+    private lateinit var containers: ContainerSystem
+    private lateinit var equipment: EquipmentSystem
+    private lateinit var definitions: ItemDefinitionSystem
 
     override fun inserted(entityId: Int) {
         update(entityId)
@@ -36,6 +55,18 @@ class AppearanceSystem : SubscriptionSystem(Aspect.all(Player::class)) {
     @Subscribe
     fun update(event: UpdateAppearance) {
         update(event.entity)
+    }
+
+    private fun PacketWriter.writeItem(item: Item) {
+        writeShort(0x8000 + equipment.getEquipId(item))
+    }
+
+    private fun PacketWriter.writeEmpty() {
+        writeByte(0)
+    }
+
+    private fun PacketWriter.writeClothes(value: Int) {
+        writeShort(0x100 + value)
     }
 
     private fun update(entityId: Int) {
@@ -69,26 +100,81 @@ class AppearanceSystem : SubscriptionSystem(Aspect.all(Player::class)) {
                 writeShort(transform.npcId)
                 writeByte(0)
             } else {
+                val equip = containers.getContainer(entityId, ContainerType.EQUIPMENT)
                 for (index in 0 until 4) {
-                    writeByte(0)//Hidden appearance
+                    val item = equip.getOrNull(index)
+                    if(item == null) {
+                        writeEmpty()
+                    } else {
+                        writeItem(item)
+                    }
+                }
+                val look = bodyMapper.get(entityId)?.look ?: DEFAULT_LOOK
+                val chest = equip.getOrNull(SLOT_CHEST)
+                if(chest == null) {
+                    writeClothes(look[2])
+                } else {
+                    writeItem(chest)//Torso
                 }
 
-                val look = bodyMapper.get(entityId)?.look ?: DEFAULT_LOOK
+                val shield = equip.getOrNull(SLOT_SHIELD)
+                if(shield == null) {
+                    writeEmpty()
+                } else {
+                    writeItem(shield)
+                }
 
-                writeShort(0x100 + look[2])//Torso
-                writeByte(0)
-                writeShort(0x100 + look[3])//Arms
+                if(chest != null && isFullBody(definitions.get(chest.type))) {
+                    writeEmpty()
+                } else {
+                    writeClothes(look[3])//Arms
+                }
 
-                writeShort(0x100 + look[5])//Legs
-                writeShort(0x100 + look[0])//Hair
-                writeShort(0x100 + look[4])//Bracelet
-                writeShort(0x100 + look[6])//Feet
-                writeShort(0x100 + look[1])//Beard
-                writeByte(0)
+                val legs = equip.getOrNull(SLOT_LEGS)
+                if(legs == null) {
+                    writeClothes(look[5])//Legs
+                } else {
+                    writeItem(legs)
+                }
+
+                val hat = equip.getOrNull(SLOT_HAT)
+                if(hat == null) {
+                    writeClothes(look[0])//Hair
+                } else {
+                    writeItem(hat)
+                }
+
+                val hands = equip.getOrNull(SLOT_HANDS)
+                if(hands == null) {
+                    writeClothes(look[4])//Bracelet
+                } else {
+                    writeItem(hands)
+                }
+
+                val shoes = equip.getOrNull(SLOT_FEET)
+                if(shoes == null) {
+                    writeClothes(look[6])//Feet
+                } else {
+                    writeItem(shoes)
+                }
+
+                if(hat != null && isFullMask(definitions.get(hat.type))) {
+                    writeEmpty()
+                } else {
+                    writeClothes(look[1])//Beard
+                }
+
+                val aura = equip.getOrNull(SLOT_AURA)
+                if(aura == null) {
+                    writeEmpty()
+                } else {
+                    writeItem(aura)
+                }
 
                 //Inventory
                 val stream = Unpooled.buffer()
-                repeat(14) { slotId -> }
+                repeat(14) { slotId ->
+                }
                 buffer.writeShort(0)
                 buffer.writeBytes(stream)//TODO remove?
             }

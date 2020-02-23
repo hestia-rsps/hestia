@@ -13,7 +13,7 @@ class ItemContainerDefinitions {
         @JvmStatic
         fun main(args: Array<String>) {
             Settings.load("./settings.yml")
-            val store = CacheStore("${System.getProperty("user.home")}\\Downloads\\rs718_cache\\")//667 doesn't have this data natively
+            val store = CacheStore()//"${System.getProperty("user.home")}\\Downloads\\rs718_cache\\")//667 doesn't have the full data natively
             val itemReader = ItemDefinitionReader(CacheStore())
             val reader = ItemContainerDefinitionReader(store)
             val data = store.getArchive(2, 5)

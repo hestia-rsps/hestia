@@ -5,13 +5,13 @@ import arrow.fx.IO
 import world.gregs.hestia.cache.definition.DefinitionReader
 import world.gregs.hestia.cache.definition.definitions.ItemDefinition
 import worlds.gregs.hestia.core.action.model.EntityAction
-import worlds.gregs.hestia.core.display.interfaces.api.Interfaces
 import worlds.gregs.hestia.core.entity.item.container.api.*
 import worlds.gregs.hestia.core.entity.item.container.logic.ContainerEditor.addEmptySlot
 import worlds.gregs.hestia.core.entity.item.container.logic.ContainerEditor.canStack
 import worlds.gregs.hestia.core.entity.item.container.logic.ContainerEditor.indexOf
 import worlds.gregs.hestia.core.entity.item.container.logic.ContainerEditor.unfold
 import worlds.gregs.hestia.core.entity.item.container.logic.ContainerEditor.unfoldRight
+import worlds.gregs.hestia.core.entity.item.container.model.ContainerType
 import worlds.gregs.hestia.core.entity.item.container.model.Item
 import worlds.gregs.hestia.core.entity.item.container.model.StackType
 import worlds.gregs.hestia.service.cache.DefinitionReader
@@ -26,15 +26,16 @@ import kotlin.math.abs
 /**
  * Empty [Composition] for folding chained modifications
  */
-private val blankComposition: Composition = { it }
+val blankComposition: Composition = { it }
 
-data class ContainerTransformBuilder(val overflow: Boolean = true) {
+data class ContainerTransformBuilder(val overflow: Boolean = false) {
     lateinit var function: Composition
+    lateinit var type: ContainerType
 }
 
 fun EntityAction.transform(builder: ContainerTransformBuilder): ItemResult {
     val containers = system(ContainerSystem::class)
-    return containers.modify(entity, Interfaces.Inventory, builder.function, builder.overflow)
+    return containers.modify(entity, builder.type, builder.function, builder.overflow)
 }
 
 /**
