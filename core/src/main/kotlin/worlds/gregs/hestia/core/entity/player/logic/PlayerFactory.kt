@@ -18,8 +18,6 @@ import worlds.gregs.hestia.core.entity.entity.api.ArchetypeFactory
 import worlds.gregs.hestia.core.entity.entity.model.components.Blackboard
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.item.container.model.ContainerList
-import worlds.gregs.hestia.core.entity.item.container.model.Equipment
-import worlds.gregs.hestia.core.entity.item.container.model.Inventory
 import worlds.gregs.hestia.core.entity.player.model.components.Member
 import worlds.gregs.hestia.core.task.model.components.TaskQueue
 import worlds.gregs.hestia.core.world.collision.model.components.Ghost
@@ -32,6 +30,6 @@ class PlayerFactory : ArchetypeFactory {
 
     override fun getBuilder(): ArchetypeBuilder {
         return ArchetypeBuilder().add(Player::class, ClientIndex::class, Renderable::class, Position::class, AppearanceData::class, DisplayName::class, Viewport::class, Mobile::class, LastLoadedRegion::class, Shift::class, Facing::class, Ghost::class, GameFrame::class,
-                TaskQueue::class, Inventory::class, Equipment::class, ContainerList::class, Member::class, InterfaceRelationships::class, ContextMenu::class, RequestList::class, Movement::class, Assisting::class, VariableStore::class, Blackboard::class)
+                TaskQueue::class, ContainerList::class, Member::class, InterfaceRelationships::class, ContextMenu::class, RequestList::class, Movement::class, Assisting::class, VariableStore::class, Blackboard::class)
     }
 }

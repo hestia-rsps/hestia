@@ -24,7 +24,7 @@ import worlds.gregs.hestia.content.interaction.player.Trade_script
 import worlds.gregs.hestia.content.activity.skill.SkillCreation_script
 
 val scripts = listOf(
-        SkillCreation_script(), Logout_script(), FilterButtons_script(), MagicSpellbook_script(), Options_script(), Emotes_script(), Inventory_script(), Notes_script(), PrayerList_script(), QuestJournals_script(), Experience_script(), Stats_script(), WorldMap_script(), WornEquipment_script(), CombatStyles_script(), Gameframe_script(), Minimap_script(), RequestAssist_script(), Resting_script(), Follow_script(), Trade_script(), Item_script(), Pickup_script(), Test_script(), Counter_script(), Banker_script(), Hans_script(), Appearance_script(), BotControl_script(), EntityCount_script(), Interface_script(), Teleport_script())
+        SkillCreation_script(), Logout_script(), FilterButtons_script(), MagicSpellbook_script(), Options_script(), Emotes_script(), Inventory_script(), Notes_script(), PrayerList_script(), QuestJournals_script(), Experience_script(), Stats_script(), WorldMap_script(), WornEquipment_script(), CombatStyles_script(), Gameframe_script(), Minimap_script(), RequestAssist_script(), Resting_script(), Follow_script(), Trade_script(), Item_script(), Pickup_script(), Test_script(), Kit_script(), Counter_script(), Banker_script(), Hans_script(), Appearance_script(), BotControl_script(), EntityCount_script(), Interface_script(), Teleport_script())
 
 setup {
     scripts.forEach {

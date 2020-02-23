@@ -8,7 +8,7 @@ import worlds.gregs.hestia.core.action.model.perform
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.entity.model.components.Type
-import worlds.gregs.hestia.core.entity.item.container.model.Inventory
+import worlds.gregs.hestia.core.entity.item.container.logic.ContainerSystem
 import worlds.gregs.hestia.core.entity.item.floor.api.FloorItems
 import worlds.gregs.hestia.core.entity.item.floor.model.events.ItemOnFloorItem
 import worlds.gregs.hestia.core.world.map.model.Chunk
@@ -19,7 +19,7 @@ class InterfaceOnFloorItemHandler : MessageHandlerSystem<InterfaceOnFloorItem>()
 
     private lateinit var es: EventSystem
 
-    private lateinit var inventoryMapper: ComponentMapper<Inventory>
+    private lateinit var containerSystem: ContainerSystem
     private lateinit var positionMapper: ComponentMapper<Position>
     private lateinit var typeMapper: ComponentMapper<Type>
     private lateinit var floorItems: FloorItems
@@ -33,15 +33,15 @@ class InterfaceOnFloorItemHandler : MessageHandlerSystem<InterfaceOnFloorItem>()
 
     override fun handle(entityId: Int, message: InterfaceOnFloorItem) {
         val (x, y, floorType, hash, slot, _, type) = message
-        val inventory = inventoryMapper.get(entityId) ?: return logger.warn("Unhandled component on floor item $message")
 
         if(!interfaces.hasInterface(entityId, hash)) {
             return logger.warn("Invalid component on floor item hash $message")
         }
 
-        val inventoryItem = inventory.items.getOrNull(slot)
+        val container = containerSystem.getContainer(entityId, hash shr 16) ?: return logger.warn("Unhandled component on floor item $message")
+        val item = container.getOrNull(slot)
 
-        if(inventoryItem == null || inventoryItem.type != type) {
+        if(item == null || item.type != type) {
             return logger.warn("Invalid component on floor item message $message")
         }
 

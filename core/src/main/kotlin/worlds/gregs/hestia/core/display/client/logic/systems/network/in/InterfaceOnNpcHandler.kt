@@ -7,7 +7,7 @@ import worlds.gregs.hestia.GameServer
 import worlds.gregs.hestia.core.action.model.perform
 import worlds.gregs.hestia.core.display.client.model.components.Viewport
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces
-import worlds.gregs.hestia.core.entity.item.container.model.Inventory
+import worlds.gregs.hestia.core.entity.item.container.logic.ContainerSystem
 import worlds.gregs.hestia.core.entity.item.container.model.events.ItemOnNpc
 import worlds.gregs.hestia.game.entity.MessageHandlerSystem
 import worlds.gregs.hestia.network.client.decoders.messages.InterfaceOnNpc
@@ -16,7 +16,7 @@ class InterfaceOnNpcHandler : MessageHandlerSystem<InterfaceOnNpc>() {
 
     private lateinit var es: EventSystem
 
-    private lateinit var inventoryMapper: ComponentMapper<Inventory>
+    private lateinit var containerSystem: ContainerSystem
     private val logger = LoggerFactory.getLogger(InterfaceOnNpcHandler::class.java)!!
     private lateinit var viewportMapper: ComponentMapper<Viewport>
     private lateinit var interfaces: Interfaces
@@ -28,15 +28,15 @@ class InterfaceOnNpcHandler : MessageHandlerSystem<InterfaceOnNpc>() {
 
     override fun handle(entityId: Int, message: InterfaceOnNpc) {
         val (slot, type, npcIndex, hash, _) = message
-        val inventory = inventoryMapper.get(entityId) ?: return logger.warn("Unhandled interface on npc $message")
 
         if(!interfaces.hasInterface(entityId, hash)) {
             return logger.warn("Invalid interface on npc hash $message")
         }
 
-        val inventoryItem = inventory.items.getOrNull(slot)
+        val container = containerSystem.getContainer(entityId, hash shr 16) ?: return logger.warn("Unhandled interface on npc $message")
+        val item = container.getOrNull(slot)
 
-        if(inventoryItem == null || inventoryItem.type != type) {
+        if(item == null || item.type != type) {
             return logger.warn("Invalid interface on npc item $message")
         }
 

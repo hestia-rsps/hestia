@@ -14,10 +14,12 @@ import worlds.gregs.hestia.core.display.interfaces.model.events.request.CloseWin
 import worlds.gregs.hestia.core.display.update.model.components.DisplayName
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.item.container.api.Composition
+import worlds.gregs.hestia.core.entity.item.container.api.Container
 import worlds.gregs.hestia.core.entity.item.container.api.ItemResult
+import worlds.gregs.hestia.core.entity.item.container.logic.ContainerSystem
 import worlds.gregs.hestia.core.entity.item.container.logic.ContainerTransformBuilder
 import worlds.gregs.hestia.core.entity.item.container.logic.transform
-import worlds.gregs.hestia.core.entity.item.container.model.Inventory
+import worlds.gregs.hestia.core.entity.item.container.model.ContainerType
 import worlds.gregs.hestia.core.entity.item.container.model.Item
 import worlds.gregs.hestia.core.entity.item.floor.model.events.CreateFloorItem
 import worlds.gregs.hestia.core.task.api.SuspendableQueue
@@ -86,17 +88,18 @@ abstract class EntityAction : WorldAction(), Cancellable {
         Containers
      */
 
+    infix fun Int.container(type: ContainerType) = system(ContainerSystem::class).getContainer(this, type)
+
     infix fun Int.overflow(overflow: Boolean) = ContainerTransformBuilder(overflow)
 
-    infix fun Int.inventory(f: Composition) = inventory() transform f
-    fun Int.inventory() = this get Inventory::class
+    infix fun Int.inventory(f: Composition) = ContainerType.INVENTORY transform f
 
     fun Item.definition(): ItemDefinition {
         val system = world system ItemDefinitionSystem::class
         return system.get(type)
     }
 
-    infix fun Inventory.transform(f: Composition) = ContainerTransformBuilder().transform(f)
+    infix fun ContainerType.transform(f: Composition) = ContainerTransformBuilder().apply { this.type = this@transform }.transform(f)
 
     infix fun ContainerTransformBuilder.transform(f: Composition) = transform(apply { function = f })
 
@@ -117,7 +120,7 @@ abstract class EntityAction : WorldAction(), Cancellable {
             is ItemResult.Issue -> {
                 entity perform Chat(when (result) {
                     ItemResult.Issue.Invalid -> {
-                        log("Issue with purchase. ${(entity get Inventory::class).items.toList()}")
+                        log("Issue with purchase. ${(entity container ContainerType.INVENTORY).toList()}")
                         "Whoops, looks like something went wrong, please try again."
                     }
                     ItemResult.Issue.Full -> "You don't have enough inventory space."

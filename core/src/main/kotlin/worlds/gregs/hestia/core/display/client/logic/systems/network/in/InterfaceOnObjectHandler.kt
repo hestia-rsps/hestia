@@ -11,7 +11,7 @@ import worlds.gregs.hestia.core.action.model.perform
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces
 import worlds.gregs.hestia.core.entity.`object`.model.components.GameObject
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
-import worlds.gregs.hestia.core.entity.item.container.model.Inventory
+import worlds.gregs.hestia.core.entity.item.container.logic.ContainerSystem
 import worlds.gregs.hestia.core.entity.item.floor.model.events.ItemOnObject
 import worlds.gregs.hestia.core.world.land.model.components.LandObjects
 import worlds.gregs.hestia.core.world.region.model.components.RegionIdentifier
@@ -22,7 +22,7 @@ class InterfaceOnObjectHandler : MessageHandlerSystem<InterfaceOnObject>() {
 
     private lateinit var es: EventSystem
 
-    private lateinit var inventoryMapper: ComponentMapper<Inventory>
+    private lateinit var containerSystem: ContainerSystem
     private val logger = LoggerFactory.getLogger(InterfaceOnObjectHandler::class.java)!!
     private lateinit var regionIdentifierMapper: ComponentMapper<RegionIdentifier>
     private lateinit var landObjectsMapper: ComponentMapper<LandObjects>
@@ -39,15 +39,15 @@ class InterfaceOnObjectHandler : MessageHandlerSystem<InterfaceOnObject>() {
 
     override fun handle(entityId: Int, message: InterfaceOnObject) {
         val (_, y, slot, hash, type, x, id) = message
-        val inventory = inventoryMapper.get(entityId) ?: return logger.warn("Unhandled interface on object $message")
 
         if(!interfaces.hasInterface(entityId, hash)) {
             return logger.warn("Invalid interface on object hash $message")
         }
 
-        val inventoryItem = inventory.items.getOrNull(slot)
+        val container = containerSystem.getContainer(entityId, hash shr 16) ?: return logger.warn("Unhandled interface on object $message")
+        val item = container.getOrNull(slot)
 
-        if(inventoryItem == null || inventoryItem.type != type) {
+        if(item == null || item.type != type) {
             return logger.warn("Invalid interface on object item $message")
         }
 
