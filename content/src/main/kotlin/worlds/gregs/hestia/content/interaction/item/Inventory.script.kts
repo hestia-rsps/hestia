@@ -58,13 +58,6 @@ on<InterfaceInteraction> {
 }
 
 on<InventoryAction> {
-    where { option == "Examine" }
-    then {
-        entity perform Chat("It's ${item.definition().name}.")//Temp
-    }
-}
-
-on<InventoryAction> {
     where { option == "Drop" }
     then {
         when(entity inventory remove(item.type, item.amount, slot)) {
