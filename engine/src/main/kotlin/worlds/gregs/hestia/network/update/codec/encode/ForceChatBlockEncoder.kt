@@ -1,6 +1,6 @@
 package worlds.gregs.hestia.network.update.codec.encode
 
-import world.gregs.hestia.core.network.codec.packet.PacketBuilder
+import world.gregs.hestia.core.network.packet.PacketBuilder
 import worlds.gregs.hestia.game.update.blocks.ForceChatBlock
 import worlds.gregs.hestia.network.update.codec.UpdateBlockEncoder
 

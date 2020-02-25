@@ -1,9 +1,9 @@
 package worlds.gregs.hestia.service.cache.config.systems
 
+import world.gregs.hestia.cache.definition.config.definitions.ClientVariableParameterDefinition
+import world.gregs.hestia.cache.definition.config.readers.ClientVariableParameterDefinitionReader
 import worlds.gregs.hestia.service.cache.CacheSystem
 import worlds.gregs.hestia.service.cache.DefinitionSystem
-import worlds.gregs.hestia.service.cache.config.definitions.ClientVariableParameterDefinition
-import worlds.gregs.hestia.service.cache.config.readers.ClientVariableParameterDefinitionReader
 
 class ClientVariableParameterDefinitionSystem : DefinitionSystem<ClientVariableParameterDefinition>() {
 

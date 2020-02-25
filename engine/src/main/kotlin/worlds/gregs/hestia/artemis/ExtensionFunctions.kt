@@ -5,7 +5,7 @@ import com.artemis.utils.IntBag
 import net.mostlyoriginal.api.event.common.EventSystem
 import org.apache.commons.text.WordUtils
 import world.gregs.hestia.core.network.codec.message.Message
-import world.gregs.hestia.core.network.codec.packet.Packet
+import world.gregs.hestia.core.network.packet.Packet
 import worlds.gregs.hestia.artemis.events.OutBoundMessage
 import worlds.gregs.hestia.artemis.events.OutBoundPacket
 import worlds.gregs.hestia.game.entity.Player

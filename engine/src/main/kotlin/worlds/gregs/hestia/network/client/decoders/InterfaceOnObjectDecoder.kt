@@ -2,10 +2,10 @@ package worlds.gregs.hestia.network.client.decoders
 
 import io.netty.channel.ChannelHandlerContext
 import world.gregs.hestia.core.network.codec.message.MessageDecoder
-import world.gregs.hestia.core.network.codec.packet.DataType
-import world.gregs.hestia.core.network.codec.packet.Endian
-import world.gregs.hestia.core.network.codec.packet.Modifier
-import world.gregs.hestia.core.network.codec.packet.Packet
+import world.gregs.hestia.io.DataType
+import world.gregs.hestia.io.Endian
+import world.gregs.hestia.io.Modifier
+import world.gregs.hestia.core.network.packet.Packet
 import world.gregs.hestia.core.network.protocol.ClientOpcodes.ITEM_ON_OBJECT
 import worlds.gregs.hestia.network.client.decoders.messages.InterfaceOnObject
 

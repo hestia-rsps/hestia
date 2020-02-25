@@ -8,6 +8,8 @@ import io.mockk.junit5.MockKExtension
 import io.mockk.verifyOrder
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import world.gregs.hestia.cache.definition.DefinitionReader
+import world.gregs.hestia.cache.definition.definitions.ItemDefinition
 import world.gregs.hestia.core.network.protocol.encoders.messages.InterfaceComponentText
 import worlds.gregs.hestia.MockkGame
 import worlds.gregs.hestia.artemis.send
@@ -17,8 +19,6 @@ import worlds.gregs.hestia.core.display.interfaces.api.Interfaces
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.ConfirmDestroy
 import worlds.gregs.hestia.core.display.interfaces.model.Window
 import worlds.gregs.hestia.network.client.encoders.messages.InterfaceItem
-import worlds.gregs.hestia.service.cache.DefinitionReader
-import worlds.gregs.hestia.service.cache.definition.definitions.ItemDefinition
 import worlds.gregs.hestia.service.cache.definition.systems.ItemDefinitionSystem
 
 @ExtendWith(MockKExtension::class)

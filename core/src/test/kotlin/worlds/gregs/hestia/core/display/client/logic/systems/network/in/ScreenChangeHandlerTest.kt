@@ -7,8 +7,8 @@ import com.nhaarman.mockitokotlin2.verify
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import world.gregs.hestia.core.network.codec.packet.Packet
-import world.gregs.hestia.core.network.codec.packet.PacketWriter
+import world.gregs.hestia.core.network.packet.Packet
+import world.gregs.hestia.core.network.packet.PacketWriter
 import worlds.gregs.hestia.artemis.getSystem
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.GraphicsOptions
 import worlds.gregs.hestia.core.display.interfaces.model.components.GameFrame

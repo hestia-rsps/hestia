@@ -2,7 +2,7 @@ package worlds.gregs.hestia.core.world.land.logic.systems
 
 import com.artemis.annotations.Wire
 import net.mostlyoriginal.api.event.common.EventSystem
-import world.gregs.hestia.core.network.codec.packet.PacketReader
+import world.gregs.hestia.core.network.packet.PacketReader
 import worlds.gregs.hestia.core.entity.`object`.model.events.CreateObject
 import worlds.gregs.hestia.core.world.collision.model.Flags.BRIDGE_TILE
 import worlds.gregs.hestia.core.world.land.api.Land

@@ -4,7 +4,7 @@ import io.netty.channel.ChannelHandlerContext
 import world.gregs.hestia.core.network.codec.HandshakeCodec
 import world.gregs.hestia.core.network.codec.message.MessageHandshake
 import world.gregs.hestia.core.network.codec.message.SimpleMessageHandshakeDecoder
-import world.gregs.hestia.core.network.codec.packet.Packet
+import world.gregs.hestia.core.network.packet.Packet
 import world.gregs.hestia.core.network.getSession
 import world.gregs.hestia.core.network.protocol.messages.ClientPacket
 import worlds.gregs.hestia.GameServer.Companion.worldSession

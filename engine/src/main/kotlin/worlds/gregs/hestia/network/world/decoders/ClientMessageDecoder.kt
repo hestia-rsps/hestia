@@ -3,8 +3,8 @@ package worlds.gregs.hestia.network.world.decoders
 import io.netty.buffer.Unpooled
 import io.netty.channel.ChannelHandlerContext
 import world.gregs.hestia.core.network.codec.message.MessageDecoder
-import world.gregs.hestia.core.network.codec.packet.Packet
-import world.gregs.hestia.core.network.codec.packet.PacketReader
+import world.gregs.hestia.core.network.packet.Packet
+import world.gregs.hestia.core.network.packet.PacketReader
 import world.gregs.hestia.core.network.protocol.WorldOpcodes.CLIENT_MESSAGE
 import worlds.gregs.hestia.network.world.decoders.messages.ClientPacketOut
 

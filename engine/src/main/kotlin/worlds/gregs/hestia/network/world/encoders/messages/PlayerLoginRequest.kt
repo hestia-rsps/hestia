@@ -1,7 +1,7 @@
 package worlds.gregs.hestia.network.world.encoders.messages
 
 import world.gregs.hestia.core.network.codec.message.Message
-import world.gregs.hestia.core.network.codec.packet.Packet
+import world.gregs.hestia.core.network.packet.Packet
 
 /**
  * Game login request to redirect to login/social-server

@@ -108,8 +108,8 @@ class RegionFileSystem : SubscriptionSystem(Aspect.all(RegionIdentifier::class, 
         val index = cache?.getIndex(5) ?: return
 
         //Get the archive id's for the regions
-        val landIndex = index.getArchiveId("l${regionX}_$regionY")
-        val mapIndex = index.getArchiveId("m${regionX}_$regionY")
+        val landIndex = index.archiveId("l${regionX}_$regionY")
+        val mapIndex = index.archiveId("m${regionX}_$regionY")
 
         //Make sure the cache has the necessary files
         if (landIndex == -1 || mapIndex == -1) {
@@ -121,8 +121,8 @@ class RegionFileSystem : SubscriptionSystem(Aspect.all(RegionIdentifier::class, 
         val keys = Xteas.KEY_TABLE.getOrNull(regionId)
 
         //Get the map files
-        val landContainerData = index.getFile(landIndex, keys)
-        val mapContainerData = index.getFile(mapIndex)
+        val landContainerData = index.archive(landIndex, keys)?.file(0)?.data
+        val mapContainerData = index.archive(mapIndex)?.file(0)?.data
 
         var decodedSettings: Array<Array<ByteArray>>? = null
         try {

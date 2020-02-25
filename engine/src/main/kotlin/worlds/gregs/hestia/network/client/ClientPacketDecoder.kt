@@ -2,7 +2,7 @@ package worlds.gregs.hestia.network.client
 
 import io.netty.buffer.ByteBuf
 import io.netty.channel.ChannelHandlerContext
-import world.gregs.hestia.core.cache.crypto.Cipher
+import world.gregs.hestia.cache.crypto.Cipher
 import world.gregs.hestia.core.network.codec.HandshakeCodec
 import world.gregs.hestia.core.network.codec.decode.SimplePacketHandshakeDecoder
 import world.gregs.hestia.core.network.codec.message.MessageHandshake

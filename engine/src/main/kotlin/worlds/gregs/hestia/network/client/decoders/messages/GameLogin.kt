@@ -1,7 +1,7 @@
 package worlds.gregs.hestia.network.client.decoders.messages
 
 import world.gregs.hestia.core.network.codec.message.Message
-import world.gregs.hestia.core.network.codec.packet.Packet
+import world.gregs.hestia.core.network.packet.Packet
 
 /**
  * An attempt to log into the game from login-screen or lobby

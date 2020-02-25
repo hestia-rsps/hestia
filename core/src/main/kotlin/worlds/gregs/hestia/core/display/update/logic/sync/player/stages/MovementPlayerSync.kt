@@ -1,6 +1,6 @@
 package worlds.gregs.hestia.core.display.update.logic.sync.player.stages
 
-import world.gregs.hestia.core.network.codec.packet.PacketBuilder
+import world.gregs.hestia.core.network.packet.PacketBuilder
 import world.gregs.hestia.core.services.int
 import worlds.gregs.hestia.artemis.ConcurrentObjectPool
 import worlds.gregs.hestia.core.display.update.logic.DirectionUtils.Companion.getPlayerRunningDirection

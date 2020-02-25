@@ -3,6 +3,7 @@ package worlds.gregs.hestia.core.action.model
 import kotlinx.coroutines.suspendCancellableCoroutine
 import net.mostlyoriginal.api.event.common.Cancellable
 import net.mostlyoriginal.api.event.common.EventSystem
+import world.gregs.hestia.cache.definition.definitions.ItemDefinition
 import world.gregs.hestia.core.services.plural
 import worlds.gregs.hestia.core.action.logic.dispatch
 import worlds.gregs.hestia.core.display.client.model.components.ClientIndex
@@ -22,7 +23,6 @@ import worlds.gregs.hestia.core.entity.item.floor.model.events.CreateFloorItem
 import worlds.gregs.hestia.core.task.api.SuspendableQueue
 import worlds.gregs.hestia.core.task.api.Task
 import worlds.gregs.hestia.core.task.api.TaskSuspension
-import worlds.gregs.hestia.service.cache.definition.definitions.ItemDefinition
 import worlds.gregs.hestia.service.cache.definition.systems.ItemDefinitionSystem
 
 abstract class EntityAction : WorldAction(), Cancellable {

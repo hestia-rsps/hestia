@@ -2,7 +2,7 @@ package worlds.gregs.hestia.network.world.decoders
 
 import io.netty.channel.ChannelHandlerContext
 import world.gregs.hestia.core.network.codec.message.MessageDecoder
-import world.gregs.hestia.core.network.codec.packet.Packet
+import world.gregs.hestia.core.network.packet.Packet
 import world.gregs.hestia.core.network.protocol.WorldOpcodes.LOGIN_RESPONSE
 import world.gregs.hestia.core.network.protocol.messages.PlayerLoginResponse
 
