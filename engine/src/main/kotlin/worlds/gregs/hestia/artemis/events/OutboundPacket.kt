@@ -2,7 +2,7 @@ package worlds.gregs.hestia.artemis.events
 
 import com.artemis.Entity
 import net.mostlyoriginal.api.event.common.EventSystem
-import world.gregs.hestia.core.network.codec.packet.Packet
+import world.gregs.hestia.core.network.packet.Packet
 import worlds.gregs.hestia.artemis.InstantEvent
 import worlds.gregs.hestia.artemis.getSystem
 

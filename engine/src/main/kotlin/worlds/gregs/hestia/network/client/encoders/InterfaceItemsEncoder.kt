@@ -1,9 +1,9 @@
 package worlds.gregs.hestia.network.client.encoders
 
 import world.gregs.hestia.core.network.codec.message.MessageEncoder
-import world.gregs.hestia.core.network.codec.packet.Endian
-import world.gregs.hestia.core.network.codec.packet.Packet
-import world.gregs.hestia.core.network.codec.packet.PacketBuilder
+import world.gregs.hestia.io.Endian
+import world.gregs.hestia.core.network.packet.Packet
+import world.gregs.hestia.core.network.packet.PacketBuilder
 import world.gregs.hestia.core.network.protocol.ClientOpcodes.INTERFACE_ITEMS
 import worlds.gregs.hestia.network.client.encoders.messages.InterfaceItems
 

@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Assertions.assertNotNull
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
+import world.gregs.hestia.cache.definition.definitions.ItemDefinition
 import worlds.gregs.hestia.MockkGame
 import worlds.gregs.hestia.artemis.getComponent
 import worlds.gregs.hestia.artemis.remove
@@ -28,7 +29,6 @@ import worlds.gregs.hestia.core.entity.item.floor.model.components.Amount
 import worlds.gregs.hestia.core.entity.item.floor.model.components.Private
 import worlds.gregs.hestia.core.entity.item.floor.model.components.Public
 import worlds.gregs.hestia.network.client.encoders.messages.*
-import worlds.gregs.hestia.service.cache.definition.definitions.ItemDefinition
 import worlds.gregs.hestia.service.cache.definition.systems.ItemDefinitionSystem
 
 @ExtendWith(MockKExtension::class)

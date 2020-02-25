@@ -3,7 +3,7 @@ package worlds.gregs.hestia.network.world.handlers
 import io.netty.buffer.ByteBuf
 import io.netty.channel.ChannelHandlerContext
 import org.slf4j.LoggerFactory
-import world.gregs.hestia.core.cache.crypto.Isaac
+import world.gregs.hestia.cache.crypto.Isaac
 import world.gregs.hestia.core.network.codec.Codec
 import world.gregs.hestia.core.network.codec.message.Message
 import world.gregs.hestia.core.network.codec.message.MessageEncoder

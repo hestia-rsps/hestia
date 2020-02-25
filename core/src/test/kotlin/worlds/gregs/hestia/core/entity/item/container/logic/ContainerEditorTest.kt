@@ -10,6 +10,7 @@ import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
 import org.junit.jupiter.api.fail
+import world.gregs.hestia.cache.definition.readers.ItemDefinitionReader
 import worlds.gregs.hestia.core.entity.item.container.api.Composition
 import worlds.gregs.hestia.core.entity.item.container.api.Container
 import worlds.gregs.hestia.core.entity.item.container.api.ContainerModificationDetails
@@ -19,7 +20,6 @@ import worlds.gregs.hestia.core.entity.item.container.logic.ContainerEditor.subt
 import worlds.gregs.hestia.core.entity.item.container.model.Item
 import worlds.gregs.hestia.core.entity.item.container.model.ItemContainer
 import worlds.gregs.hestia.core.entity.item.container.model.StackType
-import worlds.gregs.hestia.service.cache.definition.readers.ItemDefinitionReader
 
 @ExtendWith(MockKExtension::class)
 internal class ContainerEditorTest {

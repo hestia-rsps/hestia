@@ -1,7 +1,7 @@
 package worlds.gregs.hestia.network.world.decoders.messages
 
 import world.gregs.hestia.core.network.codec.message.Message
-import world.gregs.hestia.core.network.codec.packet.Packet
+import world.gregs.hestia.core.network.packet.Packet
 
 /**
  * A packet to send directly to the client

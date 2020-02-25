@@ -2,6 +2,8 @@ package worlds.gregs.hestia.core.entity.item.container.logic
 
 import arrow.core.*
 import arrow.fx.IO
+import world.gregs.hestia.cache.definition.DefinitionReader
+import world.gregs.hestia.cache.definition.definitions.ItemDefinition
 import worlds.gregs.hestia.core.action.model.EntityAction
 import worlds.gregs.hestia.core.entity.item.container.api.*
 import worlds.gregs.hestia.core.entity.item.container.logic.ContainerEditor.addEmptySlot
@@ -13,8 +15,6 @@ import worlds.gregs.hestia.core.entity.item.container.model.Inventory
 import worlds.gregs.hestia.core.entity.item.container.model.Item
 import worlds.gregs.hestia.core.entity.item.container.model.ItemContainer
 import worlds.gregs.hestia.core.entity.item.container.model.StackType
-import worlds.gregs.hestia.service.cache.DefinitionReader
-import worlds.gregs.hestia.service.cache.definition.definitions.ItemDefinition
 import worlds.gregs.hestia.service.cache.definition.systems.ItemDefinitionSystem
 import java.lang.Math.addExact
 import java.lang.Math.subtractExact

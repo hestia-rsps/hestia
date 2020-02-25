@@ -1,28 +1,29 @@
 package worlds.gregs.hestia.service.cache
 
+import com.displee.cache.CacheLibrary
+import com.displee.cache.index.Index
 import net.mostlyoriginal.api.system.core.PassiveSystem
-import world.gregs.hestia.core.cache.CacheStore
-import world.gregs.hestia.core.cache.store.Index
+import world.gregs.hestia.core.Settings
 
 class CacheSystem : PassiveSystem() {
 
     @Throws(ArrayIndexOutOfBoundsException::class)
     fun getIndex(id: Int): Index {
-        return store.getIndex(id)
+        return store.index(id)
     }
 
     @Throws(ArrayIndexOutOfBoundsException::class)
     fun getFile(index: Int, archive: Int): ByteArray? {
-        return store.getFile(index, archive)
+        return store.index(index).archive(archive)?.file(0)?.data
     }
 
     @Throws(ArrayIndexOutOfBoundsException::class)
     fun getFile(index: Int, archive: Int, file: Int): ByteArray? {
-        return store.getFile(index, archive, file)
+        return store.index(index).archive(archive)?.file(file)?.data
     }
 
     companion object {
-        val store = CacheStore()
+        val store = CacheLibrary(Settings.getString("cachePath")!!)
     }
 
 }

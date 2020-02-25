@@ -1,6 +1,6 @@
 package worlds.gregs.hestia.core.display.update.model.sync
 
-import world.gregs.hestia.core.network.codec.packet.PacketBuilder
+import world.gregs.hestia.core.network.packet.PacketBuilder
 import worlds.gregs.hestia.artemis.ConcurrentObjectPool
 import worlds.gregs.hestia.game.update.SyncStage
 

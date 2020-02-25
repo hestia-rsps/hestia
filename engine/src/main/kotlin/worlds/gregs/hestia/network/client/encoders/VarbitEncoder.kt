@@ -1,8 +1,8 @@
 package worlds.gregs.hestia.network.client.encoders
 
 import world.gregs.hestia.core.network.codec.message.MessageEncoder
-import world.gregs.hestia.core.network.codec.packet.Modifier
-import world.gregs.hestia.core.network.codec.packet.PacketBuilder
+import world.gregs.hestia.io.Modifier
+import world.gregs.hestia.core.network.packet.PacketBuilder
 import world.gregs.hestia.core.network.protocol.ClientOpcodes.CLIENT_VARBIT
 import world.gregs.hestia.core.network.protocol.ClientOpcodes.CLIENT_VARBIT_LARGE
 import worlds.gregs.hestia.network.client.encoders.messages.Varbit

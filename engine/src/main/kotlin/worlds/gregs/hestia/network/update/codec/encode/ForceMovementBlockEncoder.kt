@@ -1,8 +1,8 @@
 package worlds.gregs.hestia.network.update.codec.encode
 
-import world.gregs.hestia.core.network.codec.packet.Endian
-import world.gregs.hestia.core.network.codec.packet.Modifier
-import world.gregs.hestia.core.network.codec.packet.PacketBuilder
+import world.gregs.hestia.io.Endian
+import world.gregs.hestia.io.Modifier
+import world.gregs.hestia.core.network.packet.PacketBuilder
 import worlds.gregs.hestia.game.update.blocks.ForceMovementBlock
 import worlds.gregs.hestia.network.update.codec.UpdateBlockEncoder
 

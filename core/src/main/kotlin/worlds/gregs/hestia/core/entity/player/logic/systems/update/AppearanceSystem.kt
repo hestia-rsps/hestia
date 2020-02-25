@@ -3,8 +3,8 @@ package worlds.gregs.hestia.core.entity.player.logic.systems.update
 import com.artemis.ComponentMapper
 import io.netty.buffer.Unpooled
 import net.mostlyoriginal.api.event.common.Subscribe
-import world.gregs.hestia.core.cache.crypto.Encryption
-import world.gregs.hestia.core.network.codec.packet.PacketWriter
+import world.gregs.hestia.cache.crypto.Encryption
+import world.gregs.hestia.core.network.packet.PacketWriter
 import worlds.gregs.hestia.artemis.Aspect
 import worlds.gregs.hestia.artemis.SubscriptionSystem
 import worlds.gregs.hestia.core.display.update.model.components.*
