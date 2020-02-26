@@ -63,6 +63,13 @@ fun ItemContainer.transform(definitions: DefinitionReader<ItemDefinition>, stack
     })
 }
 
+
+fun clear(): Composition = {
+    unfold(it) { container ->
+        container.indices.fold(blankComposition) { acc, type -> acc andThen remove(index = type) }(it).either
+    }
+}
+
 /**
  * Container modification - Addition
  * Adds a new [Item] to a [Container]. Combining stack sizes if [type] is stackable and [Container] has a stack.
@@ -128,7 +135,7 @@ fun addAll(vararg pairs: Pair<Int, Int>): Composition = pairs.fold(blankComposit
  * @param amount The amount of items to remove
  * @param index The container index to apply to (-1 = any slot)
  */
-fun remove(type: Int, amount: Int = 1, index: Int = -1): Composition = {
+fun remove(type: Int = -1, amount: Int = 1, index: Int = -1): Composition = {
     val (_, definitions, _, stack) = it
     unfold(it) { container ->
         if (amount <= 0) {
@@ -352,7 +359,7 @@ object ContainerEditor {
      * @param index The exact index to check or -1 to check all indices.
      * @return [Int] index of the first slot with [type] or -1
      */
-    fun indexOf(container: Container, type: Int, index: Int) = indexOf(container, index, Predicate { it?.type == type })
+    fun indexOf(container: Container, type: Int, index: Int) = indexOf(container, index, Predicate { type == -1 || it?.type == type })
 
     /**
      * Checks a [Container] slot(s) against [predicate].
