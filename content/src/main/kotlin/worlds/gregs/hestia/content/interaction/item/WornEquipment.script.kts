@@ -86,7 +86,7 @@ on<EquipmentAction> {
             }
             ItemResult.Issue.Invalid -> TODO()
             ItemResult.Issue.Full -> {
-                entity perform Chat("Inv Full")//FIXME
+                entity perform Chat("You don't have enough inventory space.")
             }
         }
     }
