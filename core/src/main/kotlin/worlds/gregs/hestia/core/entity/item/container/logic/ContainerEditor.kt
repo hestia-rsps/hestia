@@ -13,10 +13,8 @@ import worlds.gregs.hestia.core.entity.item.container.logic.ContainerEditor.unfo
 import worlds.gregs.hestia.core.entity.item.container.logic.ContainerEditor.unfoldRight
 import worlds.gregs.hestia.core.entity.item.container.model.ContainerType
 import worlds.gregs.hestia.core.entity.item.container.model.Item
+import worlds.gregs.hestia.core.entity.item.container.model.ItemContainer
 import worlds.gregs.hestia.core.entity.item.container.model.StackType
-import worlds.gregs.hestia.service.cache.DefinitionReader
-import worlds.gregs.hestia.service.cache.definition.definitions.ItemDefinition
-import worlds.gregs.hestia.service.cache.definition.systems.ItemDefinitionSystem
 import java.lang.Math.addExact
 import java.lang.Math.subtractExact
 import java.util.*
@@ -36,6 +34,33 @@ data class ContainerTransformBuilder(val overflow: Boolean = false) {
 fun EntityAction.transform(builder: ContainerTransformBuilder): ItemResult {
     val containers = system(ContainerSystem::class)
     return containers.modify(entity, builder.type, builder.function, builder.overflow)
+}
+
+/**
+ * Applies one or many changes to an [ItemContainer], stops if one fails.
+ * Note: changes only apply if returns [ItemResult.Success]
+ * @param definitions Item definitions
+ * @param function The container modifications to make.
+ * @param overflow Whether addition overflows should be applied or not (returns [ItemResult.Issue.Full] instead)
+ * @return [ItemResult] success (with params) or failure
+ */
+@Suppress("RemoveExplicitTypeArguments")
+fun ItemContainer.transform(definitions: DefinitionReader<ItemDefinition>, stackType: StackType, function: Composition, overflow: Boolean = true): ItemResult {
+    val modification = ContainerModificationDetails(items.clone().right(), definitions, mutableListOf(), stackType)
+    val (result, _, overflows) = function.invoke(modification)
+    return result.fold<ItemResult>({ it }, {
+        if (!overflow && overflows.isNotEmpty()) {
+            return@fold ItemResult.Issue.Full
+        }
+        if (setItems(it)) {
+            if (overflows.isNotEmpty()) {
+                return@fold ItemResult.Success.Overflow(overflows)
+            }
+            ItemResult.Success.Success
+        } else {
+            ItemResult.Issue.Invalid
+        }
+    })
 }
 
 /**

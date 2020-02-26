@@ -1,7 +1,7 @@
 package world.gregs.hestia.tools
 
+import com.displee.cache.CacheLibrary
 import world.gregs.hestia.core.Settings
-import world.gregs.hestia.core.cache.CacheStore
 import java.nio.ByteBuffer
 import java.nio.file.Files
 import java.nio.file.Paths
@@ -11,15 +11,15 @@ object CreateChecksumFile {
     fun main(args: Array<String>) {
         //Load necessary files
         Settings.load("./settings.yml")
-        val cache = CacheStore()
+        val cache = CacheLibrary("../hestia/data/cache")
         //Create buffer
-        val count = cache.indexCount()
+        val count = cache.indices().size
         val buffer = ByteBuffer.allocate(1 + count * 4)
         //Write index count
         buffer.put(count.toByte())
         //Write index crcs
         repeat(count) {
-            buffer.putInt(cache.getIndex(it).crc)
+            buffer.putInt(cache.index(it).crc)
         }
         //Write to file
         val file = Paths.get("checksum.dat")

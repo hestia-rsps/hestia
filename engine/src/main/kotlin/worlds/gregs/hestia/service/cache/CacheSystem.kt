@@ -23,8 +23,6 @@ class CacheSystem : PassiveSystem() {
     }
 
     companion object {
-        val store = CacheStore()
-        val store718 = CacheStore("${System.getProperty("user.home")}\\Downloads\\rs718_cache\\")
         val store = CacheLibrary(Settings.getString("cachePath")!!)
     }
 

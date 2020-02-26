@@ -15,6 +15,7 @@ import worlds.gregs.hestia.core.display.interfaces.api.Interfaces
 import worlds.gregs.hestia.core.task.api.TaskCancellation
 import worlds.gregs.hestia.core.task.api.Tasks
 import worlds.gregs.hestia.core.task.model.await.ClearTasks
+import worlds.gregs.hestia.core.task.model.components.TaskQueue
 
 @ExtendWith(MockKExtension::class)
 internal class ClearTaskSystemTest : MockkGame() {
@@ -67,6 +68,7 @@ internal class ClearTaskSystemTest : MockkGame() {
     fun `Task resumed tick after`() {
         //Given
         val entityId = 0
+        world.createEntity().edit().add(TaskQueue())
         es.perform(entityId, ClearTasks())
         val suspension: ClearTasks = mockk(relaxed = true)
         every { tasks.getSuspension(entityId) } returns suspension

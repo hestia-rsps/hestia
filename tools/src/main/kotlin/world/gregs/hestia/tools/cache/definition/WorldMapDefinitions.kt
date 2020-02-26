@@ -1,17 +1,17 @@
 package world.gregs.hestia.tools.cache.definition
 
+import com.displee.cache.CacheLibrary
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
+import world.gregs.hestia.cache.definition.readers.WorldMapDefinitionReader
 import world.gregs.hestia.core.Settings
-import world.gregs.hestia.core.cache.CacheStore
-import worlds.gregs.hestia.service.cache.definition.readers.WorldMapDefinitionReader
 
 class WorldMapDefinitions {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
             Settings.load("./settings.yml")
-            val store = CacheStore()
+            val store = CacheLibrary("../hestia/data/cache")
             val reader = WorldMapDefinitionReader(store)
             val size = reader.size
             println("Size $size")

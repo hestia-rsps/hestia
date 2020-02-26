@@ -6,8 +6,6 @@ import world.gregs.hestia.cache.definition.definitions.ItemDefinition
 import worlds.gregs.hestia.core.entity.item.container.model.Item
 import worlds.gregs.hestia.core.entity.item.container.model.StackType
 import worlds.gregs.hestia.core.task.api.TaskCancellation
-import worlds.gregs.hestia.service.cache.DefinitionReader
-import worlds.gregs.hestia.service.cache.definition.definitions.ItemDefinition
 
 data class ContainerModificationDetails(val either: Either<ItemResult.Issue, Container>, val definitions: DefinitionReader<ItemDefinition>, val overflows: MutableList<Item>, val stackType: StackType)
 typealias Composition = (ContainerModificationDetails) -> ContainerModificationDetails
@@ -19,9 +17,9 @@ typealias Slot = Item?
  */
 fun Container.validateItem(slot: Int, type: Int): Item? {
     val item = getOrNull(slot)
-    if(item == null && type != -1) {
+    if (item == null && type != -1) {
         throw TaskCancellation.Cancellation("Null item container item $slot $type")
-    } else if(item != null && item.type != type) {
+    } else if (item != null && item.type != type) {
         throw TaskCancellation.Cancellation("Invalid item container item $slot $type - $item")
     }
     return item

@@ -19,13 +19,11 @@ import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Comp
 import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.SLOT_SHIELD
 import worlds.gregs.hestia.core.entity.item.container.model.ContainerType
 import worlds.gregs.hestia.core.entity.item.container.model.EquipConstants.isFullBody
-import worlds.gregs.hestia.core.entity.item.container.model.EquipConstants.isFullHat
 import worlds.gregs.hestia.core.entity.item.container.model.EquipConstants.isFullMask
 import worlds.gregs.hestia.core.entity.item.container.model.Item
 import worlds.gregs.hestia.core.entity.player.model.components.update.*
 import worlds.gregs.hestia.core.entity.player.model.events.UpdateAppearance
 import worlds.gregs.hestia.game.entity.Player
-import worlds.gregs.hestia.service.cache.definition.definitions.ItemDefinition
 import worlds.gregs.hestia.service.cache.definition.systems.ItemDefinitionSystem
 
 class AppearanceSystem : SubscriptionSystem(Aspect.all(Player::class)) {

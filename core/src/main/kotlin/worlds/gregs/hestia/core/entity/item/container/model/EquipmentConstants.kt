@@ -1,6 +1,7 @@
 package worlds.gregs.hestia.core.entity.item.container.model
 
-import worlds.gregs.hestia.service.cache.definition.definitions.ItemDefinition
+import world.gregs.hestia.cache.definition.definitions.ItemDefinition
+
 
 object EquipConstants {
     /**
@@ -32,7 +33,7 @@ object EquipConstants {
                 return true
             }
         }
-        return def.id === 14824
+        return def.id == 14824
     }
 
     /**

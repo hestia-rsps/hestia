@@ -1,10 +1,10 @@
 package world.gregs.hestia.tools.cache.definition
 
+import com.displee.cache.CacheLibrary
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
+import world.gregs.hestia.cache.definition.readers.InterfaceDefinitionReader
 import world.gregs.hestia.core.Settings
-import world.gregs.hestia.core.cache.CacheStore
-import worlds.gregs.hestia.service.cache.definition.readers.InterfaceDefinitionReader
 
 class InterfaceDefinitions {
     companion object {
@@ -23,7 +23,7 @@ class InterfaceDefinitions {
         @JvmStatic
         fun main(args: Array<String>) {
             Settings.load("./settings.yml")
-            val store = CacheStore()
+            val store = CacheLibrary("../hestia/data/cache")
             val reader = InterfaceDefinitionReader(store)
 //            repeat(reader.size) { id ->
                 val iface = reader.get(679)

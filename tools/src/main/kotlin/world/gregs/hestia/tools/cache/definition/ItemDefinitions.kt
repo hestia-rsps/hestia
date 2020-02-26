@@ -1,27 +1,22 @@
 package world.gregs.hestia.tools.cache.definition
 
-import org.apache.commons.lang3.builder.ToStringBuilder
-import org.apache.commons.lang3.builder.ToStringStyle
+import com.displee.cache.CacheLibrary
+import world.gregs.hestia.cache.definition.definitions.ItemDefinition
+import world.gregs.hestia.cache.definition.readers.ItemDefinitionReader
 import world.gregs.hestia.core.Settings
-import world.gregs.hestia.core.cache.CacheStore
-import worlds.gregs.hestia.service.cache.CacheSystem
-import worlds.gregs.hestia.service.cache.config.readers.StrutDefinitionReader
-import worlds.gregs.hestia.service.cache.definition.definitions.ItemDefinition
-import worlds.gregs.hestia.service.cache.definition.readers.EnumDefinitionReader
-import worlds.gregs.hestia.service.cache.definition.readers.ItemDefinitionReader
-import kotlin.collections.set
 
 class ItemDefinitions {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
             Settings.load("./settings.yml")
-            val store = CacheStore()//"${System.getProperty("user.home")}\\Downloads\\rs718_cache\\")
+//            val store = CacheLibrary("${System.getProperty("user.home")}\\Downloads\\rs718_cache\\")
+            val store = CacheLibrary("../hestia/data/cache")//"${System.getProperty("user.home")}\\Downloads\\rs718_cache\\")
             val reader = ItemDefinitionReader(store)
-            ItemDefinition.sevenEighteen = false
             val itemCount = reader.size
+            println(itemCount)
 
-            println(ToStringBuilder.reflectionToString(reader.get(20769), ToStringStyle.MULTI_LINE_STYLE))
+//            println(ToStringBuilder.reflectionToString(reader.get(20769), ToStringStyle.MULTI_LINE_STYLE))
 
 
 //            val list = mutableListOf<String>()
