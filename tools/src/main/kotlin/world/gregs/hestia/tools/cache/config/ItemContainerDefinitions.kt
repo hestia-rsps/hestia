@@ -1,22 +1,19 @@
 package world.gregs.hestia.tools.cache.config
 
+import com.displee.cache.CacheLibrary
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
-import world.gregs.hestia.core.Settings
-import world.gregs.hestia.core.cache.CacheStore
-import worlds.gregs.hestia.service.cache.config.readers.ItemContainerDefinitionReader
-import worlds.gregs.hestia.service.cache.definition.readers.ItemDefinitionReader
-
+import world.gregs.hestia.cache.definition.config.readers.ItemContainerDefinitionReader
+import world.gregs.hestia.cache.definition.readers.ItemDefinitionReader
 
 class ItemContainerDefinitions {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            Settings.load("./settings.yml")
-            val store = CacheStore()//"${System.getProperty("user.home")}\\Downloads\\rs718_cache\\")//667 doesn't have the full data natively
-            val itemReader = ItemDefinitionReader(CacheStore())
+            val store = CacheLibrary("../hestia/data/cache")//"${System.getProperty("user.home")}\\Downloads\\rs718_cache\\")//667 doesn't have the full data natively
+            val itemReader = ItemDefinitionReader(store)
             val reader = ItemContainerDefinitionReader(store)
-            val data = store.getArchive(2, 5)
+            val data = store.index(2).archive(5)?.file(0)?.data
 
 //            val file = RandomAccessFile("./data/containers.dat", "r")
             println(reader.size)

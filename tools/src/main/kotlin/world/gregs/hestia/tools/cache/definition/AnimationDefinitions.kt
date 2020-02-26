@@ -1,17 +1,17 @@
 package world.gregs.hestia.tools.cache.definition
 
+import com.displee.cache.CacheLibrary
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
+import world.gregs.hestia.cache.definition.readers.AnimationDefinitionReader
 import world.gregs.hestia.core.Settings
-import world.gregs.hestia.core.cache.CacheStore
-import worlds.gregs.hestia.service.cache.definition.readers.AnimationDefinitionReader
 
 class AnimationDefinitions {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
             Settings.load("./settings.yml")
-            val store = CacheStore()
+            val store = CacheLibrary("../hestia/data/cache")
             val reader = AnimationDefinitionReader(store)
             val animation = reader.get(11788)
             println(ToStringBuilder.reflectionToString(animation, ToStringStyle.MULTI_LINE_STYLE))

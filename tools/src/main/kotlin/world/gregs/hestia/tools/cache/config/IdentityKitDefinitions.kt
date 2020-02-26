@@ -1,18 +1,15 @@
 package world.gregs.hestia.tools.cache.config
 
+import com.displee.cache.CacheLibrary
 import org.apache.commons.lang3.builder.ToStringBuilder
 import org.apache.commons.lang3.builder.ToStringStyle
-import world.gregs.hestia.core.Settings
-import world.gregs.hestia.core.cache.CacheStore
-import worlds.gregs.hestia.service.cache.config.readers.IdentityKitDefinitionReader
-
+import world.gregs.hestia.cache.definition.config.readers.IdentityKitDefinitionReader
 
 class IdentityKitDefinitions {
     companion object {
         @JvmStatic
         fun main(args: Array<String>) {
-            Settings.load("./settings.yml")
-            val store = CacheStore()
+            val store = CacheLibrary("../hestia/data/cache")
             val reader = IdentityKitDefinitionReader(store)
             repeat(reader.size) { id ->
                 val identityKit = reader.get(id)

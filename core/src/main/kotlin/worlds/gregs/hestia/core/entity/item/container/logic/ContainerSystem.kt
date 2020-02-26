@@ -10,7 +10,6 @@ import worlds.gregs.hestia.core.entity.item.container.api.*
 import worlds.gregs.hestia.core.entity.item.container.model.ContainerList
 import worlds.gregs.hestia.core.entity.item.container.model.ContainerType
 import worlds.gregs.hestia.network.client.encoders.messages.InterfaceItems
-import worlds.gregs.hestia.service.cache.config.definitions.ItemContainerDefinition
 import worlds.gregs.hestia.service.cache.config.systems.ItemContainerDefinitionSystem
 import worlds.gregs.hestia.service.cache.definition.systems.ItemDefinitionSystem
 

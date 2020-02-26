@@ -19,6 +19,7 @@ import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Comp
 import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.SLOT_HANDS
 import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.SLOT_RING
 import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.SLOT_LEGS
+import world.gregs.hestia.cache.definition.definitions.ItemDefinition
 
 on<InterfaceOpened> {
     where { id == WornEquipment }
@@ -68,6 +69,11 @@ on<InterfaceInteraction> {
             45 -> entity perform OpenInterface(ItemsKeptOnDeath)
         }
     }
+}
+
+
+fun ItemDefinition.getEquipOption(optionId: Int): String? {
+    return params?.getOrDefault(528L + optionId, null) as? String
 }
 
 on<EquipmentAction> {

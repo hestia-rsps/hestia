@@ -2,13 +2,14 @@ package worlds.gregs.hestia.core.entity.item.container.logic
 
 import arrow.core.andThen
 import net.mostlyoriginal.api.system.core.PassiveSystem
+import org.slf4j.LoggerFactory
 import worlds.gregs.hestia.core.entity.item.container.api.Composition
 import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.equipSlots
 import worlds.gregs.hestia.core.entity.item.container.model.Item
-import worlds.gregs.hestia.service.cache.CacheSystem.Companion.store718
-import worlds.gregs.hestia.service.cache.definition.definitions.ItemDefinition
-import worlds.gregs.hestia.service.cache.definition.readers.ItemDefinitionReader
 import worlds.gregs.hestia.service.cache.definition.systems.ItemDefinitionSystem
+import java.io.DataInputStream
+import java.io.File
+import kotlin.system.measureTimeMillis
 
 class EquipmentSystem : PassiveSystem() {
 
@@ -25,14 +26,23 @@ class EquipmentSystem : PassiveSystem() {
                 equipIds[id] = equipId++
             }
         }
-        ItemDefinition.sevenEighteen = true
-        val definitions = ItemDefinitionReader(store718)
-        repeat(itemCount) { id ->
-            val def = definitions.get(id)
-            equipSlots[id] = def.equipSlot
-            equipTypes[id] = def.equipType
+
+        var file = File("./data/equipmentSlots.dat")
+        var stream = DataInputStream(file.inputStream())
+        var time = measureTimeMillis {
+            while(stream.available() > 0) {
+                equipSlots[stream.readShort().toInt()] = stream.readByte().toInt()
+            }
         }
-        ItemDefinition.sevenEighteen = false
+        logger.info("${equipSlots.size} equipment slots loaded in ${time}ms")
+        file = File("./data/equipmentTypes.dat")
+        stream = DataInputStream(file.inputStream())
+        time = measureTimeMillis {
+            while(stream.available() > 0) {
+                equipTypes[stream.readShort().toInt()] = stream.readByte().toInt()
+            }
+        }
+        logger.info("${equipTypes.size} equipment types loaded in ${time}ms")
     }
 
     companion object {
@@ -52,6 +62,7 @@ class EquipmentSystem : PassiveSystem() {
         val equipIds = mutableMapOf<Int, Int>()
         val equipSlots = mutableMapOf<Int, Int>()
         val equipTypes = mutableMapOf<Int, Int>()
+        private val logger = LoggerFactory.getLogger(EquipmentSystem::class.java)
     }
 }
 

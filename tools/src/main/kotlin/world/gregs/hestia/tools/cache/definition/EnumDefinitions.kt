@@ -1,9 +1,8 @@
 package world.gregs.hestia.tools.cache.definition
 
+import com.displee.cache.CacheLibrary
+import world.gregs.hestia.cache.definition.readers.EnumDefinitionReader
 import world.gregs.hestia.core.Settings
-import world.gregs.hestia.core.cache.CacheStore
-import worlds.gregs.hestia.service.cache.definition.readers.EnumDefinitionReader
-
 
 class EnumDefinitions {
     /*
@@ -57,7 +56,7 @@ class EnumDefinitions {
         @JvmStatic
         fun main(args: Array<String>) {
             Settings.load("./settings.yml")
-            val store = CacheStore()
+            val store = CacheLibrary("../hestia/data/cache")
             val reader = EnumDefinitionReader(store)
 //            val enum = reader.get(75)
 //            println(ToStringBuilder.reflectionToString(enum, ToStringStyle.MULTI_LINE_STYLE))
