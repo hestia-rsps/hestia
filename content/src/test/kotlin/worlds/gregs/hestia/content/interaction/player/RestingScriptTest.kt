@@ -12,11 +12,6 @@ internal class RestingScriptTest : ScriptTester<Resting>() {
     @RelaxedMockK
     lateinit var variables: Variables
 
-    override fun loadInjections() {
-        inject(Variables::class, variables)
-        super.loadInjections()
-    }
-
     @Test
     fun `Listen to musician resting`() {
 

@@ -9,11 +9,10 @@ import io.mockk.mockk
 import org.junit.jupiter.api.extension.ExtendWith
 import worlds.gregs.hestia.core.action.model.Action
 import worlds.gregs.hestia.core.action.model.EntityAction
-import worlds.gregs.hestia.core.script.ScriptBase
 import worlds.gregs.hestia.core.task.api.SuspendableQueue
 import worlds.gregs.hestia.core.task.api.Task
 import worlds.gregs.hestia.core.task.api.TaskCancellation
-import worlds.gregs.hestia.game.plugin.PluginLoader
+import worlds.gregs.hestia.game.plugin.ScriptLoader
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.coroutines.createCoroutine
@@ -67,7 +66,7 @@ abstract class ScriptTester<T : ScriptTemplateWithArgs>(aspect: Aspect.Builder? 
 
     fun send(action: Action) {
         action.world = world
-        val listeners = PluginLoader.listeners.filter { it.event == action::class }
+        val listeners = ScriptLoader.listeners.filter { it.event == action::class }
         listeners.forEach { listener ->
             if(listener.conditional == null || listener.conditional!!.invoke(action)) {
                 listener.action.invoke(action)

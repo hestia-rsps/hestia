@@ -44,11 +44,6 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist>() {
     @RelaxedMockK
     lateinit var variables: Variables
 
-    override fun loadInjections() {
-        inject(Variables::class, variables)
-        super.loadInjections()
-    }
-
     @Test
     fun `Can't request if too soon since last request`() {
         //Given
@@ -88,6 +83,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist>() {
         }
         every { assisting.lastRequest } returns 5
         Engine.ticks = 15
+        setSystem(Variables::class, variables)
         every { variables.get(targetId, "total_xp_earned", 0) } returns 30000
         //When
         send(action)
@@ -115,13 +111,14 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist>() {
         }
         every { assisting.lastRequest } returns 5
         Engine.ticks = 15
+        setSystem(Variables::class, variables)
         every { variables.get(targetId, "total_xp_earned", 0) } returns 0
         val map = getMapper(DisplayName::class)
         every { map.get(targetId) } returns mockk<DisplayName>(relaxed = true).apply { name = "Name" }
         with(task) {
             coEvery { await(WithinRange(targetId, 1)) } answers { true }
         }
-        setSystem(req)//FIXME one or the other
+        setSystem(RequestSystem::class, req)//FIXME one or the other
         //When
         send(action)
         //Then
@@ -331,6 +328,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist>() {
         every { action.component } returns 16
         every { action.option } returns 9
         val assisting = mockk<Assisting>(relaxed = true)
+        setSystem(Variables::class, variables)
         every { variables.get(entityId, "total_xp_earned", 0) } returns 35000
         every { assisting.timeout } returns System.currentTimeMillis() - TimeUnit.HOURS.toMillis(hours)
         with(action) {
@@ -341,8 +339,8 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist>() {
         //Then
         with(action) {
             verify {
-                entityId.perform(Chat("You've earned the maximum XP (30,000 Xp) from the Assist System within a 24-hour period.", ChatType.GameAssist))
-                entityId.perform(Chat("You can assist again in $hours hours.", ChatType.GameAssist))
+                entityId perform Chat("You've earned the maximum XP (30,000 Xp) from the Assist System within a 24-hour period.", ChatType.GameAssist)
+                entityId perform Chat("You can assist again in $hours hours.", ChatType.GameAssist)
             }
         }
     }
@@ -356,6 +354,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist>() {
         every { action.component } returns 16
         every { action.option } returns 9
         val assisting = mockk<Assisting>(relaxed = true)
+        setSystem(Variables::class, variables)
         every { variables.get(entityId, "total_xp_earned", 0) } returns 30000
         every { assisting.timeout } returns System.currentTimeMillis() - TimeUnit.HOURS.toMillis(hours)
         with(action) {
@@ -381,6 +380,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist>() {
         every { action.component } returns 16
         every { action.option } returns 9
         val assisting = mockk<Assisting>(relaxed = true)
+        setSystem(Variables::class, variables)
         every { variables.get(entityId, "total_xp_earned", 0) } returns 10000
         with(action) {
             every { entityId.get(Assisting::class) } returns assisting
@@ -406,6 +406,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist>() {
         val assistance = mockk<Assistance>(relaxed = true)
         assistance.helper = targetId
         val assisting = mockk<Assisting>(relaxed = true)
+        setSystem(Variables::class, variables)
         every { variables.get(targetId, "assist_toggle_1", false) } returns true
         every { variables.get(targetId, "total_xp_earned", 0) } returns 1000
         with(action) {
@@ -435,6 +436,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist>() {
         val assistance = mockk<Assistance>(relaxed = true)
         assistance.helper = targetId
         val assisting = mockk<Assisting>(relaxed = true)
+        setSystem(Variables::class, variables)
         every { variables.get(targetId, "assist_toggle_1", false) } returns false
         every { variables.get(targetId, "total_xp_earned", 0) } returns 1000
         with(action) {
@@ -484,6 +486,7 @@ internal class RequestAssistScriptTest : ScriptTester<RequestAssist>() {
         val assistance = mockk<Assistance>(relaxed = true)
         assistance.helper = targetId
         val assisting = mockk<Assisting>(relaxed = true)
+        setSystem(Variables::class.java, variables)
         every { variables.get(targetId, "assist_toggle_1", false) } returns true
         every { variables.get(targetId, "total_xp_earned", 0) } returns 35000
         with(action) {

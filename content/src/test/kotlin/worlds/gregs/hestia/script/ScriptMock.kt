@@ -1,9 +1,6 @@
 package worlds.gregs.hestia.script
 
 import com.artemis.*
-import com.artemis.injection.CachedInjector
-import com.artemis.injection.FieldHandler
-import com.artemis.utils.reflect.Field
 import io.mockk.every
 import io.mockk.impl.annotations.RelaxedMockK
 import io.mockk.junit5.MockKExtension
@@ -12,12 +9,10 @@ import io.mockk.mockkStatic
 import net.mostlyoriginal.api.event.common.EventSystem
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.extension.ExtendWith
-import worlds.gregs.hestia.core.script.ScriptBuilder
 import worlds.gregs.hestia.game
+import worlds.gregs.hestia.game.plugin.ScriptLoader.listeners
 import kotlin.reflect.KClass
 import kotlin.reflect.KFunction
-import kotlin.reflect.full.functions
-import kotlin.reflect.full.memberFunctions
 import kotlin.reflect.jvm.isAccessible
 import kotlin.script.templates.standard.ScriptTemplateWithArgs
 
@@ -37,61 +32,34 @@ abstract class ScriptMock<T : ScriptTemplateWithArgs>(private val aspect: Aspect
     protected lateinit var es: EventSystem
 
     @BeforeEach
-    fun setup() {
+    open fun setup() {
         mockkStatic("worlds.gregs.hestia.artemis.ExtensionFunctionsKt", "worlds.gregs.hestia.core.action.logic.ActionsKt")
+        listeners.clear()
         //Load script
         script = if (aspect != null) {
             loadScriptClass().getConstructor(Aspect.Builder::class.java).newInstance(aspect) as T
         } else {
             loadScript()!!
         }
-
-        //Clear injection list
-        namedInjections.clear()
-        typedInjections.clear()
-
-        //Add defaults
-        inject(World::class, world)
-        setSystem(es)
         every { world.aspectSubscriptionManager } returns mockk(relaxed = true)
-        loadInjections()
-    }
 
-    open fun loadInjections() {
-        val fieldHandler = mockk<FieldHandler>()
-        //Might need to be expanded at some point to handle other injection types
-        every { fieldHandler.resolve(any(), any(), any()) } answers {
-            val field = arg<Field>(2)
-            typedInjections[field.type] ?: namedInjections[field.name]
-        }
-
-        //Inject fields
-        val injector = CachedInjector()
-        injector.setFieldHandler(fieldHandler)
-        injector.inject(script)
-
+        setSystem(EventSystem::class.java, es)
         //Set world
         game = world
     }
 
-    fun inject(fieldName: String, any: Any): Any {
-        namedInjections[fieldName] = any
-        return any
+    fun <T : BaseSystem> setSystem(clazz: KClass<T>, system: T) = setSystem(clazz.java, system)
+
+    fun <T : BaseSystem> setSystem(clazz: Class<T>, system: T) {
+        every { world.getSystem(clazz) } returns system
     }
 
-    fun <T : Any> inject(type: KClass<T>, any: T): T {
-        typedInjections[type.java] = any
-        return any
-    }
+    fun <T : Component> getMapper(type: KClass<T>) = getMapper(type.java)
 
-    fun <T : BaseSystem> setSystem(system: T) {
-        every { world.getSystem(system::class.java) } returns system
-    }
-
-    fun <T : Component> getMapper(type: KClass<T>) : ComponentMapper<T> {
-        return mappers.getOrPut(type.java) {
+    fun <T : Component> getMapper(type: Class<T>) : ComponentMapper<T> {
+        return mappers.getOrPut(type) {
             val mock = mockk<ComponentMapper<T>>(relaxed = true)
-            every { world.getMapper(type.java) } returns mock
+            every { world.getMapper(type) } returns mock
             mock
         } as ComponentMapper<T>
     }
