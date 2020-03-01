@@ -13,16 +13,18 @@ import worlds.gregs.hestia.core.script.ScriptBase
 import worlds.gregs.hestia.core.task.api.SuspendableQueue
 import worlds.gregs.hestia.core.task.api.Task
 import worlds.gregs.hestia.core.task.api.TaskCancellation
+import worlds.gregs.hestia.game.plugin.PluginLoader
 import kotlin.coroutines.Continuation
 import kotlin.coroutines.EmptyCoroutineContext
 import kotlin.coroutines.createCoroutine
 import kotlin.coroutines.resume
+import kotlin.script.templates.standard.ScriptTemplateWithArgs
 
 /**
  * Class for testing scripts by mocking injections
  */
 @ExtendWith(MockKExtension::class)
-abstract class ScriptTester<T : ScriptBase>(aspect: Aspect.Builder? = null) : ScriptMock<T>(aspect) {
+abstract class ScriptTester<T : ScriptTemplateWithArgs>(aspect: Aspect.Builder? = null) : ScriptMock<T>(aspect) {
 
     lateinit var continuation: Continuation<Unit>
     lateinit var task: Task
@@ -65,7 +67,7 @@ abstract class ScriptTester<T : ScriptBase>(aspect: Aspect.Builder? = null) : Sc
 
     fun send(action: Action) {
         action.world = world
-        val listeners = script.listeners.filter { it.event == action::class }
+        val listeners = PluginLoader.listeners.filter { it.event == action::class }
         listeners.forEach { listener ->
             if(listener.conditional == null || listener.conditional!!.invoke(action)) {
                 listener.action.invoke(action)

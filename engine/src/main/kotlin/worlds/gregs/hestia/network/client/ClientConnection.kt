@@ -5,6 +5,7 @@ import world.gregs.hestia.core.network.Session
 import world.gregs.hestia.core.network.codec.ConnectionSessionListener
 import worlds.gregs.hestia.GameServer
 import worlds.gregs.hestia.artemis.events.Disconnect
+import worlds.gregs.hestia.game
 
 @ChannelHandler.Sharable
 class ClientConnection : ConnectionSessionListener() {
@@ -13,7 +14,7 @@ class ClientConnection : ConnectionSessionListener() {
     }
 
     override fun disconnect(session: Session) {
-        if (session.id != -1 && GameServer.server.server!!.entityManager.isActive(session.id)) {
+        if (session.id != -1 && game.entityManager.isActive(session.id)) {
             GameServer.eventSystem.dispatch(Disconnect(session.id))
         }
     }

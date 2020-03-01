@@ -13,17 +13,19 @@ import net.mostlyoriginal.api.event.common.EventSystem
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.extension.ExtendWith
 import worlds.gregs.hestia.core.script.ScriptBuilder
+import worlds.gregs.hestia.game
 import kotlin.reflect.KClass
 import kotlin.reflect.KFunction
 import kotlin.reflect.full.functions
 import kotlin.reflect.full.memberFunctions
 import kotlin.reflect.jvm.isAccessible
+import kotlin.script.templates.standard.ScriptTemplateWithArgs
 
 /**
  * Class for testing scripts by mocking injections
  */
 @ExtendWith(MockKExtension::class)
-abstract class ScriptMock<T : ScriptBuilder>(private val aspect: Aspect.Builder? = null) : ScriptLoader {
+abstract class ScriptMock<T : ScriptTemplateWithArgs>(private val aspect: Aspect.Builder? = null) : ScriptLoader {
 
     private val namedInjections = HashMap<String, Any>()
     val typedInjections = HashMap<Class<*>, Any>()
@@ -69,11 +71,7 @@ abstract class ScriptMock<T : ScriptBuilder>(private val aspect: Aspect.Builder?
         injector.inject(script)
 
         //Set world
-        val setWorld = script::class.functions.first { it.name == "setWorld" }
-        callUnsafe(setWorld, script, world)
-        //Initialise
-        val initialise = script::class.memberFunctions.first { it.name == "initialize" }
-        callUnsafe(initialise, script)
+        game = world
     }
 
     fun inject(fieldName: String, any: Any): Any {

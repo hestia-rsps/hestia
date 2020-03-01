@@ -10,6 +10,7 @@ import worlds.gregs.hestia.GameServer
 import worlds.gregs.hestia.artemis.events.SocialLogin
 import worlds.gregs.hestia.artemis.forEach
 import worlds.gregs.hestia.artemis.players
+import worlds.gregs.hestia.game
 
 class WorldDetailsHandler(private val details: Details) : MessageHandler<SocialDetails> {
 
@@ -30,7 +31,7 @@ class WorldDetailsHandler(private val details: Details) : MessageHandler<SocialD
         GameServer.server.init(world)
 
         //Notify social server of all the current players
-        GameServer.server.server?.players()?.forEach {
+        game.players().forEach {
             GameServer.eventSystem.dispatch(SocialLogin(it))
         }
     }

@@ -24,6 +24,7 @@ import worlds.gregs.hestia.game.Engine
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.EVENT_PROCESS_PRIORITY
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.PACKET_PROCESS_PRIORITY
 import worlds.gregs.hestia.game.plugin.PluginLoader
+import worlds.gregs.hestia.game.plugin.ScriptLoader
 import worlds.gregs.hestia.network.WorldChangeListener
 import worlds.gregs.hestia.network.client.*
 import worlds.gregs.hestia.network.world.WorldCodec
@@ -32,6 +33,8 @@ import worlds.gregs.hestia.network.world.WorldDetails
 import worlds.gregs.hestia.network.world.WorldMessages
 import worlds.gregs.hestia.service.Xteas
 import kotlin.system.measureNanoTime
+
+lateinit var game: World
 
 class GameServer(worldDetails: Details) : Engine(), WorldChangeListener {
     private val log = LoggerFactory.getLogger(this::class.java)
@@ -42,13 +45,12 @@ class GameServer(worldDetails: Details) : Engine(), WorldChangeListener {
     private val socialDecoders = ArrayList<Triple<Int, Int, Boolean>>()
 
     private lateinit var network: Network
-    var server: World? = null//TODO rename to world after kotlin fix
 
     override fun tick(time: Long, delta: Float) {
         val took = measureNanoTime {
 //            println("Tick $delta")
-            server?.setDelta(600f)
-            server?.process()
+            game.setDelta(600f)
+            game.process()
         }
         if (took > 1000000L) {
             log.info("Took ${(took / 1000000)}ms")
@@ -88,7 +90,6 @@ class GameServer(worldDetails: Details) : Engine(), WorldChangeListener {
             builder.with(EVENT_PROCESS_PRIORITY, eventSystem)
             //Load plugins
             PluginLoader.setup(builder)
-
 //            builder.register(BenchmarkStrategy())
             //Temp
             builder.with(PACKET_PROCESS_PRIORITY, gameMessages)
@@ -96,9 +97,10 @@ class GameServer(worldDetails: Details) : Engine(), WorldChangeListener {
             val config = builder.build()
             //Initialize world
             val server = World(config)
-            this.server = server
+            game = server
             //Initiate plugins
             PluginLoader.init(server, dispatcher)
+            ScriptLoader.init(server, dispatcher)
 
             //Set delta
             server.setDelta(1F)

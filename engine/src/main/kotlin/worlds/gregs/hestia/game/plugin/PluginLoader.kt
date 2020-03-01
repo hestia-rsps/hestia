@@ -1,12 +1,15 @@
 package worlds.gregs.hestia.game.plugin
 
-import com.artemis.World
-import com.artemis.WorldConfigurationBuilder
+import com.artemis.*
+import io.github.classgraph.ClassGraph
 import org.slf4j.LoggerFactory
 import world.gregs.hestia.core.Settings
 import world.gregs.hestia.core.services.plural
+import worlds.gregs.hestia.artemis.event.ExtendedEventListener
 import worlds.gregs.hestia.artemis.event.ExtendedFastEventDispatcher
+import worlds.gregs.hestia.game
 import kotlin.system.measureNanoTime
+import kotlin.system.measureTimeMillis
 
 object PluginLoader : Plug {
 
@@ -43,6 +46,7 @@ object PluginLoader : Plug {
                 it.init(world, dispatcher)
             }
         }
+
         val count = world.systems.size() - 5//Ignoring Artemis' own systems
         logger.debug("$count ${"system".plural(count)} loaded in ${loadTime / 1000000}ms")
     }

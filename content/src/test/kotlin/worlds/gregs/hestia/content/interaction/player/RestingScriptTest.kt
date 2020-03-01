@@ -5,7 +5,7 @@ import org.junit.jupiter.api.Test
 import worlds.gregs.hestia.core.display.variable.api.Variables
 import worlds.gregs.hestia.script.ScriptTester
 
-internal class RestingScriptTest : ScriptTester<Resting_script>() {
+internal class RestingScriptTest : ScriptTester<Resting>() {
 
     val targetId = 0
 

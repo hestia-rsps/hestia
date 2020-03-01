@@ -37,7 +37,7 @@ import worlds.gregs.hestia.network.client.encoders.messages.InterfaceVisibility
 import worlds.gregs.hestia.script.ScriptTester
 import java.util.concurrent.TimeUnit
 
-internal class RequestAssistScriptTest : ScriptTester<RequestAssist_script>() {
+internal class RequestAssistScriptTest : ScriptTester<RequestAssist>() {
 
     val targetId = 0
 

@@ -11,6 +11,7 @@ import worlds.gregs.hestia.artemis.events.send
 import worlds.gregs.hestia.network.client.encoders.messages.FriendListDisconnect
 import worlds.gregs.hestia.artemis.forEach
 import worlds.gregs.hestia.artemis.players
+import worlds.gregs.hestia.game
 
 @ChannelHandler.Sharable
 class WorldConnection(private val details: Details) : ConnectionSessionListener() {
@@ -20,9 +21,8 @@ class WorldConnection(private val details: Details) : ConnectionSessionListener(
     }
 
     override fun disconnect(session: Session) {
-        val world = GameServer.server.server ?: return
-        world.players().forEach {
-            val entity = world.getEntity(it)
+        game.players().forEach {
+            val entity = game.getEntity(it)
             entity.send(FriendListDisconnect())
             entity.send(FriendsChatDisconnect())
         }

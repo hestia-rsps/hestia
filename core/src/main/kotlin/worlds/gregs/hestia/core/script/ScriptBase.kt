@@ -8,6 +8,7 @@ import worlds.gregs.hestia.artemis.event.ExtendedEventDispatchStrategy
 import worlds.gregs.hestia.artemis.event.ExtendedEventListener
 import worlds.gregs.hestia.core.action.model.Action
 import worlds.gregs.hestia.core.script.dsl.artemis.*
+import worlds.gregs.hestia.game.plugin.ScriptLoader.listeners
 import kotlin.script.experimental.annotations.KotlinScript
 
 @KotlinScript(displayName = "Hestia Script", fileExtension = "script.kts", compilationConfiguration = ScriptConfiguration::class)
@@ -83,4 +84,10 @@ abstract class ScriptBase : ScriptBuilder() {
             dispatcher.register(it)
         }
     }
+}
+
+inline fun <reified E : Action> on(priority: Int = 0, skipCancelledEvents: Boolean = true, noinline conditional: (E.() -> Boolean)? = null, noinline action: (E.() -> Unit)? = null, setup: EventListenerBuilder<E>.() -> Unit = {}) {
+    val builder = EventListenerBuilder(E::class, priority, skipCancelledEvents, conditional, action)
+    builder.setup()
+    listeners += builder.build() ?: return
 }
