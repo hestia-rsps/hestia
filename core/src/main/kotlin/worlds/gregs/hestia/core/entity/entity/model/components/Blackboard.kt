@@ -15,6 +15,8 @@ class Blackboard : Component() {
         return (map[key] as? T)
     }
 
+    fun has(key: String) = map.containsKey(key)
+
     fun getBoolean(key: String) = get(key, false)
 
     fun getLong(key: String) = get(key, -1L)

@@ -1,11 +1,13 @@
 package worlds.gregs.hestia.content.display.fullscreen
 
+import worlds.gregs.hestia.content.display.Tabs
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.FixedGameframe
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.Logout
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.ResizableGameframe
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.WorldMap
 import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceInteraction
 import worlds.gregs.hestia.core.display.interfaces.model.events.request.OpenInterface
+import worlds.gregs.hestia.core.display.variable.model.events.SetVariable
 import worlds.gregs.hestia.core.script.on
 
 on<InterfaceInteraction> {
@@ -28,13 +30,13 @@ on<InterfaceInteraction> {
                 }
             }
             resizable && component in 39..54 -> {//All tabs
-                println("Open Tab ${component - 39}")
+                entity perform SetVariable("tab", Tabs.tabNames[component - 39], false)
             }
             !resizable && component in 129..136 -> {//Top row tabs
-                println("Open Tab ${component - 129}")
+                entity perform SetVariable("tab", Tabs.tabNames[component - 129], false)
             }
             !resizable && component in 99..106 -> {//Bottom row tabs
-                println("Open Tab ${component - 91}")//99 - 8
+                entity perform SetVariable("tab", Tabs.tabNames[component - 91], false)
             }
         }
     }

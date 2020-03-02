@@ -1,16 +1,19 @@
 package worlds.gregs.hestia.game.plugin
 
-import com.artemis.*
+import com.artemis.World
+import com.artemis.WorldConfigurationBuilder
 import io.github.classgraph.ClassGraph
 import org.slf4j.LoggerFactory
 import world.gregs.hestia.core.services.plural
 import worlds.gregs.hestia.artemis.event.ExtendedEventListener
 import worlds.gregs.hestia.artemis.event.ExtendedFastEventDispatcher
 import worlds.gregs.hestia.game
+import worlds.gregs.hestia.game.plugin.ScriptLoader.initialisers
 import kotlin.system.measureTimeMillis
 
 object ScriptLoader : Plug {
     val listeners = mutableListOf<ExtendedEventListener>()
+    val initialisers = mutableListOf<() -> Unit>()
     private val logger = LoggerFactory.getLogger(ScriptLoader::class.java)!!
 
     override fun setup(b: WorldConfigurationBuilder) {
@@ -31,6 +34,9 @@ object ScriptLoader : Plug {
                             scripts++
                         }
                     }
+            initialisers.forEach { init ->
+                init.invoke()
+            }
             listeners.forEach {
                 dispatcher.register(it)
             }
@@ -39,3 +45,5 @@ object ScriptLoader : Plug {
         listeners.clear()
     }
 }
+
+fun init(function: () -> Unit) = initialisers.add(function)

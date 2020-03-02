@@ -9,6 +9,7 @@ import worlds.gregs.hestia.core.display.variable.api.Variable
 import worlds.gregs.hestia.core.display.variable.api.Variables
 import worlds.gregs.hestia.core.display.variable.model.VariableStore
 import worlds.gregs.hestia.core.display.variable.model.events.*
+import worlds.gregs.hestia.core.display.variable.model.variable.BitwiseVar
 import worlds.gregs.hestia.core.display.variable.model.variable.BitwiseVariable
 import worlds.gregs.hestia.network.client.encoders.messages.Varbit
 import worlds.gregs.hestia.network.client.encoders.messages.Varc
@@ -36,35 +37,39 @@ class VariableSystem : Variables() {
 
     override fun <T : Any> set(entityId: Int, key: String, value: T, refresh: Boolean) {
         val store = variableStoreMapper.get(entityId) ?: return
-        val variable = variables[key] as? Variable<T> ?: return logger.warn("Cannot variable for key '$key'")
-        store.set(variable, value)
-        if (refresh) {
+        val variable = variables[key] as? Variable<T> ?: return logger.warn("Cannot find variable for key '$key'")
+        val changed = store.set(variable, value)
+        if (changed && refresh) {
             send(entityId, key)
         }
     }
 
     override fun send(entityId: Int, key: String) {
         val store = variableStoreMapper.get(entityId) ?: return
-        val variable = variables[key] ?: return logger.warn("Cannot variable for key '$key'")
+        val variable = variables[key] ?: return logger.warn("Cannot find variable for key '$key'")
         variable.send(entityId, store)
     }
 
     override fun <T : Any> get(entityId: Int, key: String, default: T): T {
-        val store = variableStoreMapper.get(entityId) ?: return default
-        val variable = variables[key] as? Variable<T> ?: return default
+        return get(entityId, key) ?: default
+    }
+
+    override fun <T : Any> get(entityId: Int, key: String): T? {
+        val store = variableStoreMapper.get(entityId) ?: return null
+        val variable = variables[key] as? Variable<T> ?: return null
         return store.get(variable)
     }
 
     override fun <T : Any> add(entityId: Int, key: String, id: T, refresh: Boolean) {
         val store = variableStoreMapper.get(entityId) ?: return
-        val variable = variables[key] as? BitwiseVariable<T> ?: return logger.warn("Cannot variable for key '$key'")
+        val variable = variables[key] as? BitwiseVar<T> ?: return logger.warn("Cannot variable for key '$key'")
 
-        val power = variable.getPower(id) ?: return logger.warn("Invalid bitwise value '$id'")
+        val operand = variable.getValue(id) ?: return logger.warn("Invalid bitwise value '$id'")
         val value = store.get(variable)
 
-        if (!value.has(power)) {//If isn't already added
-            store.set(variable, value + power)//Add
-            if (refresh) {
+        if (!value.has(operand)) {//If isn't already added
+            val changed = store.set(variable, value + operand)//Add
+            if (changed && refresh) {
                 send(entityId, key)
             }
         }
@@ -72,14 +77,14 @@ class VariableSystem : Variables() {
 
     override fun <T : Any> remove(entityId: Int, key: String, id: T, refresh: Boolean) {
         val store = variableStoreMapper.get(entityId) ?: return
-        val variable = variables[key] as? BitwiseVariable<T> ?: return logger.warn("Cannot variable for key '$key'")
+        val variable = variables[key] as? BitwiseVariable<T> ?: return logger.warn("Cannot find variable for key '$key'")
 
-        val power = variable.getPower(id) ?: return logger.warn("Invalid bitwise value '$id'")
+        val operand = variable.getValue(id) ?: return logger.warn("Invalid bitwise value '$id'")
         val value = store.get(variable)
 
-        if (value.has(power)) {//If is added
-            store.set(variable, value - power)//Remove
-            if (refresh) {
+        if (value.has(operand)) {//If is added
+            val changed = store.set(variable, value - operand)//Remove
+            if (changed && refresh) {
                 send(entityId, key)
             }
         }
@@ -88,11 +93,10 @@ class VariableSystem : Variables() {
     override fun <T : Any> has(entityId: Int, key: String, id: T): Boolean {
         val store = variableStoreMapper.get(entityId) ?: return false
         val variable = variables[key] as? BitwiseVariable<T> ?: return false
-
-        val power = variable.getPower(id) ?: return false
+        val operand = variable.getValue(id) ?: return false
         val value = store.get(variable)
 
-        return value.has(power)
+        return value.has(operand)
     }
 
     @Subscribe
@@ -161,13 +165,18 @@ class VariableSystem : Variables() {
 
         /**
          * Sets [VariableStore] value, removes if [variable] default
+         * @return whether the value was changed
          */
-        private fun <T : Any> VariableStore.set(variable: Variable<T>, value: T) {
+        private fun <T : Any> VariableStore.set(variable: Variable<T>, value: T): Boolean {
+            val changed: Boolean
             if (value == variable.defaultValue) {
+                changed = values.containsKey(variable.hash)
                 values.remove(variable.hash)
             } else {
+                changed = values.getOrDefault(variable.hash, variable.defaultValue) != value
                 values[variable.hash] = value
             }
+            return changed
         }
 
         /**

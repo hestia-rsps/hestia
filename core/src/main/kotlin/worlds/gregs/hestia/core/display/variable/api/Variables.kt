@@ -31,6 +31,8 @@ abstract class Variables : SubscriptionSystem(Aspect.all(VariableStore::class)) 
      */
     abstract fun <T : Any> get(entityId: Int, key: String, default: T): T
 
+    abstract fun <T : Any> get(entityId: Int, key: String): T?
+
     /**
      * Adds [id] value to [BitwiseVariable] [key]
      * @param entityId The entity id who's bitwise variable to change

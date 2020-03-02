@@ -12,6 +12,7 @@ import worlds.gregs.hestia.core.display.interfaces.model.events.request.OpenInte
 import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceInteraction
 import worlds.gregs.hestia.core.display.variable.model.events.SetVariable
 import worlds.gregs.hestia.core.display.variable.model.variable.IntVariable
+import worlds.gregs.hestia.core.display.variable.model.variable.ListVariable
 import worlds.gregs.hestia.core.display.variable.model.variable.StringMapVariable
 import worlds.gregs.hestia.core.display.variable.model.variable.StringVariable
 import worlds.gregs.hestia.core.entity.item.container.model.Item
@@ -24,24 +25,24 @@ import worlds.gregs.hestia.core.task.api.Tasks
 IntVariable(8094, Variable.Type.VARBIT, true, 1).register("skill_creation_maximum")
 IntVariable(8095, Variable.Type.VARBIT, true, 1).register("skill_creation_amount")
 
-StringMapVariable(754, Variable.Type.VARC, values = mapOf(
-        0 to "Make",
-        1 to "Make sets",//No "all"
-        2 to "Cook",
-        3 to "Roast",
-        4 to "Offer",
-        5 to "Sell",
-        6 to "Bake",
-        7 to "Cut",
-        8 to "Deposit",
-        9 to "Make2",//No "all"
-        10 to "Teleport",
-        11 to "Select",
-        12 to "Make sets2",//No "all"
-        13 to "Take",
-        14 to "Return",
-        15 to "Heat",
-        16 to "Add"
+ListVariable(754, Variable.Type.VARC, values = listOf(
+        "Make",
+        "Make sets",//No "all"
+        "Cook",
+        "Roast",
+        "Offer",
+        "Sell",
+        "Bake",
+        "Cut",
+        "Deposit",
+        "Make2",//No "all"
+        "Teleport",
+        "Select",
+        "Make sets2",//No "all"
+        "Take",
+        "Return",
+        "Heat",
+        "Add"
 )).register("skill_creation_type")
 
 IntVariable(755, Variable.Type.VARC, defaultValue = -1).register("skill_creation_item_0")

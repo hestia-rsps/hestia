@@ -10,13 +10,13 @@ import worlds.gregs.hestia.network.client.encoders.messages.InterfaceSettings
 import worlds.gregs.hestia.core.script.on
 
 StringMapVariable(465, Variable.Type.VARP, true, mapOf(
-        0 to "locked",
-        7 to "unlocked"
+        "locked" to 0,
+        "unlocked" to 7
 )).register("lost_tribe_emotes")
 
 StringMapVariable(1085, Variable.Type.VARP, true, mapOf(
-        0 to "locked",
-        249852 to "unlocked"
+        "locked" to 0,
+        "unlocked" to 249852
 )).register("zombie_hand_emote")
 
 BitwiseVariable(802, Variable.Type.VARP, true, values = listOf(

@@ -11,6 +11,7 @@ import worlds.gregs.hestia.core.display.variable.api.Variable
 import worlds.gregs.hestia.core.display.variable.api.Variables
 import worlds.gregs.hestia.core.display.variable.model.events.SendVariable
 import worlds.gregs.hestia.core.display.variable.model.events.SetVariable
+import worlds.gregs.hestia.core.display.variable.model.variable.ListVariable
 import worlds.gregs.hestia.core.display.variable.model.variable.StringMapVariable
 import worlds.gregs.hestia.core.entity.entity.model.components.Blackboard
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
@@ -25,10 +26,10 @@ import worlds.gregs.hestia.core.world.movement.model.components.RunToggled
 import worlds.gregs.hestia.core.world.movement.model.events.Follow
 
 StringMapVariable(173, Variable.Type.VARP, true, mapOf(
-        0 to "walking",
-        1 to "running",
-        3 to "resting",
-        4 to "resting_at_musician"
+        "walking" to 0,
+        "running" to 1,
+        "resting" to 3,
+        "resting_at_musician" to 4
 )).register("energy_orb")
 
 lateinit var variables: Variables
