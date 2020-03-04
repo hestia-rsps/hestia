@@ -140,18 +140,6 @@ class VariableSystem : Variables() {
         val variables = mutableMapOf<Int, Variable<*>>()
 
         /**
-         * Checks a [BitwiseVariable] for [id] value
-         * @return pow(2, index) or null if not found
-         */
-        private fun <T : Any> BitwiseVariable<T>.getPower(id: T): Int? {
-            val index = values.indexOf(id)
-            if (index == -1) {
-                return null//Invalid value
-            }
-            return 1 shl index//Return power of 2 of the index
-        }
-
-        /**
          * Checks if value [this] contains value [power]
          */
         private fun Int.has(power: Int) = (this and power) != 0
