@@ -2,8 +2,8 @@ import com.github.jengelman.gradle.plugins.shadow.tasks.ShadowJar
 import net.onedaybeard.gradle.ArtemisWeavingTask
 
 plugins {
-    kotlin("jvm") version "1.3.61"
-    kotlin("kapt") version "1.3.61"
+    kotlin("jvm") version "1.3.70"
+    kotlin("kapt") version "1.3.70"
     id("com.github.johnrengelman.shadow") version "5.2.0"
     idea
 }
