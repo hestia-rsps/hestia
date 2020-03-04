@@ -11,8 +11,8 @@ class Blackboard : Component() {
     }
 
     @Suppress("UNCHECKED_CAST")
-    fun <T> getUnsafe(key: String): T? {
-        return (map[key] as? T)
+    fun <T> getOrNull(key: String): T? {
+        return map[key] as? T
     }
 
     fun has(key: String) = map.containsKey(key)
