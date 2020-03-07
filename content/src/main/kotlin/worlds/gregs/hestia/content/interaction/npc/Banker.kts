@@ -1,24 +1,24 @@
 package worlds.gregs.hestia.content.interaction.npc
 
+import worlds.gregs.hestia.core.action.model.EntityActions
+import worlds.gregs.hestia.core.action.model.NpcOption
+import worlds.gregs.hestia.core.action.logic.systems.on
 import worlds.gregs.hestia.core.display.client.model.events.Chat
 import worlds.gregs.hestia.core.display.update.model.components.direction.Watch
-import worlds.gregs.hestia.core.entity.npc.model.events.NpcOption
 import worlds.gregs.hestia.core.display.dialogue.api.Dialogue.Companion.FIRST
 import worlds.gregs.hestia.core.display.dialogue.api.Dialogue.Companion.FOURTH
 import worlds.gregs.hestia.core.display.dialogue.api.Dialogue.Companion.SECOND
 import worlds.gregs.hestia.core.display.dialogue.api.Dialogue.Companion.THIRD
 import worlds.gregs.hestia.core.task.model.await.WithinRange
 import worlds.gregs.hestia.core.world.movement.model.events.Follow
-import worlds.gregs.hestia.core.script.on
 
-on<NpcOption> {
-    where { option == "Talk-to" && name == "Banker" }
-    fun NpcOption.task() = strongQueue {
+on(NpcOption, "Talk-to", "Banker") { ->
+    fun EntityActions.task(npc: Int) = strongQueue {
         entity perform Follow(npc)
         val within = await(WithinRange(npc, 2))
         entity perform Follow(-1)
 
-        if(!within) {
+        if (!within) {
             entity perform Chat("You can't reach that.")
             return@strongQueue
         }
@@ -67,5 +67,5 @@ on<NpcOption> {
             }
         }
     }
-    then(NpcOption::task)
+    then(EntityActions::task)
 }

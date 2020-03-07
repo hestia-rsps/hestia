@@ -8,11 +8,11 @@ import worlds.gregs.hestia.content.activity.combat.prayer.PrayerConfigs.SELECTIN
 import worlds.gregs.hestia.content.activity.combat.prayer.PrayerConfigs.TEMP_QUICK_PRAYERS
 import worlds.gregs.hestia.content.activity.combat.prayer.PrayerConfigs.USING_QUICK_PRAYERS
 import worlds.gregs.hestia.content.display.Tabs.PrayerListTab
-import worlds.gregs.hestia.core.action.model.EntityAction
+import worlds.gregs.hestia.core.action.model.EntityActions
+import worlds.gregs.hestia.core.action.model.InterfaceOption
 import worlds.gregs.hestia.core.display.client.model.events.DisconnectClient
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.PrayerList
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.PrayerOrb
-import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceInteraction
 import worlds.gregs.hestia.core.display.variable.api.Variable
 import worlds.gregs.hestia.core.display.variable.api.Variables
 import worlds.gregs.hestia.core.display.variable.model.events.AddVariable
@@ -24,6 +24,7 @@ import worlds.gregs.hestia.core.entity.entity.model.components.Blackboard
 import worlds.gregs.hestia.core.entity.player.model.components.update.HeadIcon
 import worlds.gregs.hestia.core.entity.player.model.events.UpdateAppearance
 import worlds.gregs.hestia.core.script.on
+import worlds.gregs.hestia.core.action.logic.systems.on
 import worlds.gregs.hestia.game.plugin.init
 import worlds.gregs.hestia.network.client.encoders.messages.InterfaceSettings
 import worlds.gregs.hestia.service.cache.config.systems.StrutDefinitionSystem
@@ -86,28 +87,22 @@ init {
 }
 
 // Prayer activate/deactivate
-on<InterfaceInteraction> {
-    where { id == PrayerList && component == 8 }
-    then {
-        val curses = isCurses()
-        val key = if (curses) ACTIVE_CURSES else ACTIVE_PRAYERS
-        togglePrayer(second, key)
-        update(curses, key)
-    }
+on(InterfaceOption, PrayerList, components = *intArrayOf(8)) { _, _, second, _ ->
+    val curses = isCurses()
+    val key = if (curses) ACTIVE_CURSES else ACTIVE_PRAYERS
+    togglePrayer(second, key)
+    update(curses, key)
 }
 
 // Quick prayer activate/deactivate
-on<InterfaceInteraction> {
-    where { id == PrayerList && component == 42 }
-    then {
-        togglePrayer(second, if (isCurses()) QUICK_CURSES else QUICK_PRAYERS)
-    }
+on(InterfaceOption, PrayerList, components = *intArrayOf(42)) { _, _, second, _ ->
+    togglePrayer(second, if (isCurses()) QUICK_CURSES else QUICK_PRAYERS)
 }
 
-fun InterfaceInteraction.togglePrayer(prayerIndex: Int, listKey: String) {
+fun EntityActions.togglePrayer(prayerIndex: Int, listKey: String) {
     val curses = isCurses()
     val params = getPrayerParameters(prayerIndex, if (curses) curseEnumId else prayerEnumId)
-    val name = getPrayerName(params) ?: return logger.warn("Unable to find prayer button $id $component $second")
+    val name = getPrayerName(params) ?: return logger.warn("Unable to find prayer button $prayerIndex $listKey $params")
     val activated = variables.has(entity, listKey, name)
     if (activated) {
         entity perform RemoveVariable(listKey, name)
@@ -125,19 +120,19 @@ fun InterfaceInteraction.togglePrayer(prayerIndex: Int, listKey: String) {
     }
 }
 
-fun EntityAction.update(curses: Boolean, listKey: String) {
+fun EntityActions.update(curses: Boolean, listKey: String) {
     //TODO update stats
     val changed = if (curses) {
         setCurseIcon(listKey)
     } else {
         setPrayerIcon(listKey)
     }
-    if(changed) {
+    if (changed) {
         entity perform UpdateAppearance()
     }
 }
 
-fun EntityAction.setCurseIcon(listKey: String): Boolean {
+fun EntityActions.setCurseIcon(listKey: String): Boolean {
     val headIcon = entity create HeadIcon::class
     var value = -1
     when {
@@ -159,14 +154,14 @@ fun EntityAction.setCurseIcon(listKey: String): Boolean {
             }
         }
     }
-    if(headIcon.headIcon != value) {
+    if (headIcon.headIcon != value) {
         headIcon.headIcon = value
         return true
     }
     return false
 }
 
-fun EntityAction.setPrayerIcon(listKey: String): Boolean {
+fun EntityActions.setPrayerIcon(listKey: String): Boolean {
     val headIcon = entity create HeadIcon::class
     var value = -1
     when {
@@ -186,7 +181,7 @@ fun EntityAction.setPrayerIcon(listKey: String): Boolean {
             }
         }
     }
-    if(headIcon.headIcon != value) {
+    if (headIcon.headIcon != value) {
         headIcon.headIcon = value
         return true
     }
@@ -194,54 +189,45 @@ fun EntityAction.setPrayerIcon(listKey: String): Boolean {
 }
 
 // Select quick prayers
-on<InterfaceInteraction> {
-    where { id == PrayerOrb && component == 1 && option == 2 }
-    then {
-        entity perform ToggleVariable(SELECTING_QUICK_PRAYERS)
-        val selecting = variables.get(entity, SELECTING_QUICK_PRAYERS, false)
-        val blackboard = entity get Blackboard::class
-        val curses = isCurses()
-        if (selecting) {
-            entity perform SetVariable("tab", PrayerListTab)
-            blackboard[TEMP_QUICK_PRAYERS] = variables.get(entity, if (curses) QUICK_CURSES else QUICK_PRAYERS, 0)
-        } else if (blackboard.has(TEMP_QUICK_PRAYERS)) {
-            cancelQuickPrayers(curses)
-        }
-        entity send InterfaceSettings(PrayerList, if (selecting) 42 else 8, 0, 29, 2)
+on(InterfaceOption, "Select Quick Prayers", id = PrayerOrb) { _, _, _, _ ->
+    entity perform ToggleVariable(SELECTING_QUICK_PRAYERS)
+    val selecting = variables.get(entity, SELECTING_QUICK_PRAYERS, false)
+    val blackboard = entity get Blackboard::class
+    val curses = isCurses()
+    if (selecting) {
+        entity perform SetVariable("tab", PrayerListTab)
+        blackboard[TEMP_QUICK_PRAYERS] = variables.get(entity, if (curses) QUICK_CURSES else QUICK_PRAYERS, 0)
+    } else if (blackboard.has(TEMP_QUICK_PRAYERS)) {
+        cancelQuickPrayers(curses)
     }
+    entity send InterfaceSettings(PrayerList, if (selecting) 42 else 8, 0, 29, 2)
 }
 
 // Toggle quick prayers
-on<InterfaceInteraction> {
-    where { id == PrayerOrb && component == 1 && option == 1 }
-    then {
-        entity perform ToggleVariable(USING_QUICK_PRAYERS)
-        val active = variables.get(entity, USING_QUICK_PRAYERS, false)
-        val curses = isCurses()
-        val activePrayers = if (curses) ACTIVE_CURSES else ACTIVE_PRAYERS
-        if (active) {
-            //If selecting others we want to toggle the old ones until otherwise confirmed
-            val blackboard = entity get Blackboard::class
-            val quickPrayers = blackboard.getOrNull(TEMP_QUICK_PRAYERS)
-                    ?: variables.get(entity, if (curses) QUICK_CURSES else QUICK_PRAYERS, 0)
-            if (quickPrayers > 0) {
-                entity perform SetVariable(activePrayers, quickPrayers)
-            }
-        } else {
-            entity perform SetVariable(activePrayers, 0)
+on(InterfaceOption, "Turn Quick Prayers On", id = PrayerOrb) { _, _, _, _ ->
+    entity perform ToggleVariable(USING_QUICK_PRAYERS)
+    val active = variables.get(entity, USING_QUICK_PRAYERS, false)
+    val curses = isCurses()
+    val activePrayers = if (curses) ACTIVE_CURSES else ACTIVE_PRAYERS
+    if (active) {
+        //If selecting others we want to toggle the old ones until otherwise confirmed
+        val blackboard = entity get Blackboard::class
+        val quickPrayers = blackboard.getOrNull(TEMP_QUICK_PRAYERS)
+                ?: variables.get(entity, if (curses) QUICK_CURSES else QUICK_PRAYERS, 0)
+        if (quickPrayers > 0) {
+            entity perform SetVariable(activePrayers, quickPrayers)
         }
-        update(curses, activePrayers)
+    } else {
+        entity perform SetVariable(activePrayers, 0)
     }
+    update(curses, activePrayers)
 }
 
 // Confirm quick prayers
-on<InterfaceInteraction> {
-    where { id == PrayerList && component == 43 }
-    then {
-        entity perform SetVariable(SELECTING_QUICK_PRAYERS, false)
-        val blackboard = entity get Blackboard::class
-        blackboard.remove(TEMP_QUICK_PRAYERS)
-    }
+on(InterfaceOption, "Confirm Selection", id = PrayerList) { _, _, _, _ ->
+    entity perform SetVariable(SELECTING_QUICK_PRAYERS, false)
+    val blackboard = entity get Blackboard::class
+    blackboard.remove(TEMP_QUICK_PRAYERS)
 }
 
 // Cancel quick prayers
@@ -252,7 +238,7 @@ on<DisconnectClient> {
     }
 }
 
-fun EntityAction.cancelQuickPrayers(curses: Boolean) {
+fun EntityActions.cancelQuickPrayers(curses: Boolean) {
     val blackboard = entity get Blackboard::class
     entity perform SetVariable(if (curses) QUICK_CURSES else QUICK_PRAYERS, blackboard.get(TEMP_QUICK_PRAYERS, 0))
     blackboard.remove(TEMP_QUICK_PRAYERS)
@@ -268,4 +254,4 @@ fun getPrayerName(params: HashMap<Long, Any>?): String? {
     return nameRegex.find(description)?.groupValues?.lastOrNull()
 }
 
-fun EntityAction.isCurses(): Boolean = variables.get<String>(entity, PRAYERS) == "curses"
+fun EntityActions.isCurses(): Boolean = variables.get<String>(entity, PRAYERS) == "curses"

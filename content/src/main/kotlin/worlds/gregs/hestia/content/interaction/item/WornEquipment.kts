@@ -1,14 +1,11 @@
 package worlds.gregs.hestia.content.interaction.item
 
-import com.artemis.ComponentMapper
-import worlds.gregs.hestia.core.action.model.EntityAction
 import worlds.gregs.hestia.core.display.client.model.events.Chat
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.EquipmentBonuses
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.ItemsKeptOnDeath
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.PriceChecker
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.WornEquipment
 import worlds.gregs.hestia.core.display.interfaces.model.events.request.OpenInterface
-import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceInteraction
 import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceOpened
 import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceRefresh
 import worlds.gregs.hestia.core.entity.item.container.api.ItemResult
@@ -21,11 +18,17 @@ import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Comp
 import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.SLOT_RING
 import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.SLOT_LEGS
 import world.gregs.hestia.cache.definition.definitions.ItemDefinition
+import worlds.gregs.hestia.core.action.logic.systems.getInterfaceComponentId
+import worlds.gregs.hestia.core.action.model.*
 import worlds.gregs.hestia.core.entity.item.container.logic.ContainerSystem
+import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.SLOT_ARROWS
 import worlds.gregs.hestia.core.entity.item.container.logic.add
 import worlds.gregs.hestia.core.entity.item.container.logic.remove
 import worlds.gregs.hestia.core.entity.item.container.model.ContainerType
 import worlds.gregs.hestia.core.script.on
+
+lateinit var containers: ContainerSystem
+lateinit var definitions: ItemDefinitionSystem
 
 on<InterfaceOpened> {
     where { id == WornEquipment }
@@ -46,40 +49,34 @@ fun EntityAction.sendItems() {
     entity send InterfaceItems(94, items)
 }
 
-lateinit var containers: ContainerSystem
-lateinit var definitions: ItemDefinitionSystem
-
-on<InterfaceInteraction> {
-    where { id == WornEquipment }
-    then {
-        when(component) {
-            8, 11, 14, 17, 20, 23, 26, 29, 32, 35, 38, 50 -> {
-                val slot = when (component) {
-                    50 -> SLOT_AURA
-                    35 -> SLOT_RING
-                    32 -> SLOT_FEET
-                    29 -> SLOT_HANDS
-                    26 -> SLOT_LEGS
-                    else -> (component - 8) / 3
-                }
-                val item = (entity container ContainerType.EQUIPMENT).getOrNull(slot) ?: return@then
-                val definition = definitions.get(item.type)
-                var equipOption = definition.getEquipOption(option - 2) ?: definition.options.getOrNull(option) ?: if(option == 8) "Examine" else throw IllegalArgumentException("Unhandled equipment option $item - $option")
-                if(equipOption == "Wield" || equipOption == "Wear") {
-                    equipOption = "Remove"
-                }
-                entity perform EquipmentAction(item, slot, equipOption)
-            }
-            39 -> entity perform OpenInterface(EquipmentBonuses)
-            42 -> entity perform OpenInterface(PriceChecker)
-            45 -> entity perform OpenInterface(ItemsKeptOnDeath)
-        }
-    }
+worlds.gregs.hestia.core.action.logic.systems.on(InterfaceOption, "Show Equipment Stats", id = WornEquipment) { _, _, _, _ ->
+    entity perform OpenInterface(EquipmentBonuses)
 }
 
+worlds.gregs.hestia.core.action.logic.systems.on(InterfaceOption, "Show Price-checker", id = WornEquipment) { _, _, _, _ ->
+    entity perform OpenInterface(PriceChecker)
+}
 
-fun ItemDefinition.getEquipOption(optionId: Int): String? {
-    return params?.getOrDefault(528L + optionId, null) as? String
+worlds.gregs.hestia.core.action.logic.systems.on(InterfaceOption, "Show Items Kept on Death", id = WornEquipment) { _, _, _, _ ->
+    entity perform OpenInterface(ItemsKeptOnDeath)
+}
+
+worlds.gregs.hestia.core.action.logic.systems.on(InterfaceOption, "*", id = WornEquipment) { hash, _, _, option ->
+    val slot = getSlot(hash)
+    val item = (entity container ContainerType.EQUIPMENT).getOrNull(slot) ?: return@on
+    val definition = definitions.get(item.type)
+    var equipOption = definition.getEquipOption(option - 2) ?: definition.options.getOrNull(option)
+    ?: throw IllegalArgumentException("Unhandled equipment option $item - $option")
+    if (equipOption == "Wield" || equipOption == "Wear") {
+        equipOption = "Remove"
+    }
+    entity perform EquipmentAction(item, slot, equipOption)
+}
+
+worlds.gregs.hestia.core.action.logic.systems.on(InterfaceOption, option = 8, id = WornEquipment) { hash, _, _, _ ->
+    val slot = getSlot(hash)
+    val item = (entity container ContainerType.EQUIPMENT).getOrNull(slot) ?: return@on
+    entity perform EquipmentAction(item, slot, "Examine")
 }
 
 on<EquipmentAction> {
@@ -96,4 +93,18 @@ on<EquipmentAction> {
             }
         }
     }
+}
+
+fun getSlot(hash: Int) = when (val component = getInterfaceComponentId(hash)) {
+    50 -> SLOT_AURA
+    38 -> SLOT_ARROWS
+    35 -> SLOT_RING
+    32 -> SLOT_FEET
+    29 -> SLOT_HANDS
+    26 -> SLOT_LEGS
+    else -> (component - 8) / 3
+}
+
+fun ItemDefinition.getEquipOption(optionId: Int): String? {
+    return params?.getOrDefault(528L + optionId, null) as? String
 }

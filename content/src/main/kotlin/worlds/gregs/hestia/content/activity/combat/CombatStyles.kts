@@ -1,10 +1,12 @@
 package worlds.gregs.hestia.content.activity.combat
 
 import worlds.gregs.hestia.core.action.model.EntityAction
+import worlds.gregs.hestia.core.action.model.InterfaceOption
+import worlds.gregs.hestia.core.action.logic.systems.getInterfaceComponentId
+import worlds.gregs.hestia.core.action.logic.systems.on
 import worlds.gregs.hestia.core.display.variable.api.Variable
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.CombatStyles
 import worlds.gregs.hestia.core.display.variable.model.events.SetVariable
-import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceInteraction
 import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceOpened
 import worlds.gregs.hestia.core.display.variable.model.variable.IntVariable
 import worlds.gregs.hestia.core.script.on
@@ -19,17 +21,16 @@ on<InterfaceOpened> {
     }
 }
 
-on<InterfaceInteraction> {
-    where { id == CombatStyles }
-    then {
-        when (component) {
-            4 -> {//Special attack bar
-            }
-            in 11..14 -> entity perform SetVariable("combat_style", component - 11)//Attack style
-            15 -> {//Auto retaliate
-            }
+on(InterfaceOption, option = 1, id = CombatStyles, components = *intArrayOf(4, 11, 12, 13, 14)) { hash, _, _, _ ->
+    when (val component = getInterfaceComponentId(hash)) {
+        4 -> {//Special attack bar
         }
+        in 11..14 -> entity perform SetVariable("combat_style", component - 11)//Attack style
     }
+}
+
+on(InterfaceOption, "Auto Retaliate", id = CombatStyles) { _, _, _, _ ->
+
 }
 
 fun EntityAction.toggle(unlock: Boolean) {

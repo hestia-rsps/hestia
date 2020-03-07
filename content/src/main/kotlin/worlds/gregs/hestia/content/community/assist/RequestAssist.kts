@@ -4,7 +4,8 @@ import world.gregs.hestia.core.network.protocol.encoders.messages.InterfaceCompo
 import world.gregs.hestia.core.services.plural
 import worlds.gregs.hestia.content.activity.skill.Experience
 import worlds.gregs.hestia.content.activity.skill.Skill
-import worlds.gregs.hestia.core.action.model.EntityAction
+import worlds.gregs.hestia.core.action.logic.systems.getInterfaceComponentId
+import worlds.gregs.hestia.core.action.model.*
 import worlds.gregs.hestia.core.display.client.model.events.Chat
 import worlds.gregs.hestia.core.display.dialogue.model.ChatType.GameAssist
 import worlds.gregs.hestia.core.display.update.model.components.DisplayName
@@ -15,15 +16,12 @@ import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.Assi
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.FilterButtons
 import worlds.gregs.hestia.core.display.request.logic.RequestSystem
 import worlds.gregs.hestia.core.display.request.model.FilterMode
-import worlds.gregs.hestia.core.display.interfaces.model.PlayerOptions.ASSIST
 import worlds.gregs.hestia.core.display.request.model.Request
 import worlds.gregs.hestia.core.display.interfaces.model.events.request.CloseInterface
 import worlds.gregs.hestia.core.display.request.model.components.Assistance
 import worlds.gregs.hestia.core.display.request.model.components.Assisting
 import worlds.gregs.hestia.core.display.request.model.events.AcceptedRequest
-import worlds.gregs.hestia.core.display.interfaces.model.events.PlayerOption
 import worlds.gregs.hestia.core.display.request.model.events.RequestResponse
-import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceInteraction
 import worlds.gregs.hestia.core.display.variable.model.events.SetVariable
 import worlds.gregs.hestia.core.display.variable.model.events.ToggleVariable
 import worlds.gregs.hestia.core.display.variable.model.variable.BooleanVariable
@@ -63,9 +61,8 @@ IntVariable(1088, Variable.Type.VARP, true).register("total_xp_earned")//Same as
 
 lateinit var variables: Variables
 
-on<PlayerOption> {
-    where { option == ASSIST }
-    fun PlayerOption.task() = strongQueue {
+worlds.gregs.hestia.core.action.logic.systems.on(PlayerOption, "Req Assist") { ->
+    fun EntityActions.task(target: Int) = strongQueue {
         val assisting = entity get Assisting::class
         //Delayed requesting
         val lastRequest = Engine.ticks - assisting.lastRequest
@@ -88,14 +85,14 @@ on<PlayerOption> {
         val within = await(WithinRange(target, 1))
         entity perform Follow(-1)
 
-        if(!within) {
+        if (!within) {
             entity perform Chat("You can't reach that.")
             return@strongQueue
         }
         system(RequestSystem::class).sendRequest(entity, target, Request.ASSIST)
         assisting.lastRequest = Engine.ticks
     }
-    then(PlayerOption::task)
+    then(EntityActions::task)
 }
 
 //The assistance requester
@@ -138,12 +135,10 @@ on<AcceptedRequest> {
 }
 
 //Handle skill toggling
-on<InterfaceInteraction> {
-    where { id == AssistXP && component in 74..82 }
-    then {
-        val index = component - 74
-        entity perform ToggleVariable("assist_toggle_$index")
-    }
+worlds.gregs.hestia.core.action.logic.systems.on(InterfaceOption, "Toggle Skill On / Off", id = AssistXP) { hash, _, _, _ ->
+    val component = getInterfaceComponentId(hash)
+    val index = component - 74
+    entity perform ToggleVariable("assist_toggle_$index")
 }
 
 //Check if assisted player moves outside of range
@@ -165,30 +160,33 @@ on<Moved> {
     }
 }
 
-//Filter button handling
-on<InterfaceInteraction> {
-    where { id == FilterButtons && component == 16 }
-    then {
-        val assisting = entity get Assisting::class
-        when (option) {
-            1 -> {//View
-            }
-            2 -> assisting.mode = FilterMode.On
-            3 -> assisting.mode = FilterMode.Friends
-            4 -> assisting.mode = FilterMode.Off
-            9 -> {//Xp Earned/Time
-                update(assisting)
-                val earned = variables.get(entity, "total_xp_earned", 0)
-                if (earned >= maximumExperience) {
-                    val hours = assisting.getHoursRemaining()
-                    entity perform Chat("You've earned the maximum XP (30,000 Xp) from the Assist System within a 24-hour period.", GameAssist)
-                    entity perform Chat("You can assist again in $hours ${"hour".plural(hours)}.", GameAssist)
-                } else {
-                    entity perform Chat("You have earned $earned Xp. The Assist system is available to you.", GameAssist)
-                }
-            }
-        }
+// Filter button handling
+worlds.gregs.hestia.core.action.logic.systems.on(InterfaceOption, "XP Earned/Time", id = FilterButtons) { _, _, _, _ ->
+    val assisting = entity get Assisting::class
+    update(assisting)
+    val earned = variables.get(entity, "total_xp_earned", 0)
+    if (earned >= maximumExperience) {
+        val hours = assisting.getHoursRemaining()
+        entity perform Chat("You've earned the maximum XP (30,000 Xp) from the Assist System within a 24-hour period.", GameAssist)
+        entity perform Chat("You can assist again in $hours ${"hour".plural(hours)}.", GameAssist)
+    } else {
+        entity perform Chat("You have earned $earned Xp. The Assist system is available to you.", GameAssist)
     }
+}
+
+worlds.gregs.hestia.core.action.logic.systems.on(InterfaceOption, "On Assist", id = FilterButtons) { _, _, _, _ ->
+    val assisting = entity get Assisting::class
+    assisting.mode = FilterMode.On
+}
+
+worlds.gregs.hestia.core.action.logic.systems.on(InterfaceOption, "Friends Assist", id = FilterButtons) { _, _, _, _ ->
+    val assisting = entity get Assisting::class
+    assisting.mode = FilterMode.Friends
+}
+
+worlds.gregs.hestia.core.action.logic.systems.on(InterfaceOption, "Off Assist", id = FilterButtons) { _, _, _, _ ->
+    val assisting = entity get Assisting::class
+    assisting.mode = FilterMode.Off
 }
 
 //Intercepting xp
@@ -227,7 +225,7 @@ fun Assisting.getHoursRemaining(): Int {
 /**
  * Checks to see if the 24 hour timeout has passed
  */
-fun EntityAction.update(assisting: Assisting) {
+fun EntityActions.update(assisting: Assisting) {
     if (assisting.timeout <= 0) {
         return
     }

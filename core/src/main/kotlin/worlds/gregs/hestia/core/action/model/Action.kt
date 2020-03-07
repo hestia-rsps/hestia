@@ -9,10 +9,10 @@ import world.gregs.hestia.core.network.codec.message.Message
 import worlds.gregs.hestia.core.task.api.SuspendableQueue
 import kotlin.reflect.KClass
 
-interface Action : Event {
+interface Action {
     var world: World
 
-    fun perform(action: Action)
+    fun perform(action: Event)
 
     infix fun Int.send(message: Message)
 
@@ -40,11 +40,6 @@ interface Action : Event {
      * Starts a suspendable task
      */
     fun task(priority: Int = 0, action: SuspendableQueue) : EntityAction
-
-    /**
-     * A strong task clears all tasks with the same or lower priority
-     */
-    fun strongTask(priority: Int = 1, action: SuspendableQueue) : EntityAction
 
     fun log(message: String)
 

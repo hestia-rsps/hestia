@@ -1,6 +1,7 @@
 package worlds.gregs.hestia.core.task.logic.systems
 
 import com.artemis.ComponentMapper
+import net.mostlyoriginal.api.event.common.Event
 import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.event.common.Subscribe
 import worlds.gregs.hestia.core.action.model.Action
@@ -68,7 +69,7 @@ class TaskSystem : Tasks() {
         if(taskQueue.needsUpdate) {
             taskQueue.needsUpdate = false
             if(suspension is Resendable) {
-                (suspension as? Action)?.perform(suspension)
+                (suspension as? Action)?.perform(suspension as Event)
             }
         }
     }

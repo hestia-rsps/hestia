@@ -9,9 +9,11 @@ class StrutDefinitions {
         fun main(args: Array<String>) {
             val store = CacheLibrary("../hestia/data/cache")
             val reader = StrutDefinitionReader(store)
+
+            println(reader.size)
             repeat(reader.size) { id ->
                 val strut = reader.get(id)
-                println(strut.params)
+                println("$id ${strut.params}")
             }
         }
     }

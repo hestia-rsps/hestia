@@ -1,32 +1,37 @@
 package worlds.gregs.hestia.content.display.main
 
+import worlds.gregs.hestia.core.action.model.InterfaceOption
+import worlds.gregs.hestia.core.action.logic.systems.on
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.GraphicsOptions
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.Options
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.SoundOptions
 import worlds.gregs.hestia.core.display.interfaces.model.events.request.OpenInterface
-import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceInteraction
-import worlds.gregs.hestia.core.script.on
 
-on<InterfaceInteraction> {
-    where { id == Options }
-    then {
-        when (component) {
-            14 -> entity perform OpenInterface(GraphicsOptions)
-            16 -> entity perform OpenInterface(SoundOptions)
-            6 -> {//Mouse buttons
-            }
-            3 -> {//Profanity filter
-            }
-            4 -> {//Chat effects
-            }
-            5 -> {//Chat setup
-            }
-            7 -> {//Accept aid
-            }
-            8 -> {//House options
-            }
-            18 -> {//Adventures log options
-            }
-        }
-    }
+on(InterfaceOption, "Graphics Settings", id = Options) { _, _, _, _ ->
+    entity perform OpenInterface(GraphicsOptions)
+}
+
+on(InterfaceOption, "Audio Settings", id = Options) { _, _, _, _ ->
+    entity perform OpenInterface(SoundOptions)
+}
+
+on(InterfaceOption, "Toggle Number of Mouse Buttons", id = Options) { _, _, _, _ ->
+}
+
+on(InterfaceOption, "Toggle Profanity Filter", id = Options) { _, _, _, _ ->
+}
+
+on(InterfaceOption, "Toggle Chat Effects", id = Options) { _, _, _, _ ->
+}
+
+on(InterfaceOption, "Open Chat Setup", id = Options) { _, _, _, _ ->
+}
+
+on(InterfaceOption, "Toggle Accept Aid", id = Options) { _, _, _, _ ->
+}
+
+on(InterfaceOption, "Open House Options", id = Options) { _, _, _, _ ->
+}
+
+on(InterfaceOption, "Adventurerﾒs Log Options", id = Options) { _, _, _, _ ->
 }

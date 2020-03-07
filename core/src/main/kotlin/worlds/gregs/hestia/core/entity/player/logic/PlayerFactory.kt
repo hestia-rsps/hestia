@@ -2,6 +2,7 @@ package worlds.gregs.hestia.core.entity.player.logic
 
 import com.artemis.ArchetypeBuilder
 import worlds.gregs.hestia.artemis.add
+import worlds.gregs.hestia.core.action.model.ActionContext
 import worlds.gregs.hestia.core.display.client.model.components.ClientIndex
 import worlds.gregs.hestia.core.display.client.model.components.LastLoadedRegion
 import worlds.gregs.hestia.core.display.client.model.components.Viewport
@@ -30,6 +31,6 @@ class PlayerFactory : ArchetypeFactory {
 
     override fun getBuilder(): ArchetypeBuilder {
         return ArchetypeBuilder().add(Player::class, ClientIndex::class, Renderable::class, Position::class, AppearanceData::class, DisplayName::class, Viewport::class, Mobile::class, LastLoadedRegion::class, Shift::class, Facing::class, Ghost::class, GameFrame::class,
-                TaskQueue::class, ContainerList::class, Member::class, InterfaceRelationships::class, ContextMenu::class, RequestList::class, Movement::class, Assisting::class, VariableStore::class, Blackboard::class)
+                TaskQueue::class, ContainerList::class, Member::class, InterfaceRelationships::class, ContextMenu::class, RequestList::class, Movement::class, Assisting::class, VariableStore::class, Blackboard::class, ActionContext::class)
     }
 }

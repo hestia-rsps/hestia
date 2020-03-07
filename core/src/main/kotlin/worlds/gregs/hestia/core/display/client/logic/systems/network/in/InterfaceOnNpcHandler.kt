@@ -33,6 +33,7 @@ class InterfaceOnNpcHandler : MessageHandlerSystem<InterfaceOnNpc>() {
             return logger.warn("Invalid interface on npc hash $message")
         }
 
+        //FIXME interface isn't always a container with a slot
         val container = containerSystem.getContainer(entityId, hash shr 16) ?: return logger.warn("Unhandled interface on npc $message")
         val item = container.getOrNull(slot)
 

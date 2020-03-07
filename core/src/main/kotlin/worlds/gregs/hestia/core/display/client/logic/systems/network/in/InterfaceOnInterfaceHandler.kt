@@ -14,7 +14,6 @@ class InterfaceOnInterfaceHandler : MessageHandlerSystem<InterfaceOnInterface>()
 
     private lateinit var es: EventSystem
 
-
     private lateinit var containerSystem: ContainerSystem
     private val logger = LoggerFactory.getLogger(InterfaceOnInterfaceHandler::class.java)!!
     private lateinit var interfaces: Interfaces

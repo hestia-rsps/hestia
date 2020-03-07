@@ -1,6 +1,8 @@
 package worlds.gregs.hestia.content.activity.skill
 
 import world.gregs.hestia.core.network.protocol.encoders.messages.InterfaceComponentText
+import worlds.gregs.hestia.core.action.model.InterfaceOption
+import worlds.gregs.hestia.core.action.logic.systems.getInterfaceComponentId
 import worlds.gregs.hestia.core.display.dialogue.model.events.ContinueDialogue
 import worlds.gregs.hestia.core.display.variable.api.Variable
 import worlds.gregs.hestia.core.display.variable.api.Variables
@@ -9,17 +11,16 @@ import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.Skil
 import worlds.gregs.hestia.core.display.interfaces.model.Window.DIALOGUE_BOX
 import worlds.gregs.hestia.core.display.interfaces.model.events.request.CloseWindow
 import worlds.gregs.hestia.core.display.interfaces.model.events.request.OpenInterface
-import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceInteraction
 import worlds.gregs.hestia.core.display.variable.model.events.SetVariable
 import worlds.gregs.hestia.core.display.variable.model.variable.IntVariable
 import worlds.gregs.hestia.core.display.variable.model.variable.ListVariable
-import worlds.gregs.hestia.core.display.variable.model.variable.StringMapVariable
 import worlds.gregs.hestia.core.display.variable.model.variable.StringVariable
 import worlds.gregs.hestia.core.entity.item.container.model.Item
 import worlds.gregs.hestia.network.client.encoders.messages.InterfaceSettings
 import worlds.gregs.hestia.network.client.encoders.messages.InterfaceVisibility
 import worlds.gregs.hestia.service.cache.definition.systems.ItemDefinitionSystem
 import worlds.gregs.hestia.core.script.on
+import worlds.gregs.hestia.core.action.logic.systems.on
 import worlds.gregs.hestia.core.task.api.Tasks
 
 IntVariable(8094, Variable.Type.VARBIT, true, 1).register("skill_creation_maximum")
@@ -91,7 +92,7 @@ on<SkillCreation> {
         repeat(10) { index ->
             val item = items.getOrNull(index) ?: -1
             entity perform SetVariable("skill_creation_item_$index", item)
-            if(item != -1) {
+            if (item != -1) {
                 entity perform SetVariable("skill_creation_name_$index", definitions.get(item).name)
             }
         }
@@ -103,29 +104,26 @@ on<SkillCreation> {
 }
 
 //Amount interface buttons
-on<InterfaceInteraction> {
-    where { id == SkillCreationAmount }
-    then {
-        when (component) {
-            5 -> entity perform SetVariable("skill_creation_amount", 1, false)
-            6 -> entity perform SetVariable("skill_creation_amount", 5, false)
-            7 -> entity perform SetVariable("skill_creation_amount", 10, false)
-            8 -> entity perform SetVariable("skill_creation_amount", variables.get(entity, "skill_creation_maximum", 1), false)//All
-            19 -> {//Increment
-                var current = variables.get(entity, "skill_creation_amount", 0)
-                val maximum = variables.get(entity, "skill_creation_maximum", 1)
-                if(++current > maximum) {
-                    current = maximum
-                }
-                entity perform SetVariable("skill_creation_amount", current)
+on(InterfaceOption, SkillCreationAmount) { hash, _, _, _ ->
+    when (getInterfaceComponentId(hash)) {
+        5 -> entity perform SetVariable("skill_creation_amount", 1, false)
+        6 -> entity perform SetVariable("skill_creation_amount", 5, false)
+        7 -> entity perform SetVariable("skill_creation_amount", 10, false)
+        8 -> entity perform SetVariable("skill_creation_amount", variables.get(entity, "skill_creation_maximum", 1), false)//All
+        19 -> {//Increment
+            var current = variables.get(entity, "skill_creation_amount", 0)
+            val maximum = variables.get(entity, "skill_creation_maximum", 1)
+            if (++current > maximum) {
+                current = maximum
             }
-            20 -> {//Decrement
-                var current = variables.get(entity, "skill_creation_amount", 0)
-                if(--current < 0) {
-                    current = 0
-                }
-                entity perform SetVariable("skill_creation_amount", current)
+            entity perform SetVariable("skill_creation_amount", current)
+        }
+        20 -> {//Decrement
+            var current = variables.get(entity, "skill_creation_amount", 0)
+            if (--current < 0) {
+                current = 0
             }
+            entity perform SetVariable("skill_creation_amount", current)
         }
     }
 }
@@ -136,9 +134,9 @@ on<ContinueDialogue> {
     then {
         val choice = option - 14
         val suspension = tasks.getSuspension(entity)
-        if(suspension is SkillCreation) {
+        if (suspension is SkillCreation) {
             val item = suspension.items.getOrNull(choice)
-            if(item == null) {
+            if (item == null) {
                 log("Invalid skill selection $choice $suspension")
                 return@then
             }

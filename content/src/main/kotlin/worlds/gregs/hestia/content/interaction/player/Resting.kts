@@ -1,23 +1,20 @@
 package worlds.gregs.hestia.content.interaction.player
 
 import com.artemis.ComponentMapper
-import worlds.gregs.hestia.core.action.model.EntityAction
+import worlds.gregs.hestia.core.action.logic.systems.on
+import worlds.gregs.hestia.core.action.model.*
 import worlds.gregs.hestia.core.display.client.model.events.Chat
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.EnergyOrb
-import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceInteraction
 import worlds.gregs.hestia.core.display.update.model.components.UpdateMovement
 import worlds.gregs.hestia.core.display.update.model.components.direction.Face
 import worlds.gregs.hestia.core.display.variable.api.Variable
 import worlds.gregs.hestia.core.display.variable.api.Variables
 import worlds.gregs.hestia.core.display.variable.model.events.SendVariable
 import worlds.gregs.hestia.core.display.variable.model.events.SetVariable
-import worlds.gregs.hestia.core.display.variable.model.variable.ListVariable
 import worlds.gregs.hestia.core.display.variable.model.variable.StringMapVariable
 import worlds.gregs.hestia.core.entity.entity.model.components.Blackboard
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.entity.model.events.Animation
-import worlds.gregs.hestia.core.entity.npc.model.events.NpcOption
-import worlds.gregs.hestia.core.script.on
 import worlds.gregs.hestia.core.task.api.TaskCancellation
 import worlds.gregs.hestia.core.task.model.await.Forever
 import worlds.gregs.hestia.core.task.model.await.Ticks
@@ -42,15 +39,14 @@ enum class RestType(val sit: Int, val stand: Int) {
     LEGS_STRAIGHT(2716, 2921)
 }
 
-on<NpcOption> {
-    where { option == "Listen-to" }
-    fun NpcOption.task() = strongQueue {
+worlds.gregs.hestia.core.action.logic.systems.on(NpcOption, "Listen-to", "Musician") { ->
+    fun EntityActions.task(npc: Int) = strongQueue {
         entity perform Follow(npc)
         val within = await(WithinRange(npc, 1))
         entity perform Follow(-1)
         entity perform Face(npc get Position::class)
 
-        if(!within) {
+        if (!within) {
             entity perform Chat("You can't reach that.")
             return@strongQueue
         }
@@ -59,47 +55,42 @@ on<NpcOption> {
         blackboard["unrest_state"] = current
         entity perform rest(true)
     }
-    then(NpcOption::task)
+    then(EntityActions::task)
 }
 
-on<InterfaceInteraction> {
-    where { id == EnergyOrb && component == 1 }
-    then {
-        val blackboard = entity get Blackboard::class
-        val current = variables.get(entity, "energy_orb", "walking")
-        when (option) {
-            //Toggle run
-            1 -> {
-                if (current == "walking" || current == "running") {
-                    val run = current == "walking"
-                    runToggledMapper.set(entity, run)
-                    updateMovementMapper.create(entity)
-                    entity perform SetVariable("energy_orb", if (run) {
-                        "running"
-                    } else {
-                        "walking"
-                    })
-                } else {
-                    blackboard["unrest_state"] = "running"
-                    runToggledMapper.set(entity, true)
-                    updateMovementMapper.create(entity)
-                    entity perform SendVariable("energy_orb")
-                }
-            }
-            2 -> {//Rest
-                blackboard["unrest_state"] = current
-                entity perform rest(false)
-            }
-        }
+on(InterfaceOption, "Turn Run mode on", id = EnergyOrb) { _, _, _, _ ->
+    val blackboard = entity get Blackboard::class
+    val current = variables.get(entity, "energy_orb", "walking")
+    if (current == "walking" || current == "running") {
+        val run = current == "walking"
+        runToggledMapper.set(entity, run)
+        updateMovementMapper.create(entity)
+        entity perform SetVariable("energy_orb", if (run) {
+            "running"
+        } else {
+            "walking"
+        })
+    } else {
+        blackboard["unrest_state"] = "running"
+        runToggledMapper.set(entity, true)
+        updateMovementMapper.create(entity)
+        entity perform SendVariable("energy_orb")
     }
 }
 
-fun EntityAction.rest(musician: Boolean) = strongTask {
+on(InterfaceOption, "Rest", id = EnergyOrb) { _, _, _, _ ->
+    val blackboard = entity get Blackboard::class
+    val current = variables.get(entity, "energy_orb", "walking")
+    blackboard["unrest_state"] = current
+    entity perform rest(false)
+}
+
+fun EntityActions.rest(musician: Boolean) = strongTask {
     val blackboard = entity get Blackboard::class
     //If cancelled then stand up
     onCancel {
         //If next task movement type is walking
-        val slowly = blackboard.getString("unrest_state") == "walking" || if(it is TaskCancellation.Walk) entity.get(Position::class).getDistance(Position(it.x, it.y)) <= 1 else false
+        val slowly = blackboard.getString("unrest_state") == "walking" || if (it is TaskCancellation.Walk) entity.get(Position::class).getDistance(Position(it.x, it.y)) <= 1 else false
         entity perform standUp(slowly)
     }
     //Choose a rest animation
@@ -113,13 +104,13 @@ fun EntityAction.rest(musician: Boolean) = strongTask {
     await(Forever)
 }
 
-fun EntityAction.standUp(slowly: Boolean) = task(2) {
+fun EntityActions.standUp(slowly: Boolean) = task(2) {
     val blackboard = entity get Blackboard::class
     //Perform stand up animation
     val animation = blackboard.getInt("stand_up_anim")
     entity await this perform Animation(animation)
     //Cancel animation quickly or slowly
-    if(slowly) {
+    if (slowly) {
         await(Ticks(1))
     }
     entity perform Animation(-1)

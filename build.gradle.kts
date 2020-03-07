@@ -62,8 +62,8 @@ allprojects {
 
     dependencies {
         //Systems
-        implementation("world.gregs.hestia:hestia-server-core:0.4.8")
-        implementation("world.gregs.hestia:hestia-cache-store:0.1.0")
+        implementation("world.gregs.hestia:hestia-server-core:0.4.10")
+        implementation("world.gregs.hestia:hestia-cache-store:0.1.2")
         implementation("com.displee:rs-cache-library:6.1")
         implementation("net.onedaybeard.artemis:artemis-odb-serializer:2.3.0")
         implementation("net.mostlyoriginal.artemis-odb:contrib-eventbus:2.4.0")
@@ -110,9 +110,11 @@ allprojects {
         }
         compileKotlin {
             kotlinOptions.jvmTarget = "1.8"
+            kotlinOptions.freeCompilerArgs = listOf("-XXLanguage:+InlineClasses")
         }
         compileTestKotlin {
             kotlinOptions.jvmTarget = "1.8"
+            kotlinOptions.freeCompilerArgs = listOf("-XXLanguage:+InlineClasses")
         }
     }
 
