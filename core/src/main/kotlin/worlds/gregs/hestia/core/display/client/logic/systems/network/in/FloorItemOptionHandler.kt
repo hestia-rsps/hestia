@@ -1,14 +1,13 @@
 package worlds.gregs.hestia.core.display.client.logic.systems.network.`in`
 
 import com.artemis.ComponentMapper
-import net.mostlyoriginal.api.event.common.EventSystem
 import org.slf4j.LoggerFactory
 import worlds.gregs.hestia.GameServer
-import worlds.gregs.hestia.core.action.model.perform
+import worlds.gregs.hestia.core.action.model.ActionContext
+import worlds.gregs.hestia.core.action.logic.systems.FloorItemOptionSystem
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.entity.model.components.Type
 import worlds.gregs.hestia.core.entity.item.floor.api.FloorItems
-import worlds.gregs.hestia.core.entity.item.floor.model.events.FloorItemOption
 import worlds.gregs.hestia.core.world.map.model.Chunk.toChunkPosition
 import worlds.gregs.hestia.game.entity.MessageHandlerSystem
 import worlds.gregs.hestia.network.client.decoders.messages.FloorItemOptionMessage
@@ -24,12 +23,13 @@ class FloorItemOptionHandler : MessageHandlerSystem<FloorItemOptionMessage>() {
     private lateinit var typeMapper: ComponentMapper<Type>
     private lateinit var positionMapper: ComponentMapper<Position>
     private lateinit var floorItems: FloorItems
-    private lateinit var es: EventSystem
     private lateinit var itemDefinitions: ItemDefinitionSystem
     private val logger = LoggerFactory.getLogger(FloorItemOptionHandler::class.java)!!
+    private lateinit var options: FloorItemOptionSystem
+    private lateinit var actionContextMapper: ComponentMapper<ActionContext>
 
     override fun handle(entityId: Int, message: FloorItemOptionMessage) {
-        val (id, run, y, x, option) = message
+        val (id, run, y, x, optionId) = message
         val position = positionMapper.get(entityId)
 
         val chunk = toChunkPosition(x shr 3, y shr 3, position.plane)
@@ -41,11 +41,13 @@ class FloorItemOptionHandler : MessageHandlerSystem<FloorItemOptionMessage>() {
 
         if(item != null) {
             val definition = itemDefinitions.get(id)
-            val action = definition.floorOptions.getOrNull(option - 1)
-            if(action != null) {
-                es.perform(entityId, FloorItemOption(item, action))
+            val optionString = definition.floorOptions.getOrNull(optionId - 1)
+            if(optionString != null) {
+                val action = options.get(optionString, id) ?: return logger.warn("Invalid floor item action $id $optionString")
+                val actionContext = actionContextMapper.get(entityId)
+                action.invoke(actionContext, item)
             } else {
-                logger.warn("Invalid floor item option $id $option")
+                logger.warn("Invalid floor item option $id $optionId")
             }
         } else {
             logger.warn("Invalid floor item $id $x $y")

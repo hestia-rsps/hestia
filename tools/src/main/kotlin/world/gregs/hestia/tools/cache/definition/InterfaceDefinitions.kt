@@ -22,14 +22,15 @@ class InterfaceDefinitions {
 
         @JvmStatic
         fun main(args: Array<String>) {
-            Settings.load("./settings.yml")
             val store = CacheLibrary("../hestia/data/cache")
             val reader = InterfaceDefinitionReader(store)
+//            val str = "Burst of Strength"
 //            repeat(reader.size) { id ->
-                val iface = reader.get(679)
+                val iface = reader.get(751)
                 if (iface.size > 1) {
 //                    println("Interface $id")
                     iface.forEach { (index, component) ->
+
                         println("$index ${getName(component.type)}")
                         println(ToStringBuilder.reflectionToString(component, ToStringStyle.MULTI_LINE_STYLE))
                     }

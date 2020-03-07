@@ -3,14 +3,13 @@ package worlds.gregs.hestia.core.display.client.logic.systems.network.`in`
 import com.artemis.ComponentMapper
 import com.artemis.EntitySubscription
 import com.artemis.World
-import net.mostlyoriginal.api.event.common.EventSystem
 import org.slf4j.LoggerFactory
 import worlds.gregs.hestia.GameServer
 import worlds.gregs.hestia.artemis.Aspect
 import worlds.gregs.hestia.artemis.toArray
-import worlds.gregs.hestia.core.action.model.perform
+import worlds.gregs.hestia.core.action.model.ActionContext
+import worlds.gregs.hestia.core.action.logic.systems.ObjectOptionSystem
 import worlds.gregs.hestia.core.entity.`object`.model.components.GameObject
-import worlds.gregs.hestia.core.entity.`object`.model.events.ObjectOption
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.world.land.model.components.LandObjects
 import worlds.gregs.hestia.core.world.region.model.components.RegionIdentifier
@@ -26,13 +25,14 @@ class ObjectOptionHandler : MessageHandlerSystem<ObjectOptionMessage>() {
     }
 
     private lateinit var positionMapper: ComponentMapper<Position>
-    private lateinit var es: EventSystem
     private lateinit var objectDefinitions: ObjectDefinitionSystem
     private val logger = LoggerFactory.getLogger(ObjectOptionHandler::class.java)!!
     private lateinit var regionIdentifierMapper: ComponentMapper<RegionIdentifier>
     private lateinit var landObjectsMapper: ComponentMapper<LandObjects>
     private lateinit var gameObjectMapper: ComponentMapper<GameObject>
     private lateinit var regions: EntitySubscription
+    private lateinit var options: ObjectOptionSystem
+    private lateinit var actionContextMapper: ComponentMapper<ActionContext>
 
     override fun setWorld(world: World) {
         super.setWorld(world)
@@ -40,7 +40,7 @@ class ObjectOptionHandler : MessageHandlerSystem<ObjectOptionMessage>() {
     }
 
     override fun handle(entityId: Int, message: ObjectOptionMessage) {
-        val (id, x, y, run, option) = message
+        val (id, x, y, run, optionId) = message
         val position = positionMapper.get(entityId)
         val objectPosition = Position.create(x, y, position.plane)
         val regionId = regions.entities.toArray().firstOrNull { regionIdentifierMapper.get(it).regionX == objectPosition.regionX && regionIdentifierMapper.get(it).regionY == objectPosition.regionY }
@@ -50,11 +50,13 @@ class ObjectOptionHandler : MessageHandlerSystem<ObjectOptionMessage>() {
             val objectId = landObjects.list[pos]?.firstOrNull { gameObjectMapper.get(it).id == id }
             if(objectId != null) {
                 val def = objectDefinitions.get(id)
-                val action = def.options.getOrNull(option - 1)
-                if(action != null) {
-                    es.perform(entityId, ObjectOption(objectId, action, def.name))
+                val optionString = def.options.getOrNull(optionId - 1)
+                if(optionString != null) {
+                    val action = options.get(optionString, id) ?: return logger.warn("Invalid object action $id $optionString")
+                    val actionContext = actionContextMapper.get(entityId)
+                    action.invoke(actionContext, objectId)
                 } else {
-                    logger.warn("Invalid object option $id $option ${def.options.toList()}")
+                    logger.warn("Invalid object option $id $optionId ${def.options.toList()}")
                 }
             } else {
                 logger.warn("Can't find object $id $x $y")

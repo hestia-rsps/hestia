@@ -2,6 +2,9 @@ package worlds.gregs.hestia.content.interaction.npc
 
 import arrow.syntax.function.andThen
 import world.gregs.hestia.core.services.plural
+import worlds.gregs.hestia.core.action.model.EntityActions
+import worlds.gregs.hestia.core.action.model.NpcOption
+import worlds.gregs.hestia.core.action.logic.systems.on
 import worlds.gregs.hestia.core.display.client.model.events.Chat
 import worlds.gregs.hestia.core.display.dialogue.model.Expression.Agree
 import worlds.gregs.hestia.core.display.dialogue.model.Expression.Delayed
@@ -12,7 +15,6 @@ import worlds.gregs.hestia.core.display.dialogue.model.Expression.Sad
 import worlds.gregs.hestia.core.display.dialogue.model.Expression.Uncertain
 import worlds.gregs.hestia.core.display.update.model.components.ForceChat
 import worlds.gregs.hestia.core.display.update.model.components.direction.Watch
-import worlds.gregs.hestia.core.entity.npc.model.events.NpcOption
 import worlds.gregs.hestia.core.entity.player.model.components.Member
 import worlds.gregs.hestia.core.display.dialogue.api.Dialogue.Companion.FIRST
 import worlds.gregs.hestia.core.display.dialogue.api.Dialogue.Companion.SECOND
@@ -22,16 +24,14 @@ import worlds.gregs.hestia.core.entity.item.container.logic.addAll
 import worlds.gregs.hestia.core.entity.item.container.logic.remove
 import worlds.gregs.hestia.core.task.model.await.WithinRange
 import worlds.gregs.hestia.core.world.movement.model.events.Follow
-import worlds.gregs.hestia.core.script.on
 
 val year = 365
 val fiveYears = year * 5
 
 val veteranCape = remove(995, 50000) andThen addAll(20763, 20764)
 
-on<NpcOption> {
-    where { option == "Talk-to" && name == "Hans" }
-    fun NpcOption.task() = strongQueue {
+on(NpcOption, "Talk-to", "Hans") { ->
+    fun EntityActions.task(npc: Int) = strongQueue {
 
         entity perform Follow(npc)
         val within = await(WithinRange(npc, 1))
@@ -109,5 +109,5 @@ on<NpcOption> {
             }
         }
     }
-    then(NpcOption::task)
+    then(EntityActions::task)
 }

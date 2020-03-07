@@ -5,6 +5,8 @@ import net.mostlyoriginal.api.event.common.EventSystem
 import net.mostlyoriginal.api.event.common.Subscribe
 import org.slf4j.LoggerFactory
 import worlds.gregs.hestia.artemis.send
+import worlds.gregs.hestia.core.action.logic.systems.getInterfaceComponentId
+import worlds.gregs.hestia.core.action.logic.systems.getInterfaceId
 import worlds.gregs.hestia.core.action.model.perform
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces
 import worlds.gregs.hestia.core.display.interfaces.model.Window
@@ -152,13 +154,13 @@ class InterfaceSystem : Interfaces() {
     override fun verify(entityId: Int, hash: Int): Boolean {
         val relationships = interfaceRelationshipsMapper.get(entityId)?.relationships ?: return false
         //Check entity has interface open
-        val id = hash shr 16
+        val id = getInterfaceId(hash)
         if (!relationships.containsKey(id)) {
             return false//Interface not open
         }
 
         //Check component is real
-        val componentId = hash - (id shl 16)
+        val componentId = getInterfaceComponentId(hash)
         val definition = definitions.get(id)
         if (!definition.containsKey(componentId)) {
             return false//Invalid component index
@@ -195,16 +197,6 @@ class InterfaceSystem : Interfaces() {
 
     @Subscribe
     private fun refreshInterface(event: RefreshInterface) = refreshInterface(event.entity, event.id)
-
-    @Subscribe
-    private fun click(event: ButtonClick) {
-        val (entityId, hash, from, to, option) = event
-        if (verify(entityId, hash)) {
-            val id = hash shr 16
-            val component = hash - (id shl 16)
-            es.perform(entityId, InterfaceInteraction(id, component, from, to, option))
-        }
-    }
 
     private fun getIndex(id: Int, resizeable: Boolean): Int {
         return getWindow(id).getIndex(resizeable)

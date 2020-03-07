@@ -3,13 +3,14 @@ package worlds.gregs.hestia.content.community.friend
 import world.gregs.hestia.core.network.protocol.messages.FriendsChatName
 import world.gregs.hestia.core.network.protocol.messages.FriendsChatSettings
 import worlds.gregs.hestia.GameServer
+import worlds.gregs.hestia.core.action.model.InterfaceOption
 import worlds.gregs.hestia.core.display.dialogue.model.events.StringEntered
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.FriendsChatSetup
 import worlds.gregs.hestia.core.display.interfaces.logic.systems.InterfaceSystem
-import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceInteraction
 import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceOpened
 import worlds.gregs.hestia.network.client.encoders.messages.Script
 import worlds.gregs.hestia.core.script.on
+import worlds.gregs.hestia.core.action.logic.systems.on
 
 on<InterfaceOpened> {
     where { id == FriendsChatSetup }
@@ -27,24 +28,17 @@ on<StringEntered> {
     }
 }
 
-on<InterfaceInteraction> {
-    where { id == FriendsChatSetup }
-    then {
-        when(component) {
-            22 -> {//Chat name
-                when(option) {
-                    1 -> {//Set prefix
-                        entity send Script(109, "Enter chat prefix:")
-                    }
-                    2 -> {
-                        GameServer.worldSession?.write(FriendsChatName(entity, ""))//Disable
-                    }
-                }
-            }
-            23, 24, 25, 26, 33 -> {
-                GameServer.worldSession?.write(FriendsChatSettings(entity, FriendsChatSetup shl 16 or component, option))
-            }
-//            3 -> {}//Close
-        }
+on(InterfaceOption, "Set prefix", id = FriendsChatSetup) { _, _, _, _ ->
+    entity send Script(109, "Enter chat prefix:")
+}
+
+on(InterfaceOption, "Disable", id = FriendsChatSetup) { _, _, _, _ ->
+    GameServer.worldSession?.write(FriendsChatName(entity, ""))
+}
+
+val options = arrayOf("No-one", "Anyone", "Any friends", "Recruit+", "Corporal+", "Sergeant+", "Lieutenant+", "Captain+", "General+", "Only me")
+options.forEach { optionName ->
+    on(InterfaceOption, optionName, id = FriendsChatSetup) { hash, _, _, option ->
+        GameServer.worldSession?.write(FriendsChatSettings(entity, hash, option))
     }
 }

@@ -11,5 +11,6 @@ enum class PlayerOptions(val string: String, val slot: Int, val top: Boolean = f
 
     companion object {
         fun getOption(slot: Int) = values().firstOrNull { it.slot == slot }
+        val names = values().map { it.string to it.slot }
     }
 }

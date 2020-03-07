@@ -4,6 +4,7 @@ import arrow.core.*
 import arrow.fx.IO
 import world.gregs.hestia.cache.definition.DefinitionReader
 import world.gregs.hestia.cache.definition.definitions.ItemDefinition
+import worlds.gregs.hestia.core.action.model.EntityActions
 import worlds.gregs.hestia.core.action.model.EntityAction
 import worlds.gregs.hestia.core.entity.item.container.api.*
 import worlds.gregs.hestia.core.entity.item.container.logic.ContainerEditor.addEmptySlot
@@ -32,6 +33,11 @@ data class ContainerTransformBuilder(val overflow: Boolean = false) {
 }
 
 fun EntityAction.transform(builder: ContainerTransformBuilder): ItemResult {
+    val containers = system(ContainerSystem::class)
+    return containers.modify(entity, builder.type, builder.function, builder.overflow)
+}
+
+fun EntityActions.transform(builder: ContainerTransformBuilder): ItemResult {
     val containers = system(ContainerSystem::class)
     return containers.modify(entity, builder.type, builder.function, builder.overflow)
 }

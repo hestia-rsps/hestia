@@ -1,6 +1,6 @@
 package worlds.gregs.hestia.core.display.dialogue.api
 
-import worlds.gregs.hestia.core.action.model.EntityAction
+import worlds.gregs.hestia.core.action.model.EntityActions
 import worlds.gregs.hestia.core.display.dialogue.model.DialogueBuilder
 import worlds.gregs.hestia.core.display.dialogue.model.Expression
 import worlds.gregs.hestia.core.display.dialogue.model.type.*
@@ -10,7 +10,7 @@ import worlds.gregs.hestia.core.task.api.Task
  * A DSL for readable dialogues
  * This is a work around, a proper extensions solution would require [compound extensions](https://github.com/Kotlin/KEEP/pull/176/commits).
  */
-class Dialogue(private val action: EntityAction, private val delegate: Task) : Task by delegate {
+class Dialogue(private val action: EntityActions, private val delegate: Task) : Task by delegate {
 
     private suspend fun player(text: String, animation: Int, large: Boolean, `continue`: Boolean) {
         with(action) {

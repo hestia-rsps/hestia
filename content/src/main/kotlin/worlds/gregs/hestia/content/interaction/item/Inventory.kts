@@ -1,9 +1,7 @@
 package worlds.gregs.hestia.content.interaction.item
 
 import org.slf4j.LoggerFactory
-import worlds.gregs.hestia.core.display.client.model.events.Chat
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.Inventory
-import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceInteraction
 import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceOpened
 import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceRefresh
 import worlds.gregs.hestia.core.display.interfaces.model.events.ComponentSwitch
@@ -15,6 +13,8 @@ import worlds.gregs.hestia.core.entity.item.container.api.validateSlot
 import worlds.gregs.hestia.core.entity.player.model.events.UpdateAppearance
 import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.equipSlots
 import arrow.core.andThen
+import worlds.gregs.hestia.core.action.model.EntityActions
+import worlds.gregs.hestia.core.action.model.InterfaceOption
 import worlds.gregs.hestia.core.entity.item.container.logic.ContainerSystem
 import worlds.gregs.hestia.core.entity.item.container.logic.add
 import worlds.gregs.hestia.core.entity.item.container.logic.remove
@@ -22,6 +22,7 @@ import worlds.gregs.hestia.core.entity.item.container.logic.switch
 import worlds.gregs.hestia.core.entity.item.container.model.ContainerType.INVENTORY
 import worlds.gregs.hestia.core.entity.item.container.model.ContainerType.EQUIPMENT
 import worlds.gregs.hestia.core.script.on
+import worlds.gregs.hestia.core.action.logic.systems.on
 
 val logger = LoggerFactory.getLogger(this::class.java)!!
 
@@ -46,20 +47,18 @@ on<InterfaceRefresh> {
 
 lateinit var containers: ContainerSystem
 
-on<InterfaceInteraction> {
-    where { id == Inventory }
-    fun InterfaceInteraction.task() = queue {
-        val (_, _, type, slot, option) = this@task
+on(InterfaceOption, Inventory) { ->
+    fun EntityActions.task(hash: Int, type: Int, slot: Int, option: Int) = queue {
         val inventory = entity container INVENTORY
         val item = inventory.validateItem(slot, type) ?: return@queue logger.warn("Invalid item slot $slot $type $option")
         val definition = item.definition()
         entity perform InventoryAction(item, slot, when(option) {
-            7 -> if(definition.options.any { it == "Destroy" }) "Destroy" else "Drop"
-            8 -> "Examine"
+            8 -> if(definition.options.any { it == "Destroy" }) "Destroy" else "Drop"
+            10 -> "Examine"
             else -> definition.options.getOrNull(option - 1) ?: return@queue logger.warn("Unknown item option $item $option")
         })
     }
-    then(InterfaceInteraction::task)
+    then(EntityActions::task)
 }
 
 on<InventoryAction> {
