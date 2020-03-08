@@ -11,7 +11,6 @@ import world.gregs.hestia.core.Settings
 import world.gregs.hestia.core.network.NetworkConstants
 import world.gregs.hestia.core.network.Session
 import world.gregs.hestia.core.network.client.AutoConnection
-import world.gregs.hestia.core.network.codec.ChannelFilter
 import world.gregs.hestia.core.network.codec.decode.SimplePacketDecoder
 import world.gregs.hestia.core.network.codec.message.SimpleMessageDecoder
 import world.gregs.hestia.core.network.codec.message.SimpleMessageEncoder
@@ -25,6 +24,7 @@ import worlds.gregs.hestia.game.plugin.Plugin.Companion.EVENT_PROCESS_PRIORITY
 import worlds.gregs.hestia.game.plugin.Plugin.Companion.PACKET_PROCESS_PRIORITY
 import worlds.gregs.hestia.game.plugin.PluginLoader
 import worlds.gregs.hestia.game.plugin.ScriptLoader
+import worlds.gregs.hestia.network.ChannelFilter
 import worlds.gregs.hestia.network.WorldChangeListener
 import worlds.gregs.hestia.network.client.*
 import worlds.gregs.hestia.network.world.WorldCodec

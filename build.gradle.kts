@@ -62,9 +62,9 @@ allprojects {
 
     dependencies {
         //Systems
-        implementation("world.gregs.hestia:hestia-server-core:0.4.10")
+        implementation("world.gregs.hestia:hestia-server-core:0.4.11")
         implementation("world.gregs.hestia:hestia-cache-store:0.1.2")
-        implementation("com.displee:rs-cache-library:6.1")
+        implementation("com.displee:rs-cache-library:6.2")
         implementation("net.onedaybeard.artemis:artemis-odb-serializer:2.3.0")
         implementation("net.mostlyoriginal.artemis-odb:contrib-eventbus:2.4.0")
         implementation("net.mostlyoriginal.artemis-odb:contrib-core:2.4.0")
