@@ -11,7 +11,6 @@ on(InterfaceOption, "Join Chat", id = FriendsChat) { _, _, _, _ ->
 
 on(InterfaceOption, "Open Settings", id = FriendsChat) { _, _, _, _ ->
     GameServer.worldSession?.write(FriendsChatSetupRequest(entity))
-//    entity perform OpenInterface(FriendsChatSetup)
 }
 
 on(InterfaceOption, "Toggle-LootShare", id = FriendsChat) { _, _, _, _ ->

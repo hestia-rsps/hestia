@@ -3,6 +3,8 @@ package worlds.gregs.hestia.content.community.friend
 import world.gregs.hestia.core.network.protocol.messages.FriendsChatName
 import world.gregs.hestia.core.network.protocol.messages.FriendsChatSettings
 import worlds.gregs.hestia.GameServer
+import worlds.gregs.hestia.artemis.events.FriendsChatSetupOpen
+import worlds.gregs.hestia.artemis.getSystem
 import worlds.gregs.hestia.core.action.model.InterfaceOption
 import worlds.gregs.hestia.core.display.dialogue.model.events.StringEntered
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.FriendsChatSetup
@@ -11,6 +13,16 @@ import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceOpened
 import worlds.gregs.hestia.network.client.encoders.messages.Script
 import worlds.gregs.hestia.core.script.on
 import worlds.gregs.hestia.core.action.logic.systems.on
+import worlds.gregs.hestia.core.action.model.perform
+import worlds.gregs.hestia.core.display.interfaces.model.events.request.OpenInterface
+import worlds.gregs.hestia.game
+
+on<FriendsChatSetupOpen> {
+    then {
+        val es = game.getSystem(net.mostlyoriginal.api.event.common.EventSystem::class)
+        es.perform(entity, OpenInterface(FriendsChatSetup))
+    }
+}
 
 on<InterfaceOpened> {
     where { id == FriendsChatSetup }
