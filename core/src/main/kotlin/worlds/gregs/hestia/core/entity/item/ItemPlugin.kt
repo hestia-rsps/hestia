@@ -12,7 +12,7 @@ class ItemPlugin : Plugin {
 
     override fun setup(b: WorldConfigurationBuilder) {
         b.with(Plugin.UPDATE_SYNC_PRIORITY, FloorItemSyncSystem())
-        b.with(FloorItemCreation(), FloorItemSpawnCreation(true), FloorItemSystem(), PrivateSystem(), PublicSystem(), FloorItemSpawnPointSystem())
+        b.with(FloorItemCreation(), FloorItemSpawnCreation(), FloorItemSystem(), PrivateSystem(), PublicSystem(), FloorItemSpawnPointSystem())
         b.with(Plugin.INTERFACE_PRIORITY, ContainerSystem())
         b.with(EquipmentSystem())
     }

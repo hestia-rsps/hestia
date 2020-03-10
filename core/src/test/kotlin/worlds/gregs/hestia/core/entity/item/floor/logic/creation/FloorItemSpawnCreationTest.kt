@@ -17,7 +17,7 @@ import worlds.gregs.hestia.core.entity.item.floor.model.events.CreateFloorItemSp
 @ExtendWith(MockKExtension::class)
 internal class FloorItemSpawnCreationTest : MockkGame() {
 
-    private val creation = FloorItemSpawnCreation(false)
+    private val creation = FloorItemSpawnCreation()
 
     override fun config(config: WorldConfigurationBuilder) {
         config.with(creation)

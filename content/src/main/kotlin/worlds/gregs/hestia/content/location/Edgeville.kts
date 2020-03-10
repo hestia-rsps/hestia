@@ -1,4 +1,5 @@
 import worlds.gregs.hestia.core.display.update.model.Direction
+import worlds.gregs.hestia.core.entity.item.floor.logic.creation.itemSpawn
 import worlds.gregs.hestia.core.entity.npc.logic.systems.npcSpawn
 
 npcSpawn(553, 3096, 3491, direction = Direction.WEST)// banker blue male
@@ -16,3 +17,6 @@ npcSpawn(3, 3100, 3511)// man
 npcSpawn(530, 3081, 3509)// shop keeper
 npcSpawn(0, 3087, 3499)// hans
 npcSpawn(29, 3090, 3492, direction = Direction.WEST)//MUSICIAN
+
+itemSpawn(1059, 1, 30, 3097, 3486)
+itemSpawn(995, 15, 5, 3088, 3497)
