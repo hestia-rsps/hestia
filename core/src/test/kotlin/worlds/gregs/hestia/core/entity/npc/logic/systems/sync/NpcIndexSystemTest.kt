@@ -13,7 +13,7 @@ import worlds.gregs.hestia.core.entity.npc.api.Npc
 import worlds.gregs.hestia.core.entity.npc.logic.systems.NpcCreation
 import worlds.gregs.hestia.core.entity.npc.model.events.CreateNpc
 
-internal class NpcIndexSystemTest : GameTest(WorldConfigurationBuilder().with(NpcCreation(false), NpcIndexSystem())) {
+internal class NpcIndexSystemTest : GameTest(WorldConfigurationBuilder().with(NpcCreation(), NpcIndexSystem())) {
 
     private fun fakeNpc(id: Int = 0): Entity {
         val mc = world.getSystem(NpcCreation::class)

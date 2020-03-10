@@ -19,7 +19,7 @@ import worlds.gregs.hestia.game.plugin.Plugin.Companion.UPDATE_FINISH_PRIORITY
 class NpcPlugin : Plugin {
 
     override fun setup(b: WorldConfigurationBuilder) {
-        b.with(NpcChunkMap(), NpcCreation(true))
+        b.with(NpcChunkMap(), NpcCreation())
         b.with(NpcChunkSubscriptionSystem(), NpcRegionSubscriptionSystem(), NpcChunkSystem())
         b.with(PRE_SHIFT_PRIORITY, NpcChunkChangeSystem(), NpcRegionChangeSystem())
         b.with(POST_UPDATE_PRIORITY, NpcChunkMapSystem())
