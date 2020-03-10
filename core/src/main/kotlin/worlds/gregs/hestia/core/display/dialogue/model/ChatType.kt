@@ -12,6 +12,7 @@ object ChatType {
     const val FriendsChat = 7
     const val FriendsChatGame = 8
     const val QuickChat = 9
+    const val Console = 99
     const val Trade = 100
     const val GameTrade = 103
     const val ChallengeDuel = 101
