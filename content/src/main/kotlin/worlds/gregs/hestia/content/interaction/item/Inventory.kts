@@ -12,18 +12,20 @@ import worlds.gregs.hestia.core.entity.item.container.api.validateItem
 import worlds.gregs.hestia.core.entity.item.container.api.validateSlot
 import worlds.gregs.hestia.core.entity.player.model.events.UpdateAppearance
 import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.equipSlots
-import arrow.core.andThen
 import worlds.gregs.hestia.content.activity.combat.equipment.EquippedItem
 import worlds.gregs.hestia.core.action.model.EntityActions
 import worlds.gregs.hestia.core.action.model.InterfaceOption
-import worlds.gregs.hestia.core.entity.item.container.logic.ContainerSystem
-import worlds.gregs.hestia.core.entity.item.container.logic.add
-import worlds.gregs.hestia.core.entity.item.container.logic.remove
-import worlds.gregs.hestia.core.entity.item.container.logic.switch
 import worlds.gregs.hestia.core.entity.item.container.model.ContainerType.INVENTORY
 import worlds.gregs.hestia.core.entity.item.container.model.ContainerType.EQUIPMENT
 import worlds.gregs.hestia.core.script.on
 import worlds.gregs.hestia.core.action.logic.systems.on
+import worlds.gregs.hestia.core.display.client.model.events.Chat
+import worlds.gregs.hestia.core.entity.item.container.api.Container
+import worlds.gregs.hestia.core.entity.item.container.logic.*
+import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.SLOT_SHIELD
+import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.SLOT_WEAPON
+import worlds.gregs.hestia.core.entity.item.container.model.Item
+import worlds.gregs.hestia.service.cache.definition.systems.ItemDefinitionSystem
 
 val logger = LoggerFactory.getLogger(this::class.java)!!
 
@@ -78,21 +80,85 @@ on<InventoryAction> {
         val equipSlot = equipSlots.getOrDefault(item.type, -1)
         val equipment = entity container EQUIPMENT
         val current = equipment.getOrNull(equipSlot)
-        //TODO two handed
-        val result = if(current != null) {
-            val replaceCurrent = remove(current.type, current.amount, equipSlot) andThen add(item.type, item.amount, equipSlot)
-            val replaceEquip = remove(item.type, item.amount, slot) andThen add(current.type, current.amount, slot)
-            containers.modify(entity, EQUIPMENT to replaceCurrent, INVENTORY to replaceEquip)
-        } else {
-            containers.modify(entity, INVENTORY to remove(item.type, item.amount, slot), EQUIPMENT to add(item.type, item.amount, equipSlot))
+
+        val equipmentChange = CompositionBuilder()
+        val inventoryChange = CompositionBuilder()
+
+        // Remove shield if two handed weapon
+        val conflict = equipment.getConflictingOffhand(item, equipSlot)
+
+        // Remove conflicting equipment
+        if(current != null) {
+            equipmentChange += remove(current.type, current.amount, equipSlot)
         }
+        if(conflict != null) {
+            equipmentChange += remove(conflict.type, conflict.amount, if(equipSlot == SLOT_SHIELD) SLOT_WEAPON else SLOT_SHIELD)
+        }
+
+        // Equip
+        equipmentChange += add(item.type, item.amount, equipSlot)
+        inventoryChange += remove(item.type, item.amount, slot)
+
+        // Add conflicts to inventory
+        if(current != null) {
+            inventoryChange += add(current.type, current.amount, slot)
+        }
+        if(conflict != null) {
+            inventoryChange += add(conflict.type, conflict.amount)
+        }
+
+        val result = containers.modify(entity, INVENTORY to inventoryChange.build(), EQUIPMENT to equipmentChange.build())
         when(result) {
             is ItemResult.Success -> {
                 entity perform EquippedItem(item)
                 entity perform UpdateAppearance()
             }
+            is ItemResult.Issue.Full -> entity perform Chat("Your inventory is full.")
             else -> TODO("")
         }
+    }
+}
+
+lateinit var definitions: ItemDefinitionSystem
+
+fun Container.getConflictingOffhand(item: Item, equipSlot: Int): Item? {
+    if(equipSlot == SLOT_WEAPON || equipSlot == SLOT_SHIELD) {
+        val weapon = if(equipSlot == SLOT_WEAPON) item else getOrNull(SLOT_WEAPON)
+        if(weapon != null && requiresTwoHands(weapon)) {
+            return if(equipSlot == SLOT_SHIELD) getOrNull(SLOT_WEAPON) else getOrNull(SLOT_SHIELD)
+        }
+    }
+    return null
+}
+
+fun requiresTwoHands(item: Item): Boolean {
+    val definition = definitions.get(item.type)
+    val name = definition.name.toLowerCase()
+    return when {
+        name.contains("crystal bow") -> true
+        name == "sled" -> true
+        name == "stone of power" -> true
+        name.endsWith("claws") -> true
+        name == "barrelchest anchor" -> true
+        name.contains("2h sword") -> true
+        name == "ornate katana" -> true
+        name == "seercull" -> true
+        name.contains("shortbow") -> true
+        name == "zaryte bow" -> true
+        name == "dark bow" -> true
+        name.endsWith("halberd") -> true
+        name.contains("maul") -> true
+        name.contains("karil's crossbow") -> true
+        name.contains("torag's hammers") -> true
+        name.contains("verac's flail") -> true
+        name.contains("dharok's greataxe") -> true
+        name.contains("spear") -> true
+        name == "tzhaar-ket-om" -> true
+        name.endsWith("godsword") -> true
+        name == "saradomin sword" -> true
+        name == "hand cannon" -> true
+        name == "hand cannon" -> true
+        else -> false
     }
 }
 

@@ -8,11 +8,13 @@ import worlds.gregs.hestia.service.cache.definition.systems.ItemDefinitionSystem
 
 lateinit var definitions: ItemDefinitionSystem
 
+val defaultStance = 1426
+
 on<EquippedItem> {
     where { equipSlots[item.type] == SLOT_WEAPON }
     then {
         val definition = definitions.get(item.type)
-        val renderAnim = definition.params?.get(644) as? Int ?: 1426
+        val renderAnim = definition.params?.get(644) as? Int ?: defaultStance
         entity.create(Emote::class).id = renderAnim
     }
 }
@@ -20,6 +22,6 @@ on<EquippedItem> {
 on<UnequippedItem> {
     where { equipSlots[item.type] == SLOT_WEAPON }
     then {
-        entity.create(Emote::class).id = 1426
+        entity.create(Emote::class).id = defaultStance
     }
 }
