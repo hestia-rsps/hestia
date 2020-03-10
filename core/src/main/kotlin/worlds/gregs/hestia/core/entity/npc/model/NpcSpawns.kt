@@ -18,4 +18,6 @@ enum class NpcSpawns(val id: Int, val x: Int, val y: Int, val plane: Int = 0, va
     SHOPKEEPER(3, 3081, 3509),
     HANS(0, 3087, 3499),
     MUSICIAN(29, 3090, 3492, direction = Direction.WEST),
+    NOMAD(8591, 1893, 3177, direction = Direction.SOUTH),
+    ZIMBERFIZZ(8592, 1888, 3176, direction = Direction.NORTH),
 }

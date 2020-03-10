@@ -28,7 +28,7 @@ class ClientDisconnectSystem : SubscriptionSystem(Aspect.all(NetworkSession::cla
                 world.dispatch(Disconnect(it))
             }
             world.process()
-            Thread.sleep(600 * 2)
+            Thread.sleep(600 * 3)
             println("Shutdown complete.")
         })
     }

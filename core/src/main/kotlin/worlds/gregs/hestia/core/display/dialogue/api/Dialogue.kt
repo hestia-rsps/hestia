@@ -68,6 +68,8 @@ class Dialogue(private val action: EntityActions, private val delegate: Task) : 
 
     suspend infix fun DialogueBuilder.dialogue(text: String) = dialogue(target, text, animation, large, `continue`)
 
+    suspend infix fun Int.statement(text: String) = statement(text, true)
+
     suspend infix fun DialogueBuilder.statement(text: String) = statement(text, `continue`)
 
     suspend infix fun Int.options(text: String) = options(null, text)
