@@ -13,6 +13,7 @@ import worlds.gregs.hestia.core.entity.item.container.api.validateSlot
 import worlds.gregs.hestia.core.entity.player.model.events.UpdateAppearance
 import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.equipSlots
 import arrow.core.andThen
+import worlds.gregs.hestia.content.activity.combat.equipment.EquippedItem
 import worlds.gregs.hestia.core.action.model.EntityActions
 import worlds.gregs.hestia.core.action.model.InterfaceOption
 import worlds.gregs.hestia.core.entity.item.container.logic.ContainerSystem
@@ -77,6 +78,7 @@ on<InventoryAction> {
         val equipSlot = equipSlots.getOrDefault(item.type, -1)
         val equipment = entity container EQUIPMENT
         val current = equipment.getOrNull(equipSlot)
+        //TODO two handed
         val result = if(current != null) {
             val replaceCurrent = remove(current.type, current.amount, equipSlot) andThen add(item.type, item.amount, equipSlot)
             val replaceEquip = remove(item.type, item.amount, slot) andThen add(current.type, current.amount, slot)
@@ -84,9 +86,11 @@ on<InventoryAction> {
         } else {
             containers.modify(entity, INVENTORY to remove(item.type, item.amount, slot), EQUIPMENT to add(item.type, item.amount, equipSlot))
         }
-        println("Wield result $result")
         when(result) {
-            is ItemResult.Success -> entity perform UpdateAppearance()
+            is ItemResult.Success -> {
+                entity perform EquippedItem(item)
+                entity perform UpdateAppearance()
+            }
             else -> TODO("")
         }
     }
