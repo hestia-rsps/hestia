@@ -94,6 +94,7 @@ class ClientCodec : MessageHandshakeCodec() {
         bind(NpcUpdateEncoder())
         bind(ClientMessageOutEncoder())
         bind(ChunkEncoder())
+        bind(CutsceneEncoder())
 
         bind(ChatEncoder())
         bind(FriendsChatDisconnectEncoder())
