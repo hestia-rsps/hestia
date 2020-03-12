@@ -22,23 +22,9 @@ abstract class Map : PassiveSystem() {
     abstract fun getClipping(entityId: Int?): Clipping?
 
     /**
-     * Get's a region's projectile clipping map
-     * @param entityId The entityId of the region
-     * @return The clipping map
-     */
-    abstract fun getProjectileMap(entityId: Int?): Clipping?
-
-    /**
      * Creates or returns existing region clipping map
      * @param entityId The entityId of the region
      * @return The clipping map
      */
     abstract fun createClipping(entityId: Int): Clipping
-
-    /**
-     * Creates or returns existing region projectile clipping map
-     * @param entityId The entityId of the region
-     * @return The clipping map
-     */
-    abstract fun createProjectileMap(entityId: Int): Clipping
 }

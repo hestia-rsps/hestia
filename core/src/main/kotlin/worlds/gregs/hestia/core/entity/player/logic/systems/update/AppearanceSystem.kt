@@ -171,8 +171,6 @@ class AppearanceSystem : SubscriptionSystem(Aspect.all(Player::class)) {
 
                 //Inventory
                 val stream = Unpooled.buffer()
-                repeat(14) { slotId ->
-                }
                 buffer.writeShort(0)
                 buffer.writeBytes(stream)//TODO remove?
             }

@@ -7,8 +7,8 @@ import net.mostlyoriginal.api.event.common.Subscribe
 import net.mostlyoriginal.api.system.core.PassiveSystem
 import worlds.gregs.hestia.artemis.events.CreatePlayer
 import worlds.gregs.hestia.core.display.client.api.ClientNetwork
-import worlds.gregs.hestia.core.display.update.model.components.DisplayName
 import worlds.gregs.hestia.core.display.interfaces.model.components.GameFrame
+import worlds.gregs.hestia.core.display.update.model.components.DisplayName
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.player.logic.PlayerFactory
 import java.util.concurrent.atomic.AtomicInteger
@@ -46,7 +46,7 @@ class PlayerCreation : PassiveSystem() {
         displayName?.name = event.name
 
         val position = positionMapper.get(entityId)
-        position.set(1886, 3178)//3087, 3497)// - count.getAndIncrement())
+        position.set(/*1886, 3178)*/3087, 3497)// - count.getAndIncrement())
         return entityId
     }
 }

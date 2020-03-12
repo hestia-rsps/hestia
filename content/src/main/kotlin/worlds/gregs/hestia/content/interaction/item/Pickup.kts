@@ -21,7 +21,7 @@ on(FloorItemOption, "Take") { ->
         entity perform Interact(target, true)
 
         val route = await(Route())
-        val canInteract = route.steps >= 0 && !route.alternative || isNear(entity get Position::class, target get Position::class, 1, 1, true)
+        val canInteract = route.steps >= 0 && !route.partial || isNear(entity get Position::class, target get Position::class, 1, 1, true)
         await(Ticks(1))
         if (!canInteract) {
             entity perform Face(target get Position::class)

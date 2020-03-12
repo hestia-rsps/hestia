@@ -56,7 +56,7 @@ class FollowSubscriptionSystem : SubscriptionSystem(Aspect.all(Position::class, 
         val height = sizeMapper.height(follow.entity)
 
         if(withinContact(position.x, position.y, targetPosition.x, targetPosition.y, width, height)) {
-            return
+            return//TODO what about walls?
         }
 
         //Walk beside (if not already)

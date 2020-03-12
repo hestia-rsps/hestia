@@ -3,7 +3,7 @@ rsaPrivate: "85c9db96fb8001ddc6a638c11db76a9d3a92ed1ebed8ef0c29354347b9092cd7cab
 rsaPublic: "10001"
 xteaPath: "./data/xteas.dat"
 cachePath: "./data/cache/"
-connectionLimit: 2
+connectionLimit: 2000
 serverName: "Hestia"
 pluginRootPackage:
   - "worlds.gregs.hestia.core.RootPlugin"

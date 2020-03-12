@@ -36,7 +36,7 @@ on(ObjectOption, "Enter", "Soul Wars portal") { ->
 
         val route = await(Route())
         val definition = system(ObjectDefinitionSystem::class).get(target.get(GameObject::class).id)
-        val canInteract = route.steps >= 0 && !route.alternative || isNear(entity get Position::class, target get Position::class, definition.sizeX, definition.sizeY, true)
+        val canInteract = route.steps >= 0 && !route.partial || isNear(entity get Position::class, target get Position::class, definition.sizeX, definition.sizeY, true)
         await(Ticks(1))
         if (!canInteract) {
             entity perform Face(target get Position::class)//TODO object def size
@@ -58,7 +58,7 @@ on(ObjectOption, "Leave-area", "Edgeville portal") { ->
 
         val route = await(Route())
         val definition = system(ObjectDefinitionSystem::class).get(target.get(GameObject::class).id)
-        val canInteract = route.steps >= 0 && !route.alternative || isNear(entity get Position::class, target get Position::class, definition.sizeX, definition.sizeY, true)
+        val canInteract = route.steps >= 0 && !route.partial || isNear(entity get Position::class, target get Position::class, definition.sizeX, definition.sizeY, true)
         await(Ticks(1))
         if (!canInteract) {
             entity perform Face(target get Position::class)//TODO object def size
@@ -80,7 +80,7 @@ on(ObjectOption, "Join-team", "Balance portal") { ->
 
         val route = await(Route())
         val definition = system(ObjectDefinitionSystem::class).get(target.get(GameObject::class).id)
-        val canInteract = route.steps >= 0 && !route.alternative || isNear(entity get Position::class, target get Position::class, definition.sizeX, definition.sizeY, true)
+        val canInteract = route.steps >= 0 && !route.partial || isNear(entity get Position::class, target get Position::class, definition.sizeX, definition.sizeY, true)
         await(Ticks(1))
         if (!canInteract) {
             entity perform Face(target get Position::class)//TODO object def size

@@ -14,7 +14,7 @@ class DisconnectSystem : BaseSystem() {
 
     override fun processSystem() {
         while(queue.size > 0) {
-            world.delete(queue.poll())
+            world.delete(queue.poll() ?: continue)
         }
     }
 

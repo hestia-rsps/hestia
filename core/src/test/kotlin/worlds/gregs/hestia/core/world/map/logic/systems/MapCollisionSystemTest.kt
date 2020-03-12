@@ -557,7 +557,7 @@ internal class MapCollisionSystemTest : MovementTester(false) {
         val sizeX = size.first
         val sizeY = size.second
 
-        Direction.all.forEach {
+        Direction.directions.forEach {
             Assertions.assertThat(traverse!!.traversable(it, x, y, 0, sizeX, sizeY)).describedAs("%s, %s  %s*%s - %s", x, y, sizeX, sizeY, it).isEqualTo(!direction.contains(it))
         }
     }

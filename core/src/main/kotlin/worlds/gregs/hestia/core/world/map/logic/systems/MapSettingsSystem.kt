@@ -2,9 +2,7 @@ package worlds.gregs.hestia.core.world.map.logic.systems
 
 import com.artemis.annotations.Wire
 import io.netty.buffer.Unpooled
-import worlds.gregs.hestia.core.world.collision.model.Flags
-import worlds.gregs.hestia.core.world.collision.model.Flags.BLOCKED_TILE
-import worlds.gregs.hestia.core.world.collision.model.Flags.BRIDGE_TILE
+import worlds.gregs.hestia.core.world.collision.model.CollisionFlags
 import worlds.gregs.hestia.core.world.map.api.ClippingMasks
 import worlds.gregs.hestia.core.world.map.api.MapSettings
 import worlds.gregs.hestia.core.world.map.model.MapConstants.PLANE_RANGE
@@ -66,7 +64,7 @@ class MapSettingsSystem : MapSettings() {
             //Static region
             applySettings(settings, REGION_RANGE, REGION_RANGE, PLANE_RANGE) { localX, localY, plane ->
                 //Add mask
-                masks?.addMask(entityId, localX, localY, plane, Flags.FLOOR_BLOCKS_WALK)
+                masks?.addMask(entityId, localX, localY, plane, CollisionFlags.FLOOR)
             }
         } else if (chunkX != null && chunkY != null && chunkPlane != null) {
             //Dynamic region
@@ -76,7 +74,7 @@ class MapSettingsSystem : MapSettings() {
                 val newX = chunk.translateX(localX and 0x7, localY and 0x7, rotation)
                 val newY = chunk.translateY(localX and 0x7, localY and 0x7, rotation)
                 //Add mask
-                masks?.addMask(entityId, chunkX or newX, chunkY or newY, plane, Flags.FLOOR_BLOCKS_WALK)
+                masks?.addMask(entityId, chunkX or newX, chunkY or newY, plane, CollisionFlags.FLOOR)
             }
         }
     }
@@ -101,5 +99,10 @@ class MapSettingsSystem : MapSettings() {
                 }
             }
         }
+    }
+
+    companion object {
+        const val BLOCKED_TILE = 0x1
+        const val BRIDGE_TILE = 0x2
     }
 }

@@ -23,8 +23,8 @@ class PathSystem : BaseMovementSystem(Path::class) {
         val nav = pathMapper.get(entityId)
 
         //Queue steps
-        val steps = pathFinder.findRoute(entityId, nav.strategy, nav.alternative, nav.collide)
-        (tasks.getSuspension(entityId) as? Route)?.route = RouteResult(steps, pathFinder.lastIsAlternative())//TODO temp
+        val steps = pathFinder.findRoute(entityId, nav.strategy, nav.partial, nav.collide)
+        (tasks.getSuspension(entityId) as? Route)?.route = RouteResult(steps, pathFinder.lastIsPartial())//TODO temp
         for (i in steps - 1 downTo 0) {
             if (!addWalkSteps(entityId, pathFinder.lastPathBufferX[i], pathFinder.lastPathBufferY[i], 25, false)) {
                 break

@@ -21,10 +21,10 @@ abstract class ClippingMasks : PassiveSystem() {
      * @param plane The plane coordinate of the object
      * @param sizeX The width of the object
      * @param sizeY The height of the object
-     * @param solid Whether the object is solid
-     * @param notAlternative Whether the objects clipping can be ignored on an alternative route
+     * @param sky Whether the object blocks flying entities
+     * @param sea Whether the object blocks swimming entities
      */
-    abstract fun addObject(entityId: Int, localX: Int, localY: Int, plane: Int, sizeX: Short, sizeY: Short, solid: Boolean, notAlternative: Boolean)
+    abstract fun addObject(entityId: Int, localX: Int, localY: Int, plane: Int, sizeX: Short, sizeY: Short, sky: Boolean, sea: Boolean)
 
     /**
      * Removes clipping masks for an object
@@ -34,10 +34,10 @@ abstract class ClippingMasks : PassiveSystem() {
      * @param plane The plane coordinate of the object
      * @param sizeX The width of the object
      * @param sizeY The height of the object
-     * @param solid Whether the object is solid
-     * @param notAlternative Whether the objects clipping can be ignored on an alternative route
+     * @param sky Whether the object blocks flying entities
+     * @param sea Whether the object blocks swimming entities
      */
-    abstract fun removeObject(entityId: Int, localX: Int, localY: Int, plane: Int, sizeX: Short, sizeY: Short, solid: Boolean, notAlternative: Boolean)
+    abstract fun removeObject(entityId: Int, localX: Int, localY: Int, plane: Int, sizeX: Short, sizeY: Short, sky: Boolean, sea: Boolean)
 
     /**
      * Sets clipping masks for an object
@@ -47,10 +47,10 @@ abstract class ClippingMasks : PassiveSystem() {
      * @param plane The plane coordinate of the object
      * @param sizeX The width of the object
      * @param sizeY The height of the object
-     * @param solid Whether the object is solid
-     * @param notAlternative Whether the objects clipping can be ignored on an alternative route
+     * @param sky Whether the object blocks flying entities
+     * @param sea Whether the object blocks swimming entities
      */
-    abstract fun setObject(entityId: Int, localX: Int, localY: Int, plane: Int, sizeX: Short, sizeY: Short, solid: Boolean, notAlternative: Boolean)
+    abstract fun setObject(entityId: Int, localX: Int, localY: Int, plane: Int, sizeX: Short, sizeY: Short, sky: Boolean, sea: Boolean)
 
     /**
      * Applies [changeType] changes to clipping mask for an object
@@ -60,11 +60,11 @@ abstract class ClippingMasks : PassiveSystem() {
      * @param plane The plane coordinate of the object
      * @param sizeX The width of the object
      * @param sizeY The height of the object
-     * @param solid Whether the object is solid
-     * @param notAlternative Whether the objects clipping can be ignored on an alternative route
+     * @param sky Whether the object blocks flying entities
+     * @param sea Whether the object blocks swimming entities
      * @param changeType How to change the clipping mask
      */
-    abstract fun changeObject(entityId: Int, localX: Int, localY: Int, plane: Int, sizeX: Short, sizeY: Short, solid: Boolean, notAlternative: Boolean, changeType: Int)
+    abstract fun changeObject(entityId: Int, localX: Int, localY: Int, plane: Int, sizeX: Short, sizeY: Short, sky: Boolean, sea: Boolean, changeType: Int)
 
     /**
      * Adds clipping masks for a wall
@@ -74,10 +74,10 @@ abstract class ClippingMasks : PassiveSystem() {
      * @param plane The plane coordinate of the wall
      * @param type The wall type
      * @param rotation The rotation of the wall
-     * @param solid Whether the object is solid
-     * @param notAlternative Whether the objects clipping can be ignored on an alternative route
+     * @param sky Whether the object blocks flying entities
+     * @param sea Whether the object blocks swimming entities
      */
-    abstract fun addWall(entityId: Int, localX: Int, localY: Int, plane: Int, type: Int, rotation: Int, solid: Boolean, notAlternative: Boolean)
+    abstract fun addWall(entityId: Int, localX: Int, localY: Int, plane: Int, type: Int, rotation: Int, sky: Boolean, sea: Boolean)
 
     /**
      * Removes clipping masks for a wall
@@ -87,10 +87,10 @@ abstract class ClippingMasks : PassiveSystem() {
      * @param plane The plane coordinate of the wall
      * @param type The wall type
      * @param rotation The rotation of the wall
-     * @param solid Whether the object is solid
-     * @param notAlternative Whether the objects clipping can be ignored on an alternative route
+     * @param sky Whether the object blocks flying entities
+     * @param sea Whether the object blocks swimming entities
      */
-    abstract fun removeWall(entityId: Int, localX: Int, localY: Int, plane: Int, type: Int, rotation: Int, solid: Boolean, notAlternative: Boolean)
+    abstract fun removeWall(entityId: Int, localX: Int, localY: Int, plane: Int, type: Int, rotation: Int, sky: Boolean, sea: Boolean)
 
     /**
      * Sets clipping masks for a wall
@@ -100,10 +100,10 @@ abstract class ClippingMasks : PassiveSystem() {
      * @param plane The plane coordinate of the wall
      * @param type The wall type
      * @param rotation The rotation of the wall
-     * @param solid Whether the object is solid
-     * @param notAlternative Whether the objects clipping can be ignored on an alternative route
+     * @param sky Whether the object blocks flying entities
+     * @param sea Whether the object blocks swimming entities
      */
-    abstract fun setWall(entityId: Int, localX: Int, localY: Int, plane: Int, type: Int, rotation: Int, solid: Boolean, notAlternative: Boolean)
+    abstract fun setWall(entityId: Int, localX: Int, localY: Int, plane: Int, type: Int, rotation: Int, sky: Boolean, sea: Boolean)
 
     /**
      * Applies [changeType] changes to clipping mask for a wall
@@ -113,11 +113,11 @@ abstract class ClippingMasks : PassiveSystem() {
      * @param plane The plane coordinate of the wall
      * @param type The wall type
      * @param rotation The rotation of the wall
-     * @param solid Whether the object is solid
-     * @param notAlternative Whether the objects clipping can be ignored on an alternative route
+     * @param sky Whether the object blocks flying entities
+     * @param sea Whether the object blocks swimming entities
      * @param changeType How to change the clipping mask
      */
-    abstract fun changeWall(entityId: Int, localX: Int, localY: Int, plane: Int, type: Int, rotation: Int, solid: Boolean, notAlternative: Boolean, changeType: Int)
+    abstract fun changeWall(entityId: Int, localX: Int, localY: Int, plane: Int, type: Int, rotation: Int, sky: Boolean, sea: Boolean, changeType: Int)
 
         /**
      * Adds clipping mask for a tile

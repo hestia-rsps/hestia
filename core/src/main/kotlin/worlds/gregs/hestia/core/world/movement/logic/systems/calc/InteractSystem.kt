@@ -13,6 +13,8 @@ import worlds.gregs.hestia.core.entity.entity.model.components.width
 import worlds.gregs.hestia.core.entity.item.floor.model.components.Private
 import worlds.gregs.hestia.core.entity.item.floor.model.components.Public
 import worlds.gregs.hestia.core.entity.npc.api.Npc
+import worlds.gregs.hestia.core.task.model.await.WindowClose
+import worlds.gregs.hestia.core.task.model.events.ProcessTaskSuspension
 import worlds.gregs.hestia.core.world.movement.api.RouteStrategy
 import worlds.gregs.hestia.core.world.movement.logic.strategies.EntityStrategy
 import worlds.gregs.hestia.core.world.movement.logic.strategies.FixedTileStrategy
@@ -43,7 +45,7 @@ class InteractSystem : PassiveSystem() {
 
     @Subscribe
     fun startRoute(action: Interact) {
-        val (targetId, alternative) = action
+        val (targetId, partial) = action
         val targetPosition = positionMapper.get(targetId)
 
         //Choose strategy
@@ -63,8 +65,20 @@ class InteractSystem : PassiveSystem() {
         //Navigate
         pathMapper.create(action.entity).apply {
             this.strategy = strategy
-            this.alternative = alternative
+            this.partial = partial
         }
     }
 
+
+    @Subscribe(ignoreCancelledEvents = true)
+    private fun handleSuspend(event: ProcessTaskSuspension) {
+        val (suspension) = event
+        if(suspension is WindowClose) {
+            //If no pane open skip
+//            if(!interfaces.hasInterface(event.entity, suspension.window)) {
+//                tasks.resume(event.entity, suspension, Unit)
+//            }
+            event.isCancelled = true
+        }
+    }
 }

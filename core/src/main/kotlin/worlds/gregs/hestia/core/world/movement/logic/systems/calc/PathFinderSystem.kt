@@ -12,6 +12,7 @@ import worlds.gregs.hestia.core.world.movement.api.RouteStrategy
 import worlds.gregs.hestia.core.world.movement.logic.navigation.PrimaryNavigation
 import worlds.gregs.hestia.core.world.movement.logic.navigation.SecondaryNavigation
 import worlds.gregs.hestia.core.world.movement.logic.navigation.TertiaryNavigation
+import kotlin.system.measureNanoTime
 
 @Wire(failOnNull = false)
 class PathFinderSystem : PassiveSystem() {
@@ -21,7 +22,7 @@ class PathFinderSystem : PassiveSystem() {
 
     private var exitX: Int = -1
     private var exitY: Int = -1
-    private var isAlternative: Boolean = false
+    private var isPartial: Boolean = false
     private var collision: Collision? = null
     private lateinit var primary: PrimaryNavigation
     private lateinit var secondary: SecondaryNavigation
@@ -43,7 +44,7 @@ class PathFinderSystem : PassiveSystem() {
      * steps > 0, route exists. If steps = 0, route exists, but no need to move.
      * If steps < 0, route does not exist.
      */
-    fun findRoute(entityId: Int, strategy: RouteStrategy, findAlternative: Boolean, collide: Boolean): Int {//TODO shouldn't alternative & collide be in the strategy?
+    fun findRoute(entityId: Int, strategy: RouteStrategy, partial: Boolean, collide: Boolean): Int {//TODO shouldn't alternative & collide be in the strategy?
         val position = positionMapper.get(entityId)
         //Calculate entity size
         var sizeX = 1
@@ -58,7 +59,7 @@ class PathFinderSystem : PassiveSystem() {
         val distances = distances
 
         //Reset previous data
-        isAlternative = false
+        isPartial = false
         for (x in 0 until GRAPH_SIZE) {
             for (y in 0 until GRAPH_SIZE) {
                 directions[x][y] = 0
@@ -76,7 +77,7 @@ class PathFinderSystem : PassiveSystem() {
 
         val found = calculate(position, sizeX, sizeY, strategy)
 
-        if (!found && !findAlternative) {
+        if (!found && !partial) {
             return -1
         }
 
@@ -86,8 +87,8 @@ class PathFinderSystem : PassiveSystem() {
         var endX = exitX
         var endY = exitY
 
-        if (!found && findAlternative) {
-            isAlternative = true
+        if (!found && partial) {
+            isPartial = true
             var lowestCost = Integer.MAX_VALUE
             var lowestDistance = Integer.MAX_VALUE
 
@@ -102,11 +103,11 @@ class PathFinderSystem : PassiveSystem() {
             // if we have multiple positions in our range that fits all the
             // conditions, we will choose the one which takes fewer steps.
 
-            for (checkX in approxDestX.nearby(ALTERNATIVE_ROUTE_RANGE)) {
-                for (checkY in approxDestY.nearby(ALTERNATIVE_ROUTE_RANGE)) {
+            for (checkX in approxDestX.nearby(PARTIAL_ROUTE_RANGE)) {
+                for (checkY in approxDestY.nearby(PARTIAL_ROUTE_RANGE)) {
                     val graphX = checkX - graphBaseX
                     val graphY = checkY - graphBaseY
-                    if (graphX < 0 || graphY < 0 || graphX >= GRAPH_SIZE || graphY >= GRAPH_SIZE || distances[graphX][graphY] >= ALTERNATIVE_ROUTE_MAX_DISTANCE) {
+                    if (graphX < 0 || graphY < 0 || graphX >= GRAPH_SIZE || graphY >= GRAPH_SIZE || distances[graphX][graphY] >= PARTIAL_ROUTE_MAX_DISTANCE) {
                         continue // we are out of graph's bounds or too many steps
                     }
 
@@ -135,12 +136,12 @@ class PathFinderSystem : PassiveSystem() {
             }
 
             if (lowestCost == Integer.MAX_VALUE || lowestDistance == Integer.MAX_VALUE) {
-                return -1//No alternative route found
+                return -1//No partial route found
             }
         }
 
         if (endX == position.x && endY == position.y) {
-            return 0//Alternative path found
+            return 0//Partial path found
         }
 
         //Trace path in reverse for best route
@@ -247,7 +248,7 @@ class PathFinderSystem : PassiveSystem() {
                     continue
                 }
 
-                if (directions[currentGraphX + deltaX][currentGraphY + deltaY] == 0 && nav.traversable(dir, currentGraphX, currentGraphY, sizeX, sizeY, deltaX, deltaY)) {
+                if (directions[currentGraphX + deltaX][currentGraphY + deltaY] == 0 && nav.traversable(dir.inverse(), currentGraphX, currentGraphY, sizeX, sizeY, deltaX, deltaY)) {
                     //Set the next step
                     bufferX[write] = currentX + deltaX
                     bufferY[write] = currentY + deltaY
@@ -267,6 +268,7 @@ class PathFinderSystem : PassiveSystem() {
         return false
     }
 
+    //TODO remove this
     private fun getDirectionMask(dir: Direction): Int {
         return when (dir.deltaX) {
             1 -> DIR_EAST
@@ -280,17 +282,17 @@ class PathFinderSystem : PassiveSystem() {
     }
 
     /**
-     * Whether last path is only alternative path.
+     * Whether last path is a partial path.
      */
-    fun lastIsAlternative(): Boolean {
-        return isAlternative
+    fun lastIsPartial(): Boolean {
+        return isPartial
     }
 
     companion object {
         private const val GRAPH_SIZE = 128
         private const val QUEUE_SIZE = GRAPH_SIZE * GRAPH_SIZE / 4
-        private const val ALTERNATIVE_ROUTE_MAX_DISTANCE = 100
-        private const val ALTERNATIVE_ROUTE_RANGE = 10
+        private const val PARTIAL_ROUTE_MAX_DISTANCE = 100
+        private const val PARTIAL_ROUTE_RANGE = 10
 
         private const val DIR_SOUTH = 0x1
         private const val DIR_WEST = 0x2

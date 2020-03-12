@@ -4,9 +4,9 @@ import com.artemis.annotations.Wire
 import net.mostlyoriginal.api.event.common.EventSystem
 import world.gregs.hestia.core.network.packet.PacketReader
 import worlds.gregs.hestia.core.entity.`object`.model.events.CreateObject
-import worlds.gregs.hestia.core.world.collision.model.Flags.BRIDGE_TILE
 import worlds.gregs.hestia.core.world.land.api.Land
 import worlds.gregs.hestia.core.world.land.api.LandObjects
+import worlds.gregs.hestia.core.world.map.logic.systems.MapSettingsSystem.Companion.BRIDGE_TILE
 import worlds.gregs.hestia.core.world.map.model.MapConstants.PLANE_RANGE
 import worlds.gregs.hestia.core.world.map.model.MapConstants.isOutOfBounds
 import worlds.gregs.hestia.core.world.region.logic.systems.load.ChunkRotationSystem

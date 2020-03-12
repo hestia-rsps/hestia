@@ -8,7 +8,7 @@ import worlds.gregs.hestia.core.entity.`object`.model.components.GameObject
 import worlds.gregs.hestia.core.entity.`object`.model.components.ObjectType
 import worlds.gregs.hestia.core.entity.`object`.model.components.Rotation
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
-import worlds.gregs.hestia.core.world.collision.model.Flags.FLOOR_DECO_BLOCKS_WALK
+import worlds.gregs.hestia.core.world.collision.model.CollisionFlags.FLOOR_DECO
 import worlds.gregs.hestia.core.world.map.api.ClippingMasks
 import worlds.gregs.hestia.core.world.map.logic.systems.ClippingMaskSystem.Companion.ADD_MASK
 import worlds.gregs.hestia.core.world.map.logic.systems.ClippingMaskSystem.Companion.REMOVE_MASK
@@ -68,7 +68,7 @@ class ObjectClippingSystem : SubscriptionSystem(Aspect.all(GameObject::class)) {
             }
             22 -> {
                 if(definition.solid == 1) {
-                    masks?.changeMask(regionEntityId, position.xInRegion, position.yInRegion, position.plane, FLOOR_DECO_BLOCKS_WALK, changeType)
+                    masks?.changeMask(regionEntityId, position.xInRegion, position.yInRegion, position.plane, FLOOR_DECO, changeType)
                 }
             }
         }

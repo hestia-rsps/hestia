@@ -77,6 +77,6 @@ class MapCollisionSystem : TileClipping() {
             width == 1 && height == 1 -> primary
             width == 2 && height == 2 -> secondary
             else -> tertiary
-        }.traversable(direction, x % 64, y % 64, width, height, deltaX, deltaY)
+        }.traversable(direction.inverse(), x % 64, y % 64, width, height, deltaX, deltaY)
     }
 }

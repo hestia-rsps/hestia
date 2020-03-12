@@ -5,7 +5,7 @@ import com.artemis.WorldConfigurationBuilder
 import worlds.gregs.hestia.core.world.collision.api.ObjectCollision
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.GameTest
-import worlds.gregs.hestia.core.world.collision.model.Flags
+import worlds.gregs.hestia.core.world.collision.model.CollisionFlags
 import worlds.gregs.hestia.core.world.collision.logic.systems.CollisionSystem
 import worlds.gregs.hestia.core.world.map.logic.systems.CollisionTestInterface
 import worlds.gregs.hestia.core.world.map.logic.systems.MapCollisionSystem
@@ -153,7 +153,7 @@ abstract class MovementTester(offset: Boolean, vararg systems: BaseSystem) : Gam
         companion object {
             private const val GRAPH_SIZE = 128
             private const val CLEAR = 0
-            private const val BLOCKED = Flags.OBJ or Flags.OBJ_BLOCKS_FLY or Flags.OBJ_BLOCKS_WALK_ALTERNATIVE
+            private const val BLOCKED = CollisionFlags.WALK or CollisionFlags.FLY or CollisionFlags.SWIM
         }
     }
 
