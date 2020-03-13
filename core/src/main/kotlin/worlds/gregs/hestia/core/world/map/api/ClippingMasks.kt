@@ -3,60 +3,53 @@ package worlds.gregs.hestia.core.world.map.api
 import net.mostlyoriginal.api.system.core.PassiveSystem
 
 abstract class ClippingMasks : PassiveSystem() {
-    /**
-     * Get's a clipping mask for the tile at [localX], [localY], [plane]
-     * @param entityId The region entity id
-     * @param clipping The clipping to get the mask from
-     * @param localX The local x coordinate of the wall
-     * @param localY The local y coordinate of the wall
-     * @param plane The plane coordinate of the wall
-     */
-    abstract tailrec fun getMask(entityId: Int, clipping: Clipping, localX: Int, localY: Int, plane: Int): Int
 
     /**
      * Adds clipping masks for an object
-     * @param entityId The region entity id
-     * @param localX The local x coordinate of the object
-     * @param localY The local y coordinate of the object
+     * @param x The x coordinate of the object
+     * @param y The y coordinate of the object
      * @param plane The plane coordinate of the object
      * @param sizeX The width of the object
      * @param sizeY The height of the object
      * @param sky Whether the object blocks flying entities
      * @param sea Whether the object blocks swimming entities
      */
-    abstract fun addObject(entityId: Int, localX: Int, localY: Int, plane: Int, sizeX: Short, sizeY: Short, sky: Boolean, sea: Boolean)
+    fun addObject(x: Int, y: Int, plane: Int, sizeX: Short, sizeY: Short, sky: Boolean, sea: Boolean) {
+        changeObject(x, y, plane, sizeX, sizeY, sky, sea, ADD_MASK)
+    }
 
     /**
      * Removes clipping masks for an object
-     * @param entityId The region entity id
-     * @param localX The local x coordinate of the object
-     * @param localY The local y coordinate of the object
+     * @param x The x coordinate of the object
+     * @param y The y coordinate of the object
      * @param plane The plane coordinate of the object
      * @param sizeX The width of the object
      * @param sizeY The height of the object
      * @param sky Whether the object blocks flying entities
      * @param sea Whether the object blocks swimming entities
      */
-    abstract fun removeObject(entityId: Int, localX: Int, localY: Int, plane: Int, sizeX: Short, sizeY: Short, sky: Boolean, sea: Boolean)
+    fun removeObject(x: Int, y: Int, plane: Int, sizeX: Short, sizeY: Short, sky: Boolean, sea: Boolean) {
+        changeObject(x, y, plane, sizeX, sizeY, sky, sea, REMOVE_MASK)
+    }
 
     /**
      * Sets clipping masks for an object
-     * @param entityId The region entity id
-     * @param localX The local x coordinate of the object
-     * @param localY The local y coordinate of the object
+     * @param x The x coordinate of the object
+     * @param y The y coordinate of the object
      * @param plane The plane coordinate of the object
      * @param sizeX The width of the object
      * @param sizeY The height of the object
      * @param sky Whether the object blocks flying entities
      * @param sea Whether the object blocks swimming entities
      */
-    abstract fun setObject(entityId: Int, localX: Int, localY: Int, plane: Int, sizeX: Short, sizeY: Short, sky: Boolean, sea: Boolean)
+    fun setObject(x: Int, y: Int, plane: Int, sizeX: Short, sizeY: Short, sky: Boolean, sea: Boolean) {
+        changeObject(x, y, plane, sizeX, sizeY, sky, sea, SET_MASK)
+    }
 
     /**
      * Applies [changeType] changes to clipping mask for an object
-     * @param entityId The region entity id
-     * @param localX The local x coordinate of the object
-     * @param localY The local y coordinate of the object
+     * @param x The x coordinate of the object
+     * @param y The y coordinate of the object
      * @param plane The plane coordinate of the object
      * @param sizeX The width of the object
      * @param sizeY The height of the object
@@ -64,52 +57,54 @@ abstract class ClippingMasks : PassiveSystem() {
      * @param sea Whether the object blocks swimming entities
      * @param changeType How to change the clipping mask
      */
-    abstract fun changeObject(entityId: Int, localX: Int, localY: Int, plane: Int, sizeX: Short, sizeY: Short, sky: Boolean, sea: Boolean, changeType: Int)
+    abstract fun changeObject(x: Int, y: Int, plane: Int, sizeX: Short, sizeY: Short, sky: Boolean, sea: Boolean, changeType: Int)
 
     /**
      * Adds clipping masks for a wall
-     * @param entityId The region entity id
-     * @param localX The local x coordinate of the wall
-     * @param localY The local y coordinate of the wall
+     * @param x The x coordinate of the wall
+     * @param y The y coordinate of the wall
      * @param plane The plane coordinate of the wall
      * @param type The wall type
      * @param rotation The rotation of the wall
      * @param sky Whether the object blocks flying entities
      * @param sea Whether the object blocks swimming entities
      */
-    abstract fun addWall(entityId: Int, localX: Int, localY: Int, plane: Int, type: Int, rotation: Int, sky: Boolean, sea: Boolean)
+    fun addWall(x: Int, y: Int, plane: Int, type: Int, rotation: Int, sky: Boolean, sea: Boolean) {
+        changeWall(x, y, plane, type, rotation, sky, sea, ADD_MASK)
+    }
 
     /**
      * Removes clipping masks for a wall
-     * @param entityId The region entity id
-     * @param localX The local x coordinate of the wall
-     * @param localY The local y coordinate of the wall
+     * @param x The x coordinate of the wall
+     * @param y The y coordinate of the wall
      * @param plane The plane coordinate of the wall
      * @param type The wall type
      * @param rotation The rotation of the wall
      * @param sky Whether the object blocks flying entities
      * @param sea Whether the object blocks swimming entities
      */
-    abstract fun removeWall(entityId: Int, localX: Int, localY: Int, plane: Int, type: Int, rotation: Int, sky: Boolean, sea: Boolean)
+    fun removeWall(x: Int, y: Int, plane: Int, type: Int, rotation: Int, sky: Boolean, sea: Boolean) {
+        changeWall(x, y, plane, type, rotation, sky, sea, REMOVE_MASK)
+    }
 
     /**
      * Sets clipping masks for a wall
-     * @param entityId The region entity id
-     * @param localX The local x coordinate of the wall
-     * @param localY The local y coordinate of the wall
+     * @param x The x coordinate of the wall
+     * @param y The y coordinate of the wall
      * @param plane The plane coordinate of the wall
      * @param type The wall type
      * @param rotation The rotation of the wall
      * @param sky Whether the object blocks flying entities
      * @param sea Whether the object blocks swimming entities
      */
-    abstract fun setWall(entityId: Int, localX: Int, localY: Int, plane: Int, type: Int, rotation: Int, sky: Boolean, sea: Boolean)
+    fun setWall(x: Int, y: Int, plane: Int, type: Int, rotation: Int, sky: Boolean, sea: Boolean) {
+        changeWall(x, y, plane, type, rotation, sky, sea, SET_MASK)
+    }
 
     /**
      * Applies [changeType] changes to clipping mask for a wall
-     * @param entityId The region entity id
-     * @param localX The local x coordinate of the wall
-     * @param localY The local y coordinate of the wall
+     * @param x The x coordinate of the wall
+     * @param y The y coordinate of the wall
      * @param plane The plane coordinate of the wall
      * @param type The wall type
      * @param rotation The rotation of the wall
@@ -117,46 +112,54 @@ abstract class ClippingMasks : PassiveSystem() {
      * @param sea Whether the object blocks swimming entities
      * @param changeType How to change the clipping mask
      */
-    abstract fun changeWall(entityId: Int, localX: Int, localY: Int, plane: Int, type: Int, rotation: Int, sky: Boolean, sea: Boolean, changeType: Int)
+    abstract fun changeWall(x: Int, y: Int, plane: Int, type: Int, rotation: Int, sky: Boolean, sea: Boolean, changeType: Int)
 
-        /**
+    /**
      * Adds clipping mask for a tile
-     * @param entityId The region entity id
-     * @param localX The x coordinate of the wall
-     * @param localY The y coordinate of the wall
+     * @param x The x coordinate of the wall
+     * @param y The y coordinate of the wall
      * @param plane The plane coordinate of the wall
      * @param mask The mask to add
      */
-    abstract fun addMask(entityId: Int, localX: Int, localY: Int, plane: Int, mask: Int)
+    fun addMask(x: Int, y: Int, plane: Int, mask: Int) {
+        changeMask(x, y, plane, mask, ADD_MASK)
+    }
 
     /**
      * Removes clipping mask for a tile
-     * @param entityId The region entity id
-     * @param localX The x coordinate of the wall
-     * @param localY The y coordinate of the wall
+     * @param x The x coordinate of the wall
+     * @param y The y coordinate of the wall
      * @param plane The plane coordinate of the wall
      * @param mask The mask to remove
      */
-    abstract fun removeMask(entityId: Int, localX: Int, localY: Int, plane: Int, mask: Int)
+    fun removeMask(x: Int, y: Int, plane: Int, mask: Int) {
+        changeMask(x, y, plane, mask, REMOVE_MASK)
+    }
 
     /**
      * Sets clipping mask for a tile
-     * @param entityId The region entity id
-     * @param localX The x coordinate of the wall
-     * @param localY The y coordinate of the wall
+     * @param x The x coordinate of the wall
+     * @param y The y coordinate of the wall
      * @param plane The plane coordinate of the wall
      * @param mask The mask to set
      */
-    abstract fun setMask(entityId: Int, localX: Int, localY: Int, plane: Int, mask: Int)
+    fun setMask(x: Int, y: Int, plane: Int, mask: Int) {
+        changeMask(x, y, plane, mask, SET_MASK)
+    }
 
     /**
      * Applies [changeType] changes to a tile's clipping mask
-     * @param entityId The region entity id
-     * @param localX The x coordinate of the wall
-     * @param localY The y coordinate of the wall
+     * @param x The x coordinate of the wall
+     * @param y The y coordinate of the wall
      * @param plane The plane coordinate of the wall
      * @param mask The mask to apply
      * @param changeType How to change the clipping mask
      */
-    abstract fun changeMask(entityId: Int, localX: Int, localY: Int, plane: Int, mask: Int, changeType: Int)
+    abstract fun changeMask(x: Int, y: Int, plane: Int, mask: Int, changeType: Int)
+
+    companion object {
+        const val ADD_MASK = 0
+        const val REMOVE_MASK = 1
+        const val SET_MASK = 2
+    }
 }

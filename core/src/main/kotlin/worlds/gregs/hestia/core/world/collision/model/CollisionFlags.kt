@@ -1,6 +1,7 @@
 package worlds.gregs.hestia.core.world.collision.model
 
 import worlds.gregs.hestia.core.display.update.model.Direction
+import worlds.gregs.hestia.core.world.collision.model.CollisionFlags.block
 import kotlin.math.pow
 
 object CollisionFlags {

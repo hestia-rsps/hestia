@@ -11,15 +11,6 @@ import worlds.gregs.hestia.core.entity.entity.model.components.Position
 abstract class TileClipping : PassiveSystem() {
 
     /**
-     * Get the mask of the tile at [x], [y], [plane]
-     * @param x The x coordinate of the tile
-     * @param y The y coordinate of the tile
-     * @param plane The plane coordinate of the tile
-     * @return The clipping mask value
-     */
-    abstract fun getMask(x: Int, y: Int, plane: Int): Int
-
-    /**
      * Get's the rotation of the chunk [x], [y], [plane] is in.
      * @param x The x coordinate of the tile
      * @param y The y coordinate of the tile

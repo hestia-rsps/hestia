@@ -131,7 +131,7 @@ class RegionFileSystem : SubscriptionSystem(Aspect.all(RegionIdentifier::class, 
                 //Load the clipping
                 //TODO settings could be cached for better performance
                 decodedSettings = settings.load(mapContainerData)
-                settings.apply(entityId, decodedSettings, rotation, chunkX, chunkY, chunkPlane)
+                settings.apply(regionX, regionY, decodedSettings, rotation, chunkX, chunkY, chunkPlane)
             }
 
         } catch (t: Throwable) {

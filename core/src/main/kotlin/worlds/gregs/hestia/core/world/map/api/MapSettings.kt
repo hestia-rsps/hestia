@@ -11,13 +11,14 @@ abstract class MapSettings : PassiveSystem() {
     abstract fun load(mapContainerData: ByteArray): Array<Array<ByteArray>>
 
     /**
-     * Adds clipping masks to whole region or single chunk based on the settings provided
-     * @param entityId The region entity
-     * @param settings The map height settings
-     * @param rotation Chunk rotation
-     * @param chunkX Chunk x coordinate
-     * @param chunkY Chunk y coordinate
-     * @param chunkPlane Chunk plane coordinate
+     * Adds masks to clipping based on the settings provided
+     * @param regionX The regions x coordinate
+     * @param regionY The regions y coordinate
+     * @param settings The tile settings
+     * @param rotation The chunks rotation
+     * @param chunkX The chunks x coordinate
+     * @param chunkY The chunks y coordinate
+     * @param chunkPlane The chunks plane coordinate
      */
-    abstract fun apply(entityId: Int, settings: Array<Array<ByteArray>>, rotation: Int?, chunkX: Int?, chunkY: Int?, chunkPlane: Int?)
+    abstract fun apply(regionX: Int, regionY: Int, settings: Array<Array<ByteArray>>, rotation: Int?, chunkX: Int?, chunkY: Int?, chunkPlane: Int?)
 }

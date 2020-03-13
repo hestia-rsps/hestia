@@ -21,8 +21,6 @@ import worlds.gregs.hestia.core.world.region.logic.systems.DynamicSystem
  */
 @Wire(failOnNull = false)
 class MapCollisionSystem : TileClipping() {
-    private var masks: ClippingMasks? = null
-    private var map: Map? = null
     private var regions: Regions? = null
     private var dynamic: DynamicSystem? = null
     private var collision: Collision? = null
@@ -35,14 +33,6 @@ class MapCollisionSystem : TileClipping() {
         primary = PrimaryNavigation(collision)
         secondary = SecondaryNavigation(collision)
         tertiary = TertiaryNavigation(collision)
-    }
-
-    //TODO remove these
-    override fun getMask(x: Int, y: Int, plane: Int): Int {
-        val regionId = Position.regionId(x, y)
-        val entityId = regions?.getEntityId(regionId) ?: return -1
-        val clipping = map?.getClipping(entityId) ?: return -1
-        return masks?.getMask(entityId, clipping, x % 64, y % 64, plane) ?: -1
     }
 
     override fun getRotation(x: Int, y: Int, plane: Int): Int {

@@ -22,7 +22,6 @@ class ObjectStrategy(val type: Int, position: Position, val rotation: Int, sizeX
         }
     }
 
-
     override fun exit(currentX: Int, currentY: Int, sizeX: Int, sizeY: Int, clipBaseX: Int, clipBaseY: Int, collision: Collision?): Boolean {
         return when (routeType) {
             ObjectType.NORMAL -> checkWallInteract(collision, this.sizeX, 0, destinationY, currentY, currentX, destinationX, rotation, clipBaseX, clipBaseY)

@@ -10,8 +10,8 @@ import worlds.gregs.hestia.core.entity.`object`.model.components.Rotation
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.world.collision.model.CollisionFlags.FLOOR_DECO
 import worlds.gregs.hestia.core.world.map.api.ClippingMasks
-import worlds.gregs.hestia.core.world.map.logic.systems.ClippingMaskSystem.Companion.ADD_MASK
-import worlds.gregs.hestia.core.world.map.logic.systems.ClippingMaskSystem.Companion.REMOVE_MASK
+import worlds.gregs.hestia.core.world.map.api.ClippingMasks.Companion.ADD_MASK
+import worlds.gregs.hestia.core.world.map.api.ClippingMasks.Companion.REMOVE_MASK
 import worlds.gregs.hestia.core.world.map.model.MapConstants.isOutOfBounds
 import worlds.gregs.hestia.core.world.region.api.Regions
 import worlds.gregs.hestia.service.cache.definition.systems.ObjectDefinitionSystem
@@ -24,7 +24,6 @@ class ObjectClippingSystem : SubscriptionSystem(Aspect.all(GameObject::class)) {
     private lateinit var objectTypeMapper: ComponentMapper<ObjectType>
     private lateinit var rotationMapper: ComponentMapper<Rotation>
     private var masks: ClippingMasks? = null
-    private var regions: Regions? = null
     private lateinit var objectDef: ObjectDefinitionSystem
 
     override fun inserted(entityId: Int) {
@@ -42,8 +41,6 @@ class ObjectClippingSystem : SubscriptionSystem(Aspect.all(GameObject::class)) {
         val rotation = rotationMapper.get(entityId).rotation
         val gameObject = gameObjectMapper.get(entityId)
 
-        val regionEntityId = regions?.getEntityId(position.regionId) ?: return
-
         if (isOutOfBounds(position.xInRegion, position.yInRegion)) {
             return
         }
@@ -56,7 +53,7 @@ class ObjectClippingSystem : SubscriptionSystem(Aspect.all(GameObject::class)) {
         }
 
         when (type) {
-            in 0..3 -> masks?.changeWall(regionEntityId, position.xInRegion, position.yInRegion, position.plane, type, rotation, definition.projectileClipped, !definition.ignoreClipOnAlternativeRoute, changeType)
+            in 0..3 -> masks?.changeWall(position.x, position.y, position.plane, type, rotation, definition.projectileClipped, !definition.ignoreClipOnAlternativeRoute, changeType)
             in 9..21 -> {
                 var sizeX = definition.sizeX
                 var sizeY = definition.sizeY
@@ -64,11 +61,11 @@ class ObjectClippingSystem : SubscriptionSystem(Aspect.all(GameObject::class)) {
                     sizeX = definition.sizeY
                     sizeY = definition.sizeX
                 }
-                masks?.changeObject(regionEntityId, position.xInRegion, position.yInRegion, position.plane, sizeX.toShort(), sizeY.toShort(), definition.projectileClipped, !definition.ignoreClipOnAlternativeRoute, changeType)
+                masks?.changeObject(position.x, position.y, position.plane, sizeX.toShort(), sizeY.toShort(), definition.projectileClipped, !definition.ignoreClipOnAlternativeRoute, changeType)
             }
             22 -> {
                 if(definition.solid == 1) {
-                    masks?.changeMask(regionEntityId, position.xInRegion, position.yInRegion, position.plane, FLOOR_DECO, changeType)
+                    masks?.changeMask(position.x, position.y, position.plane, FLOOR_DECO, changeType)
                 }
             }
         }

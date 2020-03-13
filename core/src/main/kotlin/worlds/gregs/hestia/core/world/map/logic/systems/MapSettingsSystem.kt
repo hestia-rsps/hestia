@@ -50,21 +50,12 @@ class MapSettingsSystem : MapSettings() {
         return mapSettings
     }
 
-    /**
-     * Adds masks to clipping based on the settings provided
-     * @param entityId The regions entity id
-     * @param settings The tile settings
-     * @param rotation The chunks rotation
-     * @param chunkX The chunks x coordinate
-     * @param chunkY The chunks y coordinate
-     * @param chunkPlane The chunks plane coordinate
-     */
-    override fun apply(entityId: Int, settings: Array<Array<ByteArray>>, rotation: Int?, chunkX: Int?, chunkY: Int?, chunkPlane: Int?) {
+    override fun apply(regionX: Int, regionY: Int, settings: Array<Array<ByteArray>>, rotation: Int?, chunkX: Int?, chunkY: Int?, chunkPlane: Int?) {
         if (rotation == null) {
             //Static region
             applySettings(settings, REGION_RANGE, REGION_RANGE, PLANE_RANGE) { localX, localY, plane ->
                 //Add mask
-                masks?.addMask(entityId, localX, localY, plane, CollisionFlags.FLOOR)
+                masks?.addMask(regionX + localX, regionY + localY, plane, CollisionFlags.FLOOR)
             }
         } else if (chunkX != null && chunkY != null && chunkPlane != null) {
             //Dynamic region
@@ -74,7 +65,7 @@ class MapSettingsSystem : MapSettings() {
                 val newX = chunk.translateX(localX and 0x7, localY and 0x7, rotation)
                 val newY = chunk.translateY(localX and 0x7, localY and 0x7, rotation)
                 //Add mask
-                masks?.addMask(entityId, chunkX or newX, chunkY or newY, plane, CollisionFlags.FLOOR)
+                masks?.addMask(regionX + chunkX or newX, regionY + chunkY or newY, plane, CollisionFlags.FLOOR)
             }
         }
     }
