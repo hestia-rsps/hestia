@@ -8,7 +8,7 @@ import java.util.*
 
 class EntityStrategy(override val destinationX: Int, override val destinationY: Int, private val entitySizeX: Int, private val entitySizeY: Int, private val accessBlockFlag: Int = 0) : RouteStrategy {
 
-    override fun exit(currentX: Int, currentY: Int, sizeX: Int, sizeY: Int, clipBaseX: Int, clipBaseY: Int, collision: Collision?): Boolean {
+    override fun exit(currentX: Int, currentY: Int, sizeX: Int, sizeY: Int, collision: Collision?): Boolean {
         return checkFilledRectangularInteract(collision, sizeX, destinationY, sizeY, currentX, destinationX, accessBlockFlag, entitySizeY, currentY, entitySizeX)
     }
 

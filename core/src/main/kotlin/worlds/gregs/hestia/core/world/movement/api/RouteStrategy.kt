@@ -13,7 +13,7 @@ interface RouteStrategy {
 
     val sizeY: Int
 
-    fun exit(currentX: Int, currentY: Int, sizeX: Int, sizeY: Int, clipBaseX: Int, clipBaseY: Int, collision: Collision?): Boolean
+    fun exit(currentX: Int, currentY: Int, sizeX: Int, sizeY: Int, collision: Collision?): Boolean
 
     override fun equals(other: Any?): Boolean
 

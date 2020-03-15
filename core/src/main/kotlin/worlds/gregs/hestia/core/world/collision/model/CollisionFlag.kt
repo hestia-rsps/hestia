@@ -40,11 +40,11 @@ object CollisionFlag {
     fun Direction.flag(): Int = flags[this] ?: 0
     fun Direction.block(): Int = block(WALKING)
     fun Direction.clear(): Int = clear(WALKING)
-    fun Direction.wall(): Int = clear(WALKING)
+    fun Direction.wall(): Int = wall(WALKING)
     fun Direction.flag(motionType: Int): Int = applyMotion(flag(), motionType)
     fun Direction.block(motionType: Int): Int = block[this]?.getOrNull(motionType) ?: 0
     fun Direction.clear(motionType: Int): Int = clear[this]?.getOrNull(motionType) ?: 0
-    fun Direction.wall(motionType: Int): Int = clear[this]?.getOrNull(motionType) ?: 0
+    fun Direction.wall(motionType: Int): Int = wall[this]?.getOrNull(motionType) ?: 0
 
     private fun applyMotion(flag: Int, motion: Int): Int {
         return when (motion) {
@@ -87,8 +87,21 @@ object CollisionFlag {
 
     @JvmStatic
     fun main(args: Array<String>) {
+        println("FLAG")
         Direction.directions.forEach {
             println("$it 0x${"%X".format(it.flag())} ${it.flag()}")
+        }
+        println("BLOCK")
+        Direction.directions.forEach {
+            println("$it 0x${"%X".format(it.block())} ${it.block()}")
+        }
+        println("CLEAR")
+        Direction.directions.forEach {
+            println("$it 0x${"%X".format(it.clear())} ${it.clear()}")
+        }
+        println("WALL")
+        Direction.directions.forEach {
+            println("$it 0x${"%X".format(it.wall())} ${it.wall()}")
         }
     }
 }

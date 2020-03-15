@@ -122,7 +122,7 @@ class PathFinderSystem : PassiveSystem() {
             currentGraphY = currentY - graphBaseY
 
             // Check if path is complete
-            if (strategy.exit(currentX, currentY, sizeX, sizeY, graphBaseX, graphBaseY, collision)) {
+            if (strategy.exit(currentX, currentY, sizeX, sizeY, collision)) {
                 exitX = currentX
                 exitY = currentY
                 return true

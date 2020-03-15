@@ -6,7 +6,7 @@ import java.util.*
 
 class FixedTileStrategy(override val destinationX: Int, override val destinationY: Int) : RouteStrategy {
 
-    override fun exit(currentX: Int, currentY: Int, sizeX: Int, sizeY: Int, clipBaseX: Int, clipBaseY: Int, collision: Collision?): Boolean {
+    override fun exit(currentX: Int, currentY: Int, sizeX: Int, sizeY: Int, collision: Collision?): Boolean {
         return currentX == destinationX && currentY == destinationY
     }
 

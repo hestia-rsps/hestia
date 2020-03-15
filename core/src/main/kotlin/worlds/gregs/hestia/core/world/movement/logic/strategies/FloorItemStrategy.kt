@@ -6,8 +6,8 @@ import java.util.*
 
 class FloorItemStrategy(override val destinationX: Int, override val destinationY: Int) : RouteStrategy {
 
-    override fun exit(currentX: Int, currentY: Int, sizeX: Int, sizeY: Int, clipBaseX: Int, clipBaseY: Int, collision: Collision?): Boolean {
-        return checkRectangleInteract(destinationX - clipBaseX, sizeX, currentX - clipBaseX, 1, 1, currentY - clipBaseY, destinationY - clipBaseY, sizeY)
+    override fun exit(currentX: Int, currentY: Int, sizeX: Int, sizeY: Int, collision: Collision?): Boolean {
+        return checkRectangleInteract(currentX, currentY, sizeX, sizeY, destinationX, destinationY, 1, 1)
     }
 
     override val sizeX = 1
@@ -24,11 +24,11 @@ class FloorItemStrategy(override val destinationX: Int, override val destination
     }
 
     companion object {
-        fun checkRectangleInteract(targetX: Int, sizeX: Int, currentX: Int, targetSizeX: Int, targetSizeY: Int, currentY: Int, targetY: Int, sizeY: Int): Boolean {
+        fun checkRectangleInteract(currentX: Int, currentY: Int, sizeX: Int, sizeY: Int, targetX: Int, targetY: Int, targetSizeX: Int, targetSizeY: Int): Boolean {
             if (targetX + targetSizeX <= currentX || targetX >= currentX + sizeX) {
                 return false
             }
-            return !(currentY >= targetY + targetSizeY || sizeY + currentY <= targetY)
+            return currentY < targetY + targetSizeY && sizeY + currentY > targetY
         }
     }
 }

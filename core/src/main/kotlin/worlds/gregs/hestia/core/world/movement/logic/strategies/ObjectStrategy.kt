@@ -4,6 +4,7 @@ import worlds.gregs.hestia.core.display.update.model.Direction
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.world.collision.api.Collision
 import worlds.gregs.hestia.core.world.collision.model.CollisionFlag.flag
+import worlds.gregs.hestia.core.world.collision.model.CollisionFlag.wall
 import worlds.gregs.hestia.core.world.movement.api.RouteStrategy
 import java.util.*
 
@@ -22,12 +23,13 @@ class ObjectStrategy(val type: Int, position: Position, val rotation: Int, sizeX
         if (rotation != 0) {
             accessBlockFlag = (accessBlockFlag shl rotation and 0xF) + (accessBlockFlag shr 4 - rotation)
         }
+        println("Object strategy $routeType")
     }
 
-    override fun exit(currentX: Int, currentY: Int, sizeX: Int, sizeY: Int, clipBaseX: Int, clipBaseY: Int, collision: Collision?): Boolean {
+    override fun exit(currentX: Int, currentY: Int, sizeX: Int, sizeY: Int, collision: Collision?): Boolean {
         return when (routeType) {
-            ObjectType.NORMAL -> checkWallInteract(collision, this.sizeX, 0, destinationY, currentY, currentX, destinationX, rotation, clipBaseX, clipBaseY)
-            ObjectType.WALL_DECORATION -> checkWallDecorationInteract(collision, currentX, type, destinationX, destinationY, rotation, currentY, this.sizeX, clipBaseX, clipBaseY)
+            ObjectType.NORMAL -> checkWallInteract(collision, this.sizeX, 0, destinationY, currentY, currentX, destinationX, rotation)
+            ObjectType.WALL_DECORATION -> checkWallDecorationInteract(collision, currentX, type, destinationX, destinationY, rotation, currentY, this.sizeX)
             ObjectType.FLOOR_DECORATION -> EntityStrategy.checkFilledRectangularInteract(collision, sizeX, destinationY, sizeY, currentX, destinationX, accessBlockFlag, this.sizeY, currentY, this.sizeX)
             ObjectType.OTHER -> currentX == destinationX && currentY == destinationY
         }
@@ -62,225 +64,155 @@ class ObjectStrategy(val type: Int, position: Position, val rotation: Int, sizeX
             else -> ObjectType.OTHER*/
         }
 
-        fun checkWallInteract(collision: Collision?, sizeXY: Int, targetType: Int, targetY: Int, currentY: Int, currentX: Int, targetX: Int, rotation: Int, clipBaseX: Int, clipBaseY: Int): Boolean {
+        fun checkWallInteract(collision: Collision?, sizeXY: Int, targetType: Int, targetY: Int, currentY: Int, currentX: Int, targetX: Int, rotation: Int): Boolean {
             if(collision == null) {
                 return false
             }
             if (sizeXY != 1) {
-                if (targetX >= currentX && currentX - 1 >= targetX && targetY <= -1 + targetY + sizeXY) {
+                if (targetX >= currentX && currentX - 1 >= targetX && targetY <= targetY + sizeXY - 1) {
                     return true
                 }
             } else if (targetX == currentX && currentY == targetY) {
                 return true
             }
-            val currentX = currentX - clipBaseX
-            val targetY = targetY - clipBaseY
-            val targetX = targetX - clipBaseX
-            val currentY = currentY - clipBaseY
             if (sizeXY == 1) {
                 if (targetType == 0) {
-                    if (rotation == 0) {
-                        if (currentX == targetX - 1 && targetY == currentY) {
-                            return true
-                        }
-                        if (currentX == targetX && 1 + targetY == currentY && collision.collides(currentX, currentY, 0x2c0120)) {// Collides South
-                            return true
-                        }
-                        if (targetX == currentX && currentY == targetY - 1 && collision.collides(currentX, currentY, 0x2c0102)) {// Collides North
-                            return true
-                        }
-                    } else if (rotation == 1) {
-                        if (currentX == targetX && targetY + 1 == currentY) {
-                            return true
-                        }
-                        if (-1 + targetX == currentX && targetY == currentY && collision.collides(currentX, currentY, 0x2c0108)) {// Collides east
-                            return true
-                        }
-                        if (targetX + 1 == currentX && currentY == targetY && collision.collides(currentX, currentY, 0x2c0180)) {// Collides west
-                            return true
-                        }
-                    } else if (rotation == 2) {
-                        if (currentX == targetX + 1 && targetY == currentY) {
-                            return true
-                        }
-                        if (currentX == targetX && 1 + targetY == currentY && collision.collides(currentX, currentY, 0x2c0120)) {// Collides South
-                            return true
-                        }
-                        if (currentX == targetX && -1 + targetY == currentY && collision.collides(currentX, currentY, 0x2c0102)) {// Collides North
-                            return true
-                        }
-                    } else if (rotation == 3) {
-                        if (targetX == currentX && currentY == -1 + targetY) {
-                            return true
-                        }
-                        if (targetX - 1 == currentX && currentY == targetY && collision.collides(currentX, currentY, 0x2c0108)) {// Collides east
-                            return true
-                        }
-                        if (currentX == targetX + 1 && targetY == currentY && collision.collides(currentX, currentY, 0x2c0180)) {// Collides west
-                            return true
-                        }
+                    val direction = Direction.cardinal[rotation + 3 and 0x3]
+                    if(currentX == targetX + direction.deltaX && currentY == targetY + direction.deltaY) {
+                        return true
+                    }
+                    val perpendicular = Direction.cardinal[rotation + 4 and 0x3]
+                    if (currentX == targetX - perpendicular.deltaX && currentY == targetY - perpendicular.deltaY && !collision.collides(currentX, currentY, perpendicular.wall())) {
+                        return true
+                    }
+                    val inverse = perpendicular.inverse()
+                    if (currentX == targetX - inverse.deltaX && currentY == targetY - inverse.deltaY && !collision.collides(currentX, currentY, inverse.wall())) {
+                        return true
                     }
                 }
                 if (targetType == 2) {
-                    if (rotation == 0) {
-                        if (-1 + targetX == currentX && currentY == targetY) {
-                            return true
-                        }
-                        if (currentX == targetX && currentY == targetY + 1) {
-                            return true
-                        }
-                        if (1 + targetX == currentX && targetY == currentY && collision.collides(currentX, currentY, 0x2c0180)) {
-                            return true
-                        }
-                        if (currentX == targetX && -1 + targetY == currentY && collision.collides(currentX, currentY, 0x2c0102)) {
-                            return true
-                        }
-                    } else if (rotation == 1) {
-                        if (currentX == targetX - 1 && currentY == targetY && collision.collides(currentX, currentY, 0x2c0108)) {
-                            return true
-                        }
-                        if (currentX == targetX && targetY + 1 == currentY) {
-                            return true
-                        }
-                        if (currentX == 1 + targetX && targetY == currentY) {
-                            return true
-                        }
-                        if (targetX == currentX && currentY == -1 + targetY && collision.collides(currentX, currentY, 0x2c0102)) {
-                            return true
-                        }
-                    } else if (rotation == 2) {
-                        if (-1 + targetX == currentX && currentY == targetY && collision.collides(currentX, currentY, 0x2c0108)) {
-                            return true
-                        }
-                        if (targetX == currentX && currentY == 1 + targetY && collision.collides(currentX, currentY, 0x2c0120)) {
-                            return true
-                        }
-                        if (targetX + 1 == currentX && currentY == targetY) {
-                            return true
-                        }
-                        if (targetX == currentX && targetY - 1 == currentY) {
-                            return true
-                        }
-                    } else if (rotation == 3) {
-                        if (currentX == targetX - 1 && currentY == targetY) {
-                            return true
-                        }
-                        if (targetX == currentX && currentY == targetY + 1 && collision.collides(currentX, currentY, 0x2c0120)) {
-                            return true
-                        }
-                        if (1 + targetX == currentX && targetY == currentY && collision.collides(currentX, currentY, 0x2c0180)) {
-                            return true
-                        }
-                        if (currentX == targetX && currentY == -1 + targetY) {
-                            return true
-                        }
+                    val direction = Direction.ordinal[rotation and 0x3]
+                    val horizontal = direction.horizontal()
+                    if(currentX == targetX + horizontal.deltaX && currentY == targetY) {
+                        return true
+                    }
+                    val vertical = direction.vertical()
+                    if(currentX == targetX && currentY == targetY + vertical.deltaY) {
+                        return true
+                    }
+                    if(currentX == targetX - horizontal.deltaX && currentY == targetY && !collision.collides(currentX, currentY, horizontal.wall())) {
+                        return true
+                    }
+                    if(currentX == targetX && currentY == targetY - vertical.deltaY && !collision.collides(currentX, currentY, vertical.wall())) {
+                        return true
                     }
                 }
                 if (targetType == 9) {
-                    if (targetX == currentX && 1 + targetY == currentY && collision.collides(currentX, currentY, 0x20)) {
-                        return true
+                    Direction.ordinal.forEach { direction ->
+                        if (currentX == targetX - direction.deltaX && currentY == targetY - direction.deltaY && !collision.collides(currentX, currentY, direction.flag())) {
+                            return true
+                        }
                     }
-                    if (currentX == targetX && targetY + -1 == currentY && collision.collides(currentX, currentY, 0x2)) {
-                        return true
-                    }
-                    return if (-1 + targetX == currentX && currentY == targetY && collision.collides(currentX, currentY, 0x8)) {
-                        true
-                    } else 1 + targetX == currentX && currentY == targetY && collision.collides(currentX, currentY, 0x80)
+                    return false
                 }
             } else {
-                val sizeX = -1 + (sizeXY + currentX)
-                val sizeY = -1 + sizeXY + currentY
+                val sizeX = sizeXY + currentX - 1
+                val sizeY = sizeXY + currentY - 1
                 if (targetType == 0) {
                     if (rotation == 0) {
-                        if (-sizeXY + targetX == currentX && currentY <= targetY && targetY <= sizeY) {
+                        // Vertical
+                        if (currentX == targetX - sizeXY && currentY <= targetY && sizeY >= targetY) {
                             return true
                         }
-                        if (targetX in currentX..sizeX && 1 + targetY == currentY && collision.collides(targetX, currentY, 0x2c0120)) {
+                        if (targetX in currentX..sizeX && currentY == targetY + 1 && !collision.collides(targetX, currentY, Direction.SOUTH.wall())) {
                             return true
                         }
-                        if (targetX in currentX..sizeX && currentY == targetY + -sizeXY && collision.collides(targetX, sizeY, 0x2c0102)) {
+                        if (targetX in currentX..sizeX && currentY == targetY - sizeXY && !collision.collides(targetX, sizeY, Direction.NORTH.wall())) {
                             return true
                         }
                     } else if (rotation == 1) {
-                        if (targetX in currentX..sizeX && currentY == targetY + 1) {
+                        // Horizontal
+                        if (currentY == targetY + 1 && currentX <= targetX && sizeX >= targetX) {
                             return true
                         }
-                        if (-sizeXY + targetX == currentX && targetY >= currentY && sizeY >= targetY && collision.collides(sizeX, targetY, 0x2c0108)) {
+                        if (currentX == targetX - sizeXY && targetY >= currentY && sizeY >= targetY && !collision.collides(sizeX, targetY, Direction.EAST.wall())) {
                             return true
                         }
-                        if (1 + targetX == currentX && currentY <= targetY && sizeY >= targetY && collision.collides(currentX, targetY, 0x2c0180)) {
+                        if (currentX == targetX + 1 && currentY <= targetY && sizeY >= targetY && !collision.collides(currentX, targetY, Direction.WEST.wall())) {
                             return true
                         }
                     } else if (rotation == 2) {
-                        if (currentX == 1 + targetX && currentY <= targetY && targetY <= sizeY) {
+                        // Vertical
+                        if (currentX == targetX + 1 && currentY <= targetY && sizeY >= targetY) {
                             return true
                         }
-                        if (targetX in currentX..sizeX && currentY == targetY + 1 && collision.collides(targetX, currentY, 0x2c0120)) {
+                        if (targetX in currentX..sizeX && currentY == targetY + 1 && !collision.collides(targetX, currentY, Direction.SOUTH.wall())) {
                             return true
                         }
-                        if (targetX in currentX..sizeX && targetY - sizeXY == currentY && collision.collides(targetX, sizeY, 0x2c0102)) {
+                        if (targetX in currentX..sizeX && targetY - sizeXY == currentY && !collision.collides(targetX, sizeY, Direction.NORTH.wall())) {
                             return true
                         }
                     } else if (rotation == 3) {
-                        if (targetX in currentX..sizeX && currentY == targetY + -sizeXY) {
+                        // Horizontal
+                        if (currentY == targetY - sizeXY && currentX <= targetX && sizeX >= targetX) {
                             return true
                         }
-                        if (-sizeXY + targetX == currentX && targetY >= currentY && sizeY >= targetY && collision.collides(sizeX, targetY, 0x2c0108)) {
+                        if (targetX - sizeXY == currentX && targetY >= currentY && sizeY >= targetY && !collision.collides(sizeX, targetY, Direction.EAST.wall())) {
                             return true
                         }
-                        if (currentX == 1 + targetX && currentY <= targetY && sizeY >= targetY && collision.collides(currentX, targetY, 0x2c0180)) {
+                        if (currentX == targetX + 1 && currentY <= targetY && sizeY >= targetY && !collision.collides(currentX, targetY, Direction.WEST.wall())) {
                             return true
                         }
                     }
                 }
                 if (targetType == 2) {
                     if (rotation == 0) {
-                        if (targetX + -sizeXY == currentX && targetY >= currentY && sizeY >= targetY) {
+                        if (targetX - sizeXY == currentX && targetY >= currentY && sizeY >= targetY) {
                             return true
                         }
-                        if (targetX in currentX..sizeX && currentY == 1 + targetY) {
+                        if (targetX in currentX..sizeX && currentY == targetY + 1) {
                             return true
                         }
-                        if (currentX == targetX + 1 && targetY >= currentY && sizeY >= targetY && collision.collides(currentX, targetY, 0x2c0180)) {
+                        if (currentX == targetX + 1 && targetY >= currentY && sizeY >= targetY && !collision.collides(currentX, targetY, Direction.WEST.wall())) {
                             return true
                         }
-                        if (targetX in currentX..sizeX && -sizeXY + targetY == currentY && collision.collides(targetX, sizeY, 0x2c0102)) {
+                        if (targetX in currentX..sizeX && targetY - sizeXY == currentY && !collision.collides(targetX, sizeY, Direction.NORTH.wall())) {
                             return true
                         }
                     } else if (rotation == 1) {
-                        if (-sizeXY + targetX == currentX && currentY <= targetY && targetY <= sizeY && collision.collides(sizeX, targetY, 0x2c0108)) {
+                        if (targetX - sizeXY == currentX && currentY <= targetY && targetY <= sizeY && !collision.collides(sizeX, targetY, Direction.EAST.wall())) {
                             return true
                         }
                         if (targetX in currentX..sizeX && targetY + 1 == currentY) {
                             return true
                         }
-                        if (1 + targetX == currentX && targetY >= currentY && sizeY >= targetY) {
+                        if (targetX + 1 == currentX && targetY >= currentY && sizeY >= targetY) {
                             return true
                         }
-                        if (targetX in currentX..sizeX && currentY == targetY + -sizeXY && collision.collides(targetX, sizeY, 0x2c0102)) {
+                        if (targetX in currentX..sizeX && currentY == targetY - sizeXY && !collision.collides(targetX, sizeY, Direction.NORTH.wall())) {
                             return true
                         }
                     } else if (rotation == 2) {
-                        if (currentX == targetX + -sizeXY && targetY >= currentY && targetY <= sizeY && collision.collides(sizeX, targetY, 0x2c0108)) {
+                        if (currentX == targetX - sizeXY && targetY >= currentY && targetY <= sizeY && !collision.collides(sizeX, targetY, Direction.EAST.wall())) {
                             return true
                         }
-                        if (targetX in currentX..sizeX && currentY == 1 + targetY && collision.collides(targetX, currentY, 0x2c0120)) {
+                        if (targetX in currentX..sizeX && currentY == targetY + 1 && !collision.collides(targetX, currentY, Direction.SOUTH.wall())) {
                             return true
                         }
                         if (targetX + 1 == currentX && targetY >= currentY && sizeY >= targetY) {
                             return true
                         }
-                        if (targetX in currentX..sizeX && currentY == targetY + -sizeXY) {
+                        if (targetX in currentX..sizeX && currentY == targetY - sizeXY) {
                             return true
                         }
                     } else if (rotation == 3) {
-                        if (currentX == -sizeXY + targetX && currentY <= targetY && targetY <= sizeY) {
+                        if (currentX == targetX - sizeXY && currentY <= targetY && targetY <= sizeY) {
                             return true
                         }
-                        if (targetX in currentX..sizeX && 1 + targetY == currentY && collision.collides(targetX, currentY, 0x2c0120)) {
+                        if (targetX in currentX..sizeX && targetY + 1 == currentY && !collision.collides(targetX, currentY, Direction.SOUTH.wall())) {
                             return true
                         }
-                        if (currentX == targetX + 1 && targetY >= currentY && targetY <= sizeY && collision.collides(currentX, targetY, 0x2c0180)) {
+                        if (currentX == targetX + 1 && targetY >= currentY && targetY <= sizeY && !collision.collides(currentX, targetY, Direction.WEST.wall())) {
                             return true
                         }
                         if (targetX in currentX..sizeX && targetY - sizeXY == currentY) {
@@ -289,21 +221,21 @@ class ObjectStrategy(val type: Int, position: Position, val rotation: Int, sizeX
                     }
                 }
                 if (targetType == 9) {
-                    if (targetX in currentX..sizeX && currentY == 1 + targetY && collision.collides(targetX, currentY, 0x2c0120)) {
+                    if (targetX in currentX..sizeX && currentY == targetY + 1 && !collision.collides(targetX, currentY, Direction.SOUTH.wall())) {
                         return true
                     }
-                    if (targetX in currentX..sizeX && -sizeXY + targetY == currentY && collision.collides(targetX, sizeY, 0x2c0102)) {
+                    if (targetX in currentX..sizeX && targetY - sizeXY == currentY && !collision.collides(targetX, sizeY, Direction.NORTH.wall())) {
                         return true
                     }
-                    return if (-sizeXY + targetX == currentX && targetY >= currentY && targetY <= sizeY && collision.collides(sizeX, targetY, 0x2c0108)) {
+                    return if (targetX - sizeXY == currentX && targetY >= currentY && targetY <= sizeY && !collision.collides(sizeX, targetY, Direction.EAST.wall())) {
                         true
-                    } else targetX + 1 == currentX && targetY >= currentY && sizeY >= targetY && collision.collides(currentX, targetY, 0x2c0180)
+                    } else targetX + 1 == currentX && targetY >= currentY && sizeY >= targetY && !collision.collides(currentX, targetY, Direction.WEST.wall())
                 }
             }
             return false
         }
         
-        fun checkWallDecorationInteract(collision: Collision?, currentX: Int, targetType: Int, targetX: Int, targetY: Int, targetRotation: Int, currentY: Int, sizeXY: Int, clipBaseX: Int, clipBaseY: Int): Boolean {
+        fun checkWallDecorationInteract(collision: Collision?, currentX: Int, targetType: Int, targetX: Int, targetY: Int, targetRotation: Int, currentY: Int, sizeXY: Int): Boolean {
             if(collision == null) {
                 return false
             }
@@ -312,106 +244,102 @@ class ObjectStrategy(val type: Int, position: Position, val rotation: Int, sizeX
                 if (targetX == currentX && currentY == targetY) {
                     return true
                 }
-            } else if (currentX <= targetX && -1 + sizeXY + currentX >= targetX && targetY <= -1 + sizeXY + targetY) {
+            } else if (currentX <= targetX && sizeXY + currentX - 1 >= targetX && targetY <= sizeXY + targetY - 1) {
                 return true
             }
-            val currentX = currentX - clipBaseX
-            val targetY = targetY - clipBaseY
-            val targetX = targetX - clipBaseX
-            val currentY = currentY - clipBaseY
             if (sizeXY == 1) {
-                if (targetType == 6 || targetType == 7) {
-                    if (targetType == 7) {
-                        targetRotation = 0x3 and targetRotation + 2
-                    }
-                    if (targetRotation == 0) {
-                        if (currentX == 1 + targetX && currentY == targetY && collision.collides(currentX, currentY, Direction.WEST.flag())) {
-                            return true
-                        }
-                        if (targetX == currentX && currentY == -1 + targetY && collision.collides(currentX, currentY, Direction.NORTH.flag())) {
-                            return true
-                        }
-                    } else if (targetRotation == 1) {
-                        if (currentX == -1 + targetX && currentY == targetY && collision.collides(currentX, currentY, Direction.EAST.flag())) {
-                            return true
-                        }
-                        if (targetX == currentX && currentY == -1 + targetY && collision.collides(currentX, currentY, Direction.NORTH.flag())) {
-                            return true
-                        }
-                    } else if (targetRotation == 2) {
-                        if (currentX == targetX - 1 && targetY == currentY && collision.collides(currentX, currentY, Direction.EAST.flag())) {
-                            return true
-                        }
-                        if (targetX == currentX && currentY == 1 + targetY && collision.collides(currentX, currentY, Direction.SOUTH.flag())) {
-                            return true
-                        }
-                    } else if (targetRotation == 3) {
-                        if (1 + targetX == currentX && currentY == targetY && collision.collides(currentX, currentY, Direction.WEST.flag())) {
-                            return true
-                        }
-                        if (targetX == currentX && currentY == 1 + targetY && collision.collides(currentX, currentY, Direction.SOUTH.flag())) {
-                            return true
-                        }
-                    }
-                }
-                if (targetType == 8) {
-                    if (targetX == currentX && currentY == 1 + targetY && collision.collides(currentX, currentY, Direction.SOUTH.flag())) {
-                        return true
-                    }
-                    if (currentX == targetX && targetY + -1 == currentY && collision.collides(currentX, currentY, Direction.NORTH.flag())) {
-                        return true
-                    }
-                    return if (currentX == targetX + -1 && targetY == currentY && collision.collides(currentX, currentY, Direction.EAST.flag())) {
-                        true
-                    } else targetX + 1 == currentX && targetY == currentY && collision.collides(currentX, currentY, Direction.WEST.flag())
-                }
-            } else {
-                val sizeX = sizeXY + currentX - 1
-                val sizeY = -1 + currentY + sizeXY
                 if (targetType == 6 || targetType == 7) {
                     if (targetType == 7) {
                         targetRotation = targetRotation + 2 and 0x3
                     }
                     if (targetRotation == 0) {
-                        if (currentX == targetX + 1 && currentY <= targetY && targetY <= sizeY && collision.collides(currentX, targetY, Direction.WEST.flag())) {
+                        if (currentX == targetX + 1 && currentY == targetY && !collision.collides(currentX, currentY, Direction.WEST.flag())) {
                             return true
                         }
-                        if (targetX in currentX..sizeX && currentY == targetY + -sizeXY && collision.collides(targetX, sizeY, Direction.NORTH.flag())) {
+                        if (targetX == currentX && currentY == targetY - 1 && !collision.collides(currentX, currentY, Direction.NORTH.flag())) {
                             return true
                         }
                     } else if (targetRotation == 1) {
-                        if (currentX == targetX - sizeXY && targetY >= currentY && targetY <= sizeY && collision.collides(sizeX, targetY, Direction.EAST.flag())) {
+                        if (currentX == targetX - 1 && currentY == targetY && !collision.collides(currentX, currentY, Direction.EAST.flag())) {
                             return true
                         }
-                        if (targetX in currentX..sizeX && currentY == -sizeXY + targetY && collision.collides(targetX, sizeY, Direction.NORTH.flag())) {
+                        if (targetX == currentX && currentY == targetY - 1 && !collision.collides(currentX, currentY, Direction.NORTH.flag())) {
                             return true
                         }
                     } else if (targetRotation == 2) {
-                        if (-sizeXY + targetX == currentX && targetY >= currentY && targetY <= sizeY && collision.collides(sizeX, targetY, Direction.EAST.flag())) {
+                        if (currentX == targetX - 1 && targetY == currentY && !collision.collides(currentX, currentY, Direction.EAST.flag())) {
                             return true
                         }
-                        if (targetX in currentX..sizeX && 1 + targetY == currentY && collision.collides(targetX, currentY, Direction.SOUTH.flag())) {
+                        if (targetX == currentX && currentY == targetY + 1 && !collision.collides(currentX, currentY, Direction.SOUTH.flag())) {
                             return true
                         }
                     } else if (targetRotation == 3) {
-                        if (currentX == targetX + 1 && currentY <= targetY && targetY <= sizeY && collision.collides(currentX, targetY, Direction.WEST.flag())) {
+                        if (targetX + 1 == currentX && currentY == targetY && !collision.collides(currentX, currentY, Direction.WEST.flag())) {
                             return true
                         }
-                        if (targetX in currentX..sizeX && currentY == targetY + 1 && collision.collides(targetX, currentY, Direction.SOUTH.flag())) {
+                        if (targetX == currentX && currentY == targetY + 1 && !collision.collides(currentX, currentY, Direction.SOUTH.flag())) {
                             return true
                         }
                     }
                 }
                 if (targetType == 8) {
-                    if (targetX in currentX..sizeX && currentY == 1 + targetY && collision.collides(targetX, currentY, Direction.SOUTH.flag())) {
+                    if (targetX == currentX && currentY == targetY + 1 && !collision.collides(currentX, currentY, Direction.SOUTH.flag())) {
                         return true
                     }
-                    if (targetX in currentX..sizeX && currentY == -sizeXY + targetY && collision.collides(targetX, sizeY, Direction.NORTH.flag())) {
+                    if (currentX == targetX && targetY - 1 == currentY && !collision.collides(currentX, currentY, Direction.NORTH.flag())) {
                         return true
                     }
-                    return if (currentX == targetX + -sizeXY && currentY <= targetY && targetY <= sizeY && collision.collides(sizeX, targetY, Direction.EAST.flag())) {
+                    return if (currentX == targetX - 1 && targetY == currentY && !collision.collides(currentX, currentY, Direction.EAST.flag())) {
                         true
-                    } else currentX == 1 + targetX && currentY <= targetY && targetY <= sizeY && collision.collides(currentX, targetY, Direction.WEST.flag())
+                    } else targetX + 1 == currentX && targetY == currentY && !collision.collides(currentX, currentY, Direction.WEST.flag())
+                }
+            } else {
+                val sizeX = sizeXY + currentX - 1
+                val sizeY = currentY + sizeXY - 1
+                if (targetType == 6 || targetType == 7) {
+                    if (targetType == 7) {
+                        targetRotation = targetRotation + 2 and 0x3
+                    }
+                    if (targetRotation == 0) {
+                        if (currentX == targetX + 1 && currentY <= targetY && targetY <= sizeY && !collision.collides(currentX, targetY, Direction.WEST.flag())) {
+                            return true
+                        }
+                        if (targetX in currentX..sizeX && currentY == targetY - sizeXY && !collision.collides(targetX, sizeY, Direction.NORTH.flag())) {
+                            return true
+                        }
+                    } else if (targetRotation == 1) {
+                        if (currentX == targetX - sizeXY && targetY >= currentY && targetY <= sizeY && !collision.collides(sizeX, targetY, Direction.EAST.flag())) {
+                            return true
+                        }
+                        if (targetX in currentX..sizeX && currentY == targetY - sizeXY && !collision.collides(targetX, sizeY, Direction.NORTH.flag())) {
+                            return true
+                        }
+                    } else if (targetRotation == 2) {
+                        if (targetX - sizeXY == currentX && targetY >= currentY && targetY <= sizeY && !collision.collides(sizeX, targetY, Direction.EAST.flag())) {
+                            return true
+                        }
+                        if (targetX in currentX..sizeX && targetY + 1 == currentY && !collision.collides(targetX, currentY, Direction.SOUTH.flag())) {
+                            return true
+                        }
+                    } else if (targetRotation == 3) {
+                        if (currentX == targetX + 1 && currentY <= targetY && targetY <= sizeY && !collision.collides(currentX, targetY, Direction.WEST.flag())) {
+                            return true
+                        }
+                        if (targetX in currentX..sizeX && currentY == targetY + 1 && !collision.collides(targetX, currentY, Direction.SOUTH.flag())) {
+                            return true
+                        }
+                    }
+                }
+                if (targetType == 8) {
+                    if (targetX in currentX..sizeX && currentY == targetY + 1 && !collision.collides(targetX, currentY, Direction.SOUTH.flag())) {
+                        return true
+                    }
+                    if (targetX in currentX..sizeX && currentY == targetY - sizeXY && !collision.collides(targetX, sizeY, Direction.NORTH.flag())) {
+                        return true
+                    }
+                    return if (currentX == targetX - sizeXY && currentY <= targetY && targetY <= sizeY && !collision.collides(sizeX, targetY, Direction.EAST.flag())) {
+                        true
+                    } else currentX == targetX + 1 && currentY <= targetY && targetY <= sizeY && !collision.collides(currentX, targetY, Direction.WEST.flag())
                 }
             }
             return false
