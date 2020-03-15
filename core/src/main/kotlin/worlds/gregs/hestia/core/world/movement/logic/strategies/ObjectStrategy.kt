@@ -28,7 +28,7 @@ class ObjectStrategy(val type: Int, position: Position, val rotation: Int, sizeX
         return when (routeType) {
             ObjectType.NORMAL -> checkWallInteract(collision, this.sizeX, 0, destinationY, currentY, currentX, destinationX, rotation, clipBaseX, clipBaseY)
             ObjectType.WALL_DECORATION -> checkWallDecorationInteract(collision, currentX, type, destinationX, destinationY, rotation, currentY, this.sizeX, clipBaseX, clipBaseY)
-            ObjectType.FLOOR_DECORATION -> EntityStrategy.checkFilledRectangularInteract(collision, sizeX, destinationY, sizeY, currentX, destinationX, accessBlockFlag, this.sizeY, currentY, this.sizeX, clipBaseX, clipBaseY)
+            ObjectType.FLOOR_DECORATION -> EntityStrategy.checkFilledRectangularInteract(collision, sizeX, destinationY, sizeY, currentX, destinationX, accessBlockFlag, this.sizeY, currentY, this.sizeX)
             ObjectType.OTHER -> currentX == destinationX && currentY == destinationY
         }
     }
