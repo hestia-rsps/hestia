@@ -17,10 +17,6 @@ on<Command> {
         val headIcon = entity create HeadIcon::class
         headIcon.headIcon = content.toInt()
         entity perform UpdateAppearance()
-//        val position = entity.get(Position::class)
-//        val regionId = position.regionId
-//        val clipping = map.getClipping(regions.getEntityId(regionId))!!
-//        println("Collision mask ${position.x}, ${position.y} - ${clipping.getMask(position.xInRegion, position.yInRegion, position.plane)}")
     }
     then(Command::task)
 }

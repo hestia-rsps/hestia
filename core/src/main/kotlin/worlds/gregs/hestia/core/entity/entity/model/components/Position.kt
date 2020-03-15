@@ -89,7 +89,7 @@ open class Position() : Component() {
         get() = hash18Bit(regionX, regionY, plane)
 
     val locationHash30Bit: Int
-        get() = hash24Bit(x, y, plane)
+        get() = hash30Bit(x, y, plane)
 
     companion object {
         val EMPTY = Position()
@@ -133,7 +133,7 @@ open class Position() : Component() {
             return y + (x shl 8) + (plane shl 16)
         }
 
-        fun hash24Bit(x: Int, y: Int, plane: Int = 0): Int {
+        fun hash30Bit(x: Int, y: Int, plane: Int = 0): Int {
             return y + (x shl 14) + (plane shl 28)
         }
 

@@ -121,7 +121,7 @@ class ViewportSystem : ParallelSystem(Aspect.all(Viewport::class, Position::clas
         //Spiral clockwise outwards
         Spiral.spiral(DEFAULT_VIEW_DISTANCE).forEach { point ->
             //For each position
-            val hash = Position.hash24Bit(position.x + point.first, position.y + point.second, position.plane)
+            val hash = Position.hash30Bit(position.x + point.first, position.y + point.second, position.plane)
             //For all entities
             map.getTile(hash)?.forEach { entity ->
                 //Add

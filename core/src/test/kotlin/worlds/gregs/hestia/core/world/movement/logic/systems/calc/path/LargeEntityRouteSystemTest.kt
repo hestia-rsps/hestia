@@ -134,7 +134,7 @@ internal class LargeEntityRouteSystemTest : PathTester(true, PathSystem(), PathF
 
     private fun assertPath(targetX: Int, targetY: Int, expected: List<IntArray>? = null, display: Boolean = false) {
         assertPath(expected, display) {
-            it.edit().add(Path(FixedTileStrategy(targetX, targetY), collide = false, partial = true))
+            it.edit().add(Path(FixedTileStrategy(targetX, targetY)))
         }
     }
 }

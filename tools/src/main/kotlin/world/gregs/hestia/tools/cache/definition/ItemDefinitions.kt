@@ -1,6 +1,8 @@
 package world.gregs.hestia.tools.cache.definition
 
 import com.displee.cache.CacheLibrary
+import org.apache.commons.lang3.builder.ToStringBuilder
+import org.apache.commons.lang3.builder.ToStringStyle
 import world.gregs.hestia.cache.definition.definitions.ItemDefinition
 import world.gregs.hestia.cache.definition.readers.ItemDefinitionReader
 import world.gregs.hestia.core.Settings
@@ -16,8 +18,7 @@ class ItemDefinitions {
             val itemCount = reader.size
             println(itemCount)
 
-//            println(ToStringBuilder.reflectionToString(reader.get(20769), ToStringStyle.MULTI_LINE_STYLE))
-
+            println(ToStringBuilder.reflectionToString(reader.get(11235), ToStringStyle.MULTI_LINE_STYLE))
 
 //            val list = mutableListOf<String>()
 //

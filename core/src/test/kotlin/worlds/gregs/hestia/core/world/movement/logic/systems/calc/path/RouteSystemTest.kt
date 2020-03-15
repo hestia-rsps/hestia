@@ -160,7 +160,7 @@ internal class RouteSystemTest : PathTester(true, PathSystem(), PathFinderSystem
 
     private fun assertPath(targetX: Int, targetY: Int, expected: List<IntArray>? = null, display: Boolean = false, alternative: Boolean = true) {
         assertPath(expected, display) {
-            it.edit().add(Path(FixedTileStrategy(targetX, targetY), true, alternative))
+            it.edit().add(Path(FixedTileStrategy(targetX, targetY)))
         }
     }
 }

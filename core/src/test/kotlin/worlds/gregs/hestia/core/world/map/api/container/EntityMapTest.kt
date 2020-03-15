@@ -143,14 +143,14 @@ internal class EntityMapTest {
         val spiral = HashMap<Int, Int>()
         var i = 0
         Spiral.outwards(x, y, width, height, radius, BiPredicate { x, y ->
-            spiral[Position.hash24Bit(x, y)] = i++
+            spiral[Position.hash30Bit(x, y)] = i++
             true
         })
 
         val distances = HashMap<Int, Int>()
         ids.forEach {
             val position = points[it]
-            distances[it] = spiral[Position.hash24Bit(position.first, position.second)] ?: return@forEach
+            distances[it] = spiral[Position.hash30Bit(position.first, position.second)] ?: return@forEach
         }
         val fill = IntBag()
         val sorted = distances.toList().sortedBy { (_, value) -> value }.toMap()

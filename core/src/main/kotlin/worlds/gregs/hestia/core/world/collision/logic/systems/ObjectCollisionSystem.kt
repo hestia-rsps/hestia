@@ -12,21 +12,15 @@ class ObjectCollisionSystem : ObjectCollision() {
     private var map: Map? = null
     private var regions: Regions? = null
     private var plane = 0
-    private var regionX = 0
-    private var regionY = 0
 
-    override fun load(position: Position, single: Boolean) {
-        regionX = position.x - 64
-        regionY = position.y - 64
+    override fun load(position: Position) {
         plane = position.plane
     }
 
-    override fun collides(localX: Int, localY: Int, mask: Int): Boolean {
-        val x = regionX + localX
-        val y = regionY + localY
-        val clipping = map?.getClipping(regions?.getEntityId(Position.regionId(x, y)))
-        val clip = clipping?.getMask(x % 64, y % 64, plane) ?: return false
-        return clip and mask != 0
+    override fun collides(localX: Int, localY: Int, flag: Int): Boolean {
+        val collisions = map?.getCollision(regions?.getEntityId(Position.regionId(localX, localY)))
+        val clip = collisions?.getFlag(localX % 64, localY % 64, plane) ?: return false
+        return clip and flag != 0
     }
 
     companion object {

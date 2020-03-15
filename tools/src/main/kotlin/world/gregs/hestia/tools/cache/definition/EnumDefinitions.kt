@@ -59,12 +59,12 @@ class EnumDefinitions {
             val store = CacheLibrary("../hestia/data/cache")
             val reader = EnumDefinitionReader(store)
 //            val enum = reader.get( 2279)//677, 685, 1005, 686, 1029, 1006
-//            println(ToStringBuilder.reflectionToString(enum, ToStringStyle.MULTI_LINE_STYLE))
-            repeat(reader.size) { id ->
-                val def = reader.get(id)
+            println(ToStringBuilder.reflectionToString(reader.get(7), ToStringStyle.MULTI_LINE_STYLE))
+//            repeat(reader.size) { id ->
+//                val def = reader.get(id)
 //                if(def.map?.containsValue(906) == true)
-                println("$id ${ToStringBuilder.reflectionToString(def, ToStringStyle.MULTI_LINE_STYLE)}")
-            }
+//                println("$id ${ToStringBuilder.reflectionToString(def, ToStringStyle.MULTI_LINE_STYLE)}")
+//            }
 //            printQuests(reader)
         }
     }

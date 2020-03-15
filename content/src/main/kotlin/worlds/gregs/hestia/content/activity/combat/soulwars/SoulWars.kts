@@ -32,7 +32,7 @@ npcSpawn(8526, 1888, 3176, direction = Direction.NORTH)//ZIMBERFIZZ
 
 on(ObjectOption, "Enter", "Soul Wars portal") { ->
     fun EntityActions.task(target: Int) = strongQueue {
-        entity perform Interact(target, true)
+        entity perform Interact(target)
 
         val route = await(Route())
         val definition = system(ObjectDefinitionSystem::class).get(target.get(GameObject::class).id)
@@ -54,7 +54,7 @@ on(ObjectOption, "Enter", "Soul Wars portal") { ->
 
 on(ObjectOption, "Leave-area", "Edgeville portal") { ->
     fun EntityActions.task(target: Int) = strongQueue {
-        entity perform Interact(target, true)
+        entity perform Interact(target)
 
         val route = await(Route())
         val definition = system(ObjectDefinitionSystem::class).get(target.get(GameObject::class).id)
@@ -76,7 +76,7 @@ on(ObjectOption, "Leave-area", "Edgeville portal") { ->
 
 on(ObjectOption, "Join-team", "Balance portal") { ->
     fun EntityActions.task(target: Int) = strongQueue {
-        entity perform Interact(target, true)
+        entity perform Interact(target)
 
         val route = await(Route())
         val definition = system(ObjectDefinitionSystem::class).get(target.get(GameObject::class).id)

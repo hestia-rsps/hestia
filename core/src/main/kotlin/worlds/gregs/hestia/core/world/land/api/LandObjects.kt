@@ -15,7 +15,7 @@ abstract class LandObjects : PassiveSystem() {
      * @param x The regions x coordinate
      * @param y The regions y coordinate
      * @param landContainerData The cache map file data
-     * @param settings The clipping settings
+     * @param settings The tile settings
      * @param rotation The chunks rotation
      * @param chunkX The chunks x coordinate
      * @param chunkY The chunks x coordinate

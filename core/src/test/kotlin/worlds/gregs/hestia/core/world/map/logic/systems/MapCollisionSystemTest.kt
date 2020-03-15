@@ -3,7 +3,7 @@ package worlds.gregs.hestia.core.world.map.logic.systems
 import org.assertj.core.api.Assertions
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
-import worlds.gregs.hestia.core.world.map.api.TileClipping
+import worlds.gregs.hestia.core.world.map.api.TileCollision
 import worlds.gregs.hestia.core.world.movement.logic.systems.calc.MovementTester
 import worlds.gregs.hestia.core.display.update.model.Direction
 import worlds.gregs.hestia.core.display.update.model.Direction.*
@@ -11,7 +11,7 @@ import worlds.gregs.hestia.artemis.getSystem
 
 internal class MapCollisionSystemTest : MovementTester(false) {
 
-    private var traverse: TileClipping? = null
+    private var traverse: TileCollision? = null
     private var blocked: Array<Direction> = emptyArray()
 
     @BeforeEach

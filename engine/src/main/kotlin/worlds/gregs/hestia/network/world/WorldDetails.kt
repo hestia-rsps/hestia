@@ -22,7 +22,7 @@ class WorldDetails(ip: String, region: String, country: Int, location: Int, acti
         USA(225);
     }
 
-    enum class Setting(val mask: Int) {
+    enum class Setting(val flag: Int) {
         NON_MEMBERS(0x0),
         MEMBERS(0x1),
         PVP(0x4),
@@ -34,7 +34,7 @@ class WorldDetails(ip: String, region: String, country: Int, location: Int, acti
     companion object {
         private fun getFlag(settings: Array<out Setting>): Int {
             var flags = 0
-            settings.forEach { flags = flags or it.mask }
+            settings.forEach { flags = flags or it.flag }
             return flags
         }
     }

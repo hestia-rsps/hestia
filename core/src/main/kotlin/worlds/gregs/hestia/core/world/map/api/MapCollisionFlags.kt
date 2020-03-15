@@ -2,10 +2,10 @@ package worlds.gregs.hestia.core.world.map.api
 
 import net.mostlyoriginal.api.system.core.PassiveSystem
 
-abstract class ClippingMasks : PassiveSystem() {
+abstract class MapCollisionFlags : PassiveSystem() {
 
     /**
-     * Adds clipping masks for an object
+     * Adds collision flags for an object
      * @param x The x coordinate of the object
      * @param y The y coordinate of the object
      * @param plane The plane coordinate of the object
@@ -15,11 +15,11 @@ abstract class ClippingMasks : PassiveSystem() {
      * @param sea Whether the object blocks swimming entities
      */
     fun addObject(x: Int, y: Int, plane: Int, sizeX: Short, sizeY: Short, sky: Boolean, sea: Boolean) {
-        changeObject(x, y, plane, sizeX, sizeY, sky, sea, ADD_MASK)
+        changeObject(x, y, plane, sizeX, sizeY, sky, sea, ADD_FLAG)
     }
 
     /**
-     * Removes clipping masks for an object
+     * Removes collision flags for an object
      * @param x The x coordinate of the object
      * @param y The y coordinate of the object
      * @param plane The plane coordinate of the object
@@ -29,11 +29,11 @@ abstract class ClippingMasks : PassiveSystem() {
      * @param sea Whether the object blocks swimming entities
      */
     fun removeObject(x: Int, y: Int, plane: Int, sizeX: Short, sizeY: Short, sky: Boolean, sea: Boolean) {
-        changeObject(x, y, plane, sizeX, sizeY, sky, sea, REMOVE_MASK)
+        changeObject(x, y, plane, sizeX, sizeY, sky, sea, REMOVE_FLAG)
     }
 
     /**
-     * Sets clipping masks for an object
+     * Sets collision flags for an object
      * @param x The x coordinate of the object
      * @param y The y coordinate of the object
      * @param plane The plane coordinate of the object
@@ -43,11 +43,11 @@ abstract class ClippingMasks : PassiveSystem() {
      * @param sea Whether the object blocks swimming entities
      */
     fun setObject(x: Int, y: Int, plane: Int, sizeX: Short, sizeY: Short, sky: Boolean, sea: Boolean) {
-        changeObject(x, y, plane, sizeX, sizeY, sky, sea, SET_MASK)
+        changeObject(x, y, plane, sizeX, sizeY, sky, sea, SET_FLAG)
     }
 
     /**
-     * Applies [changeType] changes to clipping mask for an object
+     * Applies [changeType] changes to collision flag for an object
      * @param x The x coordinate of the object
      * @param y The y coordinate of the object
      * @param plane The plane coordinate of the object
@@ -55,12 +55,12 @@ abstract class ClippingMasks : PassiveSystem() {
      * @param sizeY The height of the object
      * @param sky Whether the object blocks flying entities
      * @param sea Whether the object blocks swimming entities
-     * @param changeType How to change the clipping mask
+     * @param changeType How to change the collision flag
      */
     abstract fun changeObject(x: Int, y: Int, plane: Int, sizeX: Short, sizeY: Short, sky: Boolean, sea: Boolean, changeType: Int)
 
     /**
-     * Adds clipping masks for a wall
+     * Adds collision flags for a wall
      * @param x The x coordinate of the wall
      * @param y The y coordinate of the wall
      * @param plane The plane coordinate of the wall
@@ -70,11 +70,11 @@ abstract class ClippingMasks : PassiveSystem() {
      * @param sea Whether the object blocks swimming entities
      */
     fun addWall(x: Int, y: Int, plane: Int, type: Int, rotation: Int, sky: Boolean, sea: Boolean) {
-        changeWall(x, y, plane, type, rotation, sky, sea, ADD_MASK)
+        changeWall(x, y, plane, type, rotation, sky, sea, ADD_FLAG)
     }
 
     /**
-     * Removes clipping masks for a wall
+     * Removes collision flags for a wall
      * @param x The x coordinate of the wall
      * @param y The y coordinate of the wall
      * @param plane The plane coordinate of the wall
@@ -84,11 +84,11 @@ abstract class ClippingMasks : PassiveSystem() {
      * @param sea Whether the object blocks swimming entities
      */
     fun removeWall(x: Int, y: Int, plane: Int, type: Int, rotation: Int, sky: Boolean, sea: Boolean) {
-        changeWall(x, y, plane, type, rotation, sky, sea, REMOVE_MASK)
+        changeWall(x, y, plane, type, rotation, sky, sea, REMOVE_FLAG)
     }
 
     /**
-     * Sets clipping masks for a wall
+     * Sets collision flags for a wall
      * @param x The x coordinate of the wall
      * @param y The y coordinate of the wall
      * @param plane The plane coordinate of the wall
@@ -98,11 +98,11 @@ abstract class ClippingMasks : PassiveSystem() {
      * @param sea Whether the object blocks swimming entities
      */
     fun setWall(x: Int, y: Int, plane: Int, type: Int, rotation: Int, sky: Boolean, sea: Boolean) {
-        changeWall(x, y, plane, type, rotation, sky, sea, SET_MASK)
+        changeWall(x, y, plane, type, rotation, sky, sea, SET_FLAG)
     }
 
     /**
-     * Applies [changeType] changes to clipping mask for a wall
+     * Applies [changeType] changes to collision flag for a wall
      * @param x The x coordinate of the wall
      * @param y The y coordinate of the wall
      * @param plane The plane coordinate of the wall
@@ -110,56 +110,56 @@ abstract class ClippingMasks : PassiveSystem() {
      * @param rotation The rotation of the wall
      * @param sky Whether the object blocks flying entities
      * @param sea Whether the object blocks swimming entities
-     * @param changeType How to change the clipping mask
+     * @param changeType How to change the collision flag
      */
     abstract fun changeWall(x: Int, y: Int, plane: Int, type: Int, rotation: Int, sky: Boolean, sea: Boolean, changeType: Int)
 
     /**
-     * Adds clipping mask for a tile
+     * Adds collision flag for a tile
      * @param x The x coordinate of the wall
      * @param y The y coordinate of the wall
      * @param plane The plane coordinate of the wall
-     * @param mask The mask to add
+     * @param flag The flag to add
      */
-    fun addMask(x: Int, y: Int, plane: Int, mask: Int) {
-        changeMask(x, y, plane, mask, ADD_MASK)
+    fun addFlag(x: Int, y: Int, plane: Int, flag: Int) {
+        changeFlag(x, y, plane, flag, ADD_FLAG)
     }
 
     /**
-     * Removes clipping mask for a tile
+     * Removes collision flag for a tile
      * @param x The x coordinate of the wall
      * @param y The y coordinate of the wall
      * @param plane The plane coordinate of the wall
-     * @param mask The mask to remove
+     * @param flag The flag to remove
      */
-    fun removeMask(x: Int, y: Int, plane: Int, mask: Int) {
-        changeMask(x, y, plane, mask, REMOVE_MASK)
+    fun removeFlag(x: Int, y: Int, plane: Int, flag: Int) {
+        changeFlag(x, y, plane, flag, REMOVE_FLAG)
     }
 
     /**
-     * Sets clipping mask for a tile
+     * Sets collision flag for a tile
      * @param x The x coordinate of the wall
      * @param y The y coordinate of the wall
      * @param plane The plane coordinate of the wall
-     * @param mask The mask to set
+     * @param flag The flag to set
      */
-    fun setMask(x: Int, y: Int, plane: Int, mask: Int) {
-        changeMask(x, y, plane, mask, SET_MASK)
+    fun setFlag(x: Int, y: Int, plane: Int, flag: Int) {
+        changeFlag(x, y, plane, flag, SET_FLAG)
     }
 
     /**
-     * Applies [changeType] changes to a tile's clipping mask
+     * Applies [changeType] changes to a tile's collision flag
      * @param x The x coordinate of the wall
      * @param y The y coordinate of the wall
      * @param plane The plane coordinate of the wall
-     * @param mask The mask to apply
-     * @param changeType How to change the clipping mask
+     * @param flag The flag to apply
+     * @param changeType How to change the collision flag
      */
-    abstract fun changeMask(x: Int, y: Int, plane: Int, mask: Int, changeType: Int)
+    abstract fun changeFlag(x: Int, y: Int, plane: Int, flag: Int, changeType: Int)
 
     companion object {
-        const val ADD_MASK = 0
-        const val REMOVE_MASK = 1
-        const val SET_MASK = 2
+        const val ADD_FLAG = 0
+        const val REMOVE_FLAG = 1
+        const val SET_FLAG = 2
     }
 }

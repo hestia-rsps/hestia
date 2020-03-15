@@ -2,8 +2,8 @@ package worlds.gregs.hestia.core.world.movement.logic.navigation
 
 import worlds.gregs.hestia.core.display.update.model.Direction
 import worlds.gregs.hestia.core.world.collision.api.Collision
-import worlds.gregs.hestia.core.world.collision.model.CollisionFlags.block
-import worlds.gregs.hestia.core.world.collision.model.CollisionFlags.clear
+import worlds.gregs.hestia.core.world.collision.model.CollisionFlag.block
+import worlds.gregs.hestia.core.world.collision.model.CollisionFlag.clear
 import worlds.gregs.hestia.core.world.movement.api.TerrainNavigation
 import worlds.gregs.hestia.core.world.movement.logic.navigation.SecondaryNavigation.Companion.getNorthCorner
 import worlds.gregs.hestia.core.world.movement.logic.navigation.SecondaryNavigation.Companion.getSouthCorner
@@ -19,9 +19,9 @@ class TertiaryNavigation(override val collision: Collision?) : TerrainNavigation
         val offsetX = if (deltaX == 1) width else deltaX
         val offsetY = if (deltaY == 1) height else deltaY
         if (!direction.isDiagonal()) {
-            //Check clipping in direction of movement
+            //Check collision in direction of movement
             if (!free(x + offsetX, y + offsetY, getNorthCorner(direction).block())
-                    //If moving north or east check clipping one tile outside the entity in direction of movement (if south or west only need -1 from source)
+                    //If moving north or east check collision one tile outside the entity in direction of movement (if south or west only need -1 from source)
                     || !free(x + if (deltaX == -1) -1 else width + (deltaX - 1), y + if (deltaY == -1) -1 else height + (deltaY - 1), getSouthCorner(direction).block())) {
                 return false
             }
@@ -34,7 +34,7 @@ class TertiaryNavigation(override val collision: Collision?) : TerrainNavigation
                 }
             }
         } else {
-            //Check clipping in direction of movement
+            //Check collision in direction of movement
             if (!free(x + offsetX, y + offsetY, direction.block())) {
                 return false
             }

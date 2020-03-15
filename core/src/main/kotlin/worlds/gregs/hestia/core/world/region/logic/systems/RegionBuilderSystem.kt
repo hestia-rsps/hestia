@@ -222,7 +222,7 @@ class RegionBuilderSystem : RegionBuilder() {
         //Check for dynamic region deactivate
         checkReset(entityId)
 
-        //If needs reloading, reload clipping
+        //If needs reloading, reload collisions
         if (dynamic.reloads.isNotEmpty() && loadedMapper.has(entityId)) {
             loadedMapper.remove(entityId)
             loadingMapper.create(entityId)

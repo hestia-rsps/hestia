@@ -3,7 +3,7 @@ package worlds.gregs.hestia.core.world.map.logic.systems
 import worlds.gregs.hestia.core.world.movement.logic.systems.calc.MovementTester
 
 interface CollisionTestInterface {
-    var clip: MovementTester.ClippingBuilderTester?
+    var clip: MovementTester.CollisionBuilderTester?
     var start: Pair<Int, Int>
     var size: Pair<Int, Int>
 

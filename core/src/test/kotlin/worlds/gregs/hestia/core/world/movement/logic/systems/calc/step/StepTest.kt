@@ -56,7 +56,7 @@ internal class StepTest : PathTester(false, DirectStepSystem()) {
     }
 
     @Test
-    fun `Navigate straight onto a blocked tile but without checking clipping`() {
+    fun `Navigate straight onto a blocked tile but without checking collision`() {
         canvas(0 until 5, 0 until 1)
         block(4, 0)
 
@@ -84,7 +84,7 @@ internal class StepTest : PathTester(false, DirectStepSystem()) {
     }
 
     @Test
-    fun `Navigate straight over a blocked tile without checking clipping`() {
+    fun `Navigate straight over a blocked tile without checking collisions`() {
 
         canvas(0 until 5, 0 until 1)
         block(3, 0)

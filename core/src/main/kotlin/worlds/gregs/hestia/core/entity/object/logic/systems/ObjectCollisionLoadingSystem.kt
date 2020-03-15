@@ -8,30 +8,29 @@ import worlds.gregs.hestia.core.entity.`object`.model.components.GameObject
 import worlds.gregs.hestia.core.entity.`object`.model.components.ObjectType
 import worlds.gregs.hestia.core.entity.`object`.model.components.Rotation
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
-import worlds.gregs.hestia.core.world.collision.model.CollisionFlags.FLOOR_DECO
-import worlds.gregs.hestia.core.world.map.api.ClippingMasks
-import worlds.gregs.hestia.core.world.map.api.ClippingMasks.Companion.ADD_MASK
-import worlds.gregs.hestia.core.world.map.api.ClippingMasks.Companion.REMOVE_MASK
+import worlds.gregs.hestia.core.world.collision.model.CollisionFlag.FLOOR_DECO
+import worlds.gregs.hestia.core.world.map.api.MapCollisionFlags
+import worlds.gregs.hestia.core.world.map.api.MapCollisionFlags.Companion.ADD_FLAG
+import worlds.gregs.hestia.core.world.map.api.MapCollisionFlags.Companion.REMOVE_FLAG
 import worlds.gregs.hestia.core.world.map.model.MapConstants.isOutOfBounds
-import worlds.gregs.hestia.core.world.region.api.Regions
 import worlds.gregs.hestia.service.cache.definition.systems.ObjectDefinitionSystem
 
 @Wire(failOnNull = false)
-class ObjectClippingSystem : SubscriptionSystem(Aspect.all(GameObject::class)) {
+class ObjectCollisionLoadingSystem : SubscriptionSystem(Aspect.all(GameObject::class)) {
 
     private lateinit var gameObjectMapper: ComponentMapper<GameObject>
     private lateinit var positionMapper: ComponentMapper<Position>
     private lateinit var objectTypeMapper: ComponentMapper<ObjectType>
     private lateinit var rotationMapper: ComponentMapper<Rotation>
-    private var masks: ClippingMasks? = null
+    private var flags: MapCollisionFlags? = null
     private lateinit var objectDef: ObjectDefinitionSystem
 
     override fun inserted(entityId: Int) {
-        clipObject(entityId, ADD_MASK)
+        clipObject(entityId, ADD_FLAG)
     }
 
     override fun removed(entityId: Int) {
-        clipObject(entityId, REMOVE_MASK)
+        clipObject(entityId, REMOVE_FLAG)
     }
 
     private fun clipObject(entityId: Int, changeType: Int) {
@@ -47,13 +46,13 @@ class ObjectClippingSystem : SubscriptionSystem(Aspect.all(GameObject::class)) {
 
         val definition = objectDef.get(gameObject.id)
 
-        //If isn't solid
+        // If isn't solid
         if (definition.solid == 0) {
             return
         }
 
         when (type) {
-            in 0..3 -> masks?.changeWall(position.x, position.y, position.plane, type, rotation, definition.projectileClipped, !definition.ignoreClipOnAlternativeRoute, changeType)
+            in 0..3 -> flags?.changeWall(position.x, position.y, position.plane, type, rotation, definition.projectileClipped, !definition.ignoreClipOnAlternativeRoute, changeType)
             in 9..21 -> {
                 var sizeX = definition.sizeX
                 var sizeY = definition.sizeY
@@ -61,11 +60,11 @@ class ObjectClippingSystem : SubscriptionSystem(Aspect.all(GameObject::class)) {
                     sizeX = definition.sizeY
                     sizeY = definition.sizeX
                 }
-                masks?.changeObject(position.x, position.y, position.plane, sizeX.toShort(), sizeY.toShort(), definition.projectileClipped, !definition.ignoreClipOnAlternativeRoute, changeType)
+                flags?.changeObject(position.x, position.y, position.plane, sizeX.toShort(), sizeY.toShort(), definition.projectileClipped, !definition.ignoreClipOnAlternativeRoute, changeType)
             }
             22 -> {
                 if(definition.solid == 1) {
-                    masks?.changeMask(position.x, position.y, position.plane, FLOOR_DECO, changeType)
+                    flags?.changeFlag(position.x, position.y, position.plane, FLOOR_DECO, changeType)
                 }
             }
         }

@@ -35,7 +35,7 @@ internal abstract class PathTester(offset: Boolean, vararg systems: BaseSystem) 
     private fun check(startX: Int, startY: Int, width: Int, height: Int, expected: List<IntArray>? = null, display: Boolean = false, action: (Entity) -> Unit) {
         //Create
         val entity = mockEntity(startX, startY, width, height)
-        val clipping = world.getSystem(ClippingBuilderTester::class)
+        val collision = world.getSystem(CollisionBuilderTester::class)
 
         clip?.load(Position.create(startX, startY, 0), false)
 
@@ -67,7 +67,7 @@ internal abstract class PathTester(offset: Boolean, vararg systems: BaseSystem) 
             printPath(startX, startY, directions)
             println()
 
-            val array = clipping.createDisplay(false)
+            val array = collision.createDisplay(false)
             println("Path")
             applyPath(array, startX, startY, directions)
             applyEntity(array, startX, startY, width, height)

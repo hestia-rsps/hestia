@@ -24,6 +24,7 @@ import worlds.gregs.hestia.core.task.model.components.TaskQueue
 import worlds.gregs.hestia.core.world.collision.model.components.Ghost
 import worlds.gregs.hestia.core.world.movement.api.Mobile
 import worlds.gregs.hestia.core.world.movement.model.components.Shift
+import worlds.gregs.hestia.core.world.movement.model.components.Steps
 import worlds.gregs.hestia.core.world.movement.model.components.types.Movement
 import worlds.gregs.hestia.game.entity.Player
 
@@ -31,6 +32,6 @@ class PlayerFactory : ArchetypeFactory {
 
     override fun getBuilder(): ArchetypeBuilder {
         return ArchetypeBuilder().add(Player::class, ClientIndex::class, Renderable::class, Position::class, AppearanceData::class, DisplayName::class, Viewport::class, Mobile::class, LastLoadedRegion::class, Shift::class, Facing::class, Ghost::class, GameFrame::class,
-                TaskQueue::class, ContainerList::class, Member::class, InterfaceRelationships::class, ContextMenu::class, RequestList::class, Movement::class, Assisting::class, VariableStore::class, Blackboard::class, ActionContext::class)
+                TaskQueue::class, ContainerList::class, Member::class, InterfaceRelationships::class, ContextMenu::class, RequestList::class, Movement::class, Assisting::class, VariableStore::class, Blackboard::class, ActionContext::class, Steps::class)
     }
 }

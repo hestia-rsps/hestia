@@ -11,7 +11,7 @@ abstract class MapSettings : PassiveSystem() {
     abstract fun load(mapContainerData: ByteArray): Array<Array<ByteArray>>
 
     /**
-     * Adds masks to clipping based on the settings provided
+     * Adds flags to collisions based on the settings provided
      * @param regionX The regions x coordinate
      * @param regionY The regions y coordinate
      * @param settings The tile settings

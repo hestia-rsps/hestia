@@ -1,7 +1,9 @@
 package worlds.gregs.hestia.core.world.movement.logic.strategies
 
+import worlds.gregs.hestia.core.display.update.model.Direction
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.world.collision.api.Collision
+import worlds.gregs.hestia.core.world.collision.model.CollisionFlag.flag
 import worlds.gregs.hestia.core.world.movement.api.RouteStrategy
 import java.util.*
 
@@ -81,40 +83,40 @@ class ObjectStrategy(val type: Int, position: Position, val rotation: Int, sizeX
                         if (currentX == targetX - 1 && targetY == currentY) {
                             return true
                         }
-                        if (currentX == targetX && 1 + targetY == currentY && collision.collides(currentX, currentY, 0x2c0120)) {
+                        if (currentX == targetX && 1 + targetY == currentY && collision.collides(currentX, currentY, 0x2c0120)) {// Collides South
                             return true
                         }
-                        if (targetX == currentX && currentY == targetY - 1 && collision.collides(currentX, currentY, 0x2c0102)) {
+                        if (targetX == currentX && currentY == targetY - 1 && collision.collides(currentX, currentY, 0x2c0102)) {// Collides North
                             return true
                         }
                     } else if (rotation == 1) {
                         if (currentX == targetX && targetY + 1 == currentY) {
                             return true
                         }
-                        if (-1 + targetX == currentX && targetY == currentY && collision.collides(currentX, currentY, 0x2c0108)) {
+                        if (-1 + targetX == currentX && targetY == currentY && collision.collides(currentX, currentY, 0x2c0108)) {// Collides east
                             return true
                         }
-                        if (targetX + 1 == currentX && currentY == targetY && collision.collides(currentX, currentY, 0x2c0180)) {
+                        if (targetX + 1 == currentX && currentY == targetY && collision.collides(currentX, currentY, 0x2c0180)) {// Collides west
                             return true
                         }
                     } else if (rotation == 2) {
                         if (currentX == targetX + 1 && targetY == currentY) {
                             return true
                         }
-                        if (currentX == targetX && 1 + targetY == currentY && collision.collides(currentX, currentY, 0x2c0120)) {
+                        if (currentX == targetX && 1 + targetY == currentY && collision.collides(currentX, currentY, 0x2c0120)) {// Collides South
                             return true
                         }
-                        if (currentX == targetX && -1 + targetY == currentY && collision.collides(currentX, currentY, 0x2c0102)) {
+                        if (currentX == targetX && -1 + targetY == currentY && collision.collides(currentX, currentY, 0x2c0102)) {// Collides North
                             return true
                         }
                     } else if (rotation == 3) {
                         if (targetX == currentX && currentY == -1 + targetY) {
                             return true
                         }
-                        if (targetX - 1 == currentX && currentY == targetY && collision.collides(currentX, currentY, 0x2c0108)) {
+                        if (targetX - 1 == currentX && currentY == targetY && collision.collides(currentX, currentY, 0x2c0108)) {// Collides east
                             return true
                         }
-                        if (currentX == targetX + 1 && targetY == currentY && collision.collides(currentX, currentY, 0x2c0180)) {
+                        if (currentX == targetX + 1 && targetY == currentY && collision.collides(currentX, currentY, 0x2c0180)) {// Collides west
                             return true
                         }
                     }
@@ -323,45 +325,45 @@ class ObjectStrategy(val type: Int, position: Position, val rotation: Int, sizeX
                         targetRotation = 0x3 and targetRotation + 2
                     }
                     if (targetRotation == 0) {
-                        if (currentX == 1 + targetX && currentY == targetY && collision.collides(currentX, currentY, 0x80)) {
+                        if (currentX == 1 + targetX && currentY == targetY && collision.collides(currentX, currentY, Direction.WEST.flag())) {
                             return true
                         }
-                        if (targetX == currentX && currentY == -1 + targetY && collision.collides(currentX, currentY, 0x2)) {
+                        if (targetX == currentX && currentY == -1 + targetY && collision.collides(currentX, currentY, Direction.NORTH.flag())) {
                             return true
                         }
                     } else if (targetRotation == 1) {
-                        if (currentX == -1 + targetX && currentY == targetY && collision.collides(currentX, currentY, 0x8)) {
+                        if (currentX == -1 + targetX && currentY == targetY && collision.collides(currentX, currentY, Direction.EAST.flag())) {
                             return true
                         }
-                        if (targetX == currentX && currentY == -1 + targetY && collision.collides(currentX, currentY, 0x2)) {
+                        if (targetX == currentX && currentY == -1 + targetY && collision.collides(currentX, currentY, Direction.NORTH.flag())) {
                             return true
                         }
                     } else if (targetRotation == 2) {
-                        if (currentX == targetX - 1 && targetY == currentY && collision.collides(currentX, currentY, 0x8)) {
+                        if (currentX == targetX - 1 && targetY == currentY && collision.collides(currentX, currentY, Direction.EAST.flag())) {
                             return true
                         }
-                        if (targetX == currentX && currentY == 1 + targetY && collision.collides(currentX, currentY, 0x20)) {
+                        if (targetX == currentX && currentY == 1 + targetY && collision.collides(currentX, currentY, Direction.SOUTH.flag())) {
                             return true
                         }
                     } else if (targetRotation == 3) {
-                        if (1 + targetX == currentX && currentY == targetY && collision.collides(currentX, currentY, 0x80)) {
+                        if (1 + targetX == currentX && currentY == targetY && collision.collides(currentX, currentY, Direction.WEST.flag())) {
                             return true
                         }
-                        if (targetX == currentX && currentY == 1 + targetY && collision.collides(currentX, currentY, 0x20)) {
+                        if (targetX == currentX && currentY == 1 + targetY && collision.collides(currentX, currentY, Direction.SOUTH.flag())) {
                             return true
                         }
                     }
                 }
                 if (targetType == 8) {
-                    if (targetX == currentX && currentY == 1 + targetY && collision.collides(currentX, currentY, 0x20)) {
+                    if (targetX == currentX && currentY == 1 + targetY && collision.collides(currentX, currentY, Direction.SOUTH.flag())) {
                         return true
                     }
-                    if (currentX == targetX && targetY + -1 == currentY && collision.collides(currentX, currentY, 0x2)) {
+                    if (currentX == targetX && targetY + -1 == currentY && collision.collides(currentX, currentY, Direction.NORTH.flag())) {
                         return true
                     }
-                    return if (currentX == targetX + -1 && targetY == currentY && collision.collides(currentX, currentY, 0x8)) {
+                    return if (currentX == targetX + -1 && targetY == currentY && collision.collides(currentX, currentY, Direction.EAST.flag())) {
                         true
-                    } else targetX + 1 == currentX && targetY == currentY && collision.collides(currentX, currentY, 0x80)
+                    } else targetX + 1 == currentX && targetY == currentY && collision.collides(currentX, currentY, Direction.WEST.flag())
                 }
             } else {
                 val sizeX = sizeXY + currentX - 1
@@ -371,45 +373,45 @@ class ObjectStrategy(val type: Int, position: Position, val rotation: Int, sizeX
                         targetRotation = targetRotation + 2 and 0x3
                     }
                     if (targetRotation == 0) {
-                        if (currentX == targetX + 1 && currentY <= targetY && targetY <= sizeY && collision.collides(currentX, targetY, 0x80)) {
+                        if (currentX == targetX + 1 && currentY <= targetY && targetY <= sizeY && collision.collides(currentX, targetY, Direction.WEST.flag())) {
                             return true
                         }
-                        if (targetX in currentX..sizeX && currentY == targetY + -sizeXY && collision.collides(targetX, sizeY, 0x2)) {
+                        if (targetX in currentX..sizeX && currentY == targetY + -sizeXY && collision.collides(targetX, sizeY, Direction.NORTH.flag())) {
                             return true
                         }
                     } else if (targetRotation == 1) {
-                        if (currentX == targetX - sizeXY && targetY >= currentY && targetY <= sizeY && collision.collides(sizeX, targetY, 0x8)) {
+                        if (currentX == targetX - sizeXY && targetY >= currentY && targetY <= sizeY && collision.collides(sizeX, targetY, Direction.EAST.flag())) {
                             return true
                         }
-                        if (targetX in currentX..sizeX && currentY == -sizeXY + targetY && collision.collides(targetX, sizeY, 0x2)) {
+                        if (targetX in currentX..sizeX && currentY == -sizeXY + targetY && collision.collides(targetX, sizeY, Direction.NORTH.flag())) {
                             return true
                         }
                     } else if (targetRotation == 2) {
-                        if (-sizeXY + targetX == currentX && targetY >= currentY && targetY <= sizeY && collision.collides(sizeX, targetY, 0x8)) {
+                        if (-sizeXY + targetX == currentX && targetY >= currentY && targetY <= sizeY && collision.collides(sizeX, targetY, Direction.EAST.flag())) {
                             return true
                         }
-                        if (targetX in currentX..sizeX && 1 + targetY == currentY && collision.collides(targetX, currentY, 0x20)) {
+                        if (targetX in currentX..sizeX && 1 + targetY == currentY && collision.collides(targetX, currentY, Direction.SOUTH.flag())) {
                             return true
                         }
                     } else if (targetRotation == 3) {
-                        if (currentX == targetX + 1 && currentY <= targetY && targetY <= sizeY && collision.collides(currentX, targetY, 0x80)) {
+                        if (currentX == targetX + 1 && currentY <= targetY && targetY <= sizeY && collision.collides(currentX, targetY, Direction.WEST.flag())) {
                             return true
                         }
-                        if (targetX in currentX..sizeX && currentY == targetY + 1 && collision.collides(targetX, currentY, 0x20)) {
+                        if (targetX in currentX..sizeX && currentY == targetY + 1 && collision.collides(targetX, currentY, Direction.SOUTH.flag())) {
                             return true
                         }
                     }
                 }
                 if (targetType == 8) {
-                    if (targetX in currentX..sizeX && currentY == 1 + targetY && collision.collides(targetX, currentY, 0x20)) {
+                    if (targetX in currentX..sizeX && currentY == 1 + targetY && collision.collides(targetX, currentY, Direction.SOUTH.flag())) {
                         return true
                     }
-                    if (targetX in currentX..sizeX && currentY == -sizeXY + targetY && collision.collides(targetX, sizeY, 0x2)) {
+                    if (targetX in currentX..sizeX && currentY == -sizeXY + targetY && collision.collides(targetX, sizeY, Direction.NORTH.flag())) {
                         return true
                     }
-                    return if (currentX == targetX + -sizeXY && currentY <= targetY && targetY <= sizeY && collision.collides(sizeX, targetY, 0x8)) {
+                    return if (currentX == targetX + -sizeXY && currentY <= targetY && targetY <= sizeY && collision.collides(sizeX, targetY, Direction.EAST.flag())) {
                         true
-                    } else currentX == 1 + targetX && currentY <= targetY && targetY <= sizeY && collision.collides(currentX, targetY, 0x80)
+                    } else currentX == 1 + targetX && currentY <= targetY && targetY <= sizeY && collision.collides(currentX, targetY, Direction.WEST.flag())
                 }
             }
             return false

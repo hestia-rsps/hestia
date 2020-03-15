@@ -21,16 +21,21 @@ class PathSystem : BaseMovementSystem(Path::class) {
     override fun process(entityId: Int) {
         //Request to walk
         val nav = pathMapper.get(entityId)
-
-        //Queue steps
-        val steps = pathFinder.findRoute(entityId, nav.strategy, nav.partial, nav.collide)
-        (tasks.getSuspension(entityId) as? Route)?.route = RouteResult(steps, pathFinder.lastIsPartial())//TODO temp
+        load(entityId)
+        val steps = pathFinder.findRoute(entityId, nav.strategy)
+        (tasks.getSuspension(entityId) as? Route)?.route = RouteResult(steps, pathFinder.isPartial)//TODO temp
         for (i in steps - 1 downTo 0) {
-            if (!addWalkSteps(entityId, pathFinder.lastPathBufferX[i], pathFinder.lastPathBufferY[i], 25, false)) {
+            if (!addSteps(entityId, pathFinder.lastPathBufferX[i], pathFinder.lastPathBufferY[i], 25)) {
                 break
             }
         }
+
         //Remove request
         pathMapper.remove(entityId)
     }
+
+    override fun addWalkStep(entityId: Int, nextX: Int, nextY: Int): Boolean {
+        return addWalkStep(entityId, nextX, nextY, false)
+    }
+
 }

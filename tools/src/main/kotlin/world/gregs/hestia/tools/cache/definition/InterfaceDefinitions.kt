@@ -25,17 +25,18 @@ class InterfaceDefinitions {
             val store = CacheLibrary("../hestia/data/cache")
             val reader = InterfaceDefinitionReader(store)
 //            val str = "Burst of Strength"
-//            repeat(reader.size) { id ->
-                val iface = reader.get(751)
+            repeat(reader.size) { id ->
+                val iface = reader.get(id)
                 if (iface.size > 1) {
 //                    println("Interface $id")
                     iface.forEach { (index, component) ->
-
-                        println("$index ${getName(component.type)}")
-                        println(ToStringBuilder.reflectionToString(component, ToStringStyle.MULTI_LINE_STYLE))
+                        if(component.text.contains("<") && !component.text.contains("<br>")) {
+                            println("$index ${getName(component.type)}")
+                            println(ToStringBuilder.reflectionToString(component, ToStringStyle.MULTI_LINE_STYLE))
+                        }
                     }
                 }
-//            }
+            }
         }
     }
 }

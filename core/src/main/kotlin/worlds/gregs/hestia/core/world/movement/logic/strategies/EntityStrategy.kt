@@ -1,6 +1,8 @@
 package worlds.gregs.hestia.core.world.movement.logic.strategies
 
+import worlds.gregs.hestia.core.display.update.model.Direction
 import worlds.gregs.hestia.core.world.collision.api.Collision
+import worlds.gregs.hestia.core.world.collision.model.CollisionFlag.flag
 import worlds.gregs.hestia.core.world.movement.api.RouteStrategy
 import java.util.*
 
@@ -36,22 +38,22 @@ class EntityStrategy(override val destinationX: Int, override val destinationY: 
             val srcEndY = sizeY + currentY
             val destEndX = targetSizeX + targetX
             val destEndY = targetSizeY + targetY
-            if (currentX != destEndX || 0x2 and accessBlockFlag != 0) {
-                if (srcEndX != targetX || accessBlockFlag and 0x8 != 0) {
-                    if (destEndY == currentY && 0x1 and accessBlockFlag == 0) {
+            if (currentX != destEndX || Direction.NORTH.flag() and accessBlockFlag != 0) {
+                if (srcEndX != targetX || accessBlockFlag and Direction.EAST.flag() != 0) {
+                    if (destEndY == currentY && Direction.NORTH_WEST.flag() and accessBlockFlag == 0) {
                         var clipX = if (currentX <= targetX) targetX else currentX
                         val maxX = if (destEndX <= srcEndX) destEndX else srcEndX
                         while (clipX < maxX) {
-                            if (collision.collides(-clipBaseX + clipX, -clipBaseY + destEndY - 1, 0x2)) {
+                            if (collision.collides(clipX- clipBaseX, destEndY - (clipBaseY + 1), Direction.NONE.flag())) {
                                 return true
                             }
                             clipX++
                         }
-                    } else if (srcEndY == targetY && 0x4 and accessBlockFlag == 0) {
+                    } else if (srcEndY == targetY && Direction.NORTH_EAST.flag() and accessBlockFlag == 0) {
                         var clipX = if (currentX > targetX) currentX else targetX
                         val maxX = if (srcEndX >= destEndX) destEndX else srcEndX
                         while (clipX < maxX) {
-                            if (collision.collides(-clipBaseX + clipX, targetY - clipBaseY, 0x20)) {
+                            if (collision.collides(clipX - clipBaseX , targetY - clipBaseY, Direction.SOUTH.flag())) {
                                 return true
                             }
                             clipX++
@@ -61,7 +63,7 @@ class EntityStrategy(override val destinationX: Int, override val destinationY: 
                     var clipY = if (currentY <= targetY) targetY else currentY
                     val maxY = if (destEndY <= srcEndY) destEndY else srcEndY
                     while (clipY < maxY) {
-                        if (collision.collides(targetX - clipBaseX, clipY + -clipBaseY, 0x80)) {
+                        if (collision.collides(targetX - clipBaseX, clipY - clipBaseY, Direction.WEST.flag())) {
                             return true
                         }
                         clipY++
@@ -71,7 +73,7 @@ class EntityStrategy(override val destinationX: Int, override val destinationY: 
                 var clipY = if (targetY < currentY) currentY else targetY
                 val maxY = if (destEndY <= srcEndY) destEndY else srcEndY
                 while (clipY < maxY) {
-                    if (collision.collides(destEndX + (-1 + -clipBaseX), -clipBaseY + clipY, 0x8)) {
+                    if (collision.collides(destEndX - (clipBaseX + 1), clipY - clipBaseY, Direction.EAST.flag())) {
                         return true
                     }
                     clipY++

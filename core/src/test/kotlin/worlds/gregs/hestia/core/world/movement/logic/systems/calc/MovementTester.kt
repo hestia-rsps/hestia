@@ -5,31 +5,31 @@ import com.artemis.WorldConfigurationBuilder
 import worlds.gregs.hestia.core.world.collision.api.ObjectCollision
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.GameTest
-import worlds.gregs.hestia.core.world.collision.model.CollisionFlags
+import worlds.gregs.hestia.core.world.collision.model.CollisionFlag
 import worlds.gregs.hestia.core.world.collision.logic.systems.CollisionSystem
 import worlds.gregs.hestia.core.world.map.logic.systems.CollisionTestInterface
 import worlds.gregs.hestia.core.world.map.logic.systems.MapCollisionSystem
 import worlds.gregs.hestia.artemis.getSystem
 
-abstract class MovementTester(offset: Boolean, vararg systems: BaseSystem) : GameTest(WorldConfigurationBuilder().with(ClippingBuilderTester(offset), CollisionSystem(), MapCollisionSystem(), *systems)), CollisionTestInterface {
+abstract class MovementTester(offset: Boolean, vararg systems: BaseSystem) : GameTest(WorldConfigurationBuilder().with(CollisionBuilderTester(offset), CollisionSystem(), MapCollisionSystem(), *systems)), CollisionTestInterface {
 
-    override var clip: ClippingBuilderTester? = null
+    override var clip: CollisionBuilderTester? = null
     override var start = Pair(0, 0)
     override var size = Pair(1, 1)
 
     open fun reset(startX: Int, startY: Int, sizeX: Int, sizeY: Int) {
-        clip = world.getSystem(ClippingBuilderTester::class)
+        clip = world.getSystem(CollisionBuilderTester::class)
         start = Pair(startX, startY)
         size = Pair(sizeX, sizeY)
     }
 
-    open fun build(action: (ClippingBuilderTester.() -> Unit)? = null): ClippingBuilderTester {
-        val builderTester = world.getSystem(ClippingBuilderTester::class)
+    open fun build(action: (CollisionBuilderTester.() -> Unit)? = null): CollisionBuilderTester {
+        val builderTester = world.getSystem(CollisionBuilderTester::class)
         action?.invoke(builderTester)
         return builderTester
     }
 
-    class ClippingBuilderTester(private val offset: Boolean) : ObjectCollision() {
+    class CollisionBuilderTester(private val offset: Boolean) : ObjectCollision() {
 
         private var baseX = 0
         private var baseY = 0
@@ -44,7 +44,7 @@ abstract class MovementTester(offset: Boolean, vararg systems: BaseSystem) : Gam
             }
         }
 
-        override fun collides(localX: Int, localY: Int, mask: Int): Boolean {
+        override fun collides(localX: Int, localY: Int, flag: Int): Boolean {
             if (localX + baseX > clip.size || localX + baseX < 0) {
                 return true
             }
@@ -53,7 +53,7 @@ abstract class MovementTester(offset: Boolean, vararg systems: BaseSystem) : Gam
                 return true
             }
 
-            return clip[localX + baseX][localY + baseY] and mask != 0
+            return clip[localX + baseX][localY + baseY] and flag != 0
         }
 
 
@@ -153,7 +153,7 @@ abstract class MovementTester(offset: Boolean, vararg systems: BaseSystem) : Gam
         companion object {
             private const val GRAPH_SIZE = 128
             private const val CLEAR = 0
-            private const val BLOCKED = CollisionFlags.WALK or CollisionFlags.FLY or CollisionFlags.SWIM
+            private const val BLOCKED = CollisionFlag.WALK or CollisionFlag.FLY or CollisionFlag.SWIM
         }
     }
 

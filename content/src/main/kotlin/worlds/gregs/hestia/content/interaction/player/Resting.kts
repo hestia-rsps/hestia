@@ -43,7 +43,7 @@ enum class RestType(val sit: Int, val stand: Int) {
 
 on(NpcOption, "Listen-to", "Musician") { ->
     fun EntityActions.task(npc: Int) = strongQueue {
-        entity perform Interact(npc, true)
+        entity perform Interact(npc)
         val result = await(InteractionComplete(npc))
         println(result)
 //        entity perform Follow(npc)

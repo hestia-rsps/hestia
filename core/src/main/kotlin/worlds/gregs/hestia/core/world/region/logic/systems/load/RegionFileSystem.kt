@@ -45,7 +45,7 @@ class RegionFileSystem : SubscriptionSystem(Aspect.all(RegionIdentifier::class, 
     private val logger = LoggerFactory.getLogger(RegionFileSystem::class.java)
 
     override fun inserted(entityId: Int) {
-        //Clear any old clipping data
+        //Clear any old collision data
         map?.unload(entityId)
         val region = regionMapper.get(entityId)
         //Load
@@ -60,7 +60,7 @@ class RegionFileSystem : SubscriptionSystem(Aspect.all(RegionIdentifier::class, 
     }
 
     /**
-     * Load clipping for region [regionId]
+     * Load collisions for region [regionId]
      * @param entityId Entity id of the region
      * @param regionId Location id of the region
      */
@@ -102,7 +102,7 @@ class RegionFileSystem : SubscriptionSystem(Aspect.all(RegionIdentifier::class, 
     }
 
     /**
-     * Loads clipping & objects from map files
+     * Loads collision & objects from map files
      */
     private fun load(entityId: Int, x: Int, y: Int, regionX: Int, regionY: Int, rotation: Int? = null, chunkX: Int? = null, chunkY: Int? = null, chunkPlane: Int? = null) {
         val index = cache?.getIndex(5) ?: return
@@ -128,7 +128,7 @@ class RegionFileSystem : SubscriptionSystem(Aspect.all(RegionIdentifier::class, 
         try {
             val settings = this.settings
             if (mapContainerData != null && settings != null) {
-                //Load the clipping
+                //Load the tile settings
                 //TODO settings could be cached for better performance
                 decodedSettings = settings.load(mapContainerData)
                 settings.apply(regionX, regionY, decodedSettings, rotation, chunkX, chunkY, chunkPlane)

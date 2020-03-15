@@ -17,26 +17,26 @@ class UpdateBlockStage : SyncStage {
     var npc: Boolean = false
 
     override fun encode(builder: PacketBuilder) {
-        var maskData = 0
-        //Combine all the masks which need updating
+        var dataFlag = 0
+        //Combine all the flags which need updating
         blocks.forEach {
-            maskData = maskData or it.flag
+            dataFlag = dataFlag or it.flag
         }
 
-        if (maskData >= 256) {
-            maskData = maskData or 0x80
+        if (dataFlag >= 256) {
+            dataFlag = dataFlag or 0x80
         }
-        if (maskData >= 65536) {
-            maskData = maskData or if(npc) 0x8000 else 0x800
+        if (dataFlag >= 65536) {
+            dataFlag = dataFlag or if(npc) 0x8000 else 0x800
         }
 
-        builder.writeByte(maskData)
+        builder.writeByte(dataFlag)
 
-        if (maskData >= 256) {
-            builder.writeByte(maskData shr 8)
+        if (dataFlag >= 256) {
+            builder.writeByte(dataFlag shr 8)
         }
-        if (maskData >= 65536) {
-            builder.writeByte(maskData shr 16)
+        if (dataFlag >= 65536) {
+            builder.writeByte(dataFlag shr 16)
         }
 
         //Write all of the update data

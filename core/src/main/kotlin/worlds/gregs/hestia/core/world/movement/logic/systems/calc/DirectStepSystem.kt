@@ -15,9 +15,15 @@ class DirectStepSystem : BaseMovementSystem(Step::class) {
     override fun process(entityId: Int) {
         //Request to walk
         val navigate = stepMapper.get(entityId)
+        load(entityId)
         //Add steps
-        addWalkSteps(entityId, navigate.x, navigate.y, navigate.max, navigate.check)
+        addSteps(entityId, navigate.x, navigate.y, navigate.max)
         //Remove request
         stepMapper.remove(entityId)
+    }
+
+    override fun addWalkStep(entityId: Int, nextX: Int, nextY: Int): Boolean {
+        val navigate = stepMapper.get(entityId)
+        return addWalkStep(entityId, nextX, nextY, navigate.check)
     }
 }

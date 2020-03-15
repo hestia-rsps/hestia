@@ -42,7 +42,7 @@ class WalkSystem : Walk(Aspect.all(Position::class, Mobile::class, Steps::class)
             if(movementType.actual == MovementType.Walk || movementType.actual == MovementType.Run) {
                 movementType.set(MovementType.None)
                 es.dispatch(FlagMoveType(entityId))
-                stepsMapper.remove(entityId)
+                stepsMapper.get(entityId)?.clear()
             }
         }
     }

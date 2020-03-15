@@ -46,7 +46,7 @@ class RegionSystem : Region(Aspect.all(RegionIdentifier::class)) {
     override fun unload(entityId: Int) {
         //If loaded
         if(loadedMapper.has(entityId)) {
-            //Unload clipping
+            //Unload collision maps
             map?.unload(entityId)
             //Unload objects
             land?.unload(entityId)

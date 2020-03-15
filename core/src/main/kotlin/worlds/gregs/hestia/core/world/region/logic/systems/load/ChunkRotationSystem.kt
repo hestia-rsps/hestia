@@ -11,7 +11,7 @@ import worlds.gregs.hestia.core.world.map.logic.systems.MapSettingsSystem
 class ChunkRotationSystem : PassiveSystem() {
 
     /**
-     * Get's the X coordinate of a mask or object which have been rotated [mapRotation]
+     * Get's the X coordinate of a flag or object which have been rotated [mapRotation]
      * @param x Original x position
      * @param y Original y position
      * @param mapRotation The rotation of the map chunk
@@ -24,7 +24,7 @@ class ChunkRotationSystem : PassiveSystem() {
     }
 
     /**
-     * Get's the Y coordinate of a mask or object which have been rotated [mapRotation]
+     * Get's the Y coordinate of a flag or object which have been rotated [mapRotation]
      * @param x Original x position
      * @param y Original y position
      * @param mapRotation The rotation of the map chunk
@@ -44,7 +44,7 @@ class ChunkRotationSystem : PassiveSystem() {
             in range -> {
                 /*
                    Calculation is: 7 - position - size
-                   Size only if we're rotating an object, for masks use 0
+                   Size only if we're rotating an object, for flags use 0
 
                    Flip sizes if mapRotation equals the rotation (depending on rotating x or y again)
                    Flip again if the objects rotation is factor of 1

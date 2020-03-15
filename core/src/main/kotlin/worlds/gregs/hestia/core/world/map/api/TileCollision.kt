@@ -5,10 +5,10 @@ import worlds.gregs.hestia.core.display.update.model.Direction
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 
 /**
- * TileClipping
+ * TileCollision
  * Checks whether the next tile to step on is free
  */
-abstract class TileClipping : PassiveSystem() {
+abstract class TileCollision : PassiveSystem() {
 
     /**
      * Get's the rotation of the chunk [x], [y], [plane] is in.
@@ -20,7 +20,7 @@ abstract class TileClipping : PassiveSystem() {
     abstract fun getRotation(x: Int, y: Int, plane: Int): Int
 
     /**
-     * Check if any adjacent clipping tiles contain obstacles
+     * Check if any adjacent tiles contain obstacles
      * @param dir The direction of movement
      * @param x Start x coordinate
      * @param y Start y coordinate
@@ -31,7 +31,7 @@ abstract class TileClipping : PassiveSystem() {
     abstract fun traversable(dir: Direction, x: Int, y: Int, plane: Int, width: Int, height: Int): Boolean
 
     /**
-     * Check if any adjacent clipping tiles contain obstacles
+     * Check if any adjacent tiles contain obstacles
      * @param dir The direction of movement
      * @param position Start position
      * @param width The width of area to check

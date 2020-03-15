@@ -21,12 +21,12 @@ interface TerrainNavigation {
     fun traversable(direction: Direction, x: Int, y: Int, width: Int, height: Int, deltaX: Int, deltaY: Int): Boolean
 
     /**
-     * Checks whether any objects at [x], [y] collide with [mask] type
+     * Checks whether any objects at [x], [y] collide with [flag] type
      * @param x The x coordinate to check
      * @param y The y coordinate to check
-     * @param mask The masks of object types to collide with
+     * @param flag The flags of object types to collide with
      */
-    fun free(x: Int, y: Int, mask: Int): Boolean {
-        return if(collision == null) false else !collision!!.collides(x, y, mask)
+    fun free(x: Int, y: Int, flag: Int): Boolean {
+        return if(collision == null) false else !collision!!.collides(x, y, flag)
     }
 }

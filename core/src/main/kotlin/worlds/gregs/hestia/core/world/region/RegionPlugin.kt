@@ -1,7 +1,7 @@
 package worlds.gregs.hestia.core.world.region
 
 import com.artemis.WorldConfigurationBuilder
-import worlds.gregs.hestia.core.world.map.logic.systems.ClippingMaskSystem
+import worlds.gregs.hestia.core.world.map.logic.systems.MapCollisionFlagSystem
 import worlds.gregs.hestia.core.world.region.logic.systems.*
 import worlds.gregs.hestia.core.world.region.logic.systems.load.ChunkRotationSystem
 import worlds.gregs.hestia.core.world.region.logic.systems.load.RegionCreation
@@ -15,7 +15,7 @@ class RegionPlugin : Plugin {
         b.with(RegionsSystem(), DynamicSystem())
         b.with(ChunkRotationSystem(), RegionFileSystem(), RegionBuilderSystem())
         b.with(RegionCreation(), RegionPrioritySystem())
-        b.with(RegionSystem(), ClippingMaskSystem())
+        b.with(RegionSystem(), MapCollisionFlagSystem())
         b.with(POST_UPDATE_PRIORITY, RegionCleanSystem())
     }
 

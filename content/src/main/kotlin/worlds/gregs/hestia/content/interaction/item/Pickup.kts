@@ -18,7 +18,7 @@ import worlds.gregs.hestia.core.world.movement.model.events.Interact
 
 on(FloorItemOption, "Take") { ->
     fun EntityActions.task(target: Int) = strongQueue {
-        entity perform Interact(target, true)
+        entity perform Interact(target)
 
         val route = await(Route())
         val canInteract = route.steps >= 0 && !route.partial || isNear(entity get Position::class, target get Position::class, 1, 1, true)

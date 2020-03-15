@@ -18,6 +18,6 @@ abstract class EntityCollision : PassiveSystem() {
      * @param y The y coordinate to check
      * @return Whether there is an entity to collide with
      */
-    abstract fun collides(x: Int, y: Int): Boolean
+    abstract fun collides(x: Int, y: Int, flag: Int): Boolean
 
 }

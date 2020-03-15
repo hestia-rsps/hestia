@@ -18,53 +18,50 @@ class StepBesideSystem : BaseMovementSystem(Beside::class) {
     override fun process(entityId: Int) {
         //Request to walk
         val navigate = besideMapper.get(entityId)
+        load(entityId)
         //Add steps
-        addWalkStepsBeside(entityId, navigate.x, navigate.y, navigate.max, navigate.sizeX, navigate.sizeY, navigate.check, navigate.calculate, navigate.beside)
+        addSteps(entityId, navigate.x, navigate.y, navigate.max)
         //Remove request
         besideMapper.remove(entityId)
     }
 
-    /**
-     * Navigate directly to the tile next to the (sized) target
-     * @param calculate Whether or not to calculate an extra step to prevent getting caught on corners
-     */
-    private fun addWalkStepsBeside(entityId: Int, destX: Int, destY: Int, maxStepsCount: Int, sizeX: Int, sizeY: Int, check: Boolean, calculate: Boolean, beside: Boolean): Boolean {
-        val addable: (Int, Int) -> IntArray? = success@{ myX, myY ->
-            val newX = myX + getOffset(myX, destX)
-            val newY = myY + getOffset(myY, destY)
-            //If diagonal add extra step to be beside
-            if (beside && isDiagonal(myX, myY, destX, destY, sizeX, sizeY)) {
-                when {
-                    addWalkStep(entityId, newX, myY, check) -> intArrayOf(newX, myY)
-                    addWalkStep(entityId, myX, newY, check) -> intArrayOf(myX, newY)
-                    else -> null
-                }
-            } else {
-                when {
-                    addWalkStep(entityId, newX, newY, check) -> intArrayOf(newX, newY)
-                    calculate -> {
-                        val step = calculatedStep(entityId, myX, myY, destX, destY, sizeX, sizeY, check)
-                                ?: return@success null
-                        step
-                    }
-                    else -> null
-                }
+    override fun addWalkStep(entityId: Int, nextX: Int, nextY: Int): Boolean {
+        return addWalkStep(entityId, nextX, nextY, besideMapper.get(entityId).check)
+    }
+
+    override fun addStep(entityId: Int, myX: Int, myY: Int, destX: Int, destY: Int): IntArray? {
+        val navigate = besideMapper.get(entityId)
+        val newX = myX + getOffset(myX, destX)
+        val newY = myY + getOffset(myY, destY)
+        //If diagonal add extra step to be beside
+        return if (navigate.beside && isDiagonal(myX, myY, destX, destY, navigate.sizeX, navigate.sizeY)) {
+            when {
+                addWalkStep(entityId, newX, myY) -> intArrayOf(newX, myY)
+                addWalkStep(entityId, myX, newY) -> intArrayOf(myX, newY)
+                else -> null
+            }
+        } else {
+            when {
+                addWalkStep(entityId, newX, newY) -> intArrayOf(newX, newY)
+                navigate.calculate -> calculatedStep(entityId, myX, myY, destX, destY, navigate.sizeX, navigate.sizeY)
+                else -> null
             }
         }
+    }
 
-        val success: (Int, Int) -> Boolean = { myX, myY -> isNear(myX, myY, destX, destY, sizeX, sizeY, beside) }
-
-        return addSteps(entityId, destX, destY, maxStepsCount, addable, success)
+    override fun hasReachedTarget(entityId: Int, myX: Int, myY: Int): Boolean {
+        val navigate = besideMapper.get(entityId)
+        return isNear(myX, myY, navigate.x, navigate.y, navigate.sizeX, navigate.sizeY, navigate.beside)
     }
 
     /**
      * Calculates an extra step if stuck on a corner
      */
-    private fun calculatedStep(entityId: Int, myX: Int, myY: Int, destX: Int, destY: Int, sizeX: Int, sizeY: Int, check: Boolean): IntArray? {
-        val newX = calculate(entityId, myX, myY, destX, destY, sizeX, sizeY, check, true)
+    private fun calculatedStep(entityId: Int, myX: Int, myY: Int, destX: Int, destY: Int, sizeX: Int, sizeY: Int): IntArray? {
+        val newX = calculate(entityId, myX, myY, destX, destY, sizeX, sizeY, true)
                 ?: return if (getOffset(myX, destX) == 0) null else intArrayOf(myX + getOffset(myX, destX), myY)
 
-        val newY = calculate(entityId, myX, myY, destX, destY, sizeX, sizeY, check, false)
+        val newY = calculate(entityId, myX, myY, destX, destY, sizeX, sizeY, false)
                 ?: return if (getOffset(myY, destY) == 0) null else intArrayOf(myX, myY + getOffset(myY, destY))
 
         //Return null if no change or the new position
@@ -79,7 +76,7 @@ class StepBesideSystem : BaseMovementSystem(Beside::class) {
      * Checks +/- 1 in the direction [horizontal]
      * @return The new x/y position or null if no movement
      */
-    private fun calculate(entityId: Int, myX: Int, myY: Int, destX: Int, destY: Int, sizeX: Int, sizeY: Int, check: Boolean, horizontal: Boolean): Int? {
+    private fun calculate(entityId: Int, myX: Int, myY: Int, destX: Int, destY: Int, sizeX: Int, sizeY: Int, horizontal: Boolean): Int? {
         //Current position x or y
         var current = if (horizontal) myX else myY
         //Current destination x/y
@@ -95,7 +92,7 @@ class StepBesideSystem : BaseMovementSystem(Beside::class) {
             val newX = if (horizontal) current else myX
             val newY = if (horizontal) myY else current
             //If can't walk in that direction
-            if (!addWalkStep(entityId, newX, newY, check)) {
+            if (!addWalkStep(entityId, newX, newY)) {
                 current -= offset//Return to normal
             } else if (withinContact(newX, newY, destX, destY, sizeX, sizeY)) {//If beside destination
                 return null//Done

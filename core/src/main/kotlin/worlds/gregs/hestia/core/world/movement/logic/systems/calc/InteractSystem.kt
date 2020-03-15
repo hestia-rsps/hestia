@@ -45,7 +45,7 @@ class InteractSystem : PassiveSystem() {
 
     @Subscribe
     fun startRoute(action: Interact) {
-        val (targetId, partial) = action
+        val (targetId) = action
         val targetPosition = positionMapper.get(targetId)
 
         //Choose strategy
@@ -65,7 +65,6 @@ class InteractSystem : PassiveSystem() {
         //Navigate
         pathMapper.create(action.entity).apply {
             this.strategy = strategy
-            this.partial = partial
         }
     }
 

@@ -8,7 +8,7 @@ import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.entity.model.components.Size
 import worlds.gregs.hestia.core.entity.entity.model.components.height
 import worlds.gregs.hestia.core.entity.entity.model.components.width
-import worlds.gregs.hestia.core.world.map.api.TileClipping
+import worlds.gregs.hestia.core.world.map.api.TileCollision
 import worlds.gregs.hestia.core.world.movement.api.Mobile
 import worlds.gregs.hestia.core.world.movement.model.components.Steps
 import worlds.gregs.hestia.core.display.update.model.Direction
@@ -26,28 +26,14 @@ abstract class BaseMovementSystem(vararg classes: KClass<out Component>) : Itera
     private lateinit var positionMapper: ComponentMapper<Position>
     private lateinit var stepsMapper: ComponentMapper<Steps>
     private lateinit var sizeMapper: ComponentMapper<Size>
-    private var tiles: TileClipping? = null
+    private var tiles: TileCollision? = null
     private var collision: Collision? = null
 
-    /**
-     * Navigate directly to the destination
-     * @param check Stop at obstacles or no-clip through everything
-     */
-    protected fun addWalkSteps(entityId: Int, destX: Int, destY: Int, maxStepsCount: Int, check: Boolean): Boolean {
-        val addable: (Int, Int) -> IntArray? = { myX, myY ->
-            val offsetX = DirectionUtils.getOffset(myX, destX)
-            val offsetY = DirectionUtils.getOffset(myY, destY)
-            if (addWalkStep(entityId, myX + offsetX, myY + offsetY, check)) {
-                intArrayOf(myX + offsetX, myY + offsetY)
-            } else {
-                null
-            }
-        }
-
-        return addSteps(entityId, destX, destY, maxStepsCount, addable, null)
+    fun load(entityId: Int) {
+        collision?.load(entityId)
     }
 
-    protected fun addSteps(entityId: Int, destX: Int, destY: Int, maxStepsCount: Int, addable: (Int, Int) -> IntArray?, success: ((Int, Int) -> Boolean)?): Boolean {
+    protected fun addSteps(entityId: Int, destX: Int, destY: Int, maxStepsCount: Int): Boolean {
         val steps = stepsMapper.get(entityId)
         val position = positionMapper.get(entityId)
         var myX = steps?.lastX ?: position.x
@@ -57,7 +43,7 @@ abstract class BaseMovementSystem(vararg classes: KClass<out Component>) : Itera
         while (true) {
             stepCount++
 
-            val change = addable(myX, myY)
+            val change = addStep(entityId, myX, myY, destX, destY)
             if (change?.isNotEmpty() == true) {
                 myX = change[0]
                 myY = change[1]
@@ -65,7 +51,7 @@ abstract class BaseMovementSystem(vararg classes: KClass<out Component>) : Itera
                 return false
             }
 
-            if (success?.invoke(myX, myY) == true || stepCount == maxStepsCount) {
+            if (hasReachedTarget(entityId, myX, myY) || stepCount == maxStepsCount) {
                 return true
             }
 
@@ -75,17 +61,30 @@ abstract class BaseMovementSystem(vararg classes: KClass<out Component>) : Itera
         }
     }
 
-    protected fun addWalkStep(entityId: Int, nextX: Int, nextY: Int, check: Boolean = true): Boolean {
-        val position = positionMapper.get(entityId)
-        var lastX = position.x
-        var lastY= position.y
-
-        //TODO sort out, this should be before position
-        if(stepsMapper.has(entityId)) {
-            val steps = stepsMapper.get(entityId)
-            lastX = steps.lastX ?: lastX
-            lastY = steps.lastY ?: lastY
+    open fun addStep(entityId: Int, myX: Int, myY: Int, destX: Int, destY: Int): IntArray? {
+        val offsetX = DirectionUtils.getOffset(myX, destX)
+        val offsetY = DirectionUtils.getOffset(myY, destY)
+        return if (addWalkStep(entityId, myX + offsetX, myY + offsetY)) {
+            intArrayOf(myX + offsetX, myY + offsetY)
+        } else {
+            null
         }
+    }
+
+    open fun hasReachedTarget(entityId: Int, myX: Int, myY: Int): Boolean {
+        return false
+    }
+
+
+    open fun addWalkStep(entityId: Int, nextX: Int, nextY: Int): Boolean {
+        return addWalkStep(entityId, nextX, nextY, true)
+    }
+
+    protected fun addWalkStep(entityId: Int, nextX: Int, nextY: Int, check: Boolean): Boolean {
+        val position = positionMapper.get(entityId)
+        val steps = stepsMapper.get(entityId)
+        val lastX = steps.lastX ?: position.x
+        val lastY = steps.lastY ?: position.y
 
         val dir = getMoveDirection(nextX, nextY, lastX, lastY)
         if(dir == null || dir == Direction.NONE) {
@@ -93,14 +92,11 @@ abstract class BaseMovementSystem(vararg classes: KClass<out Component>) : Itera
         }
 
         if(check) {
-            collision?.load(entityId, true, lastX, lastY)//TODO move somewhere higher up, is it even needed all the time?
-
             if (!world.entityManager.isActive(entityId) || (tiles != null && !tiles!!.traversable(dir, lastX, lastY, position.plane, sizeMapper.width(entityId), sizeMapper.height(entityId)))) {
                 return false
             }
         }
 
-        val steps = stepsMapper.create(entityId)
         steps.add(dir, nextX, nextY)
         return true
     }

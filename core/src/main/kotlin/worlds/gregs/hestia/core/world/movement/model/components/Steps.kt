@@ -18,14 +18,10 @@ class Steps : Component() {
         get() = directions.isNotEmpty()
 
     val nextDirection: Direction
-        get() {
-            return directions.poll()
-        }
+        get() = directions.poll()
 
     val peek: Direction
-        get() {
-            return directions.peek() ?: Direction.NONE
-        }
+        get() = directions.peek() ?: Direction.NONE
 
     fun add(direction: Direction, nextX: Int, nextY: Int) {
         directions.add(direction)

@@ -13,6 +13,12 @@ class NpcDefinitions {
             Settings.load("./settings.yml")
             val store = CacheLibrary("../hestia/data/cache")
             val reader = NpcDefinitionReader(store)
+            repeat(reader.size) { id ->
+                val npc = reader.get(id)
+                if(npc.name == "Banker") {
+                    println(id)
+                }
+            }
             val npc = reader.get(0)
             println(ToStringBuilder.reflectionToString(npc, ToStringStyle.MULTI_LINE_STYLE))
         }

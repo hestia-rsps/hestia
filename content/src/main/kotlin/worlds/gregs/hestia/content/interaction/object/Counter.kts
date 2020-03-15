@@ -15,7 +15,7 @@ import worlds.gregs.hestia.service.cache.definition.systems.ObjectDefinitionSyst
 
 on(ObjectOption, "Use", "Counter") { ->
     fun EntityActions.task(target: Int) = strongQueue {
-        entity perform Interact(target, true)
+        entity perform Interact(target)
 
         val route = await(Route())
         val definition = system(ObjectDefinitionSystem::class).get(target.get(GameObject::class).id)

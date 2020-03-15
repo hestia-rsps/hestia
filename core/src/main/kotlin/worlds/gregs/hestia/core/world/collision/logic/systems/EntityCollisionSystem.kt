@@ -36,22 +36,18 @@ class EntityCollisionSystem : EntityCollision() {
     override fun load(entityId: Int, position: Position) {
         //Ghosts don't need entity collision
         ghost = ghostMapper.has(entityId)
-        if (ghost) {
-            return
-        }
+//        if (ghost) {
+//            return
+//        }
 
         //Clear
         for (a in array) {
             a.fill(false)
         }
 
-        //Calculate difference between position and south-west coordinates
-        val differenceX = position.x - (position.chunkX - CHUNK_RADIUS) * 8
-        val differenceY = position.y - (position.chunkY - CHUNK_RADIUS) * 8
-
         //Offset is the overlap of the chunk area checking and region
-        this.offsetX = position.xInRegion - differenceX
-        this.offsetY = position.yInRegion - differenceY
+        this.offsetX = position.x - MAP_SIZE / 2
+        this.offsetY = position.y - MAP_SIZE / 2
 
         //Add all entities in within (CHUNK_RADIUS * 2 + 1) chunk diameter
         val players = playerChunk?.get(position, CHUNK_RADIUS)
@@ -97,37 +93,38 @@ class EntityCollisionSystem : EntityCollision() {
             startX -= offsetX
             startY -= offsetY
 
-            //Calculate the position in region
-            startX %= 64
-            startY %= 64
-
             //Fill array
             for (x in startX until startX + width) {
                 for (y in startY until startY + height) {
-                    array[x][y] = true
+                    if(x < MAP_SIZE && y < MAP_SIZE) {
+                        array[x][y] = true
+                    }
                 }
             }
         }
     }
 
-    override fun collides(x: Int, y: Int): Boolean {
+    override fun collides(x: Int, y: Int, flag: Int): Boolean {
         //Ghosts don't collide with entities
         if (ghost) {
             return false
         }
 
+        val x = x - offsetX
+        val y = y - offsetY
+
         //Check negative out of bounds
-        if (x < offsetX || y < offsetY) {
+        if (x < 0 || y < 0) {
             return false
         }
 
         //Check positive out of bounds
-        if (x >= MAP_SIZE + offsetX || y >= MAP_SIZE + offsetY) {
+        if (x >= MAP_SIZE || y >= MAP_SIZE) {
             return false
         }
 
         //Return if an entity exists
-        return array[x - offsetX % MAP_SIZE][y - offsetY % MAP_SIZE]
+        return array[x][y]
     }
 
     companion object {

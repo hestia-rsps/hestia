@@ -23,7 +23,7 @@ open class PlayerMap : EntityMap(Aspect.all(Player::class)) {
         val position = positionMapper.get(entityId)
         update(entityId, position.x, position.y, position.plane)
         setTile(entityId, position.locationHash30Bit)
-        removeFromTile(entityId, Position.hash24Bit(position.x - shift.x, position.y - shift.y, position.plane - shift.plane))
+        removeFromTile(entityId, Position.hash30Bit(position.x - shift.x, position.y - shift.y, position.plane - shift.plane))
     }
 
     override fun removed(entityId: Int) {

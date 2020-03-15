@@ -2,8 +2,8 @@ package worlds.gregs.hestia.core.world.movement.logic.navigation
 
 import worlds.gregs.hestia.core.display.update.model.Direction
 import worlds.gregs.hestia.core.world.collision.api.Collision
-import worlds.gregs.hestia.core.world.collision.model.CollisionFlags.block
-import worlds.gregs.hestia.core.world.collision.model.CollisionFlags.clear
+import worlds.gregs.hestia.core.world.collision.model.CollisionFlag.block
+import worlds.gregs.hestia.core.world.collision.model.CollisionFlag.clear
 import worlds.gregs.hestia.core.world.movement.api.TerrainNavigation
 
 /**
@@ -17,12 +17,12 @@ class SecondaryNavigation(override val collision: Collision?) : TerrainNavigatio
         val offsetY = if (deltaY == 1) height else deltaY
 
         return if (!direction.isDiagonal()) {
-            //Check clipping in direction of movement
+            //Check collision in direction of movement
             free(x + offsetX, y + offsetY, getNorthCorner(direction).block())
-                    //Check clipping of north-east corner of the entity to make sure they will fit (optimised for 2x2)
+                    //Check collision of north-east corner of the entity to make sure they will fit (optimised for 2x2)
                     && free(x + if (deltaX == 0) 1 else if (deltaX == 1) width else -1, y + if (deltaY == 0) 1 else if (deltaY == 1) height else -1, getSouthCorner(direction).block())
         } else {
-            //Check clipping in direction of movement
+            //Check collision in direction of movement
             free(x + offsetX, y + offsetY, direction.block())
                     //Check the top side of the entity
                     && free(x + offsetX, y + if (deltaY == -1) 0 else deltaY, direction.horizontal().clear())

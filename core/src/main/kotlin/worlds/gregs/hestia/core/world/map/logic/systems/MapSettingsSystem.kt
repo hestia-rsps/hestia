@@ -2,8 +2,8 @@ package worlds.gregs.hestia.core.world.map.logic.systems
 
 import com.artemis.annotations.Wire
 import io.netty.buffer.Unpooled
-import worlds.gregs.hestia.core.world.collision.model.CollisionFlags
-import worlds.gregs.hestia.core.world.map.api.ClippingMasks
+import worlds.gregs.hestia.core.world.collision.model.CollisionFlag
+import worlds.gregs.hestia.core.world.map.api.MapCollisionFlags
 import worlds.gregs.hestia.core.world.map.api.MapSettings
 import worlds.gregs.hestia.core.world.map.model.MapConstants.PLANE_RANGE
 import worlds.gregs.hestia.core.world.map.model.MapConstants.REGION_PLANES
@@ -15,12 +15,12 @@ import worlds.gregs.hestia.core.world.region.logic.systems.load.RegionFileSystem
 
 /**
  * MapSettingsSystem
- * Adds clipping masks using [ClippingMaskSystem] from the [RegionFileSystem] data
+ * Adds collision flags using [MapCollisionFlagSystem] from the [RegionFileSystem] data
  */
 @Wire(failOnNull = false)
 class MapSettingsSystem : MapSettings() {
 
-    private var masks: ClippingMasks? = null
+    private var flags: MapCollisionFlags? = null
     private lateinit var chunk: ChunkRotationSystem
 
     /**
@@ -54,8 +54,8 @@ class MapSettingsSystem : MapSettings() {
         if (rotation == null) {
             //Static region
             applySettings(settings, REGION_RANGE, REGION_RANGE, PLANE_RANGE) { localX, localY, plane ->
-                //Add mask
-                masks?.addMask(regionX + localX, regionY + localY, plane, CollisionFlags.FLOOR)
+                //Add flag
+                flags?.addFlag(regionX + localX, regionY + localY, plane, CollisionFlag.FLOOR)
             }
         } else if (chunkX != null && chunkY != null && chunkPlane != null) {
             //Dynamic region
@@ -64,8 +64,8 @@ class MapSettingsSystem : MapSettings() {
                 //Calculate new position after rotation
                 val newX = chunk.translateX(localX and 0x7, localY and 0x7, rotation)
                 val newY = chunk.translateY(localX and 0x7, localY and 0x7, rotation)
-                //Add mask
-                masks?.addMask(regionX + chunkX or newX, regionY + chunkY or newY, plane, CollisionFlags.FLOOR)
+                //Add flag
+                flags?.addFlag(regionX + chunkX or newX, regionY + chunkY or newY, plane, CollisionFlag.FLOOR)
             }
         }
     }
