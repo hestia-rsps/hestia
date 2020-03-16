@@ -17,13 +17,12 @@ class ObjectStrategy(val type: Int, position: Position, val rotation: Int, sizeX
         OTHER;
     }
 
-    internal val routeType = getType(type) ?: throw UnsupportedOperationException("Unknown Object Type $position $type")
+    internal val routeType = getType(type)
 
     init {
         if (rotation != 0) {
             accessBlockFlag = (accessBlockFlag shl rotation and 0xF) + (accessBlockFlag shr 4 - rotation)
         }
-        println("Object strategy $routeType")
     }
 
     override fun exit(currentX: Int, currentY: Int, sizeX: Int, sizeY: Int, collision: Collision?): Boolean {
@@ -54,14 +53,11 @@ class ObjectStrategy(val type: Int, position: Position, val rotation: Int, sizeX
 
     companion object {
 
-        private fun getType(type: Int) = when(type) {
-            4 -> ObjectType.WALL_DECORATION
-            0, 10, 11, 22 -> ObjectType.NORMAL
-            else -> null
-            /*type in 0..3 || type == 9 -> ObjectType.NORMAL
+        private fun getType(type: Int) = when {
+            type in 0..3 || type == 9 -> ObjectType.NORMAL
             type < 9 -> ObjectType.WALL_DECORATION
             type == 10 || type == 11 || type == 22 -> ObjectType.FLOOR_DECORATION
-            else -> ObjectType.OTHER*/
+            else -> ObjectType.OTHER
         }
 
         fun checkWallInteract(collision: Collision?, sizeXY: Int, targetType: Int, targetY: Int, currentY: Int, currentX: Int, targetX: Int, rotation: Int): Boolean {
@@ -119,8 +115,8 @@ class ObjectStrategy(val type: Int, position: Position, val rotation: Int, sizeX
                 val sizeX = sizeXY + currentX - 1
                 val sizeY = sizeXY + currentY - 1
                 if (targetType == 0) {
+
                     if (rotation == 0) {
-                        // Vertical
                         if (currentX == targetX - sizeXY && currentY <= targetY && sizeY >= targetY) {
                             return true
                         }
@@ -131,7 +127,6 @@ class ObjectStrategy(val type: Int, position: Position, val rotation: Int, sizeX
                             return true
                         }
                     } else if (rotation == 1) {
-                        // Horizontal
                         if (currentY == targetY + 1 && currentX <= targetX && sizeX >= targetX) {
                             return true
                         }
@@ -142,7 +137,6 @@ class ObjectStrategy(val type: Int, position: Position, val rotation: Int, sizeX
                             return true
                         }
                     } else if (rotation == 2) {
-                        // Vertical
                         if (currentX == targetX + 1 && currentY <= targetY && sizeY >= targetY) {
                             return true
                         }
@@ -153,7 +147,6 @@ class ObjectStrategy(val type: Int, position: Position, val rotation: Int, sizeX
                             return true
                         }
                     } else if (rotation == 3) {
-                        // Horizontal
                         if (currentY == targetY - sizeXY && currentX <= targetX && sizeX >= targetX) {
                             return true
                         }
@@ -167,26 +160,26 @@ class ObjectStrategy(val type: Int, position: Position, val rotation: Int, sizeX
                 }
                 if (targetType == 2) {
                     if (rotation == 0) {
-                        if (targetX - sizeXY == currentX && targetY >= currentY && sizeY >= targetY) {
+                        if (currentX == targetX - sizeXY && targetY >= currentY && sizeY >= targetY) {
                             return true
                         }
                         if (targetX in currentX..sizeX && currentY == targetY + 1) {
                             return true
                         }
-                        if (currentX == targetX + 1 && targetY >= currentY && sizeY >= targetY && !collision.collides(currentX, targetY, Direction.WEST.wall())) {
+                        if (currentX == targetX + 1 && currentY <= targetY && sizeY >= targetY && !collision.collides(currentX, targetY, Direction.WEST.wall())) {
                             return true
                         }
                         if (targetX in currentX..sizeX && targetY - sizeXY == currentY && !collision.collides(targetX, sizeY, Direction.NORTH.wall())) {
                             return true
                         }
                     } else if (rotation == 1) {
-                        if (targetX - sizeXY == currentX && currentY <= targetY && targetY <= sizeY && !collision.collides(sizeX, targetY, Direction.EAST.wall())) {
+                        if (currentX == targetX - sizeXY && currentY <= targetY && sizeY >= targetY && !collision.collides(sizeX, targetY, Direction.EAST.wall())) {
                             return true
                         }
-                        if (targetX in currentX..sizeX && targetY + 1 == currentY) {
+                        if (targetX in currentX..sizeX && currentY == targetY + 1) {
                             return true
                         }
-                        if (targetX + 1 == currentX && targetY >= currentY && sizeY >= targetY) {
+                        if (currentX == targetX + 1 && currentY <= targetY && sizeY >= targetY) {
                             return true
                         }
                         if (targetX in currentX..sizeX && currentY == targetY - sizeXY && !collision.collides(targetX, sizeY, Direction.NORTH.wall())) {
@@ -199,23 +192,23 @@ class ObjectStrategy(val type: Int, position: Position, val rotation: Int, sizeX
                         if (targetX in currentX..sizeX && currentY == targetY + 1 && !collision.collides(targetX, currentY, Direction.SOUTH.wall())) {
                             return true
                         }
-                        if (targetX + 1 == currentX && targetY >= currentY && sizeY >= targetY) {
+                        if (currentX == targetX + 1 && currentY <= targetY && sizeY >= targetY) {
                             return true
                         }
                         if (targetX in currentX..sizeX && currentY == targetY - sizeXY) {
                             return true
                         }
                     } else if (rotation == 3) {
-                        if (currentX == targetX - sizeXY && currentY <= targetY && targetY <= sizeY) {
+                        if (currentX == targetX - sizeXY && currentY <= targetY && sizeY >= targetY) {
                             return true
                         }
-                        if (targetX in currentX..sizeX && targetY + 1 == currentY && !collision.collides(targetX, currentY, Direction.SOUTH.wall())) {
+                        if (targetX in currentX..sizeX && currentY == targetY + 1 && !collision.collides(targetX, currentY, Direction.SOUTH.wall())) {
                             return true
                         }
-                        if (currentX == targetX + 1 && targetY >= currentY && targetY <= sizeY && !collision.collides(currentX, targetY, Direction.WEST.wall())) {
+                        if (currentX == targetX + 1 && currentY <= targetY && targetY <= sizeY && !collision.collides(currentX, targetY, Direction.WEST.wall())) {
                             return true
                         }
-                        if (targetX in currentX..sizeX && targetY - sizeXY == currentY) {
+                        if (targetX in currentX..sizeX && currentY == targetY - sizeXY) {
                             return true
                         }
                     }
@@ -224,12 +217,12 @@ class ObjectStrategy(val type: Int, position: Position, val rotation: Int, sizeX
                     if (targetX in currentX..sizeX && currentY == targetY + 1 && !collision.collides(targetX, currentY, Direction.SOUTH.wall())) {
                         return true
                     }
-                    if (targetX in currentX..sizeX && targetY - sizeXY == currentY && !collision.collides(targetX, sizeY, Direction.NORTH.wall())) {
+                    if (targetX in currentX..sizeX && currentY == targetY - sizeXY && !collision.collides(targetX, sizeY, Direction.NORTH.wall())) {
                         return true
                     }
-                    return if (targetX - sizeXY == currentX && targetY >= currentY && targetY <= sizeY && !collision.collides(sizeX, targetY, Direction.EAST.wall())) {
+                    return if (currentX == targetX - sizeXY && currentY <= targetY && sizeY >= targetY && !collision.collides(sizeX, targetY, Direction.EAST.wall())) {
                         true
-                    } else targetX + 1 == currentX && targetY >= currentY && sizeY >= targetY && !collision.collides(currentX, targetY, Direction.WEST.wall())
+                    } else currentX == targetX + 1 && currentY <= targetY && sizeY >= targetY && !collision.collides(currentX, targetY, Direction.WEST.wall())
                 }
             }
             return false
