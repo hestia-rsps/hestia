@@ -7,11 +7,8 @@ import worlds.gregs.hestia.content.activity.skill.Experience
 import worlds.gregs.hestia.content.activity.skill.Skill
 import worlds.gregs.hestia.core.action.model.EntityAction
 import worlds.gregs.hestia.core.display.client.model.events.Chat
-import worlds.gregs.hestia.core.display.dialogue.model.ChatType
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces
 import worlds.gregs.hestia.core.display.interfaces.model.PlayerOptions.ASSIST
-import worlds.gregs.hestia.core.display.interfaces.model.events.InterfaceInteraction
-import worlds.gregs.hestia.core.display.interfaces.model.events.PlayerOption
 import worlds.gregs.hestia.core.display.interfaces.model.events.request.OpenInterface
 import worlds.gregs.hestia.core.display.request.logic.RequestSystem
 import worlds.gregs.hestia.core.display.request.model.Request
@@ -23,7 +20,6 @@ import worlds.gregs.hestia.core.display.update.model.components.DisplayName
 import worlds.gregs.hestia.core.display.variable.api.Variables
 import worlds.gregs.hestia.core.display.variable.model.events.SendVariable
 import worlds.gregs.hestia.core.display.variable.model.events.SetVariable
-import worlds.gregs.hestia.core.display.variable.model.events.ToggleVariable
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.entity.model.events.Animation
 import worlds.gregs.hestia.core.entity.entity.model.events.Graphic

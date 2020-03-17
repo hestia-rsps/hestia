@@ -24,8 +24,8 @@ import worlds.gregs.hestia.core.entity.item.container.api.Container
 import worlds.gregs.hestia.core.entity.item.container.logic.*
 import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.SLOT_SHIELD
 import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.SLOT_WEAPON
+import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.TWO_HANDED
 import worlds.gregs.hestia.core.entity.item.container.model.Item
-import worlds.gregs.hestia.service.cache.definition.systems.ItemDefinitionSystem
 
 val logger = LoggerFactory.getLogger(this::class.java)!!
 
@@ -119,47 +119,16 @@ on<InventoryAction> {
     }
 }
 
-lateinit var definitions: ItemDefinitionSystem
+lateinit var equipment: EquipmentSystem
 
 fun Container.getConflictingOffhand(item: Item, equipSlot: Int): Item? {
     if(equipSlot == SLOT_WEAPON || equipSlot == SLOT_SHIELD) {
         val weapon = if(equipSlot == SLOT_WEAPON) item else getOrNull(SLOT_WEAPON)
-        if(weapon != null && requiresTwoHands(weapon)) {
+        if(weapon != null && equipment.getEquipType(weapon) == TWO_HANDED) {
             return if(equipSlot == SLOT_SHIELD) getOrNull(SLOT_WEAPON) else getOrNull(SLOT_SHIELD)
         }
     }
     return null
-}
-
-fun requiresTwoHands(item: Item): Boolean {
-    val definition = definitions.get(item.type)
-    val name = definition.name.toLowerCase()
-    return when {
-        name.contains("crystal bow") -> true
-        name == "sled" -> true
-        name == "stone of power" -> true
-        name.endsWith("claws") -> true
-        name == "barrelchest anchor" -> true
-        name.contains("2h sword") -> true
-        name == "ornate katana" -> true
-        name == "seercull" -> true
-        name.contains("shortbow") -> true
-        name == "zaryte bow" -> true
-        name == "dark bow" -> true
-        name.endsWith("halberd") -> true
-        name.contains("maul") -> true
-        name.contains("karil's crossbow") -> true
-        name.contains("torag's hammers") -> true
-        name.contains("verac's flail") -> true
-        name.contains("dharok's greataxe") -> true
-        name.contains("spear") -> true
-        name == "tzhaar-ket-om" -> true
-        name.endsWith("godsword") -> true
-        name == "saradomin sword" -> true
-        name == "hand cannon" -> true
-        name == "hand cannon" -> true
-        else -> false
-    }
 }
 
 on<ComponentSwitch> {

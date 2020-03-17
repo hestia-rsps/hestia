@@ -15,7 +15,13 @@ class EquipmentSystem : PassiveSystem() {
 
     private lateinit var definitions: ItemDefinitionSystem
 
-    fun getEquipId(item: Item) = equipIds.getOrDefault(item.type, -1)
+    fun getEquipId(item: Item) = getEquipId(item.type)
+    fun getEquipSlot(item: Item) = getEquipSlot(item.type)
+    fun getEquipType(item: Item) = getEquipType(item.type)
+
+    fun getEquipId(type: Int) = equipIds.getOrDefault(type, -1)
+    fun getEquipSlot(type: Int) = equipSlots.getOrDefault(type, -1)
+    fun getEquipType(type: Int) = equipTypes.getOrDefault(type, -1)
 
     override fun initialize() {
         var equipId = 0
@@ -58,6 +64,12 @@ class EquipmentSystem : PassiveSystem() {
         const val SLOT_RING = 12
         const val SLOT_ARROWS = 13
         const val SLOT_AURA = 14
+
+        const val HOODED_CAPE = 0
+        const val TWO_HANDED = 5
+        const val FULL_BODY = 6
+        const val HAIR = 8
+        const val MASK = 11
 
         val equipIds = mutableMapOf<Int, Int>()
         val equipSlots = mutableMapOf<Int, Int>()

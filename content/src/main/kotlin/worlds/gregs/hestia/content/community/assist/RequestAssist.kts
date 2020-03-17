@@ -43,6 +43,7 @@ import worlds.gregs.hestia.core.task.model.await.InterfaceClose
 import worlds.gregs.hestia.core.display.interfaces.logic.systems.InterfaceSystem
 import worlds.gregs.hestia.core.display.variable.model.events.SendVariable
 import worlds.gregs.hestia.core.script.on
+import worlds.gregs.hestia.core.action.logic.systems.on
 
 val skills = listOf(Skill.RUNECRAFTING, Skill.CRAFTING, Skill.FLETCHING, Skill.CONSTRUCTION, Skill.FARMING, Skill.MAGIC, Skill.SMITHING, Skill.COOKING, Skill.HERBLORE)
 val maximumExperience = 30000
@@ -61,7 +62,7 @@ IntVariable(1088, Variable.Type.VARP, true).register("total_xp_earned")//Same as
 
 lateinit var variables: Variables
 
-worlds.gregs.hestia.core.action.logic.systems.on(PlayerOption, "Req Assist") { ->
+on(PlayerOption, "Req Assist") { ->
     fun EntityActions.task(target: Int) = strongQueue {
         val assisting = entity get Assisting::class
         //Delayed requesting
@@ -135,7 +136,7 @@ on<AcceptedRequest> {
 }
 
 //Handle skill toggling
-worlds.gregs.hestia.core.action.logic.systems.on(InterfaceOption, "Toggle Skill On / Off", id = AssistXP) { hash, _, _, _ ->
+on(InterfaceOption, "Toggle Skill On / Off", id = AssistXP) { hash, _, _, _ ->
     val component = getInterfaceComponentId(hash)
     val index = component - 74
     entity perform ToggleVariable("assist_toggle_$index")
@@ -161,7 +162,7 @@ on<Moved> {
 }
 
 // Filter button handling
-worlds.gregs.hestia.core.action.logic.systems.on(InterfaceOption, "XP Earned/Time", id = FilterButtons) { _, _, _, _ ->
+on(InterfaceOption, "XP Earned/Time", id = FilterButtons) { _, _, _, _ ->
     val assisting = entity get Assisting::class
     update(assisting)
     val earned = variables.get(entity, "total_xp_earned", 0)
@@ -174,17 +175,17 @@ worlds.gregs.hestia.core.action.logic.systems.on(InterfaceOption, "XP Earned/Tim
     }
 }
 
-worlds.gregs.hestia.core.action.logic.systems.on(InterfaceOption, "On Assist", id = FilterButtons) { _, _, _, _ ->
+on(InterfaceOption, "On Assist", id = FilterButtons) { _, _, _, _ ->
     val assisting = entity get Assisting::class
     assisting.mode = FilterMode.On
 }
 
-worlds.gregs.hestia.core.action.logic.systems.on(InterfaceOption, "Friends Assist", id = FilterButtons) { _, _, _, _ ->
+on(InterfaceOption, "Friends Assist", id = FilterButtons) { _, _, _, _ ->
     val assisting = entity get Assisting::class
     assisting.mode = FilterMode.Friends
 }
 
-worlds.gregs.hestia.core.action.logic.systems.on(InterfaceOption, "Off Assist", id = FilterButtons) { _, _, _, _ ->
+on(InterfaceOption, "Off Assist", id = FilterButtons) { _, _, _, _ ->
     val assisting = entity get Assisting::class
     assisting.mode = FilterMode.Off
 }

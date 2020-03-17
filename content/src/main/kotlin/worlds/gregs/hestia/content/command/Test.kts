@@ -1,21 +1,24 @@
 package worlds.gregs.hestia.content.command
 
 import worlds.gregs.hestia.core.display.client.model.events.Command
-import worlds.gregs.hestia.core.entity.player.model.components.update.HeadIcon
+import worlds.gregs.hestia.core.entity.item.container.logic.clear
+import worlds.gregs.hestia.core.entity.item.container.model.ContainerType
 import worlds.gregs.hestia.core.entity.player.model.events.UpdateAppearance
 import worlds.gregs.hestia.core.script.on
-import worlds.gregs.hestia.core.world.map.api.Map
-import worlds.gregs.hestia.core.world.region.api.Regions
-
-lateinit var map: Map
-lateinit var regions: Regions
 
 on<Command> {
     where { prefix == "test" }
     fun Command.task() = queue(2) {
+        val equipment = entity container ContainerType.EQUIPMENT
+        println("val $content = arrayOf(${equipment.filterNotNull().map { it.type }.joinToString()})")
+    }
+    then(Command::task)
+}
 
-        val headIcon = entity create HeadIcon::class
-        headIcon.headIcon = content.toInt()
+on<Command> {
+    where { prefix == "clear" }
+    fun Command.task() = queue(2) {
+        ContainerType.EQUIPMENT transform clear()
         entity perform UpdateAppearance()
     }
     then(Command::task)

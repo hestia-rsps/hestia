@@ -80,7 +80,6 @@ object EquipmentDataDumper {
         var unnoted = false
         var equipSlot = -1
         var equipType = -1
-        var equipId = -1
 
         override fun readValues(opcode: Int, buffer: Reader, member: Boolean) {
             when (opcode) {
@@ -258,6 +257,9 @@ object EquipmentDataDumper {
             maleWieldX = itemdefinition_5_.maleWieldX
             System.arraycopy(itemdefinition_5_.options, 0, options, 0, 4)
             options[4] = "Discard"
+
+            equipType = itemdefinition_5_.equipType
+            equipSlot = itemdefinition_5_.equipSlot
         }
 
         fun toNote(itemdefinition_7_: ItemDefinition, itemdefinition_8_: ItemDefinition) {
@@ -318,8 +320,12 @@ object EquipmentDataDumper {
             originalTextureColours = itemdefinition_84_.originalTextureColours
             System.arraycopy(itemdefinition_84_.options, 0, options, 0, 4)
             options[4] = "Discard"
+
+            equipType = itemdefinition_84_.equipType
+            equipSlot = itemdefinition_84_.equipSlot
         }
     }
+
     private class ItemDefinitionReader(cacheStore: CacheLibrary) : DefinitionReader<ItemDefinition> {
 
         override val index = cacheStore.index(Indices.ITEMS)
@@ -369,7 +375,7 @@ object EquipmentDataDumper {
         var stream = DataOutputStream(file.outputStream())
         repeat(22323) { id ->
             val def = reader.get(id)
-            if(def.equipSlot > 0) {
+            if(def.equipSlot >= 0) {
                 stream.writeShort(id)
                 stream.writeByte(def.equipSlot)
             }
@@ -380,7 +386,7 @@ object EquipmentDataDumper {
         stream = DataOutputStream(file.outputStream())
         repeat(22323) { id ->
             val def = reader.get(id)
-            if(def.equipType > 0) {
+            if(def.equipType >= 0) {
                 stream.writeShort(id)
                 stream.writeByte(def.equipType)
             }

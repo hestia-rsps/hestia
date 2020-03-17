@@ -10,6 +10,9 @@ import worlds.gregs.hestia.artemis.SubscriptionSystem
 import worlds.gregs.hestia.core.display.update.model.components.*
 import worlds.gregs.hestia.core.entity.item.container.logic.ContainerSystem
 import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem
+import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.FULL_BODY
+import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.HAIR
+import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.MASK
 import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.SLOT_AURA
 import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.SLOT_CHEST
 import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.SLOT_FEET
@@ -18,8 +21,6 @@ import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Comp
 import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.SLOT_LEGS
 import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.SLOT_SHIELD
 import worlds.gregs.hestia.core.entity.item.container.model.ContainerType
-import worlds.gregs.hestia.core.entity.item.container.model.EquipConstants.isFullBody
-import worlds.gregs.hestia.core.entity.item.container.model.EquipConstants.isFullMask
 import worlds.gregs.hestia.core.entity.item.container.model.Item
 import worlds.gregs.hestia.core.entity.player.model.components.update.*
 import worlds.gregs.hestia.core.entity.player.model.events.UpdateAppearance
@@ -80,7 +81,7 @@ class AppearanceSystem : SubscriptionSystem(Aspect.all(Player::class)) {
             var flag = 0
 //            flag = flag or 0x1//gender
 //            flag = flag or 0x2//Has display name
-            if(skillLevel) {
+            if (skillLevel) {
                 flag = flag or 0x4//Skill level displayed rather than combat
             }
 //            flag = flag or (size shl 3 and 0x7)//Size
@@ -101,7 +102,7 @@ class AppearanceSystem : SubscriptionSystem(Aspect.all(Player::class)) {
                 val equip = containers.getContainer(entityId, ContainerType.EQUIPMENT)
                 for (index in 0 until 4) {
                     val item = equip.getOrNull(index)
-                    if(item == null) {
+                    if (item == null) {
                         writeEmpty()
                     } else {
                         writeItem(item)
@@ -109,61 +110,61 @@ class AppearanceSystem : SubscriptionSystem(Aspect.all(Player::class)) {
                 }
                 val look = bodyMapper.get(entityId)?.look ?: DEFAULT_LOOK
                 val chest = equip.getOrNull(SLOT_CHEST)
-                if(chest == null) {
+                if (chest == null) {
                     writeClothes(look[2])
                 } else {
                     writeItem(chest)//Torso
                 }
 
                 val shield = equip.getOrNull(SLOT_SHIELD)
-                if(shield == null) {
+                if (shield == null) {
                     writeEmpty()
                 } else {
                     writeItem(shield)
                 }
 
-                if(chest != null && isFullBody(definitions.get(chest.type))) {
+                if (chest != null && hideArms(chest)) {
                     writeEmpty()
                 } else {
                     writeClothes(look[3])//Arms
                 }
 
                 val legs = equip.getOrNull(SLOT_LEGS)
-                if(legs == null) {
+                if (legs == null) {
                     writeClothes(look[5])//Legs
                 } else {
                     writeItem(legs)
                 }
 
                 val hat = equip.getOrNull(SLOT_HAT)
-                if(hat == null) {
-                    writeClothes(look[0])//Hair
-                } else {
+                if (hat != null && hideHair(hat)) {
                     writeItem(hat)
+                } else {
+                    writeClothes(look[0])//Hair
                 }
 
                 val hands = equip.getOrNull(SLOT_HANDS)
-                if(hands == null) {
+                if (hands == null) {
                     writeClothes(look[4])//Bracelet
                 } else {
                     writeItem(hands)
                 }
 
                 val shoes = equip.getOrNull(SLOT_FEET)
-                if(shoes == null) {
+                if (shoes == null) {
                     writeClothes(look[6])//Feet
                 } else {
                     writeItem(shoes)
                 }
 
-                if(hat != null && isFullMask(definitions.get(hat.type))) {
+                if (hat != null && hideBeard(hat)) {
                     writeEmpty()
                 } else {
                     writeClothes(look[1])//Beard
                 }
 
                 val aura = equip.getOrNull(SLOT_AURA)
-                if(aura == null) {
+                if (aura == null) {
                     writeEmpty()
                 } else {
                     writeItem(aura)
@@ -179,7 +180,7 @@ class AppearanceSystem : SubscriptionSystem(Aspect.all(Player::class)) {
             writeShort(emoteMapper.get(entityId)?.id ?: 1426)//Render emote
             writeString(displayNameMapper.get(entityId)?.name ?: "")//Display name
             writeByte(combatLevelMapper.get(entityId)?.level ?: 3)//Combat level
-            if(skillLevel) {
+            if (skillLevel) {
                 writeShort(-1)//Skill level
             } else {
                 writeByte(summoningCombatLevelMapper.get(entityId)?.level ?: 0)//Combat level + summoning
@@ -205,6 +206,42 @@ class AppearanceSystem : SubscriptionSystem(Aspect.all(Player::class)) {
         //Flag for update
         appearanceMapper.create(entityId)
     }
+
+    private fun hideHair(item: Item): Boolean {
+        val def = definitions.get(item.type)
+        val name = def.name
+        return equipment.getEquipType(item) == HAIR || (equipment.getEquipType(item) == MASK && !name.contains("beard"))
+    }
+
+    fun hideArms(item: Item): Boolean {
+        return equipment.getEquipType(item) == FULL_BODY
+    }
+
+    fun hideBeard(item: Item): Boolean {
+        val def = definitions.get(item.type)
+        val name = def.name.toLowerCase()
+        return hideHair(item)
+                && !name.contains("horns")
+                && !name.contains("hat")
+                && !name.contains("afro")
+                && name != "leather cowl"
+                && !name.contains("headdress")
+                && !name.contains("hood")
+                && !isMask(name)
+                && !isHelm(name)
+    }
+
+    private fun isHelm(name: String) = name.contains("helm") && !isHelmException(name)
+
+    private fun isHelmException(name: String) = isFullHelm(name) || name.contains("decorative") || name.contains("verac") || name.contains("guthan") || name.contains("fishbowl") || name.contains("heraldic") || name.contains("lunar") || name.contains("tyras") || name.contains("slayer") || name.contains("cyclopean") || name.contains("wildstalker") || name.contains("trickster") || name.contains("vanguard")
+
+    private fun isFullHelm(name: String) = name.contains("full") && !isFullHelmException(name)
+
+    private fun isFullHelmException(name: String) = name.contains("third-age") || name.contains("statius")
+
+    private fun isMask(name: String) = name.contains("mask") && !isMaskException(name)
+
+    private fun isMaskException(name: String) = name.contains("h'ween") || name.contains("mime") || name.contains("frog") || name.contains("virtus") || name.contains("gorilla")
 
     companion object {
         private val DEFAULT_COLOURS = intArrayOf(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
