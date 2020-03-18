@@ -18,17 +18,6 @@ import worlds.gregs.hestia.core.world.movement.model.events.Interact
 
 on(FloorItemOption, "Take") { ->
     fun EntityActions.task(target: Int) = strongQueue {
-        entity perform Interact(target)
-
-        val route = await(Route())
-        val canInteract = route.steps >= 0 && !route.partial || isNear(entity get Position::class, target get Position::class, 1, 1, true)
-        await(Ticks(1))
-        if (!canInteract) {
-            entity perform Face(target get Position::class)
-            entity perform Chat("You can't reach that.")
-            return@strongQueue
-        }
-
         //Get floor item info
         val amount = target get Amount::class
         val type = target get Type::class

@@ -14,15 +14,6 @@ import worlds.gregs.hestia.core.world.movement.model.events.Follow
 
 on(NpcOption, "Talk-to", "Banker") { ->
     fun EntityActions.task(npc: Int) = strongQueue {
-        entity perform Follow(npc)
-        val within = await(WithinRange(npc, 2))
-        entity perform Follow(-1)
-
-        if (!within) {
-            entity perform Chat("You can't reach that.")
-            return@strongQueue
-        }
-
         dialogue {
             npc perform Watch(entity)
             //TODO unwatch entity if exceeds interact distance * 2

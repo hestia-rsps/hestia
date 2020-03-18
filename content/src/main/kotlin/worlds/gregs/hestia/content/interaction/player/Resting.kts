@@ -3,7 +3,6 @@ package worlds.gregs.hestia.content.interaction.player
 import com.artemis.ComponentMapper
 import worlds.gregs.hestia.core.action.logic.systems.on
 import worlds.gregs.hestia.core.action.model.*
-import worlds.gregs.hestia.core.display.client.model.events.Chat
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.EnergyOrb
 import worlds.gregs.hestia.core.display.update.model.components.UpdateMovement
 import worlds.gregs.hestia.core.display.update.model.components.direction.Face
@@ -17,11 +16,8 @@ import worlds.gregs.hestia.core.entity.entity.model.components.Position
 import worlds.gregs.hestia.core.entity.entity.model.events.Animation
 import worlds.gregs.hestia.core.task.api.TaskCancellation
 import worlds.gregs.hestia.core.task.model.await.Forever
-import worlds.gregs.hestia.core.task.model.await.InteractionComplete
 import worlds.gregs.hestia.core.task.model.await.Ticks
-import worlds.gregs.hestia.core.task.model.await.WithinRange
 import worlds.gregs.hestia.core.world.movement.model.components.RunToggled
-import worlds.gregs.hestia.core.world.movement.model.events.Follow
 import worlds.gregs.hestia.core.world.movement.model.events.Interact
 
 StringMapVariable(173, Variable.Type.VARP, true, mapOf(
@@ -43,18 +39,6 @@ enum class RestType(val sit: Int, val stand: Int) {
 
 on(NpcOption, "Listen-to", "Musician") { ->
     fun EntityActions.task(npc: Int) = strongQueue {
-        entity perform Interact(npc)
-        val result = await(InteractionComplete(npc))
-        println(result)
-//        entity perform Follow(npc)
-//        val within = await(WithinRange(npc, 1))
-//        entity perform Follow(-1)
-        entity perform Face(npc get Position::class)
-
-//        if (!within) {
-//            entity perform Chat("You can't reach that.")
-//            return@strongQueue
-//        }
         val blackboard = entity get Blackboard::class
         val current = variables.get(entity, "energy_orb", "walking")
         blackboard["unrest_state"] = current

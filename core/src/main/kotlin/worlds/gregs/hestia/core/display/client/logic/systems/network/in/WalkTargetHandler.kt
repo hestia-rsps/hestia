@@ -5,6 +5,7 @@ import kotlinx.coroutines.suspendCancellableCoroutine
 import net.mostlyoriginal.api.event.common.EventSystem
 import worlds.gregs.hestia.GameServer
 import worlds.gregs.hestia.core.action.model.perform
+import worlds.gregs.hestia.core.task.api.SuspendableQueue
 import worlds.gregs.hestia.core.task.api.TaskCancellation
 import worlds.gregs.hestia.core.task.model.InactiveTask
 import worlds.gregs.hestia.core.task.model.await.ClearTasks
@@ -30,31 +31,33 @@ class WalkTargetHandler : MessageHandlerSystem<WalkMap>() {
         GameServer.gameMessages.bind(this)
     }
 
+    fun test(entityId: Int, x: Int, y: Int): SuspendableQueue = {
+        suspendCancellableCoroutine<Unit> {
+            val clear = ClearTasks(1, TaskCancellation.Walk(x, y))
+            clear.continuation = it
+            suspension = clear
+            es.perform(entityId, clear)
+        }
+
+        //TODO temp clearing, needs a proper system
+        //Clear current steps
+        stepsMapper.get(entityId)?.clear()
+
+        //Clear follow
+        followingMapper.remove(entityId)
+
+        //Clear any movement
+        shiftMapper.remove(entityId)
+
+        //Calculate path
+        pathMapper.create(entityId).apply {
+            this.strategy = FixedTileStrategy(x, y)
+        }
+    }
+
     override fun handle(entityId: Int, message: WalkMap) {
         val (x, y, running) = message
-        es.perform(entityId, StartTask(InactiveTask(1) {
-            suspendCancellableCoroutine<Unit> {
-                val clear = ClearTasks(1, TaskCancellation.Walk(x, y))
-                clear.continuation = it
-                suspension = clear
-                es.perform(entityId, clear)
-            }
-
-            //TODO temp clearing, needs a proper system
-            //Clear current steps
-            stepsMapper.get(entityId)?.clear()
-
-            //Clear follow
-            followingMapper.remove(entityId)
-
-            //Clear any movement
-            shiftMapper.remove(entityId)
-
-            //Calculate path
-            pathMapper.create(entityId).apply {
-                this.strategy = FixedTileStrategy(x, y)
-            }
-        }))
+        es.perform(entityId, StartTask(InactiveTask(1, test(entityId, x, y))))
     }
 
 }

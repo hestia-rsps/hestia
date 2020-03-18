@@ -64,8 +64,9 @@ lateinit var variables: Variables
 
 on(PlayerOption, "Req Assist") { ->
     fun EntityActions.task(target: Int) = strongQueue {
+        // TODO This should be before interaction movement
         val assisting = entity get Assisting::class
-        //Delayed requesting
+        // Delayed requesting
         val lastRequest = Engine.ticks - assisting.lastRequest
         if (lastRequest in 1 until requestDelay - 1) {
             val waitTime = requestDelay - lastRequest
@@ -82,14 +83,6 @@ on(PlayerOption, "Req Assist") { ->
             return@strongQueue
         }
 
-        entity perform Follow(target)
-        val within = await(WithinRange(target, 1))
-        entity perform Follow(-1)
-
-        if (!within) {
-            entity perform Chat("You can't reach that.")
-            return@strongQueue
-        }
         system(RequestSystem::class).sendRequest(entity, target, Request.ASSIST)
         assisting.lastRequest = Engine.ticks
     }

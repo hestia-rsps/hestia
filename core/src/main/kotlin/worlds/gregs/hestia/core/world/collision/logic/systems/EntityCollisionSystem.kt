@@ -36,9 +36,9 @@ class EntityCollisionSystem : EntityCollision() {
     override fun load(entityId: Int, position: Position) {
         //Ghosts don't need entity collision
         ghost = ghostMapper.has(entityId)
-//        if (ghost) {
-//            return
-//        }
+        if (ghost) {
+            return
+        }
 
         //Clear
         for (a in array) {

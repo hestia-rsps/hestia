@@ -32,21 +32,6 @@ npcSpawn(8526, 1888, 3176, direction = Direction.NORTH)//ZIMBERFIZZ
 
 on(ObjectOption, "Enter", "Soul Wars portal") { ->
     fun EntityActions.task(target: Int) = strongQueue {
-        entity perform Interact(target)
-
-        val route = await(Route())
-        val definition = system(ObjectDefinitionSystem::class).get(target.get(GameObject::class).id)
-        val canInteract = route.steps >= 0 && !route.partial || isNear(entity get Position::class, target get Position::class, definition.sizeX, definition.sizeY, true)
-        await(Ticks(1))
-        if (!canInteract) {
-            entity perform Face(target get Position::class)//TODO object def size
-            entity perform Chat("You can't reach that.")
-            return@strongQueue
-        }
-
-        entity remove Following::class
-        entity remove Shift::class
-        entity.get(Steps::class).clear()
         entity.create(MoveStep::class).set(1886, 3178)
     }
     then(EntityActions::task)
@@ -54,21 +39,6 @@ on(ObjectOption, "Enter", "Soul Wars portal") { ->
 
 on(ObjectOption, "Leave-area", "Edgeville portal") { ->
     fun EntityActions.task(target: Int) = strongQueue {
-        entity perform Interact(target)
-
-        val route = await(Route())
-        val definition = system(ObjectDefinitionSystem::class).get(target.get(GameObject::class).id)
-        val canInteract = route.steps >= 0 && !route.partial || isNear(entity get Position::class, target get Position::class, definition.sizeX, definition.sizeY, true)
-        await(Ticks(1))
-        if (!canInteract) {
-            entity perform Face(target get Position::class)//TODO object def size
-            entity perform Chat("You can't reach that.")
-            return@strongQueue
-        }
-
-        entity remove Following::class
-        entity remove Shift::class
-        entity.get(Steps::class).clear()
         entity.create(MoveStep::class).set(3082, 3474)
     }
     then(EntityActions::task)
@@ -76,22 +46,6 @@ on(ObjectOption, "Leave-area", "Edgeville portal") { ->
 
 on(ObjectOption, "Join-team", "Balance portal") { ->
     fun EntityActions.task(target: Int) = strongQueue {
-        entity perform Interact(target)
-
-        val route = await(Route())
-        val definition = system(ObjectDefinitionSystem::class).get(target.get(GameObject::class).id)
-        val canInteract = route.steps >= 0 && !route.partial || isNear(entity get Position::class, target get Position::class, definition.sizeX, definition.sizeY, true)
-        await(Ticks(1))
-        if (!canInteract) {
-            entity perform Face(target get Position::class)//TODO object def size
-            entity perform Chat("You can't reach that.")
-            return@strongQueue
-        }
-
-        entity remove Following::class
-        entity remove Shift::class
-        entity.get(Steps::class).clear()
-
         dialogue {
             entity statement """
                 <col=ff0000>Warning:<col=000000> a game is currently in progress. If you enter the portal,
@@ -118,14 +72,6 @@ on(ObjectOption, "Join-team", "Balance portal") { ->
 
 on(NpcOption, "Talk-to", "Nomad") { ->
     fun EntityActions.task(npc: Int) = strongQueue {
-        entity perform Follow(npc)
-        val within = await(WithinRange(npc, 1))
-        entity perform Follow(-1)
-
-        if (!within) {
-            entity perform Chat("You can't reach that.")
-            return@strongQueue
-        }
         val firstTime = true
 
         dialogue {

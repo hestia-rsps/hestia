@@ -21,14 +21,6 @@ import worlds.gregs.hestia.core.task.api.Task
 
 on(PlayerOption, "Trade") { ->
     fun EntityActions.task(target: Int) = strongQueue {
-        entity perform Follow(target)
-        val within = await(WithinRange(target, 1))
-        entity perform Follow(-1)
-
-        if (!within) {
-            entity perform Chat("You can't reach that.")
-            return@strongQueue
-        }
         system(RequestSystem::class).sendRequest(entity, target, Request.TRADE)
     }
     then(EntityActions::task)

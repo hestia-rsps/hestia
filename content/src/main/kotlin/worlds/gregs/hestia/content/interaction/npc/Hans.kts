@@ -32,16 +32,6 @@ val veteranCape = remove(995, 50000) andThen addAll(20763, 20764)
 
 on(NpcOption, "Talk-to", "Hans") { ->
     fun EntityActions.task(npc: Int) = strongQueue {
-
-        entity perform Follow(npc)
-        val within = await(WithinRange(npc, 1))
-        entity perform Follow(-1)
-
-        if (!within) {
-            entity perform Chat("You can't reach that.")
-            return@strongQueue
-        }
-
         dialogue {
             npc perform Watch(entity)
             npc dialogue "Hello. What are you doing here?"
