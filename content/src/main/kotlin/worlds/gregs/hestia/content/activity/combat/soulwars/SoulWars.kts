@@ -1,3 +1,7 @@
+import arrow.core.andThen
+import com.artemis.ComponentMapper
+import worlds.gregs.hestia.content.activity.combat.equipment.EquippedItem
+import worlds.gregs.hestia.content.activity.combat.equipment.UnequippedItem
 import worlds.gregs.hestia.core.action.logic.systems.on
 import worlds.gregs.hestia.core.action.model.EntityActions
 import worlds.gregs.hestia.core.action.model.NpcOption
@@ -8,12 +12,28 @@ import worlds.gregs.hestia.core.display.dialogue.api.Dialogue.Companion.SECOND
 import worlds.gregs.hestia.core.display.dialogue.model.Expression.Disregard
 import worlds.gregs.hestia.core.display.dialogue.model.Expression.EvilLaugh
 import worlds.gregs.hestia.core.display.dialogue.model.Expression.Shock
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.SoulWarsRewards
+import worlds.gregs.hestia.core.display.interfaces.model.events.request.OpenInterface
 import worlds.gregs.hestia.core.display.update.model.Direction
+import worlds.gregs.hestia.core.display.update.model.components.ForceMovement
+import worlds.gregs.hestia.core.display.update.model.components.ForceMovement.Companion.EAST
+import worlds.gregs.hestia.core.display.update.model.components.ForceMovement.Companion.WEST
 import worlds.gregs.hestia.core.display.update.model.components.direction.Face
 import worlds.gregs.hestia.core.display.update.model.components.direction.Watch
 import worlds.gregs.hestia.core.entity.`object`.model.components.GameObject
+import worlds.gregs.hestia.core.entity.entity.model.components.Blackboard
 import worlds.gregs.hestia.core.entity.entity.model.components.Position
+import worlds.gregs.hestia.core.entity.entity.model.events.Animation
+import worlds.gregs.hestia.core.entity.item.container.api.ItemResult
+import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.SLOT_CAPE
+import worlds.gregs.hestia.core.entity.item.container.logic.equip
+import worlds.gregs.hestia.core.entity.item.container.logic.remove
+import worlds.gregs.hestia.core.entity.item.container.model.ContainerType
+import worlds.gregs.hestia.core.entity.item.container.model.Item
 import worlds.gregs.hestia.core.entity.npc.logic.systems.npcSpawn
+import worlds.gregs.hestia.core.entity.player.model.events.UpdateAppearance
+import worlds.gregs.hestia.core.task.api.SuspendableQueue
+import worlds.gregs.hestia.core.task.api.Task
 import worlds.gregs.hestia.core.task.model.await.Route
 import worlds.gregs.hestia.core.task.model.await.Ticks
 import worlds.gregs.hestia.core.task.model.await.WithinRange
@@ -55,9 +75,9 @@ on(ObjectOption, "Join-team", "Balance portal") { ->
                 Enter portal.
                 Stay outside.
             """
-            if(choice == FIRST) {
+            if (choice == FIRST) {
                 //TODO random walkable position in area
-                if(Random.nextBoolean()) {// TODO weighted team calculation
+                if (Random.nextBoolean()) {// TODO weighted team calculation
                     entity.create(MoveStep::class).set(1874, 3162)// Blue
                 } else {
                     entity.create(MoveStep::class).set(1904, 3162)// Red
@@ -68,6 +88,58 @@ on(ObjectOption, "Join-team", "Balance portal") { ->
         }
     }
     then(EntityActions::task)
+}
+
+on(NpcOption, "Rewards", "Nomad", "Zimberfizz") { ->
+    fun EntityActions.task(npc: Int) = queue {
+        entity perform OpenInterface(SoulWarsRewards)
+    }
+    then(EntityActions::task)
+}
+
+lateinit var forceMovementMapper: ComponentMapper<ForceMovement>
+lateinit var blackboardMapper: ComponentMapper<Blackboard>
+
+// TODO prevent removing soul wars cape
+
+on(ObjectOption, "Pass", "Blue barrier") { ->
+    fun EntityActions.enterTeam(objectId: Int) = queue {
+        val blackboard = blackboardMapper.get(entity)
+        val enter = blackboard.getString("SoulWarsTeam") != "blue"
+        val position = if (enter) Position(1879, 3162) else Position(1880, 3162)
+        val equipment = entity container ContainerType.EQUIPMENT
+        if (enter && equipment[SLOT_CAPE] != null) {
+            entity perform Chat("You can't wear a cape into Soul Wars.")// TODO reference
+            return@queue
+        }
+        entity perform Animation(10584)
+        forceMovementMapper.create(entity).apply {
+            firstPosition = position
+            firstDelay = 1
+            direction = if (enter) WEST else EAST
+        }
+        await(Ticks(1))
+        val cape = Item(14642, 1)
+        entity.create(MoveStep::class).set(position.x, position.y)
+        when (ContainerType.EQUIPMENT transform if (enter) equip(cape.type) else remove(cape.type)) {
+            is ItemResult.Success -> {
+                if (enter) {
+                    entity perform EquippedItem(cape)
+                } else {
+                    entity perform UnequippedItem(cape)
+                }
+                if(enter) {
+                    blackboard["SoulWarsTeam"] = "blue"// TODO this is probably a config
+                } else {
+                    blackboard.remove("SoulWarsTeam")
+                }
+                entity perform UpdateAppearance()
+            }
+            is ItemResult.Issue -> {
+            }
+        }
+    }
+    then(EntityActions::enterTeam)
 }
 
 on(NpcOption, "Talk-to", "Nomad") { ->
@@ -94,7 +166,7 @@ on(NpcOption, "Talk-to", "Nomad") { ->
                     Can you tell me more about Soul Wars?
                     I have to go; I think I left my house on fire.
                 """
-            when(choice) {
+            when (choice) {
                 FIRST -> {
                     npc dialogue """
                         Of course! I can give you a brief demonstration, or a book
@@ -106,7 +178,7 @@ on(NpcOption, "Talk-to", "Nomad") { ->
                         Can't I just get started?
                     """
 
-                    when(choice) {
+                    when (choice) {
                         FIRST -> {
                             npc dialogue "Very well, I'll take us there now."
                         }

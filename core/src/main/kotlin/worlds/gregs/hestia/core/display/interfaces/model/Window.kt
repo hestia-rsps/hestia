@@ -100,6 +100,9 @@ import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.Sele
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.SkillCreation
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.SkillCreationAmount
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.SmeltType
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.SoulWarsGameOverlay
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.SoulWarsRewards
+import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.SoulWarsWaitingOverlay
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.Stats
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.SummoningOrb
 import worlds.gregs.hestia.core.display.interfaces.api.Interfaces.Companion.TaskSystem
@@ -156,7 +159,7 @@ enum class Window(val parent: Int, val fixed: Int, val resizable: Int, vararg va
     //Main screen
     DIALOGUE_BOX(ChatBox, 13, 13, Multi4Offscreen, TextBoxModelSprite, CastleWarsScore, CastleWarsStatusOverlay, NpcChatNp4u, NpcChatNp3u, NpcChatNp1u, NpcChatNp2u, ConfirmDestroy, GardenQuiz, ChatBoth, Select2Models, TextBoxModel, MacroMimeEmotes, MacroQuizShow, ContainerContinue, PriceCheckBoxTitle, TutorialText, ObjDialog, PohHangman, TutorialText2, OpenUrl, Multi3OffCentre, PohHangmanGerman, Multi2Mes, PickAPuppy, MultiVar2Wide, PickAKitten, LevelUpDialog, TextBoxContinue, TextBoxContinueResizable, MobilisingArmies1, SkillCreation, SmeltType, MakeAmount, TextBoxChat, TextBoxContinue2, DoubleChat3, DoubleChat2, DoubleChat1, DoubleChat4, DoubleObjBox, ObjBox, Chat1, Chat2, Chat3, Chat4, ChatNp1, ChatNp2, ChatNp3, ChatNp4, Message1, Message2, Message3, Message4, Message5, MessageNp1, MessageNp2, MessageNp3, MessageNp4, MessageNp5, Multi2, Multi2Chat, Multi3, Multi3Chat, Multi4, Multi4Chat, Multi5, Multi5Chat, MultiVar2, MultiVar3, MultiVar4, MultiVar5, NpcChat1, NpcChat2, NpcChat3, NpcChat4, NpcChatNp1, NpcChatNp2, NpcChatNp3, NpcChatNp4),
     AREA(-1, 15, 15, AreaStatusIcon),
-    OVERLAY(-1, 9, 12),
+    OVERLAY(-1, 9, 12, SoulWarsWaitingOverlay, SoulWarsGameOverlay),
     MAIN_SCREEN(-1, 9, 12),
     FULL_SCREEN(0, 0, 0, ResizableGameframe, FixedGameframe, WorldMap),
 

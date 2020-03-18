@@ -91,7 +91,7 @@ abstract class BaseMovementSystem(vararg classes: KClass<out Component>) : Itera
             return false
         }
 
-        if(check) {
+        if(check) {// TODO step should always check otherwise we'll start walking through doors
             if (!world.entityManager.isActive(entityId) || (tiles != null && !tiles!!.traversable(dir, lastX, lastY, position.plane, sizeMapper.width(entityId), sizeMapper.height(entityId)))) {
                 return false
             }

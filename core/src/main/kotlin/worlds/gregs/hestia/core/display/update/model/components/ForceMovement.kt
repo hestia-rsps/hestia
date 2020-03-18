@@ -7,7 +7,7 @@ import worlds.gregs.hestia.core.entity.entity.model.components.Position
 @PooledWeaver
 data class ForceMovement(var firstDelay: Int = 0, var secondPosition: Position? = null, var secondDelay: Int = 0, var direction: Int = 0) : Component() {
 
-    constructor(first: Position, delay: Int, second: Position?, secondDelay: Int, direction: Int) : this(delay, second, secondDelay, direction) {
+    constructor(first: Position, delay: Int, second: Position?, secondDelay: Int = 0, direction: Int = 0) : this(delay, second, secondDelay, direction) {
         this.firstPosition = first
     }
     /*

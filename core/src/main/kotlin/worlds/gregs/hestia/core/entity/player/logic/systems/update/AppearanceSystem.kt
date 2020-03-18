@@ -12,8 +12,10 @@ import worlds.gregs.hestia.core.entity.item.container.logic.ContainerSystem
 import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem
 import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.FULL_BODY
 import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.HAIR
+import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.HOODED_CAPE
 import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.MASK
 import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.SLOT_AURA
+import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.SLOT_CAPE
 import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.SLOT_CHEST
 import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.SLOT_FEET
 import worlds.gregs.hestia.core.entity.item.container.logic.EquipmentSystem.Companion.SLOT_HANDS
@@ -137,8 +139,11 @@ class AppearanceSystem : SubscriptionSystem(Aspect.all(Player::class)) {
                 }
 
                 val hat = equip.getOrNull(SLOT_HAT)
+                val cape = equip.getOrNull(SLOT_CAPE)
                 if (hat != null && hideHair(hat)) {
                     writeItem(hat)
+                } else if(cape != null && equipment.getEquipType(cape) == HOODED_CAPE) {
+                    writeEmpty()
                 } else {
                     writeClothes(look[0])//Hair
                 }
@@ -210,7 +215,8 @@ class AppearanceSystem : SubscriptionSystem(Aspect.all(Player::class)) {
     private fun hideHair(item: Item): Boolean {
         val def = definitions.get(item.type)
         val name = def.name
-        return equipment.getEquipType(item) == HAIR || (equipment.getEquipType(item) == MASK && !name.contains("beard"))
+        val type = equipment.getEquipType(item)
+        return type == HAIR || (type == MASK && !name.contains("beard"))
     }
 
     fun hideArms(item: Item): Boolean {

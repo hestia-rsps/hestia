@@ -189,6 +189,9 @@ abstract class Interfaces : SubscriptionSystem(Aspect.all(InterfaceRelationships
         const val AssistXP = 301
         const val AreaStatusIcon = 745
         const val Shop = 620
+        const val SoulWarsRewards = 276
+        const val SoulWarsWaitingOverlay = 837
+        const val SoulWarsGameOverlay = 836
 
         /*
             Dialogue chat boxes
