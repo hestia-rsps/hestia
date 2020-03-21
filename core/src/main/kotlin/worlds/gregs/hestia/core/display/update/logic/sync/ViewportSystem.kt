@@ -64,7 +64,7 @@ class ViewportSystem : ParallelSystem(Aspect.all(Viewport::class, Position::clas
 
         //Bag rough approximate entities
         if (!accurate) {
-            map.get(bag, position, radius = DEFAULT_VIEW_DISTANCE)
+            map.getExact(bag, position.x, position.y, position.plane, radius = DEFAULT_VIEW_DISTANCE)
             accurate = bag.size() >= MAXIMUM_LOCAL_ENTITIES
             if (accurate) {
                 bag.clear()
